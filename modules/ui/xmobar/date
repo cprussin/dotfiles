@@ -1,0 +1,4 @@
+#!/bin/sh
+
+date=$(date +"%A %Y-%m-%d %H:%M:%S")
+echo -n "<action=\`$APP_PATH/calendar\` button=123>$date</action>"

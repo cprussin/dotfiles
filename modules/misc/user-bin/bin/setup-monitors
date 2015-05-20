@@ -1,0 +1,60 @@
+#!/bin/sh
+
+monitors=$(xrandr -q)
+
+function isconnected() {
+    [ ! "$(echo "$monitors" | grep $1 | grep 'disconnected')" ]
+}
+
+# First, set up the monitors
+if isconnected "HDMI1"; then
+    xrandr --output HDMI1 --auto --above eDP1 \
+           --output HDMI2 --off \
+           --output DP2-1 --off \
+           --output DP2-2 --off \
+           --output DP2-3 --off \
+           --output eDP1 --auto --primary
+elif isconnected "HDMI2"; then
+    xrandr --output HDMI1 --off \
+           --output HDMI2 --auto --above eDP1 \
+           --output DP2-1 --off \
+           --output DP2-2 --off \
+           --output DP2-3 --off \
+           --output eDP1 --auto --primary
+elif isconnected "DP2-1"; then
+    xrandr --output HDMI1 --off \
+           --output HDMI2 --off \
+           --output DP2-1 --auto --primary \
+           --output DP2-2 --off \
+           --output DP2-3 --off \
+           --output eDP1 --auto --left-of DP2-1
+elif isconnected "DP2-2"; then
+    xrandr --output HDMI1 --off \
+           --output HDMI2 --off \
+           --output DP2-1 --off \
+           --output DP2-2 --auto --primary \
+           --output DP2-3 --off \
+           --output eDP1 --auto --left-of DP2-2
+elif isconnected "DP2-3"; then
+    xrandr --output HDMI1 --off \
+           --output HDMI2 --off \
+           --output DP2-1 --off \
+           --output DP2-2 --off \
+           --output DP2-3 --auto --primary \
+           --output DP2-3 --off \
+           --output eDP1 --auto --left-of DP2-2
+else
+    xrandr --output HDMI1 --off \
+           --output HDMI2 --off \
+           --output DP2-1 --off \
+           --output DP2-2 --off \
+           --output DP2-3 --off \
+           --output eDP1 --auto --primary
+fi
+
+# Now, reset apps that get messed up when the monitor configuration changes
+systemctl --user start random-background
+if [ "$1" != "--no-restart-xmonad" ]; then
+    xmonad --restart
+fi
+systemctl --user restart tray

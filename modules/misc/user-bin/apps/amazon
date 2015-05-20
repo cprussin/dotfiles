@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec browse 'https://www.amazon.com/'

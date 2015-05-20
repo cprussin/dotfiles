@@ -1,0 +1,110 @@
+-*- mode: org; -*-
+
+* Wishlist
+** TODO Smart tabs :emacs:editing:
+** TODO Sidebar :emacs:interface:
+** TODO Something for workgroups? :emacs:interface:
+** TODO JS :user:emacs:filetypes:
+** TODO CSS/less :user:emacs:filetypes:
+    (add-hook 'css-mode-hook #'use-stylelint-from-node-modules)
+    (setq flycheck-stylelintrc ".stylelintrc")
+    (add-hook 'css-mode-hook 'flycheck-mode)
+* On Hold
+* To Do
+** TODO Fixup path hacks :user:system:
+   - [ ] user-bin
+   - [ ] $APP_PATH
+   - [ ] $SECRETS
+   - [ ] emacs (ag)
+   - [ ] fonts?
+   - [ ] xmobar scripts
+   - [ ] xmonad?
+   - [ ] zsh
+** TODO Install minichrome :user:
+** TODO Install aosd for volume change overlay :user:
+** TODO Replace packageOverrides for sudo with overlay :system:
+** TODO Consolidate solarized theme configs :user:
+* Done
+** DONE Fix emacs zoom-frm :user:
+** DONE Set up user daemons :user:
+   - [X] tray
+   - [X] emacs
+   - [X] autocutsel
+   - [X] urxvt
+** DONE Figure out a better mechanism for password/nogit linking :user:
+** DONE Remove hardcoded references to username/home directory :user:
+** DONE Reorganize user stuff :user:
+** DONE Install better cursors :user:
+** DONE Remove /usr/bin/pk12util (blocked on metatron update to https://jira.netflix.com/browse/PS-1640)
+** DONE Remove /bin/bash
+** DONE Fix n/node :user:
+** DONE Make dhcpcd non-blocking (https://github.com/NixOS/nixpkgs/issues/50930) :system:
+** DONE Recursively link bin :user:
+** DONE Fix app launchers for slack, passwords, mixer, etc :user:
+** DONE Fix app/bin scripts :user:
+** DONE Recursively link emacs dir :user:
+** DONE Fix broken sudoers nopasswd lines :system:
+** DONE Fix sudoers insults :system:
+** DONE Fix bluetooth :system:
+** DONE Add auto-update :system:
+** DONE Fix urxvt perls :user:
+** DONE Fix mbsync timer (see journalctl -alf) :user:
+** DONE Fix umask :user:
+** DONE purescript :filetypes:
+** DONE imenu sidebar :interface:
+** DONE Highlight TODO :filetypes:
+** DONE Make ivy transformers more helpful :tools:
+    ;; Show docustring in counsel-describe-function and
+    ;; counsel-describe-variable
+    (defface counsel-thing
+      '((t :inherit escape-glyph))
+      "Face used by counsel for the thing being matched.")
+    (defun get-doc-string (thing)
+      (elisp--docstring-first-line (documentation (intern thing))))
+    (defun with-doc (thing)
+      (with-temp-buffer
+        (insert (format "%-40s" thing))
+        (put-text-property (point-min) (point-max) 'face 'counsel-thing)
+        (insert (get-doc-string thing))
+        (buffer-string)))
+    (ivy-set-display-transformer 'counsel-describe-function #'with-doc)
+    (ivy-set-display-transformer 'counsel-describe-variable #'with-doc)
+    ;; Show keybinding and docustring in counsel-M-x
+    (ivy-set-display-transformer
+     'counsel-M-x
+     (lambda (cmd)
+       (let ((key (key-description (where-is-internal (intern cmd) nil t))))
+         (put-text-property 0 (length key) 'face 'counsel-key-binding key)
+         (format "%-15s%s" key (with-doc cmd)))))
+** DONE Some kind of sidebar :interface:
+** DONE [[https://github.com/politza/pdf-tools][pdf-tools]] :filetypes:
+** DONE [[http://mmm-mode.sourceforge.net/][Multiple major mode per file (html w/embedded css and js, etc)]] :editing:
+** DONE [[https://github.com/Wilfred/helpful][helpful]] :tools:
+** DONE [[https://github.com/emacsmirror/rainbow-mode][rainbow-mode]] :editing:
+** DONE Add keybindings to change font size :interface:
+   (require 'zoom-frm)
+   (global-set-key (kbd "M-+") 'zoom-frm-in)
+   (global-set-key (kbd "M--") 'zoom-frm-out)
+** DONE [[https://github.com/purcell/whitespace-cleanup-mode][whitespace-cleanup-mode]] (also newline at end of file) :editing:
+** DONE [[https://github.com/browse-kill-ring/browse-kill-ring][browse-kill-ring]] :interface:
+** DONE [[https://github.com/iqbalansari/emacs-emojify][Emoji]] :editing:
+** DONE [[https://github.com/Fuco1/smartparens][smartparens]] :editing:
+** DONE Spellchecking :checking:
+** DONE [[https://github.com/flycheck/flycheck][flycheck]] :checking:
+** DONE [[https://github.com/bbatsov/projectile][Projectile]] :projectmanagement:
+** DONE [[https://company-mode.github.io/][company-mode]] :editing:
+** DONE Ivy fuzzy search :interface:
+** DONE [[https://github.com/zk-phi/indent-guide][indent-guide]] :editing:
+** DONE [[https://github.com/Malabarba/aggressive-indent-mode][aggressive-indent-mode]] :editing:
+** DONE editorconfig / default indentation settings :editing:
+** DONE [[https://github.com/syohex/emacs-git-gutter][git-gutter]] :projectmanagement:
+** DONE [[https://magit.vc/][Magit]] :projectmanagement:
+** DONE Helm or [[https://github.com/abo-abo/swiper][Ivy, Counsel, Swiper]] :interface:
+** DONE [[https://github.com/ryuslash/mode-icons][mode-icons]] :interface:
+** DONE [[https://github.com/raugturi/powerline-evil][powerline-evil]] :interface:
+** DONE [[https://github.com/justbur/emacs-which-key][which-key]] :interface:
+** DONE Structure emacs config :codestructure:
+** DONE [[https://github.com/sabof/org-bullets][org-bullets]] :filetypes:
+** DONE Move temporary files somewhere :codestructure:
+** DONE Figure out [[https://github.com/jwiegley/use-package][use-package]] :codestructure:
+** DONE Unclutter emacs.d :codestructure:

@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+command clear $@
+fortune | cowthink -n | lolcat
+echo

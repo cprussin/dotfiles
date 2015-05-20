@@ -1,0 +1,12 @@
+#!/bin/sh
+
+SHAKTI="$HOME/Projects/shakti"
+SHAKTI_SRC="$SHAKTI/Sources/shakti"
+SHAKTI_TODO="$SHAKTI/Notes/Todo"
+
+case "$1" in
+  todo) exec open $SHAKTI_TODO ;;
+  edit) exec open $SHAKTI_SRC  ;;
+  jenkins) exec browse 'https://merch.builds.test.netflix.net/view/Shakti/' ;;
+  *) exec $TERMINAL -e $SHELL -c "cd $SHAKTI && nix-shell --run 'shakti $*'" ;;
+esac

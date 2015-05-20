@@ -1,0 +1,4 @@
+#!/bin/sh
+
+systemctl --user start mbsync &
+exec emacsclient -c --eval '(mu4e~headers-jump-to-maildir "/PrussinNet/Inbox")'

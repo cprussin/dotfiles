@@ -1,0 +1,5 @@
+#!/bin/sh
+
+url="https://trello.com/b/mHhKhvTF/web-core"
+
+exec browse $url

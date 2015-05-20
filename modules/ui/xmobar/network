@@ -1,0 +1,30 @@
+#!/bin/sh
+
+function isup() {
+    [ ! "$(ip link | grep $1 | grep DOWN)" ]
+}
+
+function getip() {
+    ip addr show dev $1 | grep "inet " | cut -f 6 -d ' ' | sed 's|/.*||' | head -n 1
+}
+
+icon="<fn=1></fn>"
+if isup wlp58s0; then
+    strength=$(tail -n 1 /proc/net/wireless | cut -d ' ' -f 5 | sed 's/\.//')
+    str="$icon $(iwgetid -r) $(getip wlp58s0) [$strength%]"
+    if [ $strength -lt 20 ]; then
+        echo -n "<fc=#dc322f>$str</fc>    "
+    elif [ $strength -lt 50 ]; then
+        echo -n "<fc=#859900>$str</fc>    "
+    else
+        echo -n "$str    "
+    fi
+else
+    echo -n "<fc=#586e75>$icon</fc>    "
+fi
+
+if isup enp0s31f6; then
+    echo -n "<fn=1></fn> $(getip enp0s31f6)    "
+fi
+
+echo

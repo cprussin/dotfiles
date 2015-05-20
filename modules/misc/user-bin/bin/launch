@@ -1,0 +1,36 @@
+#!/bin/sh
+
+tlds='com|net|org|gov|edu|co|io|do|me'
+browsePrefixes='http://|go/|localhost|chrome://'
+browseRegex='([0-9]{1,3}\.){3}[0-9]{1,3}'
+
+showPrompt() {
+    prompt \
+        -lines 7 \
+        -p '' \
+        -theme-str "textbox-prompt-colon { enabled: false; }" \
+        -mesg "$(fortune)"
+}
+
+if [ $# -eq 0 ]; then
+    topLevelFiles=$(find * -maxdepth 1)
+    otherFiles=$(find {Documents,Notes,Scratch} -mindepth 2 -not -path '*/\.*')
+    allFiles=$((echo "$topLevelFiles"; echo "$otherFiles") | sort)
+    selection=$((ls "$APP_PATH"; echo "$allFiles") | showPrompt)
+
+    if [ "$selection" ]; then
+        exec $0 $selection
+    else
+        exit
+    fi
+fi
+
+if [[ -x $APP_PATH/$1 ]]; then
+    exec "$APP_PATH/$@"
+elif [[ -e $(eval echo "$@") ]]; then
+    exec open "$*"
+elif echo "$1" | grep -oqE "(\.($TLDS)|^($browsePrefixes)|^($browseRegex)$)"; then
+    exec browse "$1"
+elif [ "$*" ]; then
+    exec search "$*"
+fi

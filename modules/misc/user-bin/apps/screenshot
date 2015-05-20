@@ -1,0 +1,10 @@
+#!/bin/sh
+
+num=$(ls -1 $HOME/Scratch/screenshot*.png 2>/dev/null | wc -l)
+
+if [ $1 == 'region' ]; then
+    args=""
+else
+    args="-window $(xdotool selectwindow)"
+fi
+exec import $args $HOME/Scratch/screenshot$num.png

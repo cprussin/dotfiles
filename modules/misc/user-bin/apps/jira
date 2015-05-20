@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec browse "https://jira.netflix.com/secure/Dashboard.jspa?selectPageId=22387#"

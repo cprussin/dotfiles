@@ -1,0 +1,6 @@
+#!/bin/sh
+
+exec yes_no -m 'Are you sure you want to shut down?' \
+     -y 'Yes, shutdown' \
+     -n 'No, remain on' \
+     "shutdown -h now"

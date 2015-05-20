@@ -1,0 +1,24 @@
+#!/bin/sh
+
+yes='Yes'
+no='No'
+message='Are you sure?'
+cmd='echo yes'
+
+OPTS=$(getopt -o y:n:m: -l yes:,no:,message: -- "$@")
+eval set -- "$OPTS"
+while true; do
+  case "$1" in
+    -y|--yes)     yes=$2;     shift 2  ;;
+    -n|--no)      no=$2;      shift 2  ;;
+    -m|--message) message=$2; shift 2  ;;
+    --)
+        shift
+        [ "$1" ] && cmd=$@
+        break
+        ;;
+  esac
+done
+
+selection=$(echo -e "$no\n$yes" | prompt -lines 1 -p "$message ")
+[ "$selection" == "$yes" ] && $cmd

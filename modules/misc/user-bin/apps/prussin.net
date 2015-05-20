@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec $TERMINAL -e sh -c 'TERM=xterm ssh prussin.net'

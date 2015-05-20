@@ -1,0 +1,12 @@
+#!/bin/sh
+
+publicIp=$(dig +short myip.opendns.com @resolver1.opendns.com)
+homeIp=$(dig +short home.prussin.net @resolver1.opendns.com)
+
+if [ $publicIp == $homeIp ]; then
+    PROFILE=home
+else
+    PROFILE=home-external
+fi
+
+exec $TERMINAL -e unison $PROFILE
