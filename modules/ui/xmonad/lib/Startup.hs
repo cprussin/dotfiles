@@ -6,6 +6,6 @@ import qualified XMonad as XMonad
 startup :: XMonad.X ()
 startup = Foldable.traverse_ XMonad.spawn
   -- UI stuff
-  [ "setup-monitors --no-restart-xmonad"
+  [ "setup-monitors"
   , "xsetroot -cursor_name left_ptr"
   ]

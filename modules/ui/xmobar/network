@@ -1,7 +1,18 @@
 #!/bin/sh
 
+for file in /sys/class/net/*
+do
+    if [ -d $file/wireless ]
+    then
+        WIRELESS_INTERFACE=${file#/sys/class/net/}
+    elif [ -h $file/device ]
+    then
+        WIRED_INTERFACE=${file#/sys/class/net/}
+    fi
+done
+
 function isup() {
-    [ ! "$(ip link | grep $1 | grep DOWN)" ]
+    [ "$(cat /sys/class/net/$1/operstate)" == "up" ]
 }
 
 function getip() {
@@ -9,9 +20,9 @@ function getip() {
 }
 
 icon="<fn=1></fn>"
-if isup wlp58s0; then
+if isup $WIRELESS_INTERFACE; then
     strength=$(tail -n 1 /proc/net/wireless | cut -d ' ' -f 5 | sed 's/\.//')
-    str="$icon $(iwgetid -r) $(getip wlp58s0) [$strength%]"
+    str="$icon $(iwgetid -r) $(getip $WIRELESS_INTERFACE) [$strength%]"
     if [ $strength -lt 20 ]; then
         echo -n "<fc=#dc322f>$str</fc>    "
     elif [ $strength -lt 50 ]; then
@@ -23,8 +34,8 @@ else
     echo -n "<fc=#586e75>$icon</fc>    "
 fi
 
-if isup enp0s31f6; then
-    echo -n "<fn=1></fn> $(getip enp0s31f6)    "
+if isup $WIRED_INTERFACE; then
+    echo -n "<fn=1></fn> $(getip $WIRED_INTERFACE)    "
 fi
 
 echo
