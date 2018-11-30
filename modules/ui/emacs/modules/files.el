@@ -7,13 +7,13 @@
 ;;;
 ;;; Code:
 
-;; Stop making lockfiles and autosave folder
-(setq create-lockfiles nil
-      auto-save-list-file-prefix nil)
+;; Stop making lockfiles
+(setq create-lockfiles nil)
 
 ;; Disable backup and autosave files
 (use-package files
-  :config (setq make-backup-files nil))
+  :config (setq make-backup-files nil
+                auto-save-default nil))
 
 (provide 'files)
 ;;; files.el ends here
