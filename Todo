@@ -1,16 +1,18 @@
 -*- mode: org; -*-
 
 * Wishlist
-** TODO Smart tabs :emacs:editing:
-** TODO Sidebar :emacs:interface:
-** TODO Something for workgroups? :emacs:interface:
 ** TODO JS :user:emacs:filetypes:
 ** TODO CSS/less :user:emacs:filetypes:
     (add-hook 'css-mode-hook #'use-stylelint-from-node-modules)
     (setq flycheck-stylelintrc ".stylelintrc")
     (add-hook 'css-mode-hook 'flycheck-mode)
+** TODO Smart tabs :emacs:editing:
+** TODO Sidebar :emacs:interface:
+** TODO Something for workgroups? :emacs:interface:
 * On Hold
 * To Do
+** TODO Install minichrome :user:
+** TODO Install aosd for volume change overlay :user:
 ** TODO Fixup path hacks :user:system:
    - [ ] user-bin
    - [ ] $APP_PATH
@@ -20,8 +22,6 @@
    - [ ] xmobar scripts
    - [ ] xmonad?
    - [ ] zsh
-** TODO Install minichrome :user:
-** TODO Install aosd for volume change overlay :user:
 ** TODO Replace packageOverrides for sudo with overlay :system:
 ** TODO Consolidate solarized theme configs :user:
 * Done
