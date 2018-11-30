@@ -27,7 +27,7 @@ fi
 
 if [[ -x $APP_PATH/$1 ]]; then
     exec "$APP_PATH/$@"
-elif [[ -e $(eval echo "$@") ]]; then
+elif [[ -e $(eval echo "$@" 2>/dev/null) ]]; then
     exec open "$*"
 elif echo "$1" | grep -oqE "(\.($TLDS)|^($browsePrefixes)|^($browseRegex)$)"; then
     exec browse "$1"
