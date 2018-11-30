@@ -11,7 +11,6 @@
 ** TODO Something for workgroups? :emacs:interface:
 * On Hold
 * To Do
-** TODO Fix solarized invisible grey :user:
 ** TODO Install minichrome :user:
 ** TODO Install aosd for volume change overlay :user:
 ** TODO Fixup path hacks :user:system:
@@ -28,6 +27,7 @@
 ** TODO Consolidate solarized theme configs :user:
 ** TODO Remove /bin/bash hack :user:shakti:
 * Done
+** DONE Fix solarized invisible grey :user:
 ** DONE Fix emacs zoom-frm :user:
 ** DONE Set up user daemons :user:
    - [X] tray
