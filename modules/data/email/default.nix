@@ -18,7 +18,10 @@
         smtp = {
           port = 587;
           host = "prussin.net";
-          tls.enable = true;
+          tls = {
+            enable = true;
+            useStartTls = true;
+          };
         };
         mbsync = {
           enable = true;
