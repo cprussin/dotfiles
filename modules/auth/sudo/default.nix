@@ -9,7 +9,7 @@ in
 
 {
   options.sudoCmds = lib.mkOption {
-    type = lib.types.listOf lib.types.string;
+    type = lib.types.listOf lib.types.str;
     default = [];
     description = ''
       The list of commands to allow the primary user to use via sudo without

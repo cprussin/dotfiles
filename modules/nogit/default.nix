@@ -1,7 +1,7 @@
 { lib, config, ... }:
 
 let
-  nogit = "${config.dotfiles}/modules/nogit";
+  nogit = toString ./.;
   link = withDot: file: {
     "${if withDot then "." else ""}${file}".source = "${nogit}/${file}";
   };

@@ -2,7 +2,7 @@
 
 {
   options.shakti.nginxConfigPath = lib.mkOption {
-    type = lib.types.string;
+    type = lib.types.str;
     default = "/home/${config.primaryUserName}/Projects/shakti/Sources/shakti/packages/shakti-build/tasks/nginx/nginx-app-generated.conf";
     description = ''
       A string containing the path to the generated nginx config file.

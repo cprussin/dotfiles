@@ -35,17 +35,5 @@
     ../../../modules/ui/zsh
   ];
 
-  options.dotfiles = lib.mkOption {
-    type = lib.types.str;
-    default = "${config.home.homeDirectory}/Projects/dotfiles";
-    description = "A string containing the path to the dotfiles";
-  };
-
-  config.home = {
-    packages = with pkgs; [
-      tree
-    ];
-
-    stateVersion = "18.09";
-  };
+  home.stateVersion = import ../../../state-version.nix;
 }

@@ -2,7 +2,7 @@
 
 {
   options.netflixVpnAuthPath = lib.mkOption {
-    type = lib.types.string;
+    type = lib.types.str;
     default = "/home/${config.primaryUserName}/Projects/dotfiles/nogit/secrets/netflix";
     description = ''
       A string containing the path containing the Netflix VPN authentication

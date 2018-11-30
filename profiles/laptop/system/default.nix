@@ -9,6 +9,7 @@
 
     (../../../modules/hardware + "/${hostName}")
 
+    ../../../modules/misc/auto-upgrade
     ../../../modules/misc/docker
     ../../../modules/misc/printing
 
@@ -16,8 +17,9 @@
     ../../../modules/netflix/shakti-nginx
     ../../../modules/netflix/vpn
 
-    ../../../modules/networks/wifi
     ../../../modules/networks/bluetooth
+    ../../../modules/networks/dhcp
+    ../../../modules/networks/wifi
 
     ../../../modules/timezone/pacific
 
@@ -32,7 +34,5 @@
 
   primaryUserName = userName;
   networking.hostName = hostName;
-  systemd.services.dhcpcd.before = lib.mkForce [ "network-online.target" ];
-  system.autoUpgrade.enable = true;
-  system.stateVersion = "18.09";
+  system.stateVersion = import ../../../state-version.nix;
 }
