@@ -11,6 +11,7 @@
 ** TODO Something for workgroups? :emacs:interface:
 * On Hold
 * To Do
+** TODO Fix solarized invisible grey :user:
 ** TODO Install minichrome :user:
 ** TODO Install aosd for volume change overlay :user:
 ** TODO Fixup path hacks :user:system:
@@ -23,7 +24,9 @@
    - [ ] xmonad?
    - [ ] zsh
 ** TODO Replace packageOverrides for sudo with overlay :system:
+** TODO Add local caching DNS server :system:
 ** TODO Consolidate solarized theme configs :user:
+** TODO Remove /bin/bash hack :user:shakti:
 * Done
 ** DONE Fix emacs zoom-frm :user:
 ** DONE Set up user daemons :user:
