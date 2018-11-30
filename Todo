@@ -1,6 +1,7 @@
 -*- mode: org; -*-
 
 * Wishlist
+** TODO Add local caching DNS server :system:
 ** TODO JS :user:emacs:filetypes:
 ** TODO CSS/less :user:emacs:filetypes:
     (add-hook 'css-mode-hook #'use-stylelint-from-node-modules)
@@ -11,21 +12,21 @@
 ** TODO Something for workgroups? :emacs:interface:
 * On Hold
 * To Do
-** TODO Install minichrome :user:
-** TODO Install aosd for volume change overlay :user:
-** TODO Fixup path hacks :user:system:
+** TODO Install missing packages :user:
+   - [ ] minichrome
+   - [ ] aosd (volume change overlay)
+** TODO Fix hacks :user:system:
    - [ ] user-bin
    - [ ] $APP_PATH
    - [ ] $SECRETS
-   - [ ] emacs (ag)
+   - [ ] emacs dependencies (silver-searcher)
    - [ ] fonts?
-   - [ ] xmobar scripts
-   - [ ] xmonad?
-   - [ ] zsh
-** TODO Replace packageOverrides for sudo with overlay :system:
-** TODO Add local caching DNS server :system:
+   - [ ] xmobar script paths/dependencies
+   - [ ] xmonad hardcoded package dependencies?
+   - [ ] zsh alias paths/dependencies
+   - [ ] Replace packageOverrides for sudo with nix overlays
+   - [ ] Remove /bin/bash (used for shakti API scripts)
 ** TODO Consolidate solarized theme configs :user:
-** TODO Remove /bin/bash hack :user:shakti:
 * Done
 ** DONE Fix solarized invisible grey :user:
 ** DONE Fix emacs zoom-frm :user:
