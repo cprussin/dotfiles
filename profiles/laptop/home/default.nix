@@ -16,7 +16,6 @@
     ../../../modules/netflix/metatron
 
     ../../../modules/nix/home-manager
-    ../../../modules/nix/nixlocal
     ../../../modules/nix/nixpkgs
 
     ../../../modules/nogit
