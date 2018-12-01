@@ -24,10 +24,10 @@
    - [ ] xmobar script paths/dependencies
    - [ ] xmonad hardcoded package dependencies?
    - [ ] zsh alias paths/dependencies
-   - [ ] Replace packageOverrides for sudo with nix overlays
    - [ ] Remove /bin/bash (used for shakti API scripts)
 ** TODO Consolidate solarized theme configs :user:
 * Done
+** DONE Replace packageOverrides for sudo with nix overlays :user:system:
 ** DONE Fix solarized invisible grey :user:
 ** DONE Fix emacs zoom-frm :user:
 ** DONE Set up user daemons :user:

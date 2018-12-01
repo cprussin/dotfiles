@@ -18,9 +18,13 @@ in
   };
 
   config = {
-    nixpkgs.config.packageOverrides = pkgs: {
-      sudo = pkgs.sudo.override { withInsults = true; };
-    };
+    nixpkgs.overlays = [
+      (self: super: {
+        sudo = super.sudo.override {
+          withInsults = true;
+        };
+      })
+    ];
 
     security.sudo = {
       extraConfig = "Defaults insults";
