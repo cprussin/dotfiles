@@ -1,13 +1,13 @@
 { pkgs, ... }:
 
+let
+  ls = pkgs.callPackage ./ls.nix { };
+  clear = pkgs.callPackage ./clear.nix { inherit ls; };
+in
+
 {
   home = {
-    packages = with pkgs; [
-      python # For gitstatus
-      fortune # For clear alias
-      cowsay # For clear alias
-      lolcat # For clear alias
-    ];
+    packages = [ pkgs.python ]; # For gitstatus
     file.".zsh-dircolors.config".text = "dircolors.ansi-dark";
   };
 
@@ -45,13 +45,12 @@
       }
     ];
     shellAliases = {
-      ls = ./ls;
-      clear = ./clear;
+      ls = ls;
+      clear = clear;
     };
     initExtra = ''
-      function precmd() {
-        echo
-        ${./ls}
+      function chpwd() {
+        ${ls}
       }
 
       autoload -U colors
@@ -69,7 +68,7 @@
       setopt noclobber                    # Keep me from overwriting files accidentally
       unsetopt notify                     # Don't print status of background jobs until a prompt is about to be printed
 
-      ${./clear}
+      ${clear}
     '';
   };
 }

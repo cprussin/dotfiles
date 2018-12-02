@@ -20,12 +20,13 @@
    - [ ] $APP_PATH
    - [ ] $SECRETS
    - [ ] xmonad hardcoded package dependencies?
-   - [ ] zsh alias paths/dependencies
    - [ ] Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti)
-   - [ ] emacs dependencies (silver-searcher)
+   - [ ] zsh plugin dependencies (git, python)
+   - [ ] emacs package dependencies (silver-searcher)
    - [ ] fonts?
 ** TODO Consolidate solarized theme configs :user:
 * Done
+** DONE zsh alias paths/dependencies :user:
 ** DONE xmobar script paths/dependencies :user:
 ** DONE Replace packageOverrides for sudo with nix overlays :user:system:
 ** DONE Fix solarized invisible grey :user:
