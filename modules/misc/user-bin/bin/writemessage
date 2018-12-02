@@ -4,15 +4,15 @@ message=$1
 program="$2"
 
 writemessage() {
-    if [ -f $XDG_RUNTIME_DIR/.message ]; then
-        echo "$message" >> $XDG_RUNTIME_DIR/.message
+    if [ -f $XDG_RUNTIME_DIR/message ]; then
+        echo "$message" >> $XDG_RUNTIME_DIR/message
     else
-        echo "$message" > $XDG_RUNTIME_DIR/.message
+        echo "$message" > $XDG_RUNTIME_DIR/message
     fi
 }
 
 writemessage
-messageId=$(wc -l $XDG_RUNTIME_DIR/.message | cut -d ' ' -f 1)
+messageId=$(wc -l $XDG_RUNTIME_DIR/message | cut -d ' ' -f 1)
 
 clear() {
     clearmessage $messageId
