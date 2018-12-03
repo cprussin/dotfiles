@@ -1,1 +1,0 @@
-import ./profiles/laptop/home

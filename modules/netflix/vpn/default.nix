@@ -3,7 +3,7 @@
 {
   options.netflixVpnAuthPath = lib.mkOption {
     type = lib.types.str;
-    default = "/home/${config.primaryUserName}/Projects/dotfiles/modules/nogit/secrets/netflix";
+    default = "/home/${config.primaryUserName}/Projects/dotfiles/modules/data/nogit/secrets/netflix";
     description = ''
       A string containing the path containing the Netflix VPN authentication
       files.  This directory should contain the following files:

@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  imports = [ ../../../profiles/laptop/user ];
+}

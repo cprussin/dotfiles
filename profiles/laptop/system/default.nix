@@ -1,38 +1,36 @@
-{ hostName, userName }: { lib, ... }:
+{ lib, ... }:
 
 {
   imports = [
-    ../../../modules/auth/primary-user
-    ../../../modules/auth/sudo
-
     ../../../modules/boot/systemd-boot
 
-    (../../../modules/hardware + "/${hostName}")
+    ../../../modules/devices/bluetooth
+    ../../../modules/devices/printing
+    ../../../modules/devices/touchpad
 
-    ../../../modules/misc/auto-upgrade
-    ../../../modules/misc/docker
-    ../../../modules/misc/printing
+    ../../../modules/devtools/docker
+
+    ../../../modules/net/dhcp
+    ../../../modules/net/wifi
 
     ../../../modules/netflix/hostname
     ../../../modules/netflix/shakti-nginx
     ../../../modules/netflix/vpn
 
-    ../../../modules/networks/bluetooth
-    ../../../modules/networks/dhcp
-    ../../../modules/networks/wifi
+    ../../../modules/nix/auto-upgrade
 
-    ../../../modules/timezone/pacific
+    ../../../modules/security/primary-user
+    ../../../modules/security/sudo
 
     ../../../modules/ui/audio
-    ../../../modules/ui/dvp-system
+    ../../../modules/ui/dvp/system
     ../../../modules/ui/fonts
     ../../../modules/ui/greeting
     ../../../modules/ui/log
-    ../../../modules/ui/touchpad
     ../../../modules/ui/xorg
+
+    ../../../modules/zone/pacific
   ];
 
-  primaryUserName = userName;
-  networking.hostName = hostName;
   system.stateVersion = import ../../../state-version.nix;
 }
