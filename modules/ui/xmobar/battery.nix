@@ -7,6 +7,8 @@ writeScript "battery" ''
   wc=${coreutils}/bin/wc
   grep=${gnugrep}/bin/grep
   tr=${coreutils}/bin/tr
+  test=${coreutils}/bin/test
+  echo=${coreutils}/bin/echo
   xargs=${findutils}/bin/xargs
 
   count=$($acpi -b | $wc -l)
@@ -18,11 +20,14 @@ writeScript "battery" ''
   )
   average=$(( sum / count ))
 
-  if [ "$($acpi | grep Full)" ]; then
+  if $test "$($acpi | grep Full)"
+  then
       status="<fn=1></fn>"
-  elif [ "$($acpi | grep Charging)" ]; then
+  elif $test "$($acpi | grep Charging)"
+  then
       status="<fn=1> </fn> ▲"
-  elif [ $average -lt 50 ]; then
+  elif $test $average -lt 50
+  then
       status="<fn=1> </fn> ▼"
   else
       status="<fn=1> </fn> ▼"
@@ -30,11 +35,11 @@ writeScript "battery" ''
 
   str="$status $average%"
 
-  if [ $average -lt 5 ]; then
+  if $test $average -lt 5; then
       str="<fc=#dc322f>$str</fc>"
-  elif [ $average -lt 15 ]; then
+  elif $test $average -lt 15; then
       str="<fc=#859900>$str</fc>"
   fi
 
-  echo "$str    "
+  $echo "$str    "
 ''

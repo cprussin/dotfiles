@@ -1,5 +1,0 @@
-#!/bin/sh
-
-messageId=$1
-
-sed -i "${messageId}d" $XDG_RUNTIME_DIR/message

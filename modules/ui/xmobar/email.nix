@@ -5,7 +5,10 @@ writeScript "email" ''
 
   ls=${coreutils}/bin/ls
   wc=${coreutils}/bin/wc
+  test=${coreutils}/bin/test
+  echo=${coreutils}/bin/echo
 
+  str=""
   for mailbox in $($ls -1 $HOME/Mail); do
       cur=$($ls -1 $HOME/Mail/$mailbox/Inbox/cur | $wc -l)
       new=$($ls -1 $HOME/Mail/$mailbox/Inbox/new | $wc -l)
@@ -17,12 +20,13 @@ writeScript "email" ''
           *) action="$APP_PATH/email" ;;
       esac
 
-      if [ $total -gt 0 ]; then
+      if $test $total -gt 0
+      then
           mailbox="<action=\`$action\` button=123> $mailbox <fn=1></fn> $total</action>"
-          [ $new -ne 0 ] && mailbox="<fc=#859900>$mailbox</fc>"
-          echo -n "$mailbox    "
+          $test $new -ne 0 && mailbox="<fc=#859900>$mailbox</fc>"
+          str="$str$mailbox    "
       fi
   done
 
-  echo
+  $echo "$str"
 ''

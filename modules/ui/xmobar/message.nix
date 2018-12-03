@@ -1,14 +1,14 @@
-{ writeScript, bash, coreutils }:
+{ writeScript, bash, coreutils, gnused }:
 
 writeScript "message" ''
   #! ${bash}/bin/sh
 
-  if [ -f $XDG_RUNTIME_DIR/message ]; then
-      IFS=$'\n'
-      for line in $(${coreutils}/bin/cat $XDG_RUNTIME_DIR/message)
-      do
-          echo -n "$line  |  "
-      done
+  sed=${gnused}/bin/sed
+  test=${coreutils}/bin/test
+  paste=${coreutils}/bin/paste
+
+  if $test -f $XDG_RUNTIME_DIR/message
+  then
+      $sed 's/^[^ ]* \(.*\)/\1  |  /' < $XDG_RUNTIME_DIR/message | $paste -sd ''' -
   fi
-  echo
 ''

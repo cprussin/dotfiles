@@ -1,3 +1,3 @@
 #!/bin/sh
 
-writemessage "Syncing email..." 'systemctl --user start mbsync'
+message write "Syncing email..." 'systemctl --user start mbsync'

@@ -10,21 +10,23 @@ writeScript "network" ''
   cut=${coreutils}/bin/cut
   head=${coreutils}/bin/head
   tail=${coreutils}/bin/tail
+  test=${coreutils}/bin/test
+  echo=${coreutils}/bin/echo
   iwgetid=${wirelesstools}/bin/iwgetid
 
   for file in /sys/class/net/*
   do
-      if [ -d $file/wireless ]
+      if $test -d $file/wireless
       then
           WIRELESS_INTERFACE=''${file#/sys/class/net/}
-      elif [ -h $file/device ]
+      elif $test -h $file/device
       then
           WIRED_INTERFACE=''${file#/sys/class/net/}
       fi
   done
 
   function isup() {
-      [ "$($cat /sys/class/net/$1/operstate)" == "up" ]
+      $test "$($cat /sys/class/net/$1/operstate)" == "up"
   }
 
   function getip() {
@@ -36,23 +38,25 @@ writeScript "network" ''
   }
 
   icon="<fn=1></fn>"
-  if isup $WIRELESS_INTERFACE; then
+  if isup $WIRELESS_INTERFACE
+  then
       strength=$($tail -n 1 /proc/net/wireless | $cut -d ' ' -f 5 | $sed 's/\.//')
       str="$icon $($iwgetid -r) $(getip $WIRELESS_INTERFACE) [$strength%]"
       if [ $strength -lt 20 ]; then
-          echo -n "<fc=#dc322f>$str</fc>    "
+          str="<fc=#dc322f>$str</fc>    "
       elif [ $strength -lt 50 ]; then
-          echo -n "<fc=#859900>$str</fc>    "
+          str="<fc=#859900>$str</fc>    "
       else
-          echo -n "$str    "
+          str="$str    "
       fi
   else
-      echo -n "<fc=#586e75>$icon</fc>    "
+      str="<fc=#586e75>$icon</fc>    "
   fi
 
-  if isup $WIRED_INTERFACE; then
-      echo -n "<fn=1></fn> $(getip $WIRED_INTERFACE)    "
+  if isup $WIRED_INTERFACE
+  then
+      str="$str<fn=1></fn> $(getip $WIRED_INTERFACE)    "
   fi
 
-  echo
+  $echo "$str"
 ''
