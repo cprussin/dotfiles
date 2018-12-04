@@ -1,6 +1,6 @@
 #!/bin/sh
 
 user=0
-[ $1 == 'netflix' ] && user=1
+[ "$1" == "netflix" ] && user=1
 
 exec browse "https://www.google.com/calendar/b/$user/render#main_7"
