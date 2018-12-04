@@ -20,6 +20,7 @@
     ../../../modules/nix/auto-upgrade
 
     ../../../modules/security/primary-user
+    ../../../modules/security/sshd
     ../../../modules/security/sudo
 
     ../../../modules/ui/audio
