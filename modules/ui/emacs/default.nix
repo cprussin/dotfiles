@@ -112,8 +112,8 @@ in
     };
 
     Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.stdenv.shell} -l -c 'exec %h/.nix-profile/bin/emacs --fg-daemon'";
+      Type = "forking";
+      ExecStart = "${pkgs.stdenv.shell} -l -c 'exec %h/.nix-profile/bin/emacs --daemon'";
       ExecStop = "%h/.nix-profile/bin/emacsclient --eval '(kill-emacs)'";
       Restart = "on-failure";
     };
