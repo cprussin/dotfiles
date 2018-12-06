@@ -47,9 +47,18 @@ in
     shellAliases = {
       ls = ls;
       clear = clear;
+      ghci = "nix-shell -p ghc --run ghci";
     };
     initExtra = ''
-      function chpwd() {
+      shell() {
+        nix-shell --run "$*"
+      }
+
+      node() {
+        nix-shell -p nodejs --run "node $*";
+      }
+
+      chpwd() {
         ${ls}
       }
 
