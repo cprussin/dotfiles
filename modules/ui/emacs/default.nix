@@ -107,7 +107,6 @@ in
     Unit = {
       Description = "Emacs text editor";
       Documentation = "info:emacs man:emacs(1) https://gnu.org/software/emacs/";
-      SyslogIdentifier = "emacs-daemon";
     };
 
     Install = {
@@ -119,6 +118,7 @@ in
       ExecStart = "${pkgs.stdenv.shell} -l -c 'exec %h/.nix-profile/bin/emacs --daemon'";
       ExecStop = "%h/.nix-profile/bin/emacsclient --eval '(kill-emacs)'";
       Restart = "on-failure";
+      SyslogIdentifier = "emacs-daemon";
     };
   };
 }
