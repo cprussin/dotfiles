@@ -20,7 +20,10 @@ in
 
 {
   home = {
-    packages = [ pkgs.silver-searcher ];
+    packages = with pkgs; [
+      silver-searcher
+      zip
+    ];
 
     file = {
       ".emacs.d/modules" = {
