@@ -1,6 +1,18 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
+
+let
+  toggle-colors = pkgs.callPackage ./toggle-colors.nix {
+    emacs = config.programs.emacs.finalPackage;
+  };
+in
 
 {
+  nixpkgs.overlays = [
+    (self: super: { inherit toggle-colors; })
+  ];
+
+  home.packages = [ pkgs.toggle-colors ];
+
   xresources.extraConfig = builtins.readFile (
     pkgs.fetchFromGitHub {
       owner = "solarized";

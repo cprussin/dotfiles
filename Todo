@@ -1,6 +1,8 @@
 -*- mode: org; -*-
 
 * Wishlist
+** TODO Fix TODO items in toggle-colors script :user:
+** TODO Fix emacs colorscheme so toggle-colors preserves overrides :emacs:
 ** TODO Add local caching DNS server :system:
 ** TODO JS :user:emacs:filetypes:
 ** TODO CSS/less :user:emacs:filetypes:
