@@ -1,4 +1,4 @@
-{ pkgs, ...}:
+{ pkgs, ... }:
 
 let
   read-message = pkgs.callPackage ./read-message.nix {};
