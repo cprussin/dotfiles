@@ -26,6 +26,7 @@
     ../../../modules/ui/numix-cursor-theme
     ../../../modules/ui/readline
     ../../../modules/ui/solarized-theme
+    ../../../modules/ui/setup-monitors
     ../../../modules/ui/tray
     ../../../modules/ui/urxvt
     ../../../modules/ui/user-bin
