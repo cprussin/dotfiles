@@ -19,14 +19,15 @@
     ../../../modules/security/ssh
     ../../../modules/security/umask
 
+    ../../../modules/ui/audio/user
     ../../../modules/ui/autocutsel
     ../../../modules/ui/backgrounds
     ../../../modules/ui/dvp/user
     ../../../modules/ui/emacs
     ../../../modules/ui/numix-cursor-theme
     ../../../modules/ui/readline
-    ../../../modules/ui/solarized-theme
     ../../../modules/ui/setup-monitors
+    ../../../modules/ui/solarized-theme
     ../../../modules/ui/tray
     ../../../modules/ui/urxvt
     ../../../modules/ui/user-bin

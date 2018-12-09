@@ -23,7 +23,7 @@
     ../../../modules/security/sshd
     ../../../modules/security/sudo
 
-    ../../../modules/ui/audio
+    ../../../modules/ui/audio/system
     ../../../modules/ui/dvp/system
     ../../../modules/ui/fonts
     ../../../modules/ui/greeting

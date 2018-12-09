@@ -4,7 +4,6 @@
 , rofi
 , file
 , slack
-, pamixer
 , pavucontrol
 , feh
 , keepassxc
@@ -26,7 +25,6 @@ stdenv.mkDerivation {
     rofi
     file
     slack
-    pamixer
     pavucontrol
     feh
     keepassxc
