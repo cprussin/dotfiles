@@ -17,7 +17,7 @@
 , zathura
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "user-bin";
 
   propagatedUserEnvPkgs = [

@@ -1,6 +1,7 @@
 { pkgs, ...}:
 
 let
+  read-message = pkgs.callPackage ./read-message.nix {};
   message = pkgs.callPackage ./message.nix {};
   email = pkgs.callPackage ./email.nix {};
   vpn = pkgs.callPackage ./vpn.nix {};
@@ -12,9 +13,14 @@ let
 in
 
 {
+  nixpkgs.overlays = [
+    (self: super: { inherit message; })
+  ];
+
   home = {
     packages = with pkgs; [
       haskellPackages.xmobar
+      message
     ];
 
     file.".xmobarrc".text = ''
@@ -36,7 +42,7 @@ in
         , overrideRedirect = False
         , commands =
         [ Run UnsafeStdinReader
-        , Run Com "${message}" [] "message" 1
+        , Run Com "${read-message}" [] "message" 1
         , Run Com "${email}" [] "email" 10
         , Run Com "${vpn}" [] "vpn" 10
         , Run Com "${volume}" [] "volume" 1
