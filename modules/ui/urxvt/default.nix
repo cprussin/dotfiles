@@ -1,6 +1,16 @@
 { pkgs, config, ... }:
 
+let
+  setterminfo = pkgs.callPackage ./setterminfo.nix {};
+in
+
 {
+  nixpkgs.overlays = [
+    (self: super: { inherit setterminfo; })
+  ];
+
+  home.packages = [ pkgs.setterminfo ];
+
   xsession.profileExtra = "export TERMINAL=${config.programs.urxvt.package}/bin/urxvtc";
 
   programs.urxvt = {
