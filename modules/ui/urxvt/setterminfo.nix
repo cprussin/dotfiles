@@ -1,8 +1,6 @@
-{ writeScriptBin, bash, coreutils, openssh }:
+{ writeShellScriptBin, bash, coreutils, openssh }:
 
-writeScriptBin "setterminfo" ''
-  #! ${bash}/bin/sh
-
+writeShellScriptBin "setterminfo" ''
   echo=${coreutils}/bin/echo
   ssh=${openssh}/bin/ssh
   scp=${openssh}/bin/scp

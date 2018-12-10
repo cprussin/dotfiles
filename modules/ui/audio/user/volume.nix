@@ -1,8 +1,6 @@
-{ writeScriptBin, bash, pamixer, gnugrep, gnused, coreutils }:
+{ writeShellScriptBin, bash, pamixer, gnugrep, gnused, coreutils }:
 
-writeScriptBin "volume" ''
-  #! ${bash}/bin/sh
-
+writeShellScriptBin "volume" ''
   pamixer=${pamixer}/bin/pamixer
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed

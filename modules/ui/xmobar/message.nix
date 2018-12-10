@@ -1,8 +1,6 @@
-{ writeScriptBin, bash, coreutils, gnused }:
+{ writeShellScriptBin, bash, coreutils, gnused }:
 
-writeScriptBin "message" ''
-  #! ${bash}/bin/sh
-
+writeShellScriptBin "message" ''
   tail=${coreutils}/bin/tail
   cut=${coreutils}/bin/cut
   echo=${coreutils}/bin/echo
