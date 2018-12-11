@@ -1,3 +1,0 @@
-#!/bin/sh
-
-wine "$HOME/.wine/drive_c/SIMTOWER/SIMTOWER.EXE" &

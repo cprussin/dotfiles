@@ -1,6 +1,0 @@
-#!/bin/sh
-
-exec yes_no -m 'Are you sure you want to reboot?' \
-     -y 'Yes, reboot' \
-     -n 'No, remain on' \
-     systemctl reboot

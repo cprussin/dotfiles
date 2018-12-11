@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec browse "http://localhost:${1-4200}"

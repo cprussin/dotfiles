@@ -24,13 +24,13 @@
     ../../../modules/ui/backgrounds
     ../../../modules/ui/dvp/user
     ../../../modules/ui/emacs
+    ../../../modules/ui/launcher
     ../../../modules/ui/numix-cursor-theme
     ../../../modules/ui/readline
     ../../../modules/ui/setup-monitors
     ../../../modules/ui/solarized-theme
     ../../../modules/ui/tray
     ../../../modules/ui/urxvt
-    ../../../modules/ui/user-bin
     ../../../modules/ui/xmobar
     ../../../modules/ui/xmonad
     ../../../modules/ui/zsh

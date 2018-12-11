@@ -15,9 +15,6 @@
 * On Hold
 * To Do
 ** TODO Fix hacks :user:system:
-   - [ ] user-bin
-   - [ ] $APP_PATH
-   - [ ] $SECRETS
    - [ ] xmonad hardcoded package dependencies
    - [ ] Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti)
    - [ ] zsh plugin dependencies (git, python)
@@ -27,6 +24,9 @@
    - [ ] aosd (volume change overlay)
 ** TODO Consolidate solarized theme configs :user:
 * Done
+** DONE $SECRETS :user:
+** DONE $APP_PATH :user:
+** DONE user-bin :user:
 ** DONE zsh alias paths/dependencies :user:
 ** DONE xmobar script paths/dependencies :user:
 ** DONE Replace packageOverrides for sudo with nix overlays :user:system:

@@ -1,6 +1,0 @@
-#!/bin/sh
-
-user=0
-[ $1 == 'netflix' ] && user=1
-
-exec browse "https://drive.google.com/drive/u/$user/my-drive"

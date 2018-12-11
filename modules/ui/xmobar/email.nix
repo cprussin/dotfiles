@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils }:
+{ writeScript, bash, coreutils, launcher }:
 
 writeScript "email" ''
   #! ${bash}/bin/sh
@@ -7,6 +7,8 @@ writeScript "email" ''
   wc=${coreutils}/bin/wc
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
+  gmail=${launcher}/share/apps/gmail
+  email=${launcher}/share/apps/email
 
   str=""
   for mailbox in $($ls -1 $HOME/Mail); do
@@ -15,9 +17,9 @@ writeScript "email" ''
       total=$((cur + new))
 
       case $mailbox in
-          "GMail") action="$APP_PATH/gmail" ;;
-          "Netflix") action="$APP_PATH/gmail netflix" ;;
-          *) action="$APP_PATH/email" ;;
+          "GMail") action="$gmail" ;;
+          "Netflix") action="$gmail netflix" ;;
+          *) action="$email" ;;
       esac
 
       if $test $total -gt 0

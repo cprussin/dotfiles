@@ -1,9 +1,0 @@
-#!/bin/sh
-
-PROMPT="Authenticate for which app?"
-
-app=$(ls "$SECRETS/totp" | prompt -lines 1 -p "$PROMPT ")
-if [ "$app" ]; then
-    xdotool type "$(oathtool --totp -b $(cat "$SECRETS/totp/$app"))"
-    xdotool key Return
-fi
