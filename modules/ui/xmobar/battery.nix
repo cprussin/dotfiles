@@ -20,17 +20,19 @@ writeScript "battery" ''
   )
   average=$(( sum / count ))
 
-  if $test "$($acpi | grep Full)"
-  then
-      status="<fn=1></fn>"
-  elif $test "$($acpi | grep Charging)"
+  if $acpi | grep Charging >/dev/null
   then
       status="<fn=1> </fn> ▲"
-  elif $test $average -lt 50
+  elif $acpi | grep Discharging >/dev/null
   then
-      status="<fn=1> </fn> ▼"
+      if $test $average -lt 50
+      then
+          status="<fn=1> </fn> ▼"
+      else
+          status="<fn=1> </fn> ▼"
+      fi
   else
-      status="<fn=1> </fn> ▼"
+      status="<fn=1></fn>"
   fi
 
   str="$status $average%"
