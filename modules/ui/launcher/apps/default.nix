@@ -76,11 +76,11 @@ in
   netflix = callPackage ./netflix.nix {};
   passwords = mkScript "passwords" "${keepassxc}/bin/keepassxc";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
-  reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' 'systemctl reboot'";
+  reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- systemctl reboot";
   remacs = mkScript "remacs" "${message}/bin/message write 'Restarting emacs...' 'systemctl --user restart emacs-daemon'";
   screenshot = callPackage ./screenshot.nix {};
   shakti = callPackage ./shakti.nix {};
-  shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' 'systemctl shutdown'";
+  shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- systemctl poweroff";
   slack = mkScript "slack" "${slack}/bin/slack";
   slackagain = mkScript "slackagain" "sh -c 'pkill -x slack; ${slack}/bin/slack'";
   sotd = callPackage ./sotd.nix {};
