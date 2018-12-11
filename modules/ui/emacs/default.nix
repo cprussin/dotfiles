@@ -94,6 +94,7 @@ in
       smartparens
       solarized-theme
       swiper
+      typescript-mode
       unicode-fonts
       use-package
       web-mode
