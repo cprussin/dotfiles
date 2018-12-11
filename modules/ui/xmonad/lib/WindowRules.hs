@@ -16,9 +16,7 @@ windowRules = XMonad.composeAll
 floats :: XMonad.ManageHook
 floats = XMonad.composeAll $ map (--> XMonad.doFloat)
   [ XMonad.className =? "Mixer"
-  , XMonad.className =? "Xtensoftphone"
-  , XMonad.resource =? "wifi-menu"
-  , XMonad.resource =? "bluetoothctl"
+  , XMonad.resource =? "bluetooth"
   , XMonad.title =? "pinentry"
   , XMonad.title =? "Auto-Type - KeePassX"
   ]
