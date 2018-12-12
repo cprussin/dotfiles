@@ -11,8 +11,6 @@ in
     (self: super: { inherit toggle-colors; })
   ];
 
-  home.packages = [ pkgs.toggle-colors ];
-
   xresources.extraConfig = builtins.readFile (
     pkgs.fetchFromGitHub {
       owner = "solarized";
