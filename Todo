@@ -15,11 +15,12 @@
 * On Hold
 * To Do
 ** TODO Fix hacks :user:system:
-   - [ ] Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti)
    - [ ] zsh plugin dependencies (git, python)
-   - [ ] emacs package dependencies (silver-searcher)
+   - [ ] emacs package dependencies (silver-searcher, etc)
+   - [ ] Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti)
 ** TODO Install missing packages :user:
    - [ ] minichrome
+   - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
 ** TODO Consolidate solarized theme configs :user:
 * Done
