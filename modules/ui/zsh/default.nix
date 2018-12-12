@@ -1,8 +1,18 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   ls = pkgs.callPackage ./ls.nix { };
+
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
+
+  mkNixShellAlias = name: pkg: ''
+    ${name}() {
+      nix-shell -p ${pkg} --run "${name} $*"
+    }
+  '';
+
+  mkNixShellAliases = aliases:
+    lib.concatStringsSep "\n" (lib.mapAttrsToList mkNixShellAlias aliases);
 in
 
 {
@@ -54,9 +64,13 @@ in
         nix-shell --run "$*"
       }
 
-      node() {
-        nix-shell -p nodejs --run "node $*";
-      }
+      ${mkNixShellAliases {
+        node = "nodejs";
+        tree = "tree";
+        zip = "zip";
+        unzip = "unzip";
+        file = "file";
+      }}
 
       chpwd() {
         ${ls}
