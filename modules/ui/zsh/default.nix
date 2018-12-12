@@ -5,6 +5,8 @@ let
 
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
 
+  zsh-git-prompt = pkgs.callPackage ./zsh-git-prompt.nix { };
+
   mkNixShellAlias = name: pkg: ''
     ${name}() {
       nix-shell -p ${pkg} --run "${name} $*"
@@ -16,32 +18,24 @@ let
 in
 
 {
-  home = {
-    packages = [ pkgs.python ]; # For gitstatus
-    file.".zsh-dircolors.config".text = "dircolors.ansi-dark";
-  };
+  home.file.".zsh-dircolors.config".text = "dircolors.ansi-dark";
+
+  nixpkgs.overlays = [
+    (self: super: { inherit zsh-git-prompt; })
+  ];
 
   programs.zsh = {
     enable = true;
     plugins = [
       {
         name = "zsh-syntax-highlighting";
-        src = pkgs.fetchFromGitHub {
-          owner = "zsh-users";
-          repo = "zsh-syntax-highlighting";
-          rev = "0.6.0";
-          sha256 = "0zmq66dzasmr5pwribyh4kbkk23jxbpdw4rjxx0i7dx8jjp2lzl4";
-        };
+        src = pkgs.zsh-syntax-highlighting;
+        file = "share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
       }
       {
         name = "zsh-git-prompt";
+        src = pkgs.zsh-git-prompt;
         file = "zshrc.sh";
-        src = pkgs.fetchFromGitHub {
-          owner = "starcraftman";
-          repo = "zsh-git-prompt";
-          rev = "11b83ba3b85d14c66cf2ab79faefab6d838da28e";
-          sha256 = "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb";
-        };
       }
       {
         name = "zsh-dircolors-solarized";

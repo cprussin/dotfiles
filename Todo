@@ -15,7 +15,6 @@
 * On Hold
 * To Do
 ** TODO Fix hacks :user:system:
-   - [ ] zsh plugin dependencies (git, python)
    - [ ] Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti)
 ** TODO Install missing packages :user:
    - [ ] minichrome
@@ -23,6 +22,7 @@
    - [ ] aosd (volume change overlay)
 ** TODO Consolidate solarized theme configs :user:
 * Done
+** DONE zsh plugin dependencies (git, python) :user:
 ** DONE emacs package dependencies (silver-searcher, etc) :user:
 ** DONE xmonad hardcoded package dependencies :user:
 ** DONE $SECRETS :user:
