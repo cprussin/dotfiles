@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils, dnsutils, unison }:
+{ writeScript, bash, coreutils, dnsutils, unison, terminal }:
 
 writeScript "backup" ''
   #! ${bash}/bin/sh
@@ -17,5 +17,5 @@ writeScript "backup" ''
       PROFILE=home-external
   fi
 
-  exec $TERMINAL -e $unison $PROFILE
+  exec ${terminal} -e $unison $PROFILE
 ''

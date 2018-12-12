@@ -9,4 +9,5 @@ data Paths = Paths
   , i3lock :: String
   , xbacklight :: String
   , volume :: String
+  , terminal :: String
   }

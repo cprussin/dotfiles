@@ -1,4 +1,4 @@
-{ writeScript, bash, nix }:
+{ writeScript, bash, nix, terminal }:
 
 writeScript "shakti" ''
   #! ${bash}/bin/sh
@@ -15,6 +15,6 @@ writeScript "shakti" ''
     todo) exec $open $SHAKTI_TODO ;;
     edit) exec $open $SHAKTI_SRC ;;
     jenkins) exec $browse 'https://merch.builds.test.netflix.net/view/Shakti/' ;;
-    *) exec $TERMINAL -e $SHELL -c "cd $SHAKTI && $nixShell --run 'shakti $*'" ;;
+    *) exec ${terminal} -e ${bash}/bin/sh -c "cd $SHAKTI && $nixShell --run 'shakti $*'" ;;
 esac
 ''

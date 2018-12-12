@@ -22,6 +22,7 @@
    - [ ] aosd (volume change overlay)
 ** TODO Consolidate solarized theme configs :user:
 * Done
+** DONE remove TERMINAL env variable :user:
 ** DONE zsh plugin dependencies (git, python) :user:
 ** DONE emacs package dependencies (silver-searcher, etc) :user:
 ** DONE xmonad hardcoded package dependencies :user:

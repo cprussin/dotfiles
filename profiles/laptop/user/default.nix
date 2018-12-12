@@ -36,5 +36,12 @@
     ../../../modules/ui/zsh
   ];
 
-  home.stateVersion = import ../../../state-version.nix;
+  options.terminal = lib.mkOption {
+    type = lib.types.str;
+    description = ''
+      The string containing the path for the default terminal application.
+    '';
+  };
+
+  config.home.stateVersion = import ../../../state-version.nix;
 }

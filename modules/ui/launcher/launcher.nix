@@ -1,9 +1,9 @@
-{ stdenv, lib, callPackage, emacs, secrets }:
+{ stdenv, lib, callPackage, emacs, secrets, terminal }:
 
 let
   scripts = callPackage ./scripts { inherit emacs; };
 
-  apps = callPackage ./apps { inherit emacs secrets; };
+  apps = callPackage ./apps { inherit emacs secrets terminal; };
 
   install = location: name: script:
     if name == "override" || name == "overrideDerivation"

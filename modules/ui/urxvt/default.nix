@@ -11,7 +11,7 @@ in
 
   home.packages = [ pkgs.setterminfo ];
 
-  xsession.profileExtra = "export TERMINAL=${config.programs.urxvt.package}/bin/urxvtc";
+  terminal = "${config.programs.urxvt.package}/bin/urxvtc";
 
   programs.urxvt = {
     enable = true;

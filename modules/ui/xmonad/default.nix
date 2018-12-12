@@ -27,6 +27,7 @@
           , Paths.i3lock = "${pkgs.i3lock}/bin/i3lock"
           , Paths.xbacklight = "${pkgs.xorg.xbacklight}/bin/xbacklight"
           , Paths.volume = "${pkgs.volume}/bin/volume"
+          , Paths.terminal = "${config.terminal}"
           }
       '';
     };

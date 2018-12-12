@@ -15,6 +15,7 @@
 , emacs
 , secrets
 , coreutils
+, terminal
 }:
 
 let
@@ -42,7 +43,7 @@ let
 
   mkTerminalApp = name: bin: writeScript name ''
     #! ${bash}/bin/sh
-    exec $TERMINAL -name ${name} -e ${bin}
+    exec ${terminal} -name ${name} -e ${bin}
   '';
 
   mkScript = name: script: writeScript name ''
@@ -55,7 +56,7 @@ in
 {
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
   authenticate = callPackage ./authenticate.nix { inherit secrets; };
-  backup = callPackage ./backup.nix {};
+  backup = callPackage ./backup.nix { inherit terminal; };
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   dark = mkScript "dark" "${toggle-colors}/bin/toggle-colors dark";
@@ -79,7 +80,7 @@ in
   reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- systemctl reboot";
   remacs = mkScript "remacs" "${message}/bin/message write 'Restarting emacs...' 'systemctl --user restart emacs-daemon'";
   screenshot = callPackage ./screenshot.nix {};
-  shakti = callPackage ./shakti.nix {};
+  shakti = callPackage ./shakti.nix { inherit terminal; };
   shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- systemctl poweroff";
   slack = mkScript "slack" "${slack}/bin/slack";
   slackagain = mkScript "slackagain" "sh -c 'pkill -x slack; ${slack}/bin/slack'";
