@@ -5,6 +5,7 @@ import qualified Keybindings as Keybindings
 import qualified Layouts as Layouts
 import qualified Logging as Logging
 import qualified Mousebindings as Mousebindings
+import qualified Paths as Paths
 import qualified Startup as Startup
 import qualified WindowRules as WindowRules
 import qualified Workspaces as Workspaces
@@ -14,22 +15,22 @@ import qualified XMonad.Hooks.EwmhDesktops as EwmhDesktops
 import qualified XMonad.Hooks.ManageDocks as ManageDocks
 import qualified XMonad.Util.Run as Run
 
-start = startXmobar >>= startXmonad
+start paths = startXmobar paths >>= startXmonad paths
 
-startXmobar = Run.spawnPipe "xmobar"
+startXmobar = Run.spawnPipe . Paths.xmobar
 
-startXmonad statusbarPipe =
+startXmonad paths statusbarPipe =
   XMonad.xmonad $ wmPlugins $ XMonad.def
   { XMonad.workspaces = Workspaces.workspaceNames
   , XMonad.borderWidth = Styles.borderWidth
   , XMonad.normalBorderColor = Styles.normalBorderColor
   , XMonad.focusedBorderColor = Styles.focusedBorderColor
-  , XMonad.keys = Keybindings.keybindings
+  , XMonad.keys = Keybindings.keybindings paths
   , XMonad.mouseBindings = Mousebindings.mousebindings
   , XMonad.layoutHook = Layouts.layoutHook
   , XMonad.manageHook = WindowRules.windowRules
   , XMonad.logHook = Logging.logHook statusbarPipe
-  , XMonad.startupHook = Startup.startup
+  , XMonad.startupHook = Startup.startup paths
   }
 
 -- WM-level plugins

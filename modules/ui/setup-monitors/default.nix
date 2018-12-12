@@ -8,6 +8,4 @@ in
   nixpkgs.overlays = [
     (self: super: { inherit setup-monitors; })
   ];
-
-  home.packages = [ pkgs.setup-monitors ];
 }

@@ -8,6 +8,4 @@ in
   nixpkgs.overlays = [
     (self: super: { inherit volume; })
   ];
-
-  home.packages = [ pkgs.volume ];
 }
