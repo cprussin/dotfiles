@@ -20,7 +20,6 @@ writeScript "search" ''
       ["!im"]="https://www.google.com/search?q=%QUERY%&tbm=isch"
       ["!i"]="https://www.google.com/search?q=%QUERY%&tbm=isch"
       ["!aw"]="https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%QUERY%"
-      ["!aur"]="https://aur.archlinux.org/packages/?O=0&K=%QUERY%"
   )
   default_engine="https://google.com/search?q=%QUERY%"
 
