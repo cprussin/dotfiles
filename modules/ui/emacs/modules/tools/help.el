@@ -57,6 +57,8 @@
   :demand
   :after ivy
   :config
+  (setq counsel-ag-base-command (concat (cdr (assoc "ag" paths))
+                                        " --nocolor --nogroup %s"))
   (ivy-set-display-transformer 'counsel-M-x #'transform-func)
   (counsel-mode)
   :general ('(normal motion emacs)

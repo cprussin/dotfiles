@@ -19,26 +19,23 @@ let
 in
 
 {
-  home = {
-    packages = with pkgs; [
-      mu
-      silver-searcher
-      zip
-    ];
-
-    file = {
-      ".emacs.d/modules" = {
-        source = ./modules;
-        recursive = true;
-      };
-
-      ".emacs.d/init.el".source = ./init.el;
+  home.file = {
+    ".emacs.d/modules" = {
+      source = ./modules;
+      recursive = true;
     };
+
+    ".emacs.d/init.el".text = ''
+      (setq paths '(("ag" . "${pkgs.silver-searcher}/bin/ag")))
+
+      (load (concat user-emacs-directory "modules/init"))
+    '';
   };
 
   programs.emacs = {
     enable = true;
     extraPackages = (epkgs: (with epkgs; [
+      pkgs.mu
       aggressive-indent
       cask-mode
       company

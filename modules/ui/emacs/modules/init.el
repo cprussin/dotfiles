@@ -7,8 +7,8 @@
 ;;; Code:
 
 (require 'package)
-(setq package-archives nil)
-(setq packages-enable-at-startup nil)
+(setq package-archives nil
+      packages-enable-at-startup nil)
 (package-initialize)
 
 (require 'use-package)
