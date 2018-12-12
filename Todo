@@ -1,7 +1,11 @@
 -*- mode: org; -*-
 
 * Wishlist
-** TODO Fix TODO items in toggle-colors script :user:
+** TODO Use home-manager from nixos config :user:system:
+** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
+** TODO Minimize environment packages :user:system:
+** TODO Consolidate solarized theme configs :user:
+** TODO Fix FIXME/TODO items :user:
 ** TODO Fix emacs colorscheme so toggle-colors preserves overrides :emacs:
 ** TODO Add local caching DNS server :system:
 ** TODO JS :user:emacs:filetypes:
@@ -14,13 +18,10 @@
 ** TODO Something for workgroups? :emacs:interface:
 * On Hold
 * To Do
-** TODO Fix hacks :user:system:
-   - [ ] Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti)
 ** TODO Install missing packages :user:
    - [ ] minichrome
    - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
-** TODO Consolidate solarized theme configs :user:
 * Done
 ** DONE remove TERMINAL env variable :user:
 ** DONE zsh plugin dependencies (git, python) :user:
