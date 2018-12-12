@@ -9,6 +9,6 @@
   config.users.users.${config.primaryUserName} = {
     isNormalUser = true;
     uid = 1000;
-    shell = pkgs.zsh;
+    shell = "${pkgs.zsh}/bin/zsh";
   };
 }
