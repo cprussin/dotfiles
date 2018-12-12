@@ -1,8 +1,6 @@
 { pkgs, config, ... }:
 
 {
-  home.packages = [ pkgs.mu ];
-
   accounts.email = {
     maildirBasePath = "Mail";
     accounts = {
