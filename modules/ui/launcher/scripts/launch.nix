@@ -1,4 +1,4 @@
-{ writeScript, bash, fortune, findutils, coreutils, gnugrep }:
+{ writeScript, bash, fortune, findutils, coreutils, gnugrep, gnused }:
 
 writeScript "launch" ''
   #! ${bash}/bin/sh
@@ -14,6 +14,7 @@ writeScript "launch" ''
   test=${coreutils}/bin/test
   ls=${coreutils}/bin/ls
   grep=${gnugrep}/bin/grep
+  sed=${gnused}/bin/sed
 
   tlds='com|net|org|gov|edu|co|io|do|me'
   browsePrefixes='http://|go/|localhost|chrome://'
@@ -31,7 +32,7 @@ writeScript "launch" ''
   then
       topLevelFiles=$($find ~/* -maxdepth 1)
       otherFiles=$($find ~/{Documents,Notes,Scratch} -mindepth 2 -not -path '*/\.*')
-      allFiles=$(($echo "$topLevelFiles"; $echo "$otherFiles") | sed "s|$HOME/||" | $sort)
+      allFiles=$(($echo "$topLevelFiles"; $echo "$otherFiles") | $sed "s|$HOME/||" | $sort)
       selection=$(($ls "@out@/share/apps"; $echo "$allFiles") | showPrompt)
 
       if $test "$selection"
