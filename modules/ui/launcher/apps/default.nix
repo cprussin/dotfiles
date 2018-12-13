@@ -76,11 +76,13 @@ in
   light = mkScript "light" "${toggle-colors}/bin/toggle-colors light";
   localhost = mkWebApp "localhost" "http://localhost:\${1-4200}";
   mixer = mkScript "mixer" "${pavucontrol}/bin/pavucontrol";
-  netflix = callPackage ./netflix.nix {};
+  netflix = mkWebApp "netflix" "http://www.netflix.com";
+  netflix-api = callPackage ./netflix-api.nix {};
   passwords = mkScript "passwords" "${keepassxc}/bin/keepassxc";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- systemctl reboot";
   remacs = mkScript "remacs" "${message}/bin/message write 'Restarting emacs...' 'systemctl --user restart emacs-daemon'";
+  reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
   screenshot = callPackage ./screenshot.nix {};
   shakti = callPackage ./shakti.nix { inherit terminal; };
   shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- systemctl poweroff";

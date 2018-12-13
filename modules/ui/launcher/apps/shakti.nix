@@ -14,7 +14,21 @@ writeScript "shakti" ''
   case "$1" in
     todo) exec $open $SHAKTI_TODO ;;
     edit) exec $open $SHAKTI_SRC ;;
+
+    testers) exec $browse 'https://tenfootuiapps.netflix.com/' ;;
+
     jenkins) exec $browse 'https://merch.builds.test.netflix.net/view/Shakti/' ;;
+
+    conductors) exec $browse 'https://lyra.corp.netflix.com/inspectConductors' ;;
+
+    local) exec $browse 'https://lyra.corp.netflix.com/browse' ;;
+    develop-int) exec $browse 'https://develop-int.test.netflix.com/' ;;
+    int|release-int) exec $browse 'https://release-int.test.netflix.com/' ;;
+    qa|develop-stage) exec $browse 'https://develop-stage.netflix.com' ;;
+    stage|release-stage) exec $browse 'https://release-stage.netflix.com' ;;
+
+    dvds) exec $browse 'dvd-www-test-baseline-stable.eng.dvdco.netflix.com' ;;
+
     *) exec ${terminal} -e ${bash}/bin/sh -c "cd $SHAKTI && $nixShell --run 'shakti $*'" ;;
 esac
 ''
