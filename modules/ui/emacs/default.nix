@@ -26,7 +26,8 @@ in
     };
 
     ".emacs.d/init.el".text = ''
-      (setq paths '(("ag" . "${pkgs.silver-searcher}/bin/ag")))
+      (setq paths '(("ag" . "${pkgs.silver-searcher}/bin/ag")
+                    ("sh" . "${pkgs.bash}/bin/sh")))
 
       (load (concat user-emacs-directory "modules/init"))
     '';

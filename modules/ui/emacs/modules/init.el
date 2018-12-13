@@ -25,6 +25,7 @@
 (load-module "modules/files")
 (load-module "modules/safe")
 (load-module "modules/startup")
+(load-module "modules/system")
 
 ;; Tooling
 (load-module "modules/tools/git")
