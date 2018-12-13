@@ -55,6 +55,7 @@
                      global-eslint)))
       (setq-local flycheck-javascript-eslint-executable eslint)))
   (add-hook 'web-mode-hook 'use-eslint-from-node-modules)
+  (add-hook 'js-jsx-mode-hook 'use-eslint-from-node-modules)
   )
 (use-package flycheck-pos-tip
   :ensure t
