@@ -59,10 +59,12 @@ in
   backup = callPackage ./backup.nix { inherit terminal; };
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
+  chrome = mkScript "chrome" "@out@/bin/browse --browser chrome $*";
   dark = mkScript "dark" "${toggle-colors}/bin/toggle-colors dark";
   dvorak = mkScript "dvorak" "${setxkbmap}/bin/setxkbmap us dvp";
   emacs = mkScript "emacs" "@out@/bin/open \${1-*scratch*}";
   email = mkScript "email" "sh -c \"systemctl --user start mbsync & ${emacs}/bin/emacsclient -c --eval '(mu4e~headers-jump-to-maildir \\\"/PrussinNet/Inbox\\\")'\"";
+  firefox = mkScript "firefox" "@out@/bin/browse --browser firefox $*";
   gaming = callPackage ./gaming.nix {};
   gdrive = mkGoogleApp "gdrive" "https://drive.google.com/drive/u/@user@/my-drive";
   gimp = mkScript "gimp" "${gimp}/bin/gimp";
