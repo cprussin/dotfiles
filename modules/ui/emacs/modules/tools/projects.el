@@ -10,7 +10,9 @@
 ;; Enable projectile
 (use-package projectile
   :delight '(:eval (concat " " (projectile-project-name) " "))
-  :init (setq projectile-completion-system 'ivy)
+  :init
+  (setq projectile-completion-system 'ivy
+        projectile-enable-caching t)
   :config (projectile-mode))
 
 ;; And enable counsel-projectile, for better ivy integration

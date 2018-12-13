@@ -58,6 +58,7 @@ in
       evil-smartparens
       fill-column-indicator
       flow-minor-mode
+      flx
       flycheck
       flycheck-haskell
       flycheck-pos-tip

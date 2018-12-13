@@ -65,8 +65,7 @@
   :init (setq ivy-use-virtual-buffers t
               ivy-format-function 'ivy-format-function-line
               ivy-initial-inputs-alist nil
-              ivy-re-builders-alist '((swiper . ivy--regex-plus)
-                                      (t . ivy--regex-fuzzy)))
+              ivy-re-builders-alist '((t . ivy--regex-plus)))
   :config (ivy-mode))
 
 (provide 'completion)
