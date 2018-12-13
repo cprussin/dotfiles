@@ -5,8 +5,6 @@ let
 
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
 
-  zsh-git-prompt = pkgs.callPackage ./zsh-git-prompt.nix { };
-
   mkNixShellAlias = name: pkg: ''
     ${name}() {
       nix-shell -p ${pkg} --run "${name} $*"
@@ -21,7 +19,9 @@ in
   home.file.".zsh-dircolors.config".text = "dircolors.ansi-dark";
 
   nixpkgs.overlays = [
-    (self: super: { inherit zsh-git-prompt; })
+    (self: super: {
+      zsh-git-prompt = super.callPackage ./zsh-git-prompt.nix { };
+    })
   ];
 
   programs.zsh = {

@@ -1,14 +1,12 @@
 { pkgs, config, ... }:
 
-let
-  toggle-colors = pkgs.callPackage ./toggle-colors.nix {
-    emacs = config.programs.emacs.finalPackage;
-  };
-in
-
 {
   nixpkgs.overlays = [
-    (self: super: { inherit toggle-colors; })
+    (self: super: {
+      toggle-colors = super.callPackage ./toggle-colors.nix {
+        emacs = config.programs.emacs.finalPackage;
+      };
+    })
   ];
 
   xresources.extraConfig = builtins.readFile (

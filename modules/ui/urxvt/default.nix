@@ -1,12 +1,10 @@
 { pkgs, config, ... }:
 
-let
-  setterminfo = pkgs.callPackage ./setterminfo.nix {};
-in
-
 {
   nixpkgs.overlays = [
-    (self: super: { inherit setterminfo; })
+    (self: super: {
+      setterminfo = super.callPackage ./setterminfo.nix {};
+    })
   ];
 
   home.packages = [ pkgs.setterminfo ];

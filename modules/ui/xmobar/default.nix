@@ -2,7 +2,6 @@
 
 let
   read-message = pkgs.callPackage ./read-message.nix {};
-  message = pkgs.callPackage ./message.nix {};
   email = pkgs.callPackage ./email.nix {};
   vpn = pkgs.callPackage ./vpn.nix {};
   volume = pkgs.callPackage ./volume.nix {};
@@ -14,7 +13,9 @@ in
 
 {
   nixpkgs.overlays = [
-    (self: super: { inherit message; })
+    (self: super: {
+      message = super.callPackage ./message.nix {};
+    })
   ];
 
   home.file.".xmobarrc".text = ''
