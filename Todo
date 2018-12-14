@@ -2,20 +2,16 @@
 
 * Wishlist
 ** TODO Use home-manager from nixos config :user:system:
-** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
+** TODO More betterer layout management :user:xmonad:
 ** TODO Minimize environment packages :user:system:
+** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
 ** TODO Consolidate solarized theme configs :user:
 ** TODO Fix FIXME/TODO items :user:
-** TODO Fix emacs colorscheme so toggle-colors preserves overrides :emacs:
+** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
 ** TODO Add local caching DNS server :system:
-** TODO JS :user:emacs:filetypes:
-** TODO CSS/less :user:emacs:filetypes:
-    (add-hook 'css-mode-hook #'use-stylelint-from-node-modules)
-    (setq flycheck-stylelintrc ".stylelintrc")
-    (add-hook 'css-mode-hook 'flycheck-mode)
-** TODO Smart tabs :emacs:editing:
-** TODO Sidebar :emacs:interface:
-** TODO Something for workgroups? :emacs:interface:
+** TODO Smart tabs :user:emacs:editing:
+** TODO Sidebar :user:emacs:interface:
+** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * To Do
 ** TODO Install missing packages :user:
@@ -23,6 +19,8 @@
    - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
 * Done
+** DONE CSS/less :user:emacs:filetypes:
+** DONE JS :user:emacs:filetypes:
 ** DONE remove TERMINAL env variable :user:
 ** DONE zsh plugin dependencies (git, python) :user:
 ** DONE emacs package dependencies (silver-searcher, etc) :user:
