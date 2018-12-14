@@ -28,12 +28,25 @@ writeScript "launch" ''
           -mesg "$($fortune)"
   }
 
+  listTopLevelFiles() {
+      $find ~/* -maxdepth 1
+  }
+
+  listOtherFiles() {
+      $find ~/{Documents,Notes,Scratch} -mindepth 2 -not -path '*/\.*'
+  }
+
+  listFiles() {
+      (listTopLevelFiles; listOtherFiles) | $sed "s|$HOME/||" | $sort
+  }
+
+  listApps() {
+      $ls "@out@/share/apps"
+  }
+
   if $test $# -eq 0
   then
-      topLevelFiles=$($find ~/* -maxdepth 1)
-      otherFiles=$($find ~/{Documents,Notes,Scratch} -mindepth 2 -not -path '*/\.*')
-      allFiles=$(($echo "$topLevelFiles"; $echo "$otherFiles") | $sed "s|$HOME/||" | $sort)
-      selection=$(($ls "@out@/share/apps"; $echo "$allFiles") | showPrompt)
+      selection=$((listApps; listFiles) | showPrompt)
 
       if $test "$selection"
       then
@@ -43,12 +56,17 @@ writeScript "launch" ''
       fi
   fi
 
+  resolvedPath="$(eval $echo "$@" 2>/dev/null)"
+
   if $test -x @out@/share/apps/$1
   then
-  exec "@out@/share/apps/$@"
-  elif $test -e $(eval $echo "$@" 2>/dev/null)
+      exec "@out@/share/apps/$@"
+  elif $test "$resolvedPath" -a -e "$resolvedPath"
   then
-      exec $open "$HOME/$*"
+      exec $open "$resolvedPath"
+  elif $test "$resolvedPath" -a -e "$HOME/$resolvedPath"
+  then
+      exec $open "$HOME/$resolvedPath"
   elif $echo "$1" | $grep -oqE "(\.($TLDS)|^($browsePrefixes)|^($browseRegex)$)"
   then
       exec $browse "$1"
