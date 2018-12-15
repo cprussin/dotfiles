@@ -7,14 +7,15 @@ import qualified Data.Map as Map
 import qualified Data.Maybe as Maybe
 import qualified Graphics.X11.ExtraTypes.XF86 as XF86
 import qualified Layouts.Tabbed as Tabbed
+import qualified Layouts.VarialColumn as VarialColumn
 import qualified Paths as Paths
 import qualified Workspaces as Workspaces
 import qualified XMonad as XMonad
 import qualified XMonad.Actions.Navigation2D as Navigation2D
 import qualified XMonad.Layout.Maximize as Maximize
+import qualified XMonad.Layout.MouseResizableTile as MouseResizableTile
 import qualified XMonad.Layout.MultiToggle as MultiToggle
 import qualified XMonad.Layout.MultiToggle.Instances as MultiToggleInstances
-import qualified XMonad.Layout.ResizableTile as ResizableTile
 import qualified XMonad.StackSet as StackSet
 
 -- Use mod4 (OS key) as the primary modifier
@@ -42,10 +43,10 @@ keybindings paths _ = Map.fromList $
   , ((modMask .|. XMonad.shiftMask, XMonad.xK_Tab), goPreviousLayout)
 
   -- Resize
-  , ((modMask .|. XMonad.controlMask, XMonad.xK_j), XMonad.sendMessage ResizableTile.MirrorShrink)
-  , ((modMask .|. XMonad.controlMask, XMonad.xK_k), XMonad.sendMessage ResizableTile.MirrorExpand)
-  , ((modMask .|. XMonad.controlMask, XMonad.xK_h), XMonad.sendMessage XMonad.Shrink)
-  , ((modMask .|. XMonad.controlMask, XMonad.xK_l), XMonad.sendMessage XMonad.Expand)
+  , ((modMask .|. XMonad.controlMask, XMonad.xK_k), XMonad.withFocused $ XMonad.sendMessage . VarialColumn.Embiggen 0 (-0.05))
+  , ((modMask .|. XMonad.controlMask, XMonad.xK_j), XMonad.withFocused $ XMonad.sendMessage . VarialColumn.Embiggen 0 0.05)
+  , ((modMask .|. XMonad.controlMask, XMonad.xK_h), XMonad.withFocused $ XMonad.sendMessage . VarialColumn.Embiggen (-0.05) 0)
+  , ((modMask .|. XMonad.controlMask, XMonad.xK_l), XMonad.withFocused $ XMonad.sendMessage . VarialColumn.Embiggen 0.05 0)
 
   -- Floating/fullscreen toggle
   , ((modMask, XMonad.xK_space), Navigation2D.switchLayer)
@@ -54,8 +55,8 @@ keybindings paths _ = Map.fromList $
   , ((modMask .|. XMonad.shiftMask, XMonad.xK_f), XMonad.sendMessage $ MultiToggle.Toggle MultiToggleInstances.FULL)
 
   -- Number of windows in master
-  , ((modMask, XMonad.xK_comma), XMonad.sendMessage (XMonad.IncMasterN 1))
-  , ((modMask, XMonad.xK_period), XMonad.sendMessage (XMonad.IncMasterN (-1)))
+  , ((modMask, XMonad.xK_comma), XMonad.withFocused $ XMonad.sendMessage . VarialColumn.UpOrLeft)
+  , ((modMask, XMonad.xK_period), XMonad.withFocused $ XMonad.sendMessage . VarialColumn.DownOrRight)
 
   -- Close window
   , ((modMask .|. XMonad.shiftMask, XMonad.xK_q), XMonad.kill)
