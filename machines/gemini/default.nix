@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware.nix
-    ../../../profiles/laptop/system
+    ../../profiles/laptop
   ];
 
   primaryUserName = "cprussin";
