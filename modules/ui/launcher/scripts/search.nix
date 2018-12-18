@@ -9,19 +9,27 @@ writeScript "search" ''
   sed=${gnused}/bin/sed
   browse=@out@/bin/browse
 
+  amazon="https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%QUERY%"
+  archWiki="https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%QUERY%"
+  google="https://google.com/search?q=%QUERY%"
+  gooleMaps="https://www.google.com/maps/search/%QUERY%"
+  googleImages="https://www.google.com/search?q=%QUERY%&tbm=isch"
+  wikipedia="https://en.wikipedia.org/wiki/Special:Search?search=%QUERY%"
+  youtube="https://www.youtube.com/results?search_query=%QUERY%"
+
   declare -A engines=(
-      ["!g"]="https://google.com/search?q=%QUERY%"
-      ["!a"]="https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%QUERY%"
-      ["!amazon"]="https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%QUERY%"
-      ["!maps"]="https://www.google.com/maps/search/%QUERY%"
-      ["!wiki"]="https://en.wikipedia.org/wiki/Special:Search?search=%QUERY%"
-      ["!w"]="https://en.wikipedia.org/wiki/Special:Search?search=%QUERY%"
-      ["!yt"]="https://www.youtube.com/results?search_query=%QUERY%"
-      ["!im"]="https://www.google.com/search?q=%QUERY%&tbm=isch"
-      ["!i"]="https://www.google.com/search?q=%QUERY%&tbm=isch"
-      ["!aw"]="https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%QUERY%"
+      ["!g"]=$google
+      ["!a"]=$amazon
+      ["!amazon"]=$amazon
+      ["!maps"]=$googleMaps
+      ["!wiki"]=$wikipedia
+      ["!w"]=$wikipedia
+      ["!yt"]=$youtube
+      ["!im"]=$googleImages
+      ["!i"]=$googleImages
+      ["!aw"]=$archWiki
   )
-  default_engine="https://google.com/search?q=%QUERY%"
+  default_engine=$google
 
   urlencode() {
     local length="''${#1}"
