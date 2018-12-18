@@ -44,34 +44,40 @@ writeScript "launch" ''
       $ls "@out@/share/apps"
   }
 
-  if $test $# -eq 0
-  then
+  showLauncher() {
       selection=$((listApps; listFiles) | showPrompt)
 
       if $test "$selection"
       then
           exec $0 $selection
-      else
-          exit
       fi
-  fi
+  }
 
-  resolvedPath="$(eval $echo "$@" 2>/dev/null)"
+  runLauncherOnArgs() {
+      resolvedPath="$(eval $echo "$@" 2>/dev/null)"
 
-  if $test -x @out@/share/apps/$1
+      if $test -x @out@/share/apps/$1
+      then
+          exec "@out@/share/apps/$@"
+      elif $test "$resolvedPath" -a -e "$resolvedPath"
+      then
+          exec $open "$resolvedPath"
+      elif $test "$resolvedPath" -a -e "$HOME/$resolvedPath"
+      then
+          exec $open "$HOME/$resolvedPath"
+      elif $echo "$1" | $grep -oqE "(\.($TLDS)|^($browsePrefixes)|^($browseRegex)$)"
+      then
+          exec $browse "$1"
+      elif $test "$*"
+      then
+          exec $search "$*"
+      fi
+  }
+
+  if $test $# -eq 0
   then
-      exec "@out@/share/apps/$@"
-  elif $test "$resolvedPath" -a -e "$resolvedPath"
-  then
-      exec $open "$resolvedPath"
-  elif $test "$resolvedPath" -a -e "$HOME/$resolvedPath"
-  then
-      exec $open "$HOME/$resolvedPath"
-  elif $echo "$1" | $grep -oqE "(\.($TLDS)|^($browsePrefixes)|^($browseRegex)$)"
-  then
-      exec $browse "$1"
-  elif $test "$*"
-  then
-      exec $search "$*"
+      showLauncher
+  else
+      runLauncherOnArgs $*
   fi
 ''

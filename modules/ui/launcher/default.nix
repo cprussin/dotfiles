@@ -13,6 +13,9 @@
 
   home = {
     packages = [ pkgs.launcher ];
-    sessionVariables.EDITOR = "${pkgs.launcher}/bin/open";
+    sessionVariables = {
+      EDITOR = "${pkgs.launcher}/bin/open";
+      BROWSER = "${pkgs.launcher}/bin/browse";
+    };
   };
 }
