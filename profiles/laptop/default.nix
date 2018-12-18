@@ -51,7 +51,6 @@ in
 
       ../../modules/netflix/metatron
 
-      ../../modules/nix/home-manager
       ../../modules/nix/nixpkgs
 
       ../../modules/security/gpg
