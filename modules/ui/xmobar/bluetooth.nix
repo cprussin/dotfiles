@@ -20,9 +20,9 @@ writeScript "bluetooth" ''
     $grep Device |\
     $sed 's/Device \([^ ]*\) .*/info \1/' |\
     $bluetoothctl 2>/dev/null |\
-    $grep -B 8 'Connected: yes' |\
-    $grep Name |\
-    $sed 's/.*Name: //' |\
+    $grep -B 7 'Connected: yes' |\
+    $grep Alias |\
+    $sed 's/.*Alias: //' |\
     $paste -s - |\
     $sed 's/\t/, /'
   }
