@@ -24,13 +24,7 @@ in
         "StardewValley"
       ];
 
-      dataFile = linkFiles false [
-        "3909"
-        "Aspyr"
-        "Braid"
-        "Steam"
-        "SuperMeatBoy"
-      ];
+      dataFile = linkFiles false [ "Braid" ];
     };
 
     home.file = linkFiles true [

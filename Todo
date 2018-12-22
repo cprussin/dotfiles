@@ -7,6 +7,7 @@
 ** TODO Consolidate solarized theme configs :user:
 ** TODO Fix FIXME/TODO items :user:
 ** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
+** TODO Figure out a better way to manage games :user:
 ** TODO Add local caching DNS server :system:
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
@@ -18,6 +19,7 @@
    - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
 * Done
+** DONE Install steam :user:
 ** DONE Use home-manager from nixos config :user:system:
 ** DONE CSS/less :user:emacs:filetypes:
 ** DONE JS :user:emacs:filetypes:

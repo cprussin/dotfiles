@@ -16,6 +16,7 @@
 , secrets
 , coreutils
 , terminal
+, steam
 }:
 
 let
@@ -90,6 +91,7 @@ in
   slackagain = mkScript "slackagain" "sh -c 'pkill -x slack; ${slack}/bin/slack'";
   sotd = callPackage ./sotd.nix {};
   stash = mkWebApp "stash" "https://stash.corp.netflix.com";
+  steam = mkScript "steam" "${steam}/bin/steam";
   syncmail = mkScript "syncmail" "${message}/bin/message write 'Syncing email...' 'systemctl --user start mbsync'";
   trello = mkWebApp "trello" "https://trello.com/b/mHhKhvTF/web-core";
   us = mkScript "us" "${setxkbmap}/bin/setxkbmap us";

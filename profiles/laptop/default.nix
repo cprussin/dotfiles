@@ -33,6 +33,7 @@ in
     ../../modules/ui/fonts
     ../../modules/ui/greeting
     ../../modules/ui/log
+    ../../modules/ui/opengl
     ../../modules/ui/xorg
 
     ../../modules/zone/pacific
