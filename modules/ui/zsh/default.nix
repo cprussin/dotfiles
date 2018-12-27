@@ -4,15 +4,6 @@ let
   ls = pkgs.callPackage ./ls.nix { };
 
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
-
-  mkNixShellAlias = name: pkg: ''
-    ${name}() {
-      nix-shell -p ${pkg} --run "${name} $*"
-    }
-  '';
-
-  mkNixShellAliases = aliases:
-    lib.concatStringsSep "\n" (lib.mapAttrsToList mkNixShellAlias aliases);
 in
 
 {
@@ -51,20 +42,21 @@ in
     shellAliases = {
       ls = ls;
       clear = clear;
-      ghci = "nix-shell -p ghc --run ghci";
+      ghci = "${pkgs.ghc}/bin/ghci";
+      node = "${pkgs.nodejs}/bin/node";
+      open = "${pkgs.launcher}/bin/open";
+      tree = "${pkgs.tree}/bin/tree";
+      zip = "${pkgs.zip}/bin/zip";
+      unzip = "${pkgs.unzip}/bin/unzip";
+      file = "${pkgs.file}/bin/file";
+      git = "${pkgs.git}/bin/git";
+      man = "${pkgs.man}/bin/man";
+      setterminfo = "${pkgs.setterminfo}/bin/setterminfo";
     };
     initExtra = ''
       shell() {
         nix-shell --run "$*"
       }
-
-      ${mkNixShellAliases {
-        node = "nodejs";
-        tree = "tree";
-        zip = "zip";
-        unzip = "unzip";
-        file = "file";
-      }}
 
       chpwd() {
         ${ls}

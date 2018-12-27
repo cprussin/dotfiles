@@ -1,8 +1,8 @@
 { config, ... }:
 
 let
-  state-version = import ../../state-version.nix;
-  home-manager = builtins.fetchTarball "https://github.com/rycee/home-manager/archive/release-${state-version}.tar.gz";
+  stateVersion = import ../../state-version.nix;
+  home-manager = builtins.fetchTarball "https://github.com/rycee/home-manager/archive/release-${stateVersion}.tar.gz";
 in
 
 {
@@ -41,7 +41,7 @@ in
     "${home-manager}/nixos"
   ];
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
+  home-manager.users.${config.primaryUserName} = { lib, pkgs, ... }: {
     imports = [
       ../../modules/data/email
       ../../modules/data/nogit
@@ -77,8 +77,21 @@ in
       ../../modules/ui/zsh
     ];
 
-    home.stateVersion = state-version;
+    home = {
+      inherit stateVersion;
+
+      # FIXME For some reason, if keepassxc isn't added to the environment, it won't
+      # start from an absolute path.  The error is:
+      #
+      # qt.qpa.plugin: Could not find the Qt platform plugin "xcb" in ""
+      # This application failed to start because no Qt platform plugin could be
+      # initialized. Reinstalling the application may fix this problem.
+      #
+      # This should be fixed so keepassxc can be removed from the environment and
+      # accessible via the launcher only.
+      packages = lib.mkForce [ pkgs.keepassxc ];
+    };
   };
 
-  system.stateVersion = state-version;
+  system = { inherit stateVersion; };
 }

@@ -7,8 +7,6 @@
     })
   ];
 
-  home.packages = [ pkgs.setterminfo ];
-
   terminal = "${config.programs.urxvt.package}/bin/urxvtc";
 
   programs.urxvt = {

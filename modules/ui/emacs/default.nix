@@ -27,7 +27,8 @@ in
 
     ".emacs.d/init.el".text = ''
       (setq paths '(("ag" . "${pkgs.silver-searcher}/bin/ag")
-                    ("sh" . "${pkgs.bash}/bin/sh")))
+                    ("sh" . "${pkgs.bash}/bin/sh")
+                    ("git" . "${pkgs.git}/bin/git")))
 
       (load (concat user-emacs-directory "modules/init"))
     '';
@@ -116,8 +117,8 @@ in
 
     Service = {
       Type = "forking";
-      ExecStart = "${pkgs.stdenv.shell} -l -c 'exec %h/.nix-profile/bin/emacs --daemon'";
-      ExecStop = "%h/.nix-profile/bin/emacsclient --eval '(kill-emacs)'";
+      ExecStart = "${pkgs.stdenv.shell} -l -c 'exec ${config.programs.emacs.finalPackage}/bin/emacs --daemon'";
+      ExecStop = "${config.programs.emacs.finalPackage}/bin/emacsclient --eval '(kill-emacs)'";
       Restart = "on-failure";
       SyslogIdentifier = "emacs-daemon";
     };

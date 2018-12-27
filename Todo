@@ -2,7 +2,6 @@
 
 * Wishlist
 ** TODO More betterer layout management :user:xmonad:
-** TODO Minimize environment packages :user:system:
 ** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
 ** TODO Consolidate solarized theme configs :user:
 ** TODO Fix FIXME/TODO items :user:
@@ -19,6 +18,7 @@
    - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
 * Done
+** DONE Minimize environment packages :user:system:
 ** DONE Install steam :user:
 ** DONE Use home-manager from nixos config :user:system:
 ** DONE CSS/less :user:emacs:filetypes:

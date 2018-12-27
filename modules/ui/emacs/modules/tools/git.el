@@ -8,6 +8,8 @@
 
 ;; Magit!
 (use-package magit
+  :config
+  (setq magit-git-executable (cdr (assoc "git" paths)))
   :general
   (magit-mode-map
    "SPC" nil
