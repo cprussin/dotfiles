@@ -28,7 +28,8 @@ in
     ".emacs.d/init.el".text = ''
       (setq paths '(("ag" . "${pkgs.silver-searcher}/bin/ag")
                     ("sh" . "${pkgs.bash}/bin/sh")
-                    ("git" . "${pkgs.git}/bin/git")))
+                    ("git" . "${pkgs.git}/bin/git")
+                    ("browse" . "${pkgs.launcher}/bin/browse")))
 
       (load (concat user-emacs-directory "modules/init"))
     '';
