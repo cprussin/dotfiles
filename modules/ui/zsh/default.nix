@@ -77,6 +77,10 @@ in
       setopt noclobber                    # Keep me from overwriting files accidentally
       unsetopt notify                     # Don't print status of background jobs until a prompt is about to be printed
 
+      # TODO remove this after getting `home.sessionVariables` working again
+      export EDITOR="${pkgs.launcher}/bin/open";
+      export BROWSER="${pkgs.launcher}/bin/browse";
+
       ${clear}
     '';
   };
