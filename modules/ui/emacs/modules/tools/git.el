@@ -8,7 +8,7 @@
 
 ;; Magit!
 (use-package magit
-  :config
+  :init
   (setq magit-git-executable (cdr (assoc "git" paths)))
   :general
   (magit-mode-map
