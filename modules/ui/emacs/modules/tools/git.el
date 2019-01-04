@@ -16,6 +16,7 @@
    "?" nil)
   ('(normal motion emacs)
    :prefix "SPC g"
+   "c" '(magit-clone :which-key "git clone")
    "b" '(magit-blame :which-key "git blame")
    "l" '(magit-log :which-key "git log")
    "s" '(magit-status :which-key "git status")))
