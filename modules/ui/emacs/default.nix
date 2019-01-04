@@ -103,6 +103,7 @@ in
       web-mode
       which-key
       ws-butler
+      yaml-mode
       zoom-frm
     ]));
   };
