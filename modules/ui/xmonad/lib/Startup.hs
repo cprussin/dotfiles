@@ -7,6 +7,5 @@ import qualified XMonad as XMonad
 startup :: Paths.Paths -> XMonad.X ()
 startup paths = Foldable.traverse_ XMonad.spawn
   -- UI stuff
-  [ Paths.setupMonitors paths
-  , Paths.xsetroot paths ++ " -cursor_name left_ptr"
+  [ Paths.xsetroot paths ++ " -cursor_name left_ptr"
   ]

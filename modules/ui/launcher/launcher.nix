@@ -1,20 +1,9 @@
 { stdenv, lib, callPackage, emacs, secrets, terminal }:
 
 let
+  installLib = callPackage ../../../lib/install.nix {};
   scripts = callPackage ./scripts { inherit emacs; };
-
   apps = callPackage ./apps { inherit emacs secrets terminal; };
-
-  install = location: name: script:
-    if name == "override" || name == "overrideDerivation"
-      then ""
-      else ''
-        install -m755 -D ${script.outPath} $out/${location}/${name}
-        substituteInPlace $out/${location}/${name} --subst-var out
-      '';
-
-  installAll = set: location:
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (install location) set);
 in
 
 stdenv.mkDerivation {
@@ -23,7 +12,7 @@ stdenv.mkDerivation {
   phases = [ "installPhase" "fixupPhase" ];
 
   installPhase = lib.concatStringsSep "\n" [
-    (installAll scripts "bin")
-    (installAll apps "share/apps")
+    (installLib.installAll scripts "bin")
+    (installLib.installAll apps "share/apps")
   ];
 }

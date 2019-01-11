@@ -61,9 +61,6 @@ keybindings paths _ = Map.fromList $
   -- Close window
   , ((modMask .|. XMonad.shiftMask, XMonad.xK_q), XMonad.kill)
 
-  -- Reset stuff
-  , ((modMask .|. XMonad.shiftMask, XMonad.xK_Delete), XMonad.spawn $ Paths.setupMonitors paths)
-
   -- Launcher
   , ((modMask, XMonad.xK_d), XMonad.spawn $ Paths.launch paths)
   , ((modMask .|. XMonad.shiftMask, XMonad.xK_d), XMonad.spawn $ Paths.launch paths ++ " $(" ++ Paths.xclip paths ++ " -o)")

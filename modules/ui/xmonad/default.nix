@@ -20,7 +20,6 @@
         main :: IO ()
         main = WindowManager.start Paths.Paths
           { Paths.xmobar = "${pkgs.haskellPackages.xmobar}/bin/xmobar"
-          , Paths.setupMonitors = "${pkgs.setup-monitors}/bin/setup-monitors"
           , Paths.xsetroot = "${pkgs.xorg.xsetroot}/bin/xsetroot"
           , Paths.launch = "${pkgs.launcher}/bin/launch"
           , Paths.xclip = "${pkgs.xclip}/bin/xclip"

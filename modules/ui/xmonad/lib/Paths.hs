@@ -2,7 +2,6 @@ module Paths where
 
 data Paths = Paths
   { xmobar :: String
-  , setupMonitors :: String
   , xsetroot :: String
   , launch :: String
   , xclip :: String

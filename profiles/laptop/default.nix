@@ -35,6 +35,7 @@ in
     ../../modules/ui/greeting
     ../../modules/ui/log
     ../../modules/ui/opengl
+    ../../modules/ui/setup-monitors/system
     ../../modules/ui/xorg
 
     ../../modules/zone/pacific
@@ -68,7 +69,7 @@ in
       ../../modules/ui/launcher
       ../../modules/ui/numix-cursor-theme
       ../../modules/ui/readline
-      ../../modules/ui/setup-monitors
+      ../../modules/ui/setup-monitors/user
       ../../modules/ui/solarized-theme
       ../../modules/ui/terminal
       ../../modules/ui/tray

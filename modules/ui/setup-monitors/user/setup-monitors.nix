@@ -1,6 +1,8 @@
-{ writeShellScriptBin, bash, xorg, coreutils, gnugrep, gawk, systemd, gnused }:
+{ writeScript, bash, xorg, coreutils, gnugrep, gawk, systemd, gnused, xdpyinfo }:
 
-writeShellScriptBin "setup-monitors" ''
+writeScript "setup-monitors" ''
+  #! ${bash}/bin/sh
+
   xrandr=${xorg.xrandr}/bin/xrandr
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
@@ -9,11 +11,10 @@ writeShellScriptBin "setup-monitors" ''
   systemctl=${systemd}/bin/systemctl
   cut=${coreutils}/bin/cut
   sed=${gnused}/bin/sed
-
-  monitors=$($xrandr -q)
+  xdpyinfo=${xdpyinfo}/bin/xdpyinfo
 
   function isconnected() {
-      $test ! "$($echo "$monitors" | $grep $1 | $grep 'disconnected')"
+      $test ! "$($xrandr -q | $grep $1 | $grep 'disconnected')"
   }
 
   function disconnect() {
@@ -34,6 +35,12 @@ writeShellScriptBin "setup-monitors" ''
       exit
 
   }
+
+  if ! $xdpyinfo >/dev/null 2>&1
+  then
+      echo "Can't connect to display $DISPLAY, exiting"
+      exit
+  fi
 
   DISPLAYS=$($xrandr -q | $cut -d ' ' -f 1 | $sed '1d;/^$/d')
   HDMI_DISPLAYS=$($echo "$DISPLAYS" | $grep "HDMI")
