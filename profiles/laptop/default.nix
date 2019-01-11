@@ -25,6 +25,7 @@ in
     ../../modules/nix/auto-upgrade
 
     ../../modules/security/primary-user
+    ../../modules/security/process-information-hiding
     ../../modules/security/sshd
     ../../modules/security/sudo
 
