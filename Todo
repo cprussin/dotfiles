@@ -18,6 +18,7 @@
    - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
 * Done
+** DONE Fix $BROWSER and $EDITOR
 ** DONE Minimize environment packages :user:system:
 ** DONE Install steam :user:
 ** DONE Use home-manager from nixos config :user:system:
