@@ -10,7 +10,7 @@ in
     ../../modules/boot/systemd-boot
 
     ../../modules/devices/bluetooth
-    ../../modules/devices/printing
+    ../../modules/devices/printers
     ../../modules/devices/touchpad
 
     ../../modules/devtools/docker
