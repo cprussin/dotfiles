@@ -6,7 +6,6 @@ import qualified Layouts as Layouts
 import qualified Logging as Logging
 import qualified Mousebindings as Mousebindings
 import qualified Paths as Paths
-import qualified Startup as Startup
 import qualified WindowRules as WindowRules
 import qualified Workspaces as Workspaces
 import qualified XMonad as XMonad
@@ -30,7 +29,6 @@ startXmonad paths statusbarPipe =
   , XMonad.layoutHook = Layouts.layoutHook
   , XMonad.manageHook = WindowRules.windowRules
   , XMonad.logHook = Logging.logHook statusbarPipe
-  , XMonad.startupHook = Startup.startup paths
   }
 
 -- WM-level plugins
