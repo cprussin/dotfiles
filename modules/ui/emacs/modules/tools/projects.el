@@ -7,12 +7,19 @@
 ;;;
 ;;; Code:
 
+(defun git-cmd (args)
+  "Return a string representing the git command ARGS."
+  (concat (cdr (assoc "git" paths)) " " args))
+
 ;; Enable projectile
 (use-package projectile
   :delight '(:eval (concat " " (projectile-project-name) " "))
   :init
   (setq projectile-completion-system 'ivy
-        projectile-enable-caching t)
+        projectile-enable-caching t
+        projectile-git-command (git-cmd "ls-files -zco --exclude-standard")
+        projectile-git-submodule-command (git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
+        projectile-git-ignored-command (git-cmd "ls-files -zcoi --exclude-standard"))
   :config (projectile-mode))
 
 ;; And enable counsel-projectile, for better ivy integration
