@@ -2,18 +2,11 @@
 
 let
   ls = pkgs.callPackage ./ls.nix { };
-
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
 in
 
 {
   home.file.".zsh-dircolors.config".text = "dircolors.ansi-dark";
-
-  nixpkgs.overlays = [
-    (self: super: {
-      zsh-git-prompt = super.callPackage ./zsh-git-prompt.nix { };
-    })
-  ];
 
   programs.zsh = {
     enable = true;
@@ -25,7 +18,7 @@ in
       }
       {
         name = "zsh-git-prompt";
-        src = pkgs.zsh-git-prompt;
+        src = pkgs.callPackage ./zsh-git-prompt.nix { };
         file = "zshrc.sh";
       }
       {
