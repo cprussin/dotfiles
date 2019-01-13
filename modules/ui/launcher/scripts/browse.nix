@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils, chromium, google-chrome, firefox }:
+{ writeScript, bash, coreutils, chromium, google-chrome, firefox, minichrome }:
 
 writeScript "browse" ''
   #! ${bash}/bin/sh
@@ -6,9 +6,10 @@ writeScript "browse" ''
   chromium=${chromium}/bin/chromium
   chrome=${google-chrome}/bin/google-chrome-stable
   firefox=${firefox}/bin/firefox
+  minichrome=${minichrome}/bin/minichrome
   test=${coreutils}/bin/test
 
-  browser="chromium"
+  browser="minichrome"
   target=""
 
   while $test $# -gt 0
@@ -37,6 +38,6 @@ writeScript "browse" ''
     chromium) exec $chromium --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
     chrome) exec $chrome --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
     firefox) exec $firefox $target >/dev/null 2>&1 ;;
-    #minichrome) exec $minichrome browse $target >/dev/null 2>&1 ;;
+    minichrome) exec $minichrome browse $target >/dev/null 2>&1 ;;
   esac
 ''

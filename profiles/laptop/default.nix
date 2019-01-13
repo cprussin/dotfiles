@@ -67,6 +67,7 @@ in
       ../../modules/ui/dvp/user
       ../../modules/ui/emacs
       ../../modules/ui/launcher
+      ../../modules/ui/minichrome
       ../../modules/ui/numix-cursor-theme
       ../../modules/ui/readline
       ../../modules/ui/setup-monitors/user

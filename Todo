@@ -14,10 +14,10 @@
 * On Hold
 * To Do
 ** TODO Install missing packages :user:
-   - [ ] minichrome
    - [ ] widevine (in minichrome?)
    - [ ] aosd (volume change overlay)
 * Done
+** DONE Install minichrome :user:
 ** DONE Fix $BROWSER and $EDITOR
 ** DONE Minimize environment packages :user:system:
 ** DONE Install steam :user:

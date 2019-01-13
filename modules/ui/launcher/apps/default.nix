@@ -62,6 +62,7 @@ in
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = mkScript "chrome" "@out@/bin/browse --browser chrome $*";
+  chromium = mkScript "chromium" "@out@/bin/browse --browser chromium $*";
   dark = mkScript "dark" "${toggle-colors}/bin/toggle-colors dark";
   dvorak = mkScript "dvorak" "${setxkbmap}/bin/setxkbmap us dvp";
   emacs = mkScript "emacs" "@out@/bin/open \${1-*scratch*}";
