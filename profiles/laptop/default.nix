@@ -64,6 +64,8 @@ in
       ../../modules/ui/audio/user
       ../../modules/ui/autocutsel
       ../../modules/ui/backgrounds
+      ../../modules/ui/backlight
+      ../../modules/ui/dunst
       ../../modules/ui/dvp/user
       ../../modules/ui/emacs
       ../../modules/ui/launcher

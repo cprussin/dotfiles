@@ -1,10 +1,12 @@
-{ writeShellScriptBin, bash, pamixer, gnugrep, gnused, coreutils }:
+{ writeShellScriptBin, pamixer, gnugrep, gnused, coreutils, dunst, mk-progress-string }:
 
 writeShellScriptBin "volume" ''
   pamixer=${pamixer}/bin/pamixer
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed
   test=${coreutils}/bin/test
+  dunstify=${dunst}/bin/dunstify
+  mkProgressString=${mk-progress-string}/bin/mkProgressString
 
   # Get the sink number
   sink=$($pamixer --list-sinks | $grep a2dp | $sed 's/\([0-9]\+\).*/\1/')
@@ -28,20 +30,21 @@ writeShellScriptBin "volume" ''
           ;;
   esac
 
-  # FIXME get aosd installed and re-enable this
-  ## Next, set the contents of the on screen message
-  #[ $(pamixer --sink $sink --get-mute) == 'true' ] && muted=true
-  #[ $muted ] && mute='' || mute=''
-  #message="$mute:$(pamixer --sink $sink --get-volume)%"
-  #[ $muted ] && color='#99ff00' || color='#0099ff'
-  #
-  ## Now, show the on-screen display, ensuring that the old one is removed
-  ## immediately if it's still running
-  #pid=$(ps aux | grep aosd_cat | head -n 1 | cut -d ' ' -f 2)
-  #echo $message | aosd_cat --font="DejaVu Sans 55, Icons 55" \
-  #                         --fore-color=$color --back-color=black \
-  #                         --back-opacity 255 --shadow-opacity=0 \
-  #                         --fade-in=0 --fade-full=500 --fade-out=0 \
-  #                         --padding=30 &
-  #kill -9 $pid
+  # Next, set the contents of the on screen message
+  level=$($0 get)
+  if $test $($0 get-mute) == 'true'
+  then
+      icon=audio-volume-muted
+      color="#073642"
+  elif $test $level -ge 50
+  then
+      icon=audio-volume-high
+  elif $test $level -ge 25
+  then
+      icon=audio-volume-medium
+  else
+      icon=audio-volume-low
+  fi
+
+  $dunstify -i $icon -t 4000 -r 5454 -u normal "<span color='$color'>$($mkProgressString $level)</span>"
 ''

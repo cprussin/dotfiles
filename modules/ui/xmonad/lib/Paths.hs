@@ -6,7 +6,7 @@ data Paths = Paths
   , launch :: String
   , xclip :: String
   , i3lock :: String
-  , xbacklight :: String
+  , backlight :: String
   , volume :: String
   , terminal :: String
   }

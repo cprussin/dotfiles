@@ -1,22 +1,21 @@
 -*- mode: org; -*-
 
-* Wishlist
+* To Do
 ** TODO More betterer layout management :user:xmonad:
 ** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
 ** TODO Consolidate solarized theme configs :user:
 ** TODO Fix FIXME/TODO items :user:
 ** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
 ** TODO Figure out a better way to manage games :user:
+** TODO Add widevine in minichrome/chromium/firefox :user:
 ** TODO Add local caching DNS server :system:
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
-* To Do
-** TODO Install missing packages :user:
-   - [ ] widevine (in minichrome?)
-   - [ ] aosd (volume change overlay)
+* In Progress
 * Done
+** DONE Set up dunst for messages/notifications/volume/brightness :user:
 ** DONE Install minichrome :user:
 ** DONE Fix $BROWSER and $EDITOR
 ** DONE Minimize environment packages :user:system:

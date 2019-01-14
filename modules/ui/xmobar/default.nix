@@ -1,7 +1,6 @@
 { pkgs, ... }:
 
 let
-  read-message = pkgs.callPackage ./read-message.nix {};
   email = pkgs.callPackage ./email.nix {};
   vpn = pkgs.callPackage ./vpn.nix {};
   volume = pkgs.callPackage ./volume.nix {};
@@ -12,12 +11,6 @@ let
 in
 
 {
-  nixpkgs.overlays = [
-    (self: super: {
-      message = super.callPackage ./message.nix {};
-    })
-  ];
-
   home.file.".xmobarrc".text = ''
     Config
       { font = "xft:DejaVu Sans Mono:size=10"
@@ -37,7 +30,6 @@ in
       , overrideRedirect = False
       , commands =
         [ Run UnsafeStdinReader
-        , Run Com "${read-message}" [] "message" 1
         , Run Com "${email}" [] "email" 10
         , Run Com "${vpn}" [] "vpn" 10
         , Run Com "${volume}" [] "volume" 1
@@ -46,7 +38,7 @@ in
         , Run Com "${battery}" [] "battery" 10
         , Run Com "${date}" [] "date" 10
         ]
-      , template = " %UnsafeStdinReader%}{%message%%email%%vpn%%bluetooth%%network%%volume%%battery%%date%        "
+      , template = " %UnsafeStdinReader%}{%email%%vpn%%bluetooth%%network%%volume%%battery%%date%        "
       }
   '';
 }

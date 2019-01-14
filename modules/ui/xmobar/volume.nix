@@ -12,7 +12,7 @@ writeScript "volume" ''
 
   if $test $($volume get-mute) == "true"
   then
-      str="<fc=#859900><fn=1></fn> $currentVolume</fc>"
+      str="<fc=#586e75><fn=1></fn> $currentVolume</fc>"
   else
       if $test $currentVolume -lt 30
       then

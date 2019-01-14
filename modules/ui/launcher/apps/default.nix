@@ -9,7 +9,6 @@
 , pavucontrol
 , keepassxc
 , openssh
-, message
 , slack
 , qemu
 , emacs
@@ -84,7 +83,7 @@ in
   passwords = mkScript "passwords" "${keepassxc}/bin/keepassxc";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- systemctl reboot";
-  remacs = mkScript "remacs" "${message}/bin/message write 'Restarting emacs...' 'systemctl --user restart emacs-daemon'";
+  remacs = callPackage ./remacs.nix {};
   reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
   runescape = mkScript "runelite" "sh -c 'export _JAVA_OPTIONS=\"-Duser.home=\\\"$HOME/.cache/runescape\\\"\"; ${runelite}/bin/runelite'";
   screenshot = callPackage ./screenshot.nix {};
@@ -95,7 +94,7 @@ in
   sotd = callPackage ./sotd.nix {};
   stash = mkWebApp "stash" "https://stash.corp.netflix.com";
   steam = mkScript "steam" "${steam}/bin/steam";
-  syncmail = mkScript "syncmail" "${message}/bin/message write 'Syncing email...' 'systemctl --user start mbsync'";
+  syncmail = callPackage ./syncmail.nix {};
   trello = mkWebApp "trello" "https://trello.com/b/mHhKhvTF/web-core";
   us = mkScript "us" "${setxkbmap}/bin/setxkbmap us";
   vpn = callPackage ./vpn.nix {};

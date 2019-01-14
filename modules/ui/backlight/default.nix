@@ -3,7 +3,7 @@
 {
   nixpkgs.overlays = [
     (self: super: {
-      volume = super.callPackage ./volume.nix {};
+      backlight = super.callPackage ./backlight.nix {};
     })
   ];
 }
