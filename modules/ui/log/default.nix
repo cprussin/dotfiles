@@ -1,5 +1,5 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
-  sudoCmds = [ "/run/current-system/sw/bin/journalctl -alf" ];
+  sudoCmds = [ "${pkgs.systemd}/bin/journalctl -alf" ];
 }

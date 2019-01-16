@@ -1,4 +1,4 @@
-{ pkg, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   options.shakti.nginxConfigPath = lib.mkOption {
@@ -17,9 +17,9 @@
     systemd.services.nginx.wantedBy = lib.mkForce [ ];
 
     sudoCmds = [
-      "/run/current-system/sw/bin/systemctl start nginx"
-      "/run/current-system/sw/bin/systemctl stop nginx"
-      "/run/current-system/sw/bin/systemctl restart nginx"
+      "${pkgs.systemd}/bin/systemctl start nginx"
+      "${pkgs.systemd}/bin/systemctl stop nginx"
+      "${pkgs.systemd}/bin/systemctl restart nginx"
     ];
   };
 }

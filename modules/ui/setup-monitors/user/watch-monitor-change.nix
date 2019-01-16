@@ -8,6 +8,6 @@ writeScript "watch-monitor-change" ''
 
   while $inotifywait /run/display-change
   do
-    systemctl --user start setup-monitors
+    $systemctl --user start setup-monitors
   done
 ''

@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   options.netflixVpnAuthPath = lib.mkOption {
@@ -49,9 +49,9 @@
     };
 
     sudoCmds = [
-      "/run/current-system/sw/bin/systemctl start openvpn-netflix"
-      "/run/current-system/sw/bin/systemctl stop openvpn-netflix"
-      "/run/current-system/sw/bin/systemctl restart openvpn-netflix"
+      "${pkgs.systemd}/bin/systemctl start openvpn-netflix"
+      "${pkgs.systemd}/bin/systemctl stop openvpn-netflix"
+      "${pkgs.systemd}/bin/systemctl restart openvpn-netflix"
     ];
   };
 }
