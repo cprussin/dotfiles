@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   ls = pkgs.callPackage ./ls.nix { };
@@ -45,6 +45,7 @@ in
       git = "${pkgs.git}/bin/git";
       man = "${pkgs.man}/bin/man";
       setterminfo = "${pkgs.setterminfo}/bin/setterminfo";
+      xmonad = config.xsession.windowManager.command;
     };
     initExtra = ''
       shell() {
