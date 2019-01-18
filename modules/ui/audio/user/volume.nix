@@ -42,6 +42,9 @@ writeShellScriptBin "volume" ''
   elif $test $level -ge 25
   then
       icon=audio-volume-medium
+  elif $test $level -eq 0
+  then
+      icon=audio-volume-muted
   else
       icon=audio-volume-low
   fi
