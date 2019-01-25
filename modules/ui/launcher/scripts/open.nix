@@ -36,6 +36,7 @@ writeScript "open" ''
     application/pdf) exec $zathura "$1" ;;
     application/msword) exec $libreoffice "$1" ;;
     application/*officedocument*) exec $libreoffice "$1" ;;
+    application/vnd.ms-excel) exec $libreoffice "$1" ;;
     text/html) exec $browse "$1" ;;
     image/gif) exec $sxiv -a "$1" ;;
     image/*) exec $feh -. "$1" ;;
