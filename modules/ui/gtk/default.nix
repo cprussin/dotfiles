@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  gtk.enable = true;
+}

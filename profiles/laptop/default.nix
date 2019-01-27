@@ -68,6 +68,7 @@ in
       ../../modules/ui/dunst
       ../../modules/ui/dvp/user
       ../../modules/ui/emacs
+      ../../modules/ui/gtk
       ../../modules/ui/launcher
       ../../modules/ui/minichrome
       ../../modules/ui/numix-cursor-theme
@@ -85,16 +86,25 @@ in
     home = {
       inherit stateVersion;
 
-      # FIXME For some reason, if keepassxc isn't added to the environment, it won't
-      # start from an absolute path.  The error is:
-      #
-      # qt.qpa.plugin: Could not find the Qt platform plugin "xcb" in ""
-      # This application failed to start because no Qt platform plugin could be
-      # initialized. Reinstalling the application may fix this problem.
-      #
-      # This should be fixed so keepassxc can be removed from the environment and
-      # accessible via the launcher only.
-      packages = lib.mkForce [ pkgs.keepassxc ];
+      packages = lib.mkForce [
+
+        # FIXME For some reason, if keepassxc isn't added to the environment, it
+        # won't start from an absolute path.  The error is:
+        #
+        # qt.qpa.plugin: Could not find the Qt platform plugin "xcb" in "" This
+        # application failed to start because no Qt platform plugin could be
+        # initialized. Reinstalling the application may fix this problem.
+        #
+        # This should be fixed so keepassxc can be removed from the environment
+        # and accessible via the launcher only.
+        pkgs.keepassxc
+
+        # FIXME: If numix-cursor-theme isn't in the environment, then the GTK
+        # configuration won't be able to find it, since paths appear hardcoded
+        # in GTK.  There's likely a way to pass the path to GTK apps instead.
+        pkgs.numix-cursor-theme
+
+      ];
     };
   };
 
