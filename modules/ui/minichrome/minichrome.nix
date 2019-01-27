@@ -2,21 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "minichrome-${version}";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchurl {
-    url = "https://github.com/cprussin/minichrome/releases/download/v0.0.1/minichrome-0.0.1.tar.gz";
-    sha256 = "0ynjbhfvyjhi5zixvrni10f1l236ry387b9vsqbpm203p04391sf";
+    url = "https://github.com/cprussin/minichrome/releases/download/v${version}/minichrome-linux-x64-${version}.tar.gz";
+    sha256 = "1yggwmyxqqi7mg6419bp0grlqkgcd1ybn2m0hss7r6svryl48mh7";
   };
 
   buildInputs = [ makeWrapper ];
 
-  buildCommand = ''
-    mkdir -p $out/{lib,bin}
-    tar -xzf $src -C $out/lib
-    mv $out/lib/minichrome-linux-x64 $out/lib/minichrome
+  installPhase = ''
+    mkdir -p $out/{lib/minichrome,bin}
+    mv * $out/lib/minichrome
     ln -s $out/lib/minichrome/minichrome $out/bin
-    fixupPhase
+  '';
+
+  postFixup = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}:${gtk2}/lib:${at-spi2-atk}/lib:$out/lib/minichrome" \
