@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   key = name: "${config.sshKeys}/${name}";
@@ -13,6 +13,8 @@ in
 
   config = {
     home.file.".ssh/known_hosts".source = ./known_hosts;
+    home.file.".ssh/authorized_keys".source = ./authorized_keys;
+    home.file.".ssh/environment".text = "PATH=${pkgs.git}/bin";
 
     programs.ssh = {
       enable = true;
