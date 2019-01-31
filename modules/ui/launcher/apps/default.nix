@@ -96,5 +96,5 @@ in
   trello = mkWebApp "trello" "https://trello.com/b/mHhKhvTF/web-core";
   us = mkScript "us" "${setxkbmap}/bin/setxkbmap us";
   vpn = callPackage ./vpn.nix {};
-  windows-7 = mkScript "windows-7" "${qemu}/bin/qemu-system-x86_64 -enable-kvm -machine type=pc,accel=kvm -cpu host -m 1G -net nic -net user,smb=$HOME/Software -usb -device usb-tablet $HOME/Software/Microsoft/Windows\ 7\ VM.iso";
+  windows-7 = mkScript "windows-7" "${qemu}/bin/qemu-system-x86_64 -enable-kvm -machine type=pc,accel=kvm -cpu host -m 1G -usb -device usb-tablet \"$HOME/Software/Microsoft/Windows 7 VM.iso\"";
 }
