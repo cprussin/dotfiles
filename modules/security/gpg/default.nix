@@ -11,8 +11,11 @@ in
       photo-viewer "open %i"
       keyserver hkp://pgp.mit.edu
     '';
-    ".gnupg/gpg-agent.conf".text = ''
-      pinentry-program ${pinentry-rofi}
-    '';
+  };
+
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+    extraConfig = "pinentry-program ${pinentry-rofi}";
   };
 }

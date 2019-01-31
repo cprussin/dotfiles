@@ -43,7 +43,7 @@ in
     "${home-manager}/nixos"
   ];
 
-  home-manager.users.${config.primaryUserName} = { lib, pkgs, ... }: {
+  home-manager.users.${config.primaryUserName} = { lib, pkgs, config, ... }: {
     imports = [
       ../../modules/data/email
       ../../modules/data/nogit
@@ -65,6 +65,7 @@ in
       ../../modules/ui/autocutsel
       ../../modules/ui/backgrounds
       ../../modules/ui/backlight
+      ../../modules/ui/bash
       ../../modules/ui/dunst
       ../../modules/ui/dvp/user
       ../../modules/ui/emacs
@@ -93,6 +94,21 @@ in
         # configuration won't be able to find it, since paths appear hardcoded
         # in GTK.  There's likely a way to pass the path to GTK apps instead.
         pkgs.numix-cursor-theme
+
+        # FIXME: This is done under the hood in home-manager to set
+        # sessionVariables.  We do still want this in the environment, even if
+        # we want nothing else.  Ideally there should be a simpler way to clear
+        # the environment except this file.
+        (pkgs.writeTextFile {
+          name = "hm-session-vars.sh";
+          destination = "/etc/profile.d/hm-session-vars.sh";
+          text = ''
+            # Only source this once.
+            if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi
+            export __HM_SESS_VARS_SOURCED=1
+            ${config.lib.shell.exportAll config.home.sessionVariables}
+          '';
+        })
 
       ];
     };
