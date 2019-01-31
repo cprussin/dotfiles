@@ -57,6 +57,7 @@ in
       ../../modules/nix/nixpkgs
 
       ../../modules/security/gpg
+      ../../modules/security/pass
       ../../modules/security/ssh
       ../../modules/security/umask
 

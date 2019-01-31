@@ -11,7 +11,6 @@
 , slack
 , qemu
 , emacs
-, secrets
 , coreutils
 , terminal
 , steam
@@ -55,7 +54,6 @@ in
 
 {
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
-  authenticate = callPackage ./authenticate.nix { inherit secrets; };
   backup = callPackage ./backup.nix { inherit terminal; };
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
