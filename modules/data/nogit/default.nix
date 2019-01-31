@@ -19,7 +19,6 @@ in
     xdg = {
       configFile = linkFiles false [
         "chromium"
-        "keepassxc"
         "Slack"
         "StardewValley"
       ];

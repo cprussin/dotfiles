@@ -83,6 +83,9 @@ keybindings paths _ = Map.fromList $
   , ((XMonad.noModMask, XF86.xF86XK_MonBrightnessDown), XMonad.spawn $ Paths.backlight paths ++ " - 5")
   , ((XMonad.noModMask, XF86.xF86XK_Launch5), XMonad.spawn $ Paths.backlight paths ++ " - 5")
 
+  -- Passwords
+  , ((modMask, XMonad.xK_p), XMonad.spawn $ Paths.rofiPass paths)
+
   ] ++
 
   -- Move focus with mod + direction

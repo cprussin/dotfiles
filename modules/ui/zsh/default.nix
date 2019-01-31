@@ -45,6 +45,7 @@ in
       git = "${pkgs.git}/bin/git";
       man = "${pkgs.man}/bin/man";
       setterminfo = "${pkgs.setterminfo}/bin/setterminfo";
+      pass = "${pkgs.pass}/bin/pass";
       xmonad = config.xsession.windowManager.command;
     };
     initExtra = ''

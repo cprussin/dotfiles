@@ -26,6 +26,7 @@
           , Paths.i3lock = "${pkgs.i3lock}/bin/i3lock"
           , Paths.backlight = "${pkgs.backlight}/bin/backlight"
           , Paths.volume = "${pkgs.volume}/bin/volume"
+          , Paths.rofiPass = "${pkgs.rofi-pass}/bin/rofi-pass"
           , Paths.terminal = "${config.terminal}"
           }
       '';

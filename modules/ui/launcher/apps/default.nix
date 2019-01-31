@@ -7,7 +7,6 @@
 , gimp
 , htop
 , pavucontrol
-, keepassxc
 , openssh
 , slack
 , qemu
@@ -80,7 +79,6 @@ in
   mixer = mkScript "mixer" "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
-  passwords = mkScript "passwords" "${keepassxc}/bin/keepassxc";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- ${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};

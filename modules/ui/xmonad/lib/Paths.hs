@@ -9,4 +9,5 @@ data Paths = Paths
   , backlight :: String
   , volume :: String
   , terminal :: String
+  , rofiPass :: String
   }
