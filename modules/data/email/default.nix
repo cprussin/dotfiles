@@ -1,5 +1,14 @@
 { pkgs, config, ... }:
 
+let
+  pass = "${pkgs.pass}/bin/pass";
+  head = "${pkgs.coreutils}/bin/head";
+  grep = "${pkgs.gnugrep}/bin/grep";
+  sed = "${pkgs.gnused}/bin/sed";
+  getPassword = service: "${pass} show '${service}' | ${head} -n 1";
+  getAppPassword = service: "${pass} show '${service}' | ${grep} \"App Password\" | ${sed} 's/.*: //'";
+in
+
 {
   accounts.email = {
     maildirBasePath = "Mail";
@@ -10,7 +19,7 @@
         realName = "Connor Prussin";
         imap.host = "prussin.net";
         userName = "connor";
-        passwordCommand = "sed -n 2p ${config.secrets}/prussin.net";
+        passwordCommand = getPassword "Infrastructure/prussin.net";
         maildir.path = "PrussinNet";
         msmtp.enable = true;
         smtp = {
@@ -32,7 +41,7 @@
         address = "cprussin@netflix.com";
         realName = "Connor Prussin";
         flavor = "gmail.com";
-        passwordCommand = "sed -n 2p ${config.secrets}/netflix/google";
+        passwordCommand = getAppPassword "Computer Services/Google (Netflix)";
         maildir.path = "Netflix";
         msmtp.enable = true;
         mbsync = {
@@ -51,7 +60,7 @@
         address = "cprussin@gmail.com";
         realName = "Connor Prussin";
         flavor = "gmail.com";
-        passwordCommand = "sed -n 2p ${config.secrets}/google";
+        passwordCommand = getAppPassword "Computer Services/Google (Personal)";
         maildir.path = "GMail";
         msmtp.enable = true;
         mbsync = {
