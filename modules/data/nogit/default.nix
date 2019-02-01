@@ -9,34 +9,28 @@ let
 in
 
 {
-  options.secrets = lib.mkOption {
-    type = lib.types.str;
-    default = "${nogit}/secrets";
-    description = "A string containing the path to the secrets directory";
+  xdg = {
+    configFile = linkFiles false [
+      "chromium"
+      "Slack"
+      "StardewValley"
+    ];
+
+    dataFile = linkFiles false [ "Braid" ];
   };
 
-  config = {
-    xdg = {
-      configFile = linkFiles false [
-        "chromium"
-        "Slack"
-        "StardewValley"
-      ];
-
-      dataFile = linkFiles false [ "Braid" ];
+  home.file = linkFiles true [
+    "BitwigStudio"
+    "factorio"
+  ] // {
+    ".password-store".source = "${nogit}/secrets/passwords";
+  } // (let
+    gpgPath = "${nogit}/secrets/gnupg";
+    gpgFiles = builtins.readDir gpgPath;
+    gpgFileLink = filename: _: lib.nameValuePair ".gnupg/${filename}" {
+      source = "${gpgPath}/${filename}";
     };
-
-    home.file = linkFiles true [
-      "BitwigStudio"
-      "factorio"
-    ] // (let
-      gpgPath = "${config.secrets}/gnupg";
-      gpgFiles = builtins.readDir gpgPath;
-      gpgFileLink = filename: _: lib.nameValuePair ".gnupg/${filename}" {
-        source = "${gpgPath}/${filename}";
-      };
-    in
-      lib.mapAttrs' gpgFileLink gpgFiles
-    );
-  };
+  in
+    lib.mapAttrs' gpgFileLink gpgFiles
+  );
 }
