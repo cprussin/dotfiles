@@ -5,8 +5,9 @@ let
   head = "${pkgs.coreutils}/bin/head";
   grep = "${pkgs.gnugrep}/bin/grep";
   sed = "${pkgs.gnused}/bin/sed";
-  getPassword = service: "${pass} show '${service}' | ${head} -n 1";
-  getAppPassword = service: "${pass} show '${service}' | ${grep} \"App Password\" | ${sed} 's/.*: //'";
+  readPasswordFile = service: "PASSWORD_STORE_GPG_OPTS='--pinentry-mode cancel' ${pass} show '${service}'";
+  getPassword = service: "${readPasswordFile service} | ${head} -n 1";
+  getAppPassword = service: "${readPasswordFile service} | ${grep} \"App Password\" | ${sed} 's/.*: //'";
 in
 
 {
