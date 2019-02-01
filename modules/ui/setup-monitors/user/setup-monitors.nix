@@ -27,7 +27,6 @@ writeScript "setup-monitors" ''
       $xrandr $@
 
       # Reset apps that get messed up when the monitor configuration changes.
-      $systemctl --user start random-background
       $systemctl --user restart tray
 
       # Now exit the process--we only want to set up the first connection since we

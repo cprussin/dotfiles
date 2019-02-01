@@ -27,6 +27,8 @@
     Unit = {
       Description = "Re-configure monitors";
       After = [ "graphical-session-pre.target" ];
+      Before = [ "random-background.service" ];
+      Wants = [ "random-background.service" ];
       PartOf = [ "graphical-session.target" ];
     };
 
