@@ -1,13 +1,13 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 let
   pass = "${pkgs.pass}/bin/pass";
   head = "${pkgs.coreutils}/bin/head";
   grep = "${pkgs.gnugrep}/bin/grep";
   sed = "${pkgs.gnused}/bin/sed";
-  readPasswordFile = service: "PASSWORD_STORE_GPG_OPTS='--pinentry-mode cancel' ${pass} show '${service}'";
-  getPassword = service: "${readPasswordFile service} | ${head} -n 1";
-  getAppPassword = service: "${readPasswordFile service} | ${grep} \"App Password\" | ${sed} 's/.*: //'";
+  getPassword = service: "${pass} show '${service}' | ${head} -n 1";
+  getAppPassword = service: "${pass} show '${service}' | ${grep} \"App Password\" | ${sed} 's/.*: //'";
+  mbsyncService = config.systemd.user.services.mbsync;
 in
 
 {
@@ -85,5 +85,11 @@ in
     enable = true;
     preExec = "${config.programs.emacs.finalPackage}/bin/emacsclient -e '(mu4e-update-index)'";
     postExec = "${config.programs.emacs.finalPackage}/bin/emacsclient -e '(mu4e-update-index)'";
+  };
+  systemd.user.services = {
+    mbsync.Service.Environment = "\"PASSWORD_STORE_GPG_OPTS='--pinentry-mode cancel'\"";
+    mbsync-manual = mbsyncService // {
+      Service = mbsyncService.Service // { Environment = null; };
+    };
   };
 }
