@@ -14,6 +14,7 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
+** TODO Fix tray so that it starts after xmonad
 ** TODO Investigate using ssh certificate based auth
 * Done
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:
