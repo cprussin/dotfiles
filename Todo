@@ -1,6 +1,8 @@
 -*- mode: org; -*-
 
 * To Do
+** TODO Fix tray so that it starts after xmonad
+** TODO Investigate using ssh certificate based auth
 ** TODO More betterer layout management :user:xmonad:
 ** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
 ** TODO Consolidate solarized theme configs :user:
@@ -14,8 +16,6 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
-** TODO Fix tray so that it starts after xmonad
-** TODO Investigate using ssh certificate based auth
 * Done
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:
 ** DONE Install minichrome :user:
