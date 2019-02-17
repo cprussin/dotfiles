@@ -1,6 +1,7 @@
 -*- mode: org; -*-
 
 * To Do
+** TODO Sync mail using imap idle
 ** TODO Fix tray so that it starts after xmonad
 ** TODO Investigate using ssh certificate based auth
 ** TODO More betterer layout management :user:xmonad:
@@ -16,6 +17,7 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
+** TODO Switch to wayland (sway)
 * Done
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:
 ** DONE Install minichrome :user:
