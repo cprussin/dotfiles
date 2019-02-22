@@ -16,7 +16,6 @@
   :delight '(:eval (concat " " (projectile-project-name) " "))
   :init
   (setq projectile-completion-system 'ivy
-        projectile-enable-caching t
         projectile-git-command (git-cmd "ls-files -zco --exclude-standard")
         projectile-git-submodule-command (git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
         projectile-git-ignored-command (git-cmd "ls-files -zcoi --exclude-standard"))
