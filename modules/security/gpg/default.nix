@@ -1,9 +1,5 @@
 { pkgs, ... }:
 
-let
-  pinentry-rofi = pkgs.callPackage ./pinentry-rofi.nix { };
-in
-
 {
   home.file = {
     ".gnupg/gpg.conf".text = ''
@@ -16,6 +12,6 @@ in
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    extraConfig = "pinentry-program ${pinentry-rofi}";
+    extraConfig = "pinentry-program ${pkgs.launcher}/bin/pinentry";
   };
 }

@@ -22,6 +22,7 @@ writeScript "launch" ''
 
   showPrompt() {
       $prompt \
+          -columns 4 \
           -lines 7 \
           -p ''' \
           -theme-str "textbox-prompt-colon { enabled: false; }" \

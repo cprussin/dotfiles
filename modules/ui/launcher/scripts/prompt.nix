@@ -8,7 +8,6 @@ writeScript "prompt" ''
 
   $cat - | $rofi \
     -fixed-num-lines \
-    -columns 4 \
     -font "DejaVuSansMono 10" \
     -color-normal "#002b36,#657b83,#002b36,#859900,#002b36" \
     -color-window "#002b36,#859900" \

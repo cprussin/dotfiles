@@ -1,28 +1,23 @@
-{ writeScript, bash, rofi, coreutils, gnused }:
+{ writeScript, bash, coreutils, gnused }:
 
-writeScript "pinentry-rofi" ''
+writeScript "pinentry" ''
   #! ${bash}/bin/sh
 
   echo=${coreutils}/bin/echo
   printf=${coreutils}/bin/printf
   tr=${coreutils}/bin/tr
   test=${coreutils}/bin/test
-  rofi=${rofi}/bin/rofi
   sed=${gnused}/bin/sed
+  prompt=@out@/bin/prompt
 
   PROMPT="Enter your passphrase"
   DESC=""
 
   getPassword() {
-    DISPLAY=:0 $rofi \
-      -font "DejaVuSansMono 10" \
-      -color-normal "#002b36,#657b83,#002b36,#859900,#002b36" \
-      -color-window "#002b36,#859900" \
-      -bw 2 \
+    echo "" | DISPLAY=:0 $prompt \
       -width 20 \
-      -dmenu \
       -p "$PROMPT " \
-      -mesg "$($echo "$DESC" | $sed 's|%0A|\n|g;s|<|\&lt;|g;s|>|\&gt;|g;s|%22|<b>|;s|%22|</b>|')" \
+      -mesg "$DESC" \
       -input /dev/null \
       -password \
       -theme-str "textbox-prompt-colon { enabled: false; }" \
@@ -34,7 +29,7 @@ writeScript "pinentry-rofi" ''
     case "$cmd" in
 
       SETDESC)
-        DESC=$rest
+        DESC="$($echo "$rest" | $sed 's|%0A|\n|g;s|<|\&lt;|g;s|>|\&gt;|g;s|%22|<b>|;s|%22|</b>|')"
         if $test ''${DESC: -3} != '%0A'
         then
             DESC="$DESC%0A"
@@ -54,9 +49,6 @@ writeScript "pinentry-rofi" ''
       GETPIN) $echo -e "D $(getPassword)\nOK" ;;
       CONFIRM) $echo ASSUAN_Not_Confirmed ;;
       SETPROMPT) PROMPT=$rest; $echo OK ;;
-      SETOK) OK=$rest; $echo OK ;;
-      SETERROR) ERROR=$rest; $echo OK ;;
-      OPTION) $echo OK ;;
       BYE) $echo OK; exit ;;
       *) $echo OK ;;
 

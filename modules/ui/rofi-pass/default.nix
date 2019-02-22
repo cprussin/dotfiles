@@ -3,14 +3,9 @@
 {
   xdg.configFile."rofi-pass/config".text = ''
     _rofi() {
-      ${pkgs.rofi}/bin/rofi \
-        -font "DejaVuSansMono 10" \
-        -color-normal "#002b36,#657b83,#002b36,#859900,#002b36" \
-        -color-window "#002b36,#859900" \
-        -bw 2 \
+      ${pkgs.launcher}/bin/prompt \
         -theme-str "textbox-prompt-colon { enabled: false; }" \
         -columns 3 \
-        -i \
         -no-auto-select \
         "$@"
     }
