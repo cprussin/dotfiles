@@ -16,6 +16,7 @@
 , steam
 , runelite
 , systemd
+, bitwig-studio
 }:
 
 let
@@ -55,6 +56,7 @@ in
 {
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
   backup = callPackage ./backup.nix { inherit terminal; };
+  bitwig = mkScript "bitwig" "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = mkScript "chrome" "@out@/bin/browse --browser chrome $*";
