@@ -65,6 +65,9 @@ in
 
       bindkey -v
 
+      # Turn on case-insensitive completion
+      zstyle ':completion:*' matcher-list ''' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
       setopt appendhistory
       setopt autocd autopushd pushdtohome # Shortcuts to make cd easier
       setopt beep                         # Beep for me
