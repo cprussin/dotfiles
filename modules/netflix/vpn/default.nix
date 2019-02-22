@@ -1,21 +1,6 @@
 { lib, config, pkgs, ... }:
 
 {
-  options.netflixVpnAuthPath = lib.mkOption {
-    type = lib.types.str;
-    default = "/home/${config.primaryUserName}/Projects/dotfiles/modules/data/nogit/secrets/netflix";
-    description = ''
-      A string containing the path containing the Netflix VPN authentication
-      files.  This directory should contain the following files:
-
-      - `netflix`: an auth-user-pass file
-      - `ca`
-      - `tls-auth`
-      - `cert`
-      - `key`
-    '';
-  };
-
   config = {
     services.openvpn.servers.netflix = {
       config = ''
@@ -38,11 +23,11 @@
         cipher AES-256-CBC
         auth SHA512
         key-direction 1
-        auth-user-pass ${config.netflixVpnAuthPath}/netflix
-        ca ${config.netflixVpnAuthPath}/ca
-        tls-auth ${config.netflixVpnAuthPath}/tls-auth
-        cert ${config.netflixVpnAuthPath}/cert
-        key ${config.netflixVpnAuthPath}/key
+        auth-user-pass ${toString ../../data/nogit/secrets/netflix/netflix}
+        ca ${toString ../../data/nogit/secrets/netflix/ca}
+        tls-auth ${toString ../../data/nogit/secrets/netflix/tls-auth}
+        cert ${toString ../../data/nogit/secrets/netflix/cert}
+        key ${toString ../../data/nogit/secrets/netflix/key}
       '';
       autoStart = false;
       updateResolvConf = true;
