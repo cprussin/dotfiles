@@ -12,6 +12,7 @@ in
     ../../modules/devices/bluetooth
     ../../modules/devices/printers
     ../../modules/devices/touchpad
+    ../../modules/devices/virtualization
 
     ../../modules/devtools/docker
 
