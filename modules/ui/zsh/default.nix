@@ -46,6 +46,7 @@ in
       man = "${pkgs.man}/bin/man";
       setterminfo = "${pkgs.setterminfo}/bin/setterminfo";
       pass = "${pkgs.pass}/bin/pass";
+      nixops = "${pkgs.nixops}/bin/nixops";
       xmonad = config.xsession.windowManager.command;
     };
     initExtra = ''
