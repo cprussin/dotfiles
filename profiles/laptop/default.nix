@@ -24,6 +24,7 @@ in
     ../../modules/netflix/vpn
 
     ../../modules/nix/auto-upgrade
+    ../../modules/nix/plugins
 
     ../../modules/security/primary-user
     ../../modules/security/process-information-hiding
