@@ -33,8 +33,8 @@ in
       }
     ];
     shellAliases = {
-      ls = ls;
-      clear = clear;
+      ls = toString ls;
+      clear = toString clear;
       ghci = "${pkgs.ghc}/bin/ghci";
       node = "${pkgs.nodejs}/bin/node";
       open = "${pkgs.launcher}/bin/open";
