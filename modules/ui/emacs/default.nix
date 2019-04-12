@@ -49,6 +49,7 @@ in
       counsel-projectile
       csv-mode
       delight
+      dhall-mode
       dockerfile-mode
       edit-indirect
       editorconfig
