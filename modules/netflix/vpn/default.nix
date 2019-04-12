@@ -1,5 +1,9 @@
 { lib, config, pkgs, ... }:
 
+let
+  secret = name: toString ../../data/nogit/secrets/netflix + "/${name}";
+in
+
 {
   config = {
     services.openvpn.servers.netflix = {
@@ -23,11 +27,11 @@
         cipher AES-256-CBC
         auth SHA512
         key-direction 1
-        auth-user-pass ${toString ../../data/nogit/secrets/netflix/netflix}
-        ca ${toString ../../data/nogit/secrets/netflix/ca}
-        tls-auth ${toString ../../data/nogit/secrets/netflix/tls-auth}
-        cert ${toString ../../data/nogit/secrets/netflix/cert}
-        key ${toString ../../data/nogit/secrets/netflix/key}
+        auth-user-pass ${secret "netflix"}
+        ca ${secret "ca"}
+        tls-auth ${secret "tls-auth"}
+        cert ${secret "cert"}
+        key ${secret "key"}
       '';
       autoStart = false;
       updateResolvConf = true;
