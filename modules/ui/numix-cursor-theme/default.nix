@@ -3,6 +3,6 @@
 {
   xsession.pointerCursor = {
     package = pkgs.numix-cursor-theme;
-    name = "Numix";
+    name = "Numix-Cursor";
   };
 }
