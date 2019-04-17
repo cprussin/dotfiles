@@ -7,7 +7,6 @@ let
   sed = "${pkgs.gnused}/bin/sed";
   getPassword = service: "${pass} show '${service}' | ${head} -n 1";
   getAppPassword = service: "${pass} show '${service}' | ${grep} \"App Password\" | ${sed} 's/.*: //'";
-  mbsyncService = config.systemd.user.services.mbsync;
 in
 
 {
@@ -88,8 +87,12 @@ in
   };
   systemd.user.services = {
     mbsync.Service.Environment = "\"PASSWORD_STORE_GPG_OPTS='--pinentry-mode cancel'\"";
-    mbsync-manual = mbsyncService // {
-      Service = mbsyncService.Service // { Environment = null; };
+    mbsync-manual = {
+      Unit = {
+        Description = "mbsync manual mailbox synchronization (unlock key store)";
+        PartOf = [ "network-online.target" ];
+      };
+      Service = config.systemd.user.services.mbsync.Service // { Environment = ""; };
     };
   };
 }
