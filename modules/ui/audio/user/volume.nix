@@ -34,19 +34,19 @@ writeShellScriptBin "volume" ''
   level=$($0 get)
   if $test $($0 get-mute) == 'true'
   then
-      icon=audio-volume-muted
+      icon=notification-audio-volume-muted
       color="#073642"
   elif $test $level -ge 50
   then
-      icon=audio-volume-high
+      icon=notification-audio-volume-high
   elif $test $level -ge 25
   then
-      icon=audio-volume-medium
+      icon=notification-audio-volume-medium
   elif $test $level -eq 0
   then
-      icon=audio-volume-muted
+      icon=notification-audio-volume-muted
   else
-      icon=audio-volume-low
+      icon=notification-audio-volume-low
   fi
 
   $dunstify -i $icon -t 4000 -r 5454 -u normal "<span color='$color'>$($mkProgressString $level)</span>"
