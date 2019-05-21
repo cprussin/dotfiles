@@ -10,7 +10,7 @@ writeScript "browse" ''
   opera=${opera}/bin/opera
   test=${coreutils}/bin/test
 
-  browser="minichrome"
+  browser="chromium"
   target=""
 
   while $test $# -gt 0
