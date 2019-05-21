@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils, chromium, google-chrome, firefox, minichrome }:
+{ writeScript, bash, coreutils, chromium, google-chrome, firefox, minichrome, opera }:
 
 writeScript "browse" ''
   #! ${bash}/bin/sh
@@ -7,6 +7,7 @@ writeScript "browse" ''
   chrome=${google-chrome}/bin/google-chrome-stable
   firefox=${firefox}/bin/firefox
   minichrome=${minichrome}/bin/minichrome
+  opera=${opera}/bin/opera
   test=${coreutils}/bin/test
 
   browser="minichrome"
