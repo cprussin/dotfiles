@@ -11,6 +11,7 @@ in
 
     ../../modules/devices/bluetooth
     ../../modules/devices/printers
+    ../../modules/devices/tmp
     ../../modules/devices/touchpad
     ../../modules/devices/virtualization
 
