@@ -95,6 +95,7 @@ in
       rainbow-delimiters
       rainbow-mode
       ranger
+      rust-mode
       smartparens
       solarized-theme
       swiper
