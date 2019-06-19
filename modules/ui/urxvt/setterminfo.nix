@@ -1,4 +1,4 @@
-{ writeShellScriptBin, bash, coreutils, openssh }:
+{ writeShellScriptBin, bash, coreutils, openssh, terminfo }:
 
 writeShellScriptBin "setterminfo" ''
   echo=${coreutils}/bin/echo
@@ -6,6 +6,5 @@ writeShellScriptBin "setterminfo" ''
   scp=${openssh}/bin/scp
 
   $echo "Setting terminfo on $1..."
-  $ssh $1 mkdir -p ~/.terminfo/r
-  $scp /usr/share/terminfo/r/rxvt-unicode-256color $1:.terminfo/r
+  $scp -r ${terminfo}/share/terminfo $1:.terminfo
 ''
