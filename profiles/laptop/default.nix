@@ -9,6 +9,7 @@ in
   imports = [
     ../../modules/boot/systemd-boot
 
+    ../../modules/devices/android
     ../../modules/devices/bluetooth
     ../../modules/devices/printers
     ../../modules/devices/tmp
