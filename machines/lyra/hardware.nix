@@ -1,4 +1,12 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
+
+let
+  mkCryptInitrd = pkgs.callPackage ../../lib/mkCryptInitrd.nix {};
+  boot = {
+    device = "/dev/disk/by-uuid/642C-BBD5";
+    fsType = "vfat";
+  };
+in
 
 {
   imports =
@@ -8,25 +16,16 @@
   boot = {
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [];
-    initrd = {
-      availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "sr_mod" ];
-      kernelModules = [ "dm-snapshot" "uas" "usbcore" "usb_storage" "vfat" "nls_cp437" "nls_iso8859_1" "loop" ];
-      preLVMCommands = lib.mkMerge [
-        (lib.mkBefore ''
-          mkdir -m 0755 -p /key
-          sleep 2
-          mount -n -t vfat -o ro "/dev/disk/by-uuid/642C-BBD5" /key
-        '')
-        (lib.mkAfter ''
-          umount /key
-          rmdir /key
-        '')
-      ];
-      luks.devices.crypta = {
-        device = "/dev/nvme0n1";
-        keyFile = "/key/spitfire";
-        header = "/key/header.img";
-        preLVM = true;
+    initrd = mkCryptInitrd {
+      device = "/dev/nvme0n1";
+      key = {
+        device = boot;
+        keyPath = "/spitfire";
+        headerPath = "/header.img";
+      };
+      initRdOptions = {
+        availableKernelModules = [ "xhci_pci" "nvme" "sd_mod" "sr_mod" ];
+        kernelModules = [ "dm-snapshot" ];
       };
     };
   };
@@ -37,10 +36,7 @@
       fsType = "ext4";
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-uuid/642C-BBD5";
-      fsType = "vfat";
-    };
+    "/boot" = boot;
 
     "/home" = {
       device = "/dev/disk/by-uuid/1e8a4c25-733b-4571-9586-fd210c858581";
