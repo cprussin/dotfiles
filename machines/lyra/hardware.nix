@@ -25,7 +25,7 @@ in
       };
       initRdOptions = {
         availableKernelModules = [ "xhci_pci" "nvme" "sd_mod" "sr_mod" ];
-        kernelModules = [ "dm-snapshot" ];
+        kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
       };
     };
   };

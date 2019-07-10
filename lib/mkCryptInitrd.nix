@@ -2,19 +2,18 @@
 
 let
   mkSurround = pkgs.callPackage ./mkSurround.nix {};
+  keyMountPoint = "/key";
 in
 
 initRdOptions // {
   kernelModules = initRdOptions.kernelModules ++ [
     key.device.fsType
     "usb_storage"
-    "nls_cp437"
-    "nls_iso8859_1"
     "loop"
   ];
 
   preLVMCommands = mkSurround ''
-    mkdir -m 0755 -p /key
+    mkdir -m 0755 -p ${keyMountPoint}
     echo -n "Waiting for key device to appear.."
     while [ ! -e "${key.device.device}" ]
     do
@@ -23,17 +22,17 @@ initRdOptions // {
     done
     echo -n " done!"
     echo
-    mount -n -t ${key.device.fsType} -o ro "${key.device.device}" /key
+    mount -n -t ${key.device.fsType} -o ro "${key.device.device}" ${keyMountPoint}
   '' ''
     echo "Closing key device..."
-    umount /key
-    rmdir /key
+    umount ${keyMountPoint}
+    rmdir ${keyMountPoint}
   '';
 
   luks.devices.crypt = {
     device = device;
-    keyFile = "/key${key.keyPath}";
-    header = "/key${key.headerPath}";
+    keyFile = keyMountPoint + key.keyPath;
+    header = keyMountPoint + key.headerPath;
     preLVM = true;
   };
 }
