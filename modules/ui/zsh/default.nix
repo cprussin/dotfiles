@@ -47,6 +47,8 @@ in
       setterminfo = "${pkgs.setterminfo}/bin/setterminfo";
       pass = "${pkgs.pass}/bin/pass";
       nixops = "${pkgs.nixops}/bin/nixops";
+      get-aws-access-key = "${pkgs.get-aws-access-key}/bin/get-aws-access-key";
+      get-aws-access-key-nixops = "${pkgs.get-aws-access-key}/bin/get-aws-access-key-nixops";
       xmonad = config.xsession.windowManager.command;
     };
     initExtra = ''

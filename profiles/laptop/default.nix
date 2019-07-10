@@ -60,6 +60,7 @@ in
 
       ../../modules/nix/nixpkgs
 
+      ../../modules/security/get-aws-access-key
       ../../modules/security/gpg
       ../../modules/security/pass
       ../../modules/security/ssh

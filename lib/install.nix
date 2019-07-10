@@ -1,6 +1,6 @@
 { lib }:
 
-rec {
+let
   install = location: name: script:
     if name == "override" || name == "overrideDerivation"
       then ""
@@ -11,4 +11,8 @@ rec {
 
   installAll = set: location:
     lib.concatStringsSep "\n" (lib.mapAttrsToList (install location) set);
+in
+
+{
+  inherit install installAll;
 }
