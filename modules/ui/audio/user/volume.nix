@@ -5,6 +5,9 @@ writeShellScriptBin "volume" ''
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed
   test=${coreutils}/bin/test
+  head=${coreutils}/bin/head
+  tail=${coreutils}/bin/tail
+  cut=${coreutils}/bin/cut
   dunstify=${dunst}/bin/dunstify
   mkProgressString=${mk-progress-string}/bin/mkProgressString
 
@@ -12,7 +15,7 @@ writeShellScriptBin "volume" ''
   sink=$($pamixer --list-sinks | $grep a2dp | $sed 's/\([0-9]\+\).*/\1/')
   if $test ! "$sink"
   then
-      sink=0
+      sink=$($pamixer --list-sinks | $head -n 2 | $tail -n 1 | $cut -d ' ' -f 1)
   fi
 
   # First, actually set the volume
