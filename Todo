@@ -1,6 +1,13 @@
 -*- mode: org; -*-
 
 * To Do
+** TODO Figure out a better way to manage data :user:
+   - [ ] Chromium profile
+   - [ ] Slack config
+   - [ ] Emacs data
+   - [ ] Game data
+   - [ ] Mu database
+   - [ ] Secrets
 ** TODO Sync mail using imap idle
 ** TODO Fix tray so that it starts after xmonad
 ** TODO Investigate using ssh certificate based auth
@@ -9,15 +16,14 @@
 ** TODO Consolidate solarized theme configs :user:
 ** TODO Fix FIXME/TODO items :user:
 ** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
-** TODO Figure out a better way to manage games :user:
 ** TODO Add widevine in minichrome/chromium/firefox :user:
 ** TODO Add local caching DNS server :system:
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
-* In Progress
 ** TODO Switch to wayland (sway)
+* In Progress
 * Done
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:
 ** DONE Install minichrome :user:
