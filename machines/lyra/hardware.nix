@@ -36,7 +36,9 @@ in
       fsType = "ext4";
     };
 
-    "/boot" = boot;
+    "/boot" = boot // {
+      options = [ "noauto" ];
+    };
 
     "/home" = {
       device = "/dev/disk/by-uuid/1e8a4c25-733b-4571-9586-fd210c858581";
