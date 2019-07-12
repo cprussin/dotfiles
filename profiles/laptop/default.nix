@@ -56,6 +56,7 @@ in
       ../../modules/devtools/git
 
       ../../modules/netflix/metatron
+      ../../modules/netflix/newt
 
       ../../modules/nix/nixpkgs
 
