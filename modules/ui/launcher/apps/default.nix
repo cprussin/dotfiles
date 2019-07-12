@@ -14,7 +14,6 @@
 , coreutils
 , terminal
 , steam
-, runelite
 , systemd
 , bitwig-studio
 }:
@@ -83,7 +82,6 @@ in
   reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- ${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};
   reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
-  runescape = mkScript "runelite" "sh -c 'export _JAVA_OPTIONS=\"-Duser.home=\\\"$HOME/.cache/runescape\\\"\"; ${runelite}/bin/runelite'";
   screenshot = callPackage ./screenshot.nix {};
   shakti = callPackage ./shakti.nix { inherit terminal; };
   shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- ${systemd}/bin/systemctl poweroff";
