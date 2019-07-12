@@ -54,6 +54,7 @@ in
 
 {
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
+  aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
   backup = callPackage ./backup.nix { inherit terminal; };
   bitwig = mkScript "bitwig" "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
