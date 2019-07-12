@@ -1,5 +1,0 @@
-{ ... }:
-
-{
-  system.autoUpgrade.enable = true;
-}

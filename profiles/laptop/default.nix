@@ -25,7 +25,6 @@ in
     ../../modules/netflix/shakti-nginx
     ../../modules/netflix/vpn
 
-    ../../modules/nix/auto-upgrade
     ../../modules/nix/plugins
 
     ../../modules/security/primary-user
