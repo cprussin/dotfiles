@@ -9,19 +9,9 @@
     enable = true;
     matchBlocks = [
       {
-        host = "home.prussin.net 10.0.0.11";
-        user = "cprussin";
-        port = 5822;
-      }
-      {
         host = "prussin.net *.bci-incorporated.com";
         user = "connor";
         port = 3580;
-      }
-      {
-        host = "*.prussin.net songoftheday.net";
-        user = "root";
-        port = 7534;
       }
       {
         host = "aur.archlinux.org";
