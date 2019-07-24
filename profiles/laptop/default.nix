@@ -50,6 +50,7 @@ in
     imports = [
       ../../modules/data/email
       ../../modules/data/nogit
+      ../../modules/data/secure
       ../../modules/data/unison
       ../../modules/data/xdg-user-dirs
 

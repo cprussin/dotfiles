@@ -22,9 +22,7 @@ in
   home.file = linkFiles true [
     "BitwigStudio"
     "factorio"
-  ] // {
-    ".password-store".source = "${nogit}/secrets/passwords";
-  } // (let
+  ] // (let
     gpgPath = "${nogit}/secrets/gnupg";
     gpgFiles = builtins.readDir gpgPath;
     gpgFileLink = filename: _: lib.nameValuePair ".gnupg/${filename}" {
