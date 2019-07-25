@@ -3,7 +3,6 @@
 let
   ls = pkgs.callPackage ./ls.nix {};
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
-  pass = pkgs.callPackage ./pass.nix { inherit config; };
 in
 
 {
@@ -46,7 +45,7 @@ in
       git = "${pkgs.git}/bin/git";
       man = "${pkgs.man}/bin/man";
       setterminfo = "${pkgs.setterminfo}/bin/setterminfo";
-      pass = toString pass;
+      pass = "${pkgs.pass}/bin/pass";
       nixops = "${pkgs.nixops}/bin/nixops";
       get-aws-access-key = "${pkgs.get-aws-access-key}/bin/get-aws-access-key";
       get-aws-access-key-nixops = "${pkgs.get-aws-access-key}/bin/get-aws-access-key-nixops";
