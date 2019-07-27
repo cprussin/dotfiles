@@ -41,7 +41,7 @@ in
         address = "cprussin@netflix.com";
         realName = "Connor Prussin";
         flavor = "gmail.com";
-        passwordCommand = getAppPassword "Computer Services/Google (Netflix)";
+        passwordCommand = getAppPassword "Netflix/Google";
         maildir.path = "Netflix";
         msmtp.enable = true;
         mbsync = {
@@ -60,7 +60,7 @@ in
         address = "cprussin@gmail.com";
         realName = "Connor Prussin";
         flavor = "gmail.com";
-        passwordCommand = getAppPassword "Computer Services/Google (Personal)";
+        passwordCommand = getAppPassword "Computer Services/Google";
         maildir.path = "GMail";
         msmtp.enable = true;
         mbsync = {
