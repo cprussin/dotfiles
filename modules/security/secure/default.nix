@@ -6,7 +6,7 @@
       options = {
         path = lib.mkOption {
           type = lib.types.str;
-          default = "~/.secure";
+          default = "/secure";
           description = "The path to the secure directory.";
         };
 
@@ -14,6 +14,12 @@
           type = lib.types.str;
           default = "${config.secure.path}/passwords";
           description = "The path to the password store.";
+        };
+
+        gnupg = lib.mkOption {
+          type = lib.types.str;
+          default = "${config.secure.path}/gnupg";
+          description = "The path to the gnupg home directory.";
         };
       };
     };

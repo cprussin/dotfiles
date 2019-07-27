@@ -7,7 +7,7 @@
    - [ ] Emacs data
    - [ ] Game data
    - [ ] Mu database
-   - [ ] Secrets
+   - [X] Secrets
 ** TODO Sync mail using imap idle
 ** TODO Fix tray so that it starts after xmonad
 ** TODO Investigate using ssh certificate based auth

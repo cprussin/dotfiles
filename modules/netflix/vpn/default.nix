@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 
 let
-  secret = name: toString ../../data/nogit/secrets/netflix + "/${name}";
+  secret = name: pkgs.writeText name (builtins.extraBuiltins.pass pkgs ("Netflix/VPN/" + name));
 in
 
 {
@@ -27,7 +27,7 @@ in
         cipher AES-256-CBC
         auth SHA512
         key-direction 1
-        auth-user-pass ${secret "netflix"}
+        auth-user-pass ${secret "user-pass"}
         ca ${secret "ca"}
         tls-auth ${secret "tls-auth"}
         cert ${secret "cert"}

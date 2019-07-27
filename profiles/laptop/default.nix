@@ -27,8 +27,10 @@ in
 
     ../../modules/nix/plugins
 
+    ../../modules/security/pass/system
     ../../modules/security/primary-user
     ../../modules/security/process-information-hiding
+    ../../modules/security/secure
     ../../modules/security/sshd
     ../../modules/security/sudo
 
@@ -49,8 +51,6 @@ in
   home-manager.users.${config.primaryUserName} = { lib, pkgs, config, ... }: {
     imports = [
       ../../modules/data/email
-      ../../modules/data/nogit
-      ../../modules/data/secure
       ../../modules/data/unison
       ../../modules/data/xdg-user-dirs
 
@@ -63,7 +63,8 @@ in
 
       ../../modules/security/get-aws-access-key
       ../../modules/security/gpg
-      ../../modules/security/pass
+      ../../modules/security/pass/user
+      ../../modules/security/secure
       ../../modules/security/ssh
       ../../modules/security/umask
 

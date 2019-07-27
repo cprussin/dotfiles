@@ -1,20 +1,18 @@
-{ writeScript, bash, coreutils, gnused }:
+{ writeShellScriptBin, bash, coreutils, gnused, prompt }:
 
-writeScript "pinentry" ''
-  #! ${bash}/bin/sh
-
+writeShellScriptBin "pinentry" ''
   echo=${coreutils}/bin/echo
   printf=${coreutils}/bin/printf
   tr=${coreutils}/bin/tr
   test=${coreutils}/bin/test
   sed=${gnused}/bin/sed
-  prompt=@out@/bin/prompt
+  prompt=${prompt}
 
   PROMPT="Enter your passphrase"
   DESC=""
 
   getPassword() {
-    echo "" | DISPLAY=:0 $prompt \
+    $echo "" | DISPLAY=:0 $prompt \
       -width 20 \
       -p "$PROMPT " \
       -mesg "$DESC" \

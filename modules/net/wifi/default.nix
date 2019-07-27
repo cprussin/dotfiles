@@ -1,8 +1,7 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
-  passwords = toString ../../data/nogit/secrets/wifi;
-  getpassword = network: builtins.readFile (passwords + "/" + network);
+  getpassword = network: builtins.extraBuiltins.pass pkgs ("Wifi/" + network);
 in
 
 {

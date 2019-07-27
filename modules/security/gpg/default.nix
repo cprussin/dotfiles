@@ -1,17 +1,24 @@
-{ pkgs, ... }:
+{ config, ... }:
+
+#let
+#  gpg-config = pkgs.writeText "gpg-config" ''
+#    photo-viewer "${pkgs.launcher}/bin/open %i"
+#    keyserver hkp://pgp.mit.edu
+#  '';
+#in
 
 {
-  home.file = {
-    ".gnupg/gpg.conf".text = ''
-      armor
-      photo-viewer "open %i"
-      keyserver hkp://pgp.mit.edu
-    '';
-  };
+  nixpkgs.overlays = [
+    (self: super: {
+      gnupg = self.callPackage ./gnupg.nix {
+        gnupg = super.gnupg;
+        secure = config.secure;
+      };
+    })
+  ];
 
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    extraConfig = "pinentry-program ${pkgs.launcher}/bin/pinentry";
   };
 }
