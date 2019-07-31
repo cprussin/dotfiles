@@ -1,6 +1,9 @@
 -*- mode: org; -*-
 
 * To Do
+** TODO Extract identity to common module [0/2] :user:
+   - [ ] GPG keys (including keygrip)
+   - [ ] Name / emails / etc
 ** TODO Figure out a better way to manage data :user:
    - [ ] Chromium profile
    - [ ] Slack config
