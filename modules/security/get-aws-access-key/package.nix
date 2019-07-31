@@ -14,7 +14,5 @@ stdenv.mkDerivation {
 
   phases = [ "installPhase" "fixupPhase" ];
 
-  installPhase = lib.concatStringsSep "\n" [
-    (installLib.installAll scripts "bin")
-  ];
+  installPhase = installLib.installAll scripts "bin";
 }
