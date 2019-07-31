@@ -7,6 +7,7 @@ in
 
 {
   imports = [
+    ../../modules/boot/logind
     ../../modules/boot/systemd-boot
 
     ../../modules/devices/android
@@ -82,6 +83,7 @@ in
       ../../modules/ui/numix-cursor-theme
       ../../modules/ui/readline
       ../../modules/ui/rofi-pass
+      ../../modules/ui/screen-locker
       ../../modules/ui/setup-monitors/user
       ../../modules/ui/solarized-theme
       ../../modules/ui/terminal
