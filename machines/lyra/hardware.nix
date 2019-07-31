@@ -3,7 +3,7 @@
 let
   mkCryptInitrd = pkgs.callPackage ../../lib/mkCryptInitrd.nix {};
   boot = {
-    device = "/dev/disk/by-uuid/642C-BBD5";
+    device = "/dev/disk/by-uuid/31DB-5F66";
     fsType = "vfat";
   };
 in
@@ -37,6 +37,12 @@ in
     };
 
     "/boot" = boot // {
+      options = [ "noauto" ];
+    };
+
+    "/secure" = {
+      device = "/dev/disk/by-uuid/c00737cd-c285-4aeb-961d-89cb40fbf4bc";
+      fsType = "ext4";
       options = [ "noauto" ];
     };
 
