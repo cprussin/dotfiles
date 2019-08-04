@@ -5,7 +5,7 @@ data Paths = Paths
   , xsetroot :: String
   , launch :: String
   , xclip :: String
-  , i3lock :: String
+  , lockScreen :: String
   , backlight :: String
   , volume :: String
   , terminal :: String

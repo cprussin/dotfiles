@@ -67,7 +67,7 @@ keybindings paths _ = Map.fromList $
   , ((modMask, XMonad.xK_Return), XMonad.spawn $ Paths.terminal paths)
 
   -- Screen Locker
-  , ((modMask .|. XMonad.shiftMask, XMonad.xK_Return), XMonad.spawn $ Paths.i3lock paths ++ " -c 000000")
+  , ((modMask .|. XMonad.shiftMask, XMonad.xK_Return), XMonad.spawn $ Paths.lockScreen paths)
 
   -- Volume
   , ((modMask, XMonad.xK_End), XMonad.spawn $ Paths.volume paths ++ " toggle")

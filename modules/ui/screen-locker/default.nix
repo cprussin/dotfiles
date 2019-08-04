@@ -1,8 +1,14 @@
 { pkgs, ... }:
 
 {
+  nixpkgs.overlays = [
+    (self: super: {
+      lock-screen = super.callPackage ./lock-screen.nix {};
+    })
+  ];
+
   services.screen-locker = {
     enable = true;
-    lockCmd = "${pkgs.i3lock}/bin/i3lock";
+    lockCmd = "${pkgs.lock-screen}/bin/lock-screen";
   };
 }

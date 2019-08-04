@@ -23,7 +23,7 @@
           , Paths.xsetroot = "${pkgs.xorg.xsetroot}/bin/xsetroot"
           , Paths.launch = "${pkgs.launcher}/bin/launch"
           , Paths.xclip = "${pkgs.xclip}/bin/xclip"
-          , Paths.i3lock = "${pkgs.i3lock}/bin/i3lock"
+          , Paths.lockScreen = "${pkgs.lock-screen}/bin/lock-screen"
           , Paths.backlight = "${pkgs.backlight}/bin/backlight"
           , Paths.volume = "${pkgs.volume}/bin/volume"
           , Paths.rofiPass = "${pkgs.rofi-pass}/bin/rofi-pass"
