@@ -58,6 +58,7 @@ in
   backup = callPackage ./backup.nix { inherit terminal; };
   bitwig = mkScript "bitwig" "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
+  brave = mkScript "firefox" "@out@/bin/browse --browser brave $*";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = mkScript "chrome" "@out@/bin/browse --browser chrome $*";
   chromium = mkScript "chromium" "@out@/bin/browse --browser chromium $*";
@@ -76,9 +77,11 @@ in
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
   light = mkScript "light" "${toggle-colors}/bin/toggle-colors light";
   localhost = mkWebApp "localhost" "http://localhost:\${1-4200}";
+  minichrome = mkScript "firefox" "@out@/bin/browse --browser minichrome $*";
   mixer = mkScript "mixer" "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
+  opera = mkScript "firefox" "@out@/bin/browse --browser opera $*";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkScript "reboot" "@out@/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- ${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};
