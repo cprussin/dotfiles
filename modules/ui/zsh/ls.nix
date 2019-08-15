@@ -1,27 +1,33 @@
-{ writeScript, bash, coreutils }:
+{ writeScript, coreutils, stdenv }:
 
 writeScript "ls" ''
-  #! ${bash}/bin/sh
+  #! ${stdenv.shell}
 
+  echo=${coreutils}/bin/echo
   realpath=${coreutils}/bin/realpath
   ls=${coreutils}/bin/ls
+  pwd=${coreutils}/bin/pwd
+  test=${coreutils}/bin/test
 
-  for elem in $@
-  do
-      if [ -e "$elem" ]
-      then
-          dir="$elem"
-          break
-      fi
-  done
+  printHeader() {
+    $echo -e "\033[1mFiles in $1\033[0m:"
+  }
 
-  if [ "$dir" ]; then
-      dir="$($realpath $dir)"
+  lsWithArgs() {
+    $ls -HF --color=always --group-directories-first "$@"
+  }
+
+  if $test $# -eq 0
+  then
+    printHeader "$($pwd)"
+    lsWithArgs
+  elif $test $# -eq 1 -a -d "$1"
+  then
+    printHeader "$($realpath "$1")"
+    lsWithArgs "$1"
   else
-      dir="$(pwd)"
+    lsWithArgs "$@"
   fi
 
-  echo -e "\033[1mFiles in "$dir"\033[0m:"
-  $ls -HF --color=always --group-directories-first $@
-  echo
+  $echo
 ''
