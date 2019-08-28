@@ -14,9 +14,8 @@ in
         persist-key
         persist-tun
         auth-nocache
-        dev tun
         tun-mtu 1500
-        remote Aviatrix-vpc-f73da2920xd38c64b-562622904.us-west-1.elb.amazonaws.com 443
+        remote lt.ovpn.netflix.net 443
         proto tcp
         mssfix
         route-method exe
@@ -27,6 +26,8 @@ in
         cipher AES-256-CBC
         auth SHA512
         key-direction 1
+        dev-type tun
+        dev tun
         auth-user-pass ${secret "user-pass"}
         ca ${secret "ca"}
         tls-auth ${secret "tls-auth"}
