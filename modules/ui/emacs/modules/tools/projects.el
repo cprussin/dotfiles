@@ -31,6 +31,7 @@
   ('(normal motion emac)
    :prefix "SPC p"
    "a" '(counsel-projectile-org-agenda :which-key "agenda")
+   "d" '(counsel-projectile-find-dir :which-key "find directory")
    "f" '(counsel-projectile-find-file :which-key "find file")
    "g" '(counsel-projectile-switch-project :which-key "go to project")
    "o" '(counsel-projectile-org-capture :which-key "capture note")
