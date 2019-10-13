@@ -21,11 +21,7 @@ in
       CentarCar.psk = getpassword "CentarCar";
 
       # Netflix networks
-      strmdev = {
-        psk = getpassword "strmdev";
-        priority = 2;
-      };
-      Netflix.priority = 1;
+      Netflix = {};
 
       # Friends' networks
       "PC House2".psk = getpassword "PC House2";
