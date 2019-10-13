@@ -8,7 +8,7 @@
 
 (require 'package)
 (setq package-archives nil
-      packages-enable-at-startup nil)
+      package-enable-at-startup nil)
 (package-initialize)
 
 (require 'use-package)
