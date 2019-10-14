@@ -1,8 +1,8 @@
 { config, ... }:
 
 let
-  stateVersion = import ../../state-version.nix;
-  home-manager = builtins.fetchTarball "https://github.com/rycee/home-manager/archive/release-${stateVersion}.tar.gz";
+  nixosVersion = import ../../nixos-version.nix;
+  home-manager = builtins.fetchTarball "https://github.com/rycee/home-manager/archive/release-${nixosVersion}.tar.gz";
 in
 
 {
@@ -94,34 +94,28 @@ in
       ../../modules/ui/zsh
     ];
 
-    home = {
-      inherit stateVersion;
+    home.packages = lib.mkForce [
 
-      packages = lib.mkForce [
+      # FIXME: If numix-cursor-theme isn't in the environment, then the GTK
+      # configuration won't be able to find it, since paths appear hardcoded
+      # in GTK.  There's likely a way to pass the path to GTK apps instead.
+      pkgs.numix-cursor-theme
 
-        # FIXME: If numix-cursor-theme isn't in the environment, then the GTK
-        # configuration won't be able to find it, since paths appear hardcoded
-        # in GTK.  There's likely a way to pass the path to GTK apps instead.
-        pkgs.numix-cursor-theme
-
-        # FIXME: This is done under the hood in home-manager to set
-        # sessionVariables.  We do still want this in the environment, even if
-        # we want nothing else.  Ideally there should be a simpler way to clear
-        # the environment except this file.
-        (pkgs.writeTextFile {
-          name = "hm-session-vars.sh";
-          destination = "/etc/profile.d/hm-session-vars.sh";
-          text = ''
+      # FIXME: This is done under the hood in home-manager to set
+      # sessionVariables.  We do still want this in the environment, even if
+      # we want nothing else.  Ideally there should be a simpler way to clear
+      # the environment except this file.
+      (pkgs.writeTextFile {
+        name = "hm-session-vars.sh";
+        destination = "/etc/profile.d/hm-session-vars.sh";
+        text = ''
             # Only source this once.
             if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi
             export __HM_SESS_VARS_SOURCED=1
             ${config.lib.shell.exportAll config.home.sessionVariables}
           '';
-        })
+      })
 
-      ];
-    };
+    ];
   };
-
-  system = { inherit stateVersion; };
 }
