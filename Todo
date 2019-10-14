@@ -16,7 +16,6 @@
 ** TODO Investigate using ssh certificate based auth
 ** TODO More betterer layout management :user:xmonad:
 ** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
-** TODO Consolidate solarized theme configs :user:
 ** TODO Fix FIXME/TODO items :user:
 ** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
 ** TODO Add widevine in minichrome/chromium/firefox :user:
@@ -27,6 +26,11 @@
 * On Hold
 ** TODO Switch to wayland (sway)
 * In Progress
+** TODO Consolidate solarized theme configs :user:emacs:xmonad:
+** TODO Consolidate font theme configs (and fix emacs fonts) :user:emacs:xmonad:
+** TODO Auto-mount /secure :user:system:
+** TODO Fix editor for pass :user:
+** TODO Clear environment more betterer :user:system:
 * Done
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:
 ** DONE Install minichrome :user:
