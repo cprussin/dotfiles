@@ -30,5 +30,5 @@ writeShellScriptBin "backlight" ''
     icon=notification-display-brightness-off
   fi
 
-  $dunstify -i $icon -t 4000 -r 66347 -u normal "$($mkProgressString $level)"
+  $dunstify -i $icon -t 4000 -r 66347 -u normal "" "$($mkProgressString $level)"
 ''

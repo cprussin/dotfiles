@@ -8,7 +8,7 @@ writeScript "remacs" ''
 
   if $systemctl --user is-active --quiet emacs-daemon
   then
-    $dunstify -t 0 -r 47645 "Restarting emacs..."
+    $dunstify -t 0 -r 47645 "" Restarting emacs..."
     $systemctl --user restart emacs-daemon
     $dunstify -C 47645
   fi

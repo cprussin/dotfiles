@@ -52,5 +52,5 @@ writeShellScriptBin "volume" ''
       icon=notification-audio-volume-low
   fi
 
-  $dunstify -i $icon -t 4000 -r 5454 -u normal "<span color='$color'>$($mkProgressString $level)</span>"
+  $dunstify -i $icon -t 4000 -r 5454 -u normal "" "<span color='$color'>$($mkProgressString $level)</span>"
 ''

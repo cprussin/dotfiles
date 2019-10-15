@@ -21,7 +21,7 @@
 
     settings = {
       global = {
-        allow_markup = "yes";
+        markup = "full";
         font = "${config.primaryFont.face} ${toString config.primaryFont.size}";
         icon_position = "left";
         max_icon_size = 32;
