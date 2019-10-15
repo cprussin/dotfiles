@@ -2,6 +2,7 @@ module Layouts.Tabbed
   ( layout
   ) where
 
+import NixConfig (NixConfig, primaryFont, face, size)
 import qualified Styles as Styles
 import qualified XMonad.Layout.NoBorders as NoBorders
 import qualified XMonad.Layout.Renamed as Renamed
@@ -10,8 +11,15 @@ import qualified XMonad.Layout.Tabbed as Tabbed
 -- Name the layout.  Use box-drawing characters as a pseudo-icon.
 name = "┃   ┃"
 
+fontName :: NixConfig -> String
+fontName nixConfig = "xft:" <> fontFace <> ":size=" <> fontSize
+  where
+    fontFace = face theme
+    fontSize = show $ size theme
+    theme = primaryFont nixConfig
+
 -- A tabbed layout
-layout = NoBorders.noBorders $ Renamed.renamed [Renamed.Replace name] $
+layout nixConfig = NoBorders.noBorders $ Renamed.renamed [Renamed.Replace name] $
   Tabbed.tabbed Tabbed.shrinkText Tabbed.def
     { Tabbed.activeColor = Styles.focusedBorderColor
     , Tabbed.activeBorderColor = Styles.focusedBorderColor
@@ -22,5 +30,5 @@ layout = NoBorders.noBorders $ Renamed.renamed [Renamed.Replace name] $
     , Tabbed.urgentColor = Styles.urgentColor
     , Tabbed.urgentBorderColor = Styles.urgentColor
     , Tabbed.urgentTextColor = Styles.activeTextColor
-    , Tabbed.fontName = Styles.font
+    , Tabbed.fontName = fontName nixConfig
     }

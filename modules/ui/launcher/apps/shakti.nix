@@ -1,4 +1,4 @@
-{ writeScript, bash, nix, terminal }:
+{ writeScript, bash, nix, config }:
 
 writeScript "shakti" ''
   #! ${bash}/bin/sh
@@ -29,8 +29,8 @@ writeScript "shakti" ''
 
     dvds) exec $browse 'dvd-www-test-baseline-stable.eng.dvdco.netflix.com' ;;
 
-    shell) exec ${terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell" ;;
+    shell) exec ${config.terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell" ;;
 
-    *) exec ${terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell --run 'shakti $*'" ;;
+    *) exec ${config.terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell --run 'shakti $*'" ;;
 esac
 ''

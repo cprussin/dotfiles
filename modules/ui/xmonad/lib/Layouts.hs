@@ -11,7 +11,7 @@ import qualified XMonad.Hooks.ManageDocks as ManageDocks
 import qualified XMonad.Layout.MultiToggle as MultiToggle
 import qualified XMonad.Layout.MultiToggle.Instances as MultiToggleInstances
 
-layoutHook = layoutPlugins availableLayouts
+layoutHook nixConfig = layoutPlugins $ availableLayouts nixConfig
 
 -- Layout plugins that apply to all layouts
 layoutPlugins
@@ -19,5 +19,5 @@ layoutPlugins
   . MultiToggle.mkToggle (MultiToggle.single MultiToggleInstances.FULL)
 
 -- Available layouts
-availableLayouts =
-  VTiled.layout ||| HTiled.layout ||| Tabbed.layout
+availableLayouts nixConfig =
+  VTiled.layout ||| HTiled.layout ||| Tabbed.layout nixConfig

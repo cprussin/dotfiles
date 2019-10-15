@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
   email = pkgs.callPackage ./email.nix {};
@@ -8,15 +8,16 @@ let
   battery = pkgs.callPackage ./battery.nix {};
   network = pkgs.callPackage ./network.nix {};
   date = pkgs.callPackage ./date.nix {};
+  fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
 in
 
 {
   home.file.".xmobarrc".text = ''
     Config
-      { font = "xft:DejaVu Sans Mono:size=10"
+      { font = "${fontLib.xftFont config.primaryFont}"
       , additionalFonts =
-        [ "xft:Font Awesome 5 Free:size=9:style=Solid"
-        , "xft:DejaVu Sans Mono:style=Bold:size=10"
+        [ "${fontLib.xftFont config.primaryFont}:style=Bold"
+        , "xft:Font Awesome 5 Free:size=9:style=Solid"
         , "xft:Font Awesome 5 Brands:size=9"
         ]
       , position = BottomSize C 100 35

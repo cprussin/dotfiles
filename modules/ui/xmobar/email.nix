@@ -24,7 +24,7 @@ writeScript "email" ''
 
       if $test $total -gt 0
       then
-          mailbox="<action=\`$action\` button=123> $mailbox <fn=1></fn> $total</action>"
+          mailbox="<action=\`$action\` button=123> $mailbox <fn=2></fn> $total</action>"
           $test $new -ne 0 && mailbox="<fc=#859900>$mailbox</fc>"
           str="$str$mailbox    "
       fi

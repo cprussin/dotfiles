@@ -37,7 +37,7 @@ writeScript "network" ''
       $head -n 1
   }
 
-  icon="<fn=1></fn>"
+  icon="<fn=2></fn>"
   if isup $WIRELESS_INTERFACE
   then
       strength=$($tail -n 1 /proc/net/wireless | $cut -d ' ' -f 5 | $sed 's/\.//')
@@ -55,7 +55,7 @@ writeScript "network" ''
 
   if isup $WIRED_INTERFACE
   then
-      str="$str<fn=1></fn> $(getip $WIRED_INTERFACE)    "
+      str="$str<fn=2></fn> $(getip $WIRED_INTERFACE)    "
   fi
 
   $echo "$str"

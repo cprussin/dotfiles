@@ -1,9 +1,9 @@
-{ stdenv, lib, callPackage, emacs, terminal }:
+{ stdenv, lib, callPackage, emacs, config }:
 
 let
   installLib = callPackage ../../../lib/install.nix {};
-  scripts = callPackage ./scripts { inherit emacs; };
-  apps = callPackage ./apps { inherit emacs terminal; };
+  scripts = callPackage ./scripts { inherit emacs config; };
+  apps = callPackage ./apps { inherit emacs config; };
 in
 
 stdenv.mkDerivation {

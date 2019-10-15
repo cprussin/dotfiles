@@ -8,7 +8,7 @@ import qualified Data.Maybe as Maybe
 import qualified Graphics.X11.ExtraTypes.XF86 as XF86
 import qualified Layouts.Tabbed as Tabbed
 import qualified Layouts.VarialColumn as VarialColumn
-import qualified Paths as Paths
+import qualified NixConfig as NixConfig
 import qualified Workspaces as Workspaces
 import qualified XMonad as XMonad
 import qualified XMonad.Actions.Navigation2D as Navigation2D
@@ -33,10 +33,10 @@ directions =
 
 -- List bound keys.
 keybindings ::
-  Paths.Paths ->
+  NixConfig.NixConfig ->
   XMonad.XConfig XMonad.Layout ->
   Map.Map (XMonad.ButtonMask, XMonad.KeySym) (XMonad.X ())
-keybindings paths _ = Map.fromList $
+keybindings nixConfig _ = Map.fromList $
 
   -- Switch layouts
   [ ((modMask, XMonad.xK_Tab), XMonad.sendMessage XMonad.NextLayout)
@@ -62,43 +62,43 @@ keybindings paths _ = Map.fromList $
   , ((modMask .|. XMonad.shiftMask, XMonad.xK_q), XMonad.kill)
 
   -- Launcher
-  , ((modMask, XMonad.xK_d), XMonad.spawn $ Paths.launch paths)
-  , ((modMask .|. XMonad.shiftMask, XMonad.xK_d), XMonad.spawn $ Paths.launch paths ++ " $(" ++ Paths.xclip paths ++ " -o)")
-  , ((modMask, XMonad.xK_Return), XMonad.spawn $ Paths.terminal paths)
+  , ((modMask, XMonad.xK_d), XMonad.spawn $ NixConfig.launch paths)
+  , ((modMask .|. XMonad.shiftMask, XMonad.xK_d), XMonad.spawn $ NixConfig.launch paths ++ " $(" ++ NixConfig.xclip paths ++ " -o)")
+  , ((modMask, XMonad.xK_Return), XMonad.spawn $ NixConfig.terminal paths)
 
   -- Screen Locker
-  , ((modMask .|. XMonad.shiftMask, XMonad.xK_Return), XMonad.spawn $ Paths.lockScreen paths)
+  , ((modMask .|. XMonad.shiftMask, XMonad.xK_Return), XMonad.spawn $ NixConfig.lockScreen paths)
 
   -- Volume
-  , ((modMask, XMonad.xK_End), XMonad.spawn $ Paths.volume paths ++ " toggle")
-  , ((XMonad.noModMask, XF86.xF86XK_AudioMute), XMonad.spawn $ Paths.volume paths ++ " toggle")
-  , ((modMask, XMonad.xK_Page_Up), XMonad.spawn $ Paths.volume paths ++ " + 5")
-  , ((XMonad.noModMask, XF86.xF86XK_AudioRaiseVolume), XMonad.spawn $ Paths.volume paths ++ " + 5")
-  , ((modMask, XMonad.xK_Page_Down), XMonad.spawn $ Paths.volume paths ++ " - 5")
-  , ((XMonad.noModMask, XF86.xF86XK_AudioLowerVolume), XMonad.spawn $ Paths.volume paths ++ " - 5")
+  , ((modMask, XMonad.xK_End), XMonad.spawn $ NixConfig.volume paths ++ " toggle")
+  , ((XMonad.noModMask, XF86.xF86XK_AudioMute), XMonad.spawn $ NixConfig.volume paths ++ " toggle")
+  , ((modMask, XMonad.xK_Page_Up), XMonad.spawn $ NixConfig.volume paths ++ " + 5")
+  , ((XMonad.noModMask, XF86.xF86XK_AudioRaiseVolume), XMonad.spawn $ NixConfig.volume paths ++ " + 5")
+  , ((modMask, XMonad.xK_Page_Down), XMonad.spawn $ NixConfig.volume paths ++ " - 5")
+  , ((XMonad.noModMask, XF86.xF86XK_AudioLowerVolume), XMonad.spawn $ NixConfig.volume paths ++ " - 5")
 
   -- Backlight
-  , ((XMonad.noModMask, XF86.xF86XK_MonBrightnessUp), XMonad.spawn $ Paths.backlight paths ++ " + 5")
-  , ((XMonad.noModMask, XF86.xF86XK_Launch6), XMonad.spawn $ Paths.backlight paths ++ " + 5")
-  , ((XMonad.noModMask, XF86.xF86XK_MonBrightnessDown), XMonad.spawn $ Paths.backlight paths ++ " - 5")
-  , ((XMonad.noModMask, XF86.xF86XK_Launch5), XMonad.spawn $ Paths.backlight paths ++ " - 5")
+  , ((XMonad.noModMask, XF86.xF86XK_MonBrightnessUp), XMonad.spawn $ NixConfig.backlight paths ++ " + 5")
+  , ((XMonad.noModMask, XF86.xF86XK_Launch6), XMonad.spawn $ NixConfig.backlight paths ++ " + 5")
+  , ((XMonad.noModMask, XF86.xF86XK_MonBrightnessDown), XMonad.spawn $ NixConfig.backlight paths ++ " - 5")
+  , ((XMonad.noModMask, XF86.xF86XK_Launch5), XMonad.spawn $ NixConfig.backlight paths ++ " - 5")
 
   -- Passwords
-  , ((modMask, XMonad.xK_p), XMonad.spawn $ Paths.rofiPass paths)
+  , ((modMask, XMonad.xK_p), XMonad.spawn $ NixConfig.rofiPass paths)
 
   ] ++
 
   -- Move focus with mod + direction
   (directionalKeys modMask Navigation2D.windowGo
-    [ ((XMonad.description Tabbed.layout, XMonad.xK_h), XMonad.windows StackSet.focusUp)
-    , ((XMonad.description Tabbed.layout, XMonad.xK_l), XMonad.windows StackSet.focusDown)
+    [ ((XMonad.description (Tabbed.layout nixConfig), XMonad.xK_h), XMonad.windows StackSet.focusUp)
+    , ((XMonad.description (Tabbed.layout nixConfig), XMonad.xK_l), XMonad.windows StackSet.focusDown)
     ]
   ) ++
 
   -- Swap windows with mod + shift + direction
   (directionalKeys (modMask .|. XMonad.shiftMask) Navigation2D.windowSwap
-    [ ((XMonad.description Tabbed.layout, XMonad.xK_h), XMonad.windows StackSet.swapUp)
-    , ((XMonad.description Tabbed.layout, XMonad.xK_l), XMonad.windows StackSet.swapDown)
+    [ ((XMonad.description (Tabbed.layout nixConfig), XMonad.xK_h), XMonad.windows StackSet.swapUp)
+    , ((XMonad.description (Tabbed.layout nixConfig), XMonad.xK_l), XMonad.windows StackSet.swapDown)
     ]
   ) ++
 
@@ -110,6 +110,9 @@ keybindings paths _ = Map.fromList $
 
   -- Move windows to other workspaces with mod + shift + workspace key
   (workspaceKeys (modMask .|. XMonad.shiftMask) StackSet.shift)
+
+  where
+    paths = NixConfig.paths nixConfig
 
 -- Map directional keys
 directionalKeys ::

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   nixpkgs.overlays = [
@@ -21,8 +21,8 @@
 
     settings = {
       global = {
-        font = "DejaVu Sans Mono 10";
         allow_markup = "yes";
+        font = "${config.primaryFont.face} ${toString config.primaryFont.size}";
         icon_position = "left";
         max_icon_size = 32;
         sort = "yes";

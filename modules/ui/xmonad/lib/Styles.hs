@@ -3,10 +3,6 @@ module Styles where
 import qualified XMonad as XMonad
 
 --
-font :: String
-font = "xft:DejaVu Sans Mono-10"
-
---
 normalBorderColor :: String
 normalBorderColor = "#073642"
 

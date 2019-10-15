@@ -12,7 +12,7 @@ writeScript "volume" ''
 
   if $test $($volume get-mute) == "true"
   then
-      str="<fc=#586e75><fn=1></fn> $currentVolume</fc>"
+      str="<fc=#586e75><fn=2></fn> $currentVolume</fc>"
   else
       if $test $currentVolume -lt 30
       then
@@ -23,7 +23,7 @@ writeScript "volume" ''
       else
           symbol=""
       fi
-      str="<fn=1>$symbol</fn> $currentVolume"
+      str="<fn=2>$symbol</fn> $currentVolume"
   fi
 
   str="<action=\`$volume - 1\` button=5>$str</action>"

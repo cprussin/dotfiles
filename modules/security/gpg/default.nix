@@ -11,8 +11,8 @@
   nixpkgs.overlays = [
     (self: super: {
       gnupg = self.callPackage ./gnupg.nix {
+        inherit config;
         gnupg = super.gnupg;
-        secure = config.secure;
       };
     })
   ];

@@ -22,17 +22,17 @@ writeScript "battery" ''
 
   if $acpi | grep Charging >/dev/null
   then
-      status="<fn=1> </fn> ▲"
+      status="<fn=2> </fn> ▲"
   elif $acpi | grep Discharging >/dev/null
   then
       if $test $average -lt 50
       then
-          status="<fn=1> </fn> ▼"
+          status="<fn=2> </fn> ▼"
       else
-          status="<fn=1> </fn> ▼"
+          status="<fn=2> </fn> ▼"
       fi
   else
-      status="<fn=1></fn>"
+      status="<fn=2></fn>"
   fi
 
   str="$status $average%"

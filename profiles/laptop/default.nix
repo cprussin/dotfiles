@@ -75,6 +75,8 @@
       ../../modules/ui/urxvt
       ../../modules/ui/xmobar
       ../../modules/ui/xmonad
+
+      ../../modules/ui/theme/font/dejavu-sans-mono-10.nix
     ];
 
     home.packages = lib.mkForce [

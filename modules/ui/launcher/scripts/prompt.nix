@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils, rofi }:
+{ writeScript, bash, coreutils, rofi, config }:
 
 writeScript "prompt" ''
   #! ${bash}/bin/sh
@@ -8,7 +8,7 @@ writeScript "prompt" ''
 
   $cat - | $rofi \
     -fixed-num-lines \
-    -font "DejaVuSansMono 10" \
+    -font "${config.primaryFont.face} ${toString config.primaryFont.size}" \
     -color-normal "#002b36,#657b83,#002b36,#859900,#002b36" \
     -color-window "#002b36,#859900" \
     -bw 2 \

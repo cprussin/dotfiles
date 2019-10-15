@@ -5,7 +5,7 @@ import qualified Keybindings as Keybindings
 import qualified Layouts as Layouts
 import qualified Logging as Logging
 import qualified Mousebindings as Mousebindings
-import qualified Paths as Paths
+import qualified NixConfig as NixConfig
 import qualified WindowRules as WindowRules
 import qualified Workspaces as Workspaces
 import qualified XMonad as XMonad
@@ -14,19 +14,19 @@ import qualified XMonad.Hooks.EwmhDesktops as EwmhDesktops
 import qualified XMonad.Hooks.ManageDocks as ManageDocks
 import qualified XMonad.Util.Run as Run
 
-start paths = startXmobar paths >>= startXmonad paths
+start nixConfig = startXmobar nixConfig >>= startXmonad nixConfig
 
-startXmobar = Run.spawnPipe . Paths.xmobar
+startXmobar nixConfig = Run.spawnPipe $ NixConfig.xmobar $ NixConfig.paths nixConfig
 
-startXmonad paths statusbarPipe =
+startXmonad nixConfig statusbarPipe =
   XMonad.xmonad $ wmPlugins $ XMonad.def
   { XMonad.workspaces = Workspaces.workspaceNames
   , XMonad.borderWidth = Styles.borderWidth
   , XMonad.normalBorderColor = Styles.normalBorderColor
   , XMonad.focusedBorderColor = Styles.focusedBorderColor
-  , XMonad.keys = Keybindings.keybindings paths
+  , XMonad.keys = Keybindings.keybindings nixConfig
   , XMonad.mouseBindings = Mousebindings.mousebindings
-  , XMonad.layoutHook = Layouts.layoutHook
+  , XMonad.layoutHook = Layouts.layoutHook nixConfig
   , XMonad.manageHook = WindowRules.windowRules
   , XMonad.logHook = Logging.logHook statusbarPipe
   }

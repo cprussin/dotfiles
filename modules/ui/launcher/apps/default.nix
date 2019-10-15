@@ -12,10 +12,10 @@
 , qemu
 , emacs
 , coreutils
-, terminal
 , steam
 , systemd
 , bitwig-studio
+, config
 }:
 
 let
@@ -43,7 +43,7 @@ let
 
   mkTerminalApp = name: bin: writeScript name ''
     #! ${bash}/bin/sh
-    exec ${terminal} -name ${name} -e ${bin}
+    exec ${config.terminal} -name ${name} -e ${bin}
   '';
 
   mkScript = name: script: writeScript name ''
@@ -55,7 +55,7 @@ in
 {
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
   aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
-  backup = callPackage ./backup.nix { inherit terminal; };
+  backup = callPackage ./backup.nix { inherit config; };
   bitwig = mkScript "bitwig" "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   brave = mkScript "firefox" "@out@/bin/browse --browser brave $*";
@@ -87,7 +87,7 @@ in
   remacs = callPackage ./remacs.nix {};
   reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
   screenshot = callPackage ./screenshot.nix {};
-  shakti = callPackage ./shakti.nix { inherit terminal; };
+  shakti = callPackage ./shakti.nix { inherit config; };
   shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- ${systemd}/bin/systemctl poweroff";
   slack = mkScript "slack" "sh -c 'BROWSER=@out@/bin/browse ${slack}/bin/slack'";
   slackagain = mkScript "slackagain" "sh -c 'pkill -x slack; exec @out@/share/apps/slack'";

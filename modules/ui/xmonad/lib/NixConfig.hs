@@ -1,4 +1,9 @@
-module Paths where
+module NixConfig where
+
+data NixConfig = NixConfig
+  { paths :: Paths
+  , primaryFont :: Font
+  }
 
 data Paths = Paths
   { xmobar :: String
@@ -10,4 +15,9 @@ data Paths = Paths
   , volume :: String
   , terminal :: String
   , rofiPass :: String
+  }
+
+data Font = Font
+  { face :: String
+  , size :: Integer
   }

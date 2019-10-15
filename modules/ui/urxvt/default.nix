@@ -14,7 +14,6 @@
   programs.urxvt = {
     enable = true;
     package = pkgs.rxvt_unicode-with-plugins;
-    fonts = [ "xft:DejaVu Sans Mono:size=10" ];
     scroll.bar.enable = false;
     keybindings = {
       "M-u" = "perl:url-select:select_next";

@@ -14,20 +14,27 @@
       enable = true;
       enableContribAndExtras = true;
       config = pkgs.writeText "xmonad.hs" ''
-        import qualified Paths as Paths
-        import qualified WindowManager as WindowManager
+        import NixConfig (NixConfig(NixConfig), Paths(Paths), Font(Font))
+        import qualified NixConfig as NixConfig
+        import WindowManager (start)
 
         main :: IO ()
-        main = WindowManager.start Paths.Paths
-          { Paths.xmobar = "${pkgs.haskellPackages.xmobar}/bin/xmobar"
-          , Paths.xsetroot = "${pkgs.xorg.xsetroot}/bin/xsetroot"
-          , Paths.launch = "${pkgs.launcher}/bin/launch"
-          , Paths.xclip = "${pkgs.xclip}/bin/xclip"
-          , Paths.lockScreen = "${pkgs.lock-screen}/bin/lock-screen"
-          , Paths.backlight = "${pkgs.backlight}/bin/backlight"
-          , Paths.volume = "${pkgs.volume}/bin/volume"
-          , Paths.rofiPass = "${pkgs.rofi-pass}/bin/rofi-pass"
-          , Paths.terminal = "${config.terminal}"
+        main = start NixConfig
+          { NixConfig.paths = Paths
+            { NixConfig.xmobar = "${pkgs.haskellPackages.xmobar}/bin/xmobar"
+            , NixConfig.xsetroot = "${pkgs.xorg.xsetroot}/bin/xsetroot"
+            , NixConfig.launch = "${pkgs.launcher}/bin/launch"
+            , NixConfig.xclip = "${pkgs.xclip}/bin/xclip"
+            , NixConfig.lockScreen = "${pkgs.lock-screen}/bin/lock-screen"
+            , NixConfig.backlight = "${pkgs.backlight}/bin/backlight"
+            , NixConfig.volume = "${pkgs.volume}/bin/volume"
+            , NixConfig.rofiPass = "${pkgs.rofi-pass}/bin/rofi-pass"
+            , NixConfig.terminal = "${config.terminal}"
+            }
+          , NixConfig.primaryFont = Font
+            { NixConfig.face = "${config.primaryFont.face}"
+            , NixConfig.size = ${toString config.primaryFont.size}
+            }
           }
       '';
     };
