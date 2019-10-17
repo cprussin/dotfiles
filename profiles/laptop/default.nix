@@ -53,7 +53,6 @@
       ../../modules/security/get-aws-access-key
       ../../modules/security/gpg
       ../../modules/security/pass/user
-      ../../modules/security/secure
       ../../modules/security/ssh
 
       ../../modules/ui/audio/user

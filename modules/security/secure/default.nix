@@ -1,7 +1,7 @@
-{ lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
-{
-  options.secure = lib.mkOption {
+let
+  secureOption = lib.mkOption {
     type = lib.types.submodule {
       options = {
         path = lib.mkOption {
@@ -25,5 +25,20 @@
     };
 
     default = {};
+  };
+in
+
+{
+  options.secure = secureOption;
+
+  config = {
+    sudoCmds = [
+      "${pkgs.utillinux}/bin/mount ${config.secure.path}"
+      "${pkgs.utillinux}/bin/umount ${config.secure.path}"
+    ];
+
+    home-manager.users.${config.primaryUserName} = { ... }: {
+      options.secure = secureOption;
+    };
   };
 }
