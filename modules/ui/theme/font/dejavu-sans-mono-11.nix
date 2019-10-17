@@ -3,7 +3,7 @@
 {
   imports = [ ./. ];
   primaryFont = {
-    size = 10;
+    size = 11;
     face = "DejaVu Sans Mono";
   };
 }
