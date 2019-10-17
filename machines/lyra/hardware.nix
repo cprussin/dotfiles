@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   mkCryptInitrd = pkgs.callPackage ../../lib/mkCryptInitrd.nix {};
@@ -40,7 +40,7 @@ in
       options = [ "noauto" ];
     };
 
-    "/secure" = {
+    "${config.secure.path}" = {
       device = "/dev/disk/by-uuid/c00737cd-c285-4aeb-961d-89cb40fbf4bc";
       fsType = "ext4";
       options = [ "noauto" ];
