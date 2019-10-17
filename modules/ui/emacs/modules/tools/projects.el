@@ -9,7 +9,7 @@
 
 (defun git-cmd (args)
   "Return a string representing the git command ARGS."
-  (concat (cdr (assoc "git" paths)) " " args))
+  (concat (gethash "git" (gethash "paths" nix-config)) " " args))
 
 ;; Enable projectile
 (use-package projectile

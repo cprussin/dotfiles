@@ -27,11 +27,11 @@
 ** TODO Switch to wayland (sway)
 * In Progress
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
-** TODO Consolidate font theme configs (and fix emacs fonts) :user:emacs:xmonad:
 ** TODO Auto-mount /secure :user:system:
 ** TODO Fix editor for pass :user:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Consolidate font theme configs (and fix emacs fonts) :user:emacs:xmonad:
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:
 ** DONE Install minichrome :user:
 ** DONE Fix $BROWSER and $EDITOR

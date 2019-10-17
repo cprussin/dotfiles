@@ -9,7 +9,7 @@
 ;; Magit!
 (use-package magit
   :init
-  (setq magit-git-executable (cdr (assoc "git" paths)))
+  (setq magit-git-executable (gethash "git" (gethash "paths" nix-config)))
   :general
   (magit-mode-map
    "SPC" nil

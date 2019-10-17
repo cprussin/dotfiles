@@ -26,11 +26,25 @@ in
     };
 
     ".emacs.d/init.el".text = ''
-      (setq paths '(("ag" . "${pkgs.silver-searcher}/bin/ag")
-                    ("browse" . "${pkgs.launcher}/bin/browse")
-                    ("git" . "${pkgs.git}/bin/git")
-                    ("msmtp" . "${pkgs.msmtp}/bin/msmtp")
-                    ("sh" . "${pkgs.bash}/bin/sh")))
+      (setq nix-config #s(hash-table
+                          test equal
+                          data (
+                                "paths" #s(hash-table
+                                           test equal
+                                           data (
+                                                 "ag" "${pkgs.silver-searcher}/bin/ag"
+                                                 "browse" "${pkgs.launcher}/bin/browse"
+                                                 "git" "${pkgs.git}/bin/git"
+                                                 "msmtp" "${pkgs.msmtp}/bin/msmtp"
+                                                 "sh" "${pkgs.bash}/bin/sh"
+                                                 ))
+                                "primaryFont" #s(hash-table
+                                                 test equal
+                                                 data (
+                                                       "face" "${config.primaryFont.face}"
+                                                       "size" "${toString config.primaryFont.size}"
+                                                       ))
+                                )))
 
       (load (concat user-emacs-directory "modules/init"))
     '';

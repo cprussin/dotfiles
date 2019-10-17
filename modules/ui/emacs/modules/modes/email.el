@@ -41,7 +41,7 @@
         message-sendmail-f-is-evil 't
         message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function 'message-send-mail-with-sendmail
-        sendmail-program (cdr (assoc "msmtp" paths))
+        sendmail-program (gethash "msmtp" (gethash "paths" nix-config))
         mu4e-completing-read-function 'completing-read
         mu4e-get-mail-command "checkmail"
         mu4e-view-show-images t

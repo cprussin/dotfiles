@@ -7,7 +7,7 @@
 ;;;
 ;;; Code:
 
-(setq shell-file-name (cdr (assoc "sh" paths)))
+(setq shell-file-name (gethash "sh" (gethash "paths" nix-config)))
 
 (provide 'system)
 ;;; system.el ends here

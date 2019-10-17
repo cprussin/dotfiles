@@ -22,7 +22,7 @@
 
 ;; Browse with my browse script
 (use-package browse-url
-  :init (setq browse-url-generic-program (cdr (assoc "browse" paths))
+  :init (setq browse-url-generic-program (gethash "browse" (gethash "paths" nix-config))
               browse-url-browser-function 'browse-url-generic))
 
 ;; Turn on URL discovery

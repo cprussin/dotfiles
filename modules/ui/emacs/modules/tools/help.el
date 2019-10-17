@@ -57,7 +57,7 @@
   :demand
   :after ivy
   :config
-  (setq counsel-ag-base-command (concat (cdr (assoc "ag" paths))
+  (setq counsel-ag-base-command (concat (gethash "ag" (gethash "paths" nix-config))
                                         " --nocolor --nogroup --hidden %s"))
   (ivy-set-display-transformer 'counsel-M-x #'transform-func)
   (counsel-mode)
