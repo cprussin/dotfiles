@@ -17,8 +17,10 @@
     })
   ];
 
-  services.gpg-agent = {
-    enable = true;
-    enableSshSupport = true;
+  home-manager.users.${config.primaryUserName} = { ... }: {
+    services.gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+    };
   };
 }

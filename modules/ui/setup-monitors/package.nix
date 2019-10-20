@@ -1,7 +1,7 @@
 { stdenv, lib, callPackage }:
 
 let
-  installLib = callPackage ../../../../lib/install.nix {};
+  installLib = callPackage ../../../lib/install.nix {};
   scripts = {
     setup-monitors = callPackage ./setup-monitors.nix {};
     watch-monitor-change = callPackage ./watch-monitor-change.nix {};

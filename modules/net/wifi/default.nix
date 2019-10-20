@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
-  getpassword = network: builtins.extraBuiltins.pass pkgs ("Wifi/" + network);
+  getpassword = network:
+    builtins.extraBuiltins.pass pkgs config "Wifi/${network}";
 in
 
 {

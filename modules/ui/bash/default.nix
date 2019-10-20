@@ -1,5 +1,7 @@
-{ ... }:
+{ config, ... }:
 
 {
-  programs.bash.enable = true;
+  home-manager.users.${config.primaryUserName} = { ... }: {
+    programs.bash.enable = true;
+  };
 }

@@ -6,5 +6,6 @@ let
 in
 
 {
-  pass = pkgs: name: runCmd pkgs "${pkgs.pass}/bin/pass show '${name}'";
+  pass = pkgs: config: name:
+    runCmd pkgs "sudo -u ${config.primaryUserName} ${pkgs.pass}/bin/pass show '${name}'";
 }

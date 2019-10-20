@@ -1,4 +1,4 @@
-{ symlinkJoin, makeWrapper, pass, secure, stdenv, utillinux, sudo, gnugrep, coreutils }:
+{ symlinkJoin, makeWrapper, pass, secure, stdenv, utillinux, sudo, gnugrep, coreutils, wrapperDir }:
 
 let
   pkg = passedExtensions: symlinkJoin {
@@ -6,38 +6,40 @@ let
     paths = [ (pass.withExtensions (exts: (passedExtensions exts) ++ [ exts.pass-otp ])) ];
     buildInputs = [ makeWrapper ];
     postBuild = ''
-      mv $out/bin/pass $out/bin/.pass-original
+      wrapProgram $out/bin/pass --set-default PASSWORD_STORE_DIR ${secure.passwords} --set-default GNUPGHOME ${secure.gnupg}
 
-      cat -- > $out/bin/pass <<-EOF
-      #! ${stdenv.shell}
+      #mv $out/bin/pass $out/bin/.pass-original
 
-      mount="${utillinux}/bin/mount"
-      umount="${utillinux}/bin/umount"
-      sudo="/run/wrappers/bin/sudo"
-      grep="${gnugrep}/bin/grep"
-      echo="${coreutils}/bin/echo"
+      #cat -- > $out/bin/pass <<-EOF
+      ##! ${stdenv.shell}
 
-      export PASSWORD_STORE_DIR=\''${PASSWORD_STORE_DIR-${secure.passwords}}
-      export GNUPGHOME=\''${GNUPGHOME-${secure.gnupg}}
+      #mount="${utillinux}/bin/mount"
+      #umount="${utillinux}/bin/umount"
+      #sudo="${wrapperDir}/sudo"
+      #grep="${gnugrep}/bin/grep"
+      #echo="${coreutils}/bin/echo"
 
-      wasSecureMounted=\$(((\$mount | \$grep ${secure.path}) >/dev/null); \$echo \$?)
+      #export PASSWORD_STORE_DIR=\''${PASSWORD_STORE_DIR-${secure.passwords}}
+      #export GNUPGHOME=\''${GNUPGHOME-${secure.gnupg}}
 
-      if ! (exit \$wasSecureMounted)
-      then
-          \$sudo \$mount ${secure.path}
-      fi
+      #wasSecureMounted=\$(((\$mount | \$grep ${secure.path}) >/dev/null); \$echo \$?)
 
-      out=\$($out/bin/.pass-original "\$@")
+      #if ! (exit \$wasSecureMounted)
+      #then
+      #    \$sudo \$mount ${secure.path}
+      #fi
 
-      if ! (exit \$wasSecureMounted)
-      then
-          \$sudo \$umount ${secure.path}
-      fi
+      #out=\$($out/bin/.pass-original "\$@")
 
-      \$echo "\$out"
-      EOF
+      #if ! (exit \$wasSecureMounted)
+      #then
+      #    \$sudo \$umount ${secure.path}
+      #fi
 
-      chmod +x $out/bin/pass
+      #\$echo "\$out"
+      #EOF
+
+      #chmod +x $out/bin/pass
     '';
   };
 in

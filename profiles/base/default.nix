@@ -1,4 +1,4 @@
-{ config, ... }:
+{ ... }:
 
 let
   nixosVersion = import ../../nixos-version.nix;
@@ -7,45 +7,21 @@ in
 
 {
   imports = [
+    "${home-manager}/nixos"
+
+    ../../modules/data/session-vars
+
     ../../modules/devices/tmp
 
     ../../modules/security/primary-user
     ../../modules/security/process-information-hiding
     ../../modules/security/sudo
+    ../../modules/security/umask
 
-    ../../modules/ui/dvp/system
+    ../../modules/ui/bash
+    ../../modules/ui/dvp
     ../../modules/ui/greeting
-
-    "${home-manager}/nixos"
+    ../../modules/ui/readline
+    ../../modules/ui/zsh
   ];
-
-  home-manager.users.${config.primaryUserName} = { lib, pkgs, config, ... }: {
-    imports = [
-      ../../modules/security/umask
-
-      ../../modules/ui/bash
-      ../../modules/ui/dvp/user
-      ../../modules/ui/readline
-      ../../modules/ui/zsh
-    ];
-
-    home.packages = lib.mkForce [
-
-      # FIXME: This is done under the hood in home-manager to set
-      # sessionVariables.  We do still want this in the environment, even if we
-      # want to clear out the other automatically added stuff.  Ideally there
-      # should be a simpler way to clear the environment except this file.
-      (pkgs.writeTextFile {
-        name = "hm-session-vars.sh";
-        destination = "/etc/profile.d/hm-session-vars.sh";
-        text = ''
-          # Only source this once.
-          if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi
-          export __HM_SESS_VARS_SOURCED=1
-          ${config.lib.shell.exportAll config.home.sessionVariables}
-        '';
-      })
-
-    ];
-  };
 }

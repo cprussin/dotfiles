@@ -1,5 +1,7 @@
-{ ... }:
+{ config, ... }:
 
 {
-  gtk.enable = true;
+  home-manager.users.${config.primaryUserName} = { ... }: {
+    gtk.enable = true;
+  };
 }

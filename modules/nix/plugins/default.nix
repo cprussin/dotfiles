@@ -3,6 +3,6 @@
 {
   nix.extraOptions = ''
     plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-    extra-builtins-file = ${./extra-builtins.nix}
+    extra-builtins-file = ${toString ./extra-builtins.nix}
   '';
 }

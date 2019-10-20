@@ -1,7 +1,10 @@
-{ lib, config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
-  secret = name: pkgs.writeText name (builtins.extraBuiltins.pass pkgs ("Netflix/VPN/" + name));
+  secret = name:
+    pkgs.writeText name (
+      builtins.extraBuiltins.pass pkgs config "Netflix/VPN/${name}"
+    );
 in
 
 {
