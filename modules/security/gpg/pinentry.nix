@@ -13,7 +13,7 @@ writeShellScriptBin "pinentry" ''
 
   getPassword() {
     $echo "" | DISPLAY=:0 $prompt \
-      -width 35 \
+      -width 25 \
       -p "$PROMPT " \
       -mesg "$DESC" \
       -input /dev/null \
