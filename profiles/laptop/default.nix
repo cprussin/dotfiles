@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -56,7 +56,7 @@
     ../../modules/ui/setup-monitors
     ../../modules/ui/solarized-theme
     ../../modules/ui/terminal
-    ../../modules/ui/theme/font/dejavu-sans-mono-11.nix
+    ../../modules/ui/theme/font
     ../../modules/ui/tray
     ../../modules/ui/urxvt
     ../../modules/ui/xmobar
@@ -65,4 +65,6 @@
 
     ../../modules/zone/pacific
   ];
+
+  fontTheme = import ../../modules/ui/theme/font/dejavu-sans-mono-11.nix;
 }

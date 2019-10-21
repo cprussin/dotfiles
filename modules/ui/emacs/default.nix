@@ -116,8 +116,8 @@ in
                                   "primaryFont" #s(hash-table
                                                    test equal
                                                    data (
-                                                         "face" "${config.primaryFont.face}"
-                                                         "size" "${toString config.primaryFont.size}"
+                                                         "face" "${config.fontTheme.primaryFont.face}"
+                                                         "size" "${toString config.fontTheme.primaryFont.size}"
                                                    ))
                                   )))
 

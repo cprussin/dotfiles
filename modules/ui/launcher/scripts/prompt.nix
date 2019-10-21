@@ -1,4 +1,8 @@
-{ writeScript, bash, coreutils, rofi, config }:
+{ writeScript, callPackage, bash, coreutils, rofi, config }:
+
+let
+  fontLib = callPackage ../../../../lib/fonts.nix {};
+in
 
 writeScript "prompt" ''
   #! ${bash}/bin/sh
@@ -8,7 +12,7 @@ writeScript "prompt" ''
 
   $cat - | $rofi \
     -fixed-num-lines \
-    -font "${config.primaryFont.face} ${toString config.primaryFont.size}" \
+    -font "${fontLib.pangoFont config.fontTheme.primaryFont}" \
     -color-normal "#002b36,#657b83,#002b36,#859900,#002b36" \
     -color-window "#002b36,#859900" \
     -bw 2 \

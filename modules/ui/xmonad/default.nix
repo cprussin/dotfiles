@@ -33,8 +33,8 @@
               , NixConfig.terminal = "${config.terminal}"
               }
             , NixConfig.primaryFont = Font
-              { NixConfig.face = "${config.primaryFont.face}"
-              , NixConfig.size = ${toString config.primaryFont.size}
+              { NixConfig.face = "${config.fontTheme.primaryFont.face}"
+              , NixConfig.size = ${toString config.fontTheme.primaryFont.size}
               }
             }
         '';

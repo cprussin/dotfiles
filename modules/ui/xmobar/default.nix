@@ -15,9 +15,9 @@ in
   home-manager.users.${config.primaryUserName} = { ... }: {
     home.file.".xmobarrc".text = ''
       Config
-        { font = "${fontLib.xftFont config.primaryFont}"
+        { font = "${fontLib.xftFont config.fontTheme.primaryFont}"
         , additionalFonts =
-          [ "${fontLib.xftFont config.primaryFont}:style=Bold"
+          [ "${fontLib.xftFont config.fontTheme.primaryFont}:style=Bold"
           , "xft:Font Awesome 5 Free:size=9:style=Solid"
           , "xft:Font Awesome 5 Brands:size=9"
           ]

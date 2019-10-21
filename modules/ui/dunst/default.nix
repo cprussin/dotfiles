@@ -1,5 +1,9 @@
 { pkgs, config, ... }:
 
+let
+  fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
+in
+
 {
   nixpkgs.overlays = [
     (self: super: {
@@ -23,7 +27,7 @@
       settings = {
         global = {
           markup = "full";
-          font = "${config.primaryFont.face} ${toString config.primaryFont.size}";
+          font = fontLib.pangoFont config.fontTheme.primaryFont;
           icon_position = "left";
           max_icon_size = 32;
           sort = "yes";
