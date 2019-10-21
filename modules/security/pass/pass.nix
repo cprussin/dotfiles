@@ -1,4 +1,4 @@
-{ symlinkJoin, makeWrapper, pass, secure, stdenv, utillinux, sudo, gnugrep, coreutils, wrapperDir }:
+{ symlinkJoin, makeWrapper, pass, secure, launcher, stdenv, utillinux, sudo, gnugrep, coreutils, wrapperDir }:
 
 let
   pkg = passedExtensions: symlinkJoin {
@@ -6,7 +6,9 @@ let
     paths = [ (pass.withExtensions (exts: (passedExtensions exts) ++ [ exts.pass-otp ])) ];
     buildInputs = [ makeWrapper ];
     postBuild = ''
-      wrapProgram $out/bin/pass --set-default PASSWORD_STORE_DIR ${secure.passwords} --set-default GNUPGHOME ${secure.gnupg}
+      wrapProgram $out/bin/pass \
+        --set-default PASSWORD_STORE_DIR ${secure.passwords} \
+        --set-default GNUPGHOME ${secure.gnupg}
 
       #mv $out/bin/pass $out/bin/.pass-original
 

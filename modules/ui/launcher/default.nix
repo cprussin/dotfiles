@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, config, ... }:
 
 {
   nixpkgs.overlays = [
@@ -8,4 +8,11 @@
       };
     })
   ];
+
+  home-manager.users.${config.primaryUserName} = {
+    home.sessionVariables = {
+      EDITOR = "${pkgs.launcher}/bin/open";
+      BROWSER = "${pkgs.launcher}/bin/browse";
+    };
+  };
 }

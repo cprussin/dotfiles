@@ -89,7 +89,7 @@ in
   screenshot = callPackage ./screenshot.nix {};
   shakti = callPackage ./shakti.nix { inherit config; };
   shutdown = mkScript "shutdown" "@out@/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- ${systemd}/bin/systemctl poweroff";
-  slack = mkScript "slack" "sh -c 'BROWSER=@out@/bin/browse ${slack}/bin/slack'";
+  slack = mkScript "slack" "${slack}/bin/slack";
   slackagain = mkScript "slackagain" "sh -c 'pkill -x slack; exec @out@/share/apps/slack'";
   sotd = callPackage ./sotd.nix {};
   stash = mkWebApp "stash" "https://stash.corp.netflix.com";
