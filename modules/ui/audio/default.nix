@@ -2,9 +2,11 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      volume = super.callPackage ./volume.nix {};
-    })
+    (
+      _: super: {
+        volume = super.callPackage ./volume.nix {};
+      }
+    )
   ];
 
   hardware.pulseaudio = {

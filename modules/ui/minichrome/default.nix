@@ -2,9 +2,11 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      minichrome = super.callPackage ./minichrome.nix {};
-    })
+    (
+      _: super: {
+        minichrome = super.callPackage ./minichrome.nix {};
+      }
+    )
   ];
 
   home-manager.users.${config.primaryUserName} = { ... }: {

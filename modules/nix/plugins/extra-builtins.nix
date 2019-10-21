@@ -2,7 +2,7 @@
 
 let
   stringify = pkgs: "${pkgs.gnused}/bin/sed '1s/^/\"/;$s/$/\"/'";
-  runCmd = pkgs: cmd: exec ["sh" "-c" "${cmd} | ${stringify pkgs}"];
+  runCmd = pkgs: cmd: exec [ "sh" "-c" "${cmd} | ${stringify pkgs}" ];
 in
 
 {

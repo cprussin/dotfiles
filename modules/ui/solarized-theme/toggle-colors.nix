@@ -1,4 +1,4 @@
-{ writeShellScriptBin, bash, coreutils, emacs }:
+{ writeShellScriptBin, coreutils, emacs }:
 
 writeShellScriptBin "toggle-colors" ''
   test=${coreutils}/bin/test

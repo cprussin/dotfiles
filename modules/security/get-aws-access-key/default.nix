@@ -2,8 +2,10 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      get-aws-access-key = super.callPackage ./package.nix {};
-    })
+    (
+      _: super: {
+        get-aws-access-key = super.callPackage ./package.nix {};
+      }
+    )
   ];
 }

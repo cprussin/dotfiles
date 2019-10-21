@@ -1,8 +1,8 @@
 { ... }:
 
 {
-    services.xserver.synaptics = {
-      enable = true;
-      twoFingerScroll = true;
-    };
+  services.xserver.synaptics = {
+    enable = true;
+    twoFingerScroll = true;
+  };
 }

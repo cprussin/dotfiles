@@ -9,9 +9,9 @@ let
 in
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  imports = [
+    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+  ];
 
   boot = {
     kernelModules = [ "kvm-intel" ];

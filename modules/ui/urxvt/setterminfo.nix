@@ -1,4 +1,4 @@
-{ writeShellScriptBin, bash, coreutils, openssh, terminfo }:
+{ writeShellScriptBin, coreutils, openssh, terminfo }:
 
 writeShellScriptBin "setterminfo" ''
   echo=${coreutils}/bin/echo

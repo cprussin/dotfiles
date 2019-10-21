@@ -6,11 +6,13 @@ in
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      setterminfo = super.callPackage ./setterminfo.nix {
-        terminfo = pkgs.rxvt_unicode.terminfo;
-      };
-    })
+    (
+      _: super: {
+        setterminfo = super.callPackage ./setterminfo.nix {
+          terminfo = pkgs.rxvt_unicode.terminfo;
+        };
+      }
+    )
   ];
 
   terminal = "${urxvt}/bin/urxvtc";

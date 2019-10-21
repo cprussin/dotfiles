@@ -19,7 +19,7 @@ in
         }
         {
           name = "zsh-git-prompt";
-          src = pkgs.callPackage ./zsh-git-prompt.nix { };
+          src = pkgs.callPackage ./zsh-git-prompt.nix {};
           file = "zshrc.sh";
         }
         {

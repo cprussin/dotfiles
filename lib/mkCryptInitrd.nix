@@ -1,4 +1,4 @@
-{ pkgs, lib }: { device, key, initRdOptions }:
+{ pkgs }: { device, key, initRdOptions }:
 
 let
   mkSurround = pkgs.callPackage ./mkSurround.nix {};
@@ -30,7 +30,7 @@ initRdOptions // {
   '';
 
   luks.devices.crypt = {
-    device = device;
+    inherit device;
     keyFile = keyMountPoint + key.keyPath;
     header = keyMountPoint + key.headerPath;
     preLVM = true;

@@ -2,9 +2,11 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      setup-monitors = super.callPackage ./package.nix {};
-    })
+    (
+      _: super: {
+        setup-monitors = super.callPackage ./package.nix {};
+      }
+    )
   ];
 
   services.udev.extraRules = ''

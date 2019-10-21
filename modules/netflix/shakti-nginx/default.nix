@@ -14,7 +14,7 @@
       enable = true;
       appendHttpConfig = "include ${config.shakti.nginxConfigPath};";
     };
-    systemd.services.nginx.wantedBy = lib.mkForce [ ];
+    systemd.services.nginx.wantedBy = lib.mkForce [];
 
     sudoCmds = [
       "${pkgs.systemd}/bin/systemctl start nginx"

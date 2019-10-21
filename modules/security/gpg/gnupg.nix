@@ -2,11 +2,17 @@
 
 symlinkJoin {
   name = "gnupg";
-  paths = [ (gnupg.override { pinentry = callPackage ./pinentry.nix {
-    prompt = callPackage ../../ui/launcher/scripts/prompt.nix {
-      inherit config;
-    };
-  }; }) ];
+  paths = [
+    (
+      gnupg.override {
+        pinentry = callPackage ./pinentry.nix {
+          prompt = callPackage ../../ui/launcher/scripts/prompt.nix {
+            inherit config;
+          };
+        };
+      }
+    )
+  ];
   buildInputs = [ makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/gpg --set-default GNUPGHOME ${config.secure.gnupg}

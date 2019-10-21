@@ -4,7 +4,7 @@
   services.xserver = {
     enable = true;
 
-    videoDrivers = ["intel"];
+    videoDrivers = [ "intel" ];
 
     displayManager.lightdm = {
       enable = true;

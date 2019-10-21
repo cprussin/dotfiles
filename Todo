@@ -26,7 +26,6 @@
 * On Hold
 ** TODO Switch to wayland (sway)
 * In Progress
-** TODO Add nixfmt and nixlint
 ** TODO Nixify/containerize/etc prussin.net [2/8]
    - [X] Web
    - [X] Identity (openldap)
@@ -40,6 +39,7 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Add nixfmt and nixlint
 ** DONE Fix editor for pass :user:
 ** DONE Consolidate font theme configs (and fix emacs fonts) :user:emacs:xmonad:
 ** DONE Set up dunst for messages/notifications/volume/brightness :user:

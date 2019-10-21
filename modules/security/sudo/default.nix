@@ -1,8 +1,8 @@
-{ lib, pkgs, config, ... }:
+{ lib, config, ... }:
 
 let
-  nopasswd = cmd: {
-    command = cmd;
+  nopasswd = command: {
+    inherit command;
     options = [ "NOPASSWD" ];
   };
 in
@@ -19,19 +19,23 @@ in
 
   config = {
     nixpkgs.overlays = [
-      (self: super: {
-        sudo = super.sudo.override {
-          withInsults = true;
-        };
-      })
+      (
+        _: super: {
+          sudo = super.sudo.override {
+            withInsults = true;
+          };
+        }
+      )
     ];
 
     security.sudo = {
       extraConfig = "Defaults insults";
-      extraRules = lib.mkAfter [{
-        users = [ config.primaryUserName ];
-        commands = (map nopasswd config.sudoCmds);
-      }];
+      extraRules = lib.mkAfter [
+        {
+          users = [ config.primaryUserName ];
+          commands = (map nopasswd config.sudoCmds);
+        }
+      ];
     };
 
     users.users.${config.primaryUserName}.extraGroups = [ "wheel" ];

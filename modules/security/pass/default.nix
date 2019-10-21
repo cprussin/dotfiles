@@ -1,13 +1,14 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      pass = self.callPackage ./pass.nix {
-        pass = super.pass;
-        secure = config.secure;
-        wrapperDir = config.security.wrapperDir;
-      };
-    })
+    (
+      self: super: {
+        pass = self.callPackage ./pass.nix {
+          inherit config;
+          pass = super.pass;
+        };
+      }
+    )
   ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage }:
+{ stdenv, callPackage }:
 
 let
   installLib = callPackage ../../../lib/install.nix {};

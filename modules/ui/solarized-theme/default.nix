@@ -2,9 +2,11 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      toggle-colors = super.callPackage ./toggle-colors.nix {};
-    })
+    (
+      _: super: {
+        toggle-colors = super.callPackage ./toggle-colors.nix {};
+      }
+    )
   ];
 
   home-manager.users.${config.primaryUserName} = { ... }: {
@@ -16,8 +18,8 @@
         sha256 = "0lxv37gmh38y9d3l8nbnsm1mskcv10g3i83j0kac0a2qmypv1k9f";
       } + "/Xresources.dark"
     ) + ''
-    #define S_base025 #0B5B70
-  '';
+      #define S_base025 #0B5B70
+    '';
 
     xresources.properties = {
       "*color8" = "S_base025";

@@ -9,12 +9,14 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      gnupg = self.callPackage ./gnupg.nix {
-        inherit config;
-        gnupg = super.gnupg;
-      };
-    })
+    (
+      self: super: {
+        gnupg = self.callPackage ./gnupg.nix {
+          inherit config;
+          gnupg = super.gnupg;
+        };
+      }
+    )
   ];
 
   home-manager.users.${config.primaryUserName} = { ... }: {

@@ -2,9 +2,11 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      lock-screen = super.callPackage ./lock-screen.nix {};
-    })
+    (
+      _: super: {
+        lock-screen = super.callPackage ./lock-screen.nix {};
+      }
+    )
   ];
 
   home-manager.users.${config.primaryUserName} = { ... }: {

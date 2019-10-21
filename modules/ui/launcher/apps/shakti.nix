@@ -32,5 +32,5 @@ writeScript "shakti" ''
     shell) exec ${config.terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell" ;;
 
     *) exec ${config.terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell --run 'shakti $*'" ;;
-esac
+  esac
 ''

@@ -6,12 +6,14 @@ in
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      dunst = super.dunst.override {
-        dunstify = true;
-      };
-      mk-progress-string = super.callPackage ./mk-progress-string.nix {};
-    })
+    (
+      _: super: {
+        dunst = super.dunst.override {
+          dunstify = true;
+        };
+        mk-progress-string = super.callPackage ./mk-progress-string.nix {};
+      }
+    )
   ];
 
   home-manager.users.${config.primaryUserName} = { ... }: {

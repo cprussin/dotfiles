@@ -1,4 +1,4 @@
-{ writeShellScriptBin, bash, coreutils, gnused, prompt }:
+{ writeShellScriptBin, coreutils, gnused, prompt }:
 
 writeShellScriptBin "pinentry" ''
   echo=${coreutils}/bin/echo
