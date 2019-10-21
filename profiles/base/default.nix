@@ -13,6 +13,10 @@ in
 
     ../../modules/devices/tmp
 
+    ../../modules/nix/nixpkgs
+    ../../modules/nix/plugins
+    ../../modules/nix/trusted-users
+
     ../../modules/security/primary-user
     ../../modules/security/process-information-hiding
     ../../modules/security/sudo

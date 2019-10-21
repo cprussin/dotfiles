@@ -28,9 +28,6 @@
     ../../modules/netflix/shakti-nginx
     ../../modules/netflix/vpn
 
-    ../../modules/nix/nixpkgs
-    ../../modules/nix/plugins
-
     ../../modules/security/get-aws-access-key
     ../../modules/security/gpg
     ../../modules/security/pass
