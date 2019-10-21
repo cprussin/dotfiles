@@ -26,6 +26,7 @@
 * On Hold
 ** TODO Switch to wayland (sway)
 * In Progress
+** TODO Add nixfmt and nixlint
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
