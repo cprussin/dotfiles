@@ -27,6 +27,15 @@
 ** TODO Switch to wayland (sway)
 * In Progress
 ** TODO Add nixfmt and nixlint
+** TODO Nixify/containerize/etc prussin.net [2/8]
+   - [X] Web
+   - [X] Identity (openldap)
+   - [ ] SSL (certbot/acme)
+   - [ ] DNS caching (named)
+   - [ ] Authentication (dovecot sasl)
+   - [ ] Calendar / Contacts
+   - [ ] Email (postfix/dovecot/spamassassin/opendkim)
+   - [ ] Chat / SIP?
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
