@@ -22,6 +22,7 @@
 
     ../../modules/net/wifi
 
+    ../../modules/netflix/ca
     ../../modules/netflix/hostname
     ../../modules/netflix/metatron
     ../../modules/netflix/newt
