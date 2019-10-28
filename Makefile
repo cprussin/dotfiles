@@ -17,7 +17,7 @@ ifeq ($(BOOT_MOUNTED),1)
 else ifeq ($(SECURE_MOUNTED),1)
 	$(info /secure is not mounted!)
 else
-	sudo nixos-rebuild switch --upgrade
+	sudo nixos-rebuild switch --upgrade --show-trace
 endif
 
 collect-garbage:
