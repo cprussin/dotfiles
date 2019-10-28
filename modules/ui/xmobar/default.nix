@@ -8,6 +8,7 @@ let
   battery = pkgs.callPackage ./battery.nix {};
   network = pkgs.callPackage ./network.nix {};
   date = pkgs.callPackage ./date.nix {};
+  mounts = pkgs.callPackage ./mounts.nix {};
   fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
 in
 
@@ -39,9 +40,10 @@ in
           , Run Com "${network}" [] "network" 10
           , Run Com "${battery}" [] "battery" 10
           , Run Com "${date}" [] "date" 10
+          , Run Com "${mounts}" [] "mounts" 10
           ]
-        , template = " %UnsafeStdinReader%}{%email%%vpn%%bluetooth%%network%%volume%%battery%%date%        "
-                                           }
+        , template = " %UnsafeStdinReader%}{%email%%vpn%%mounts%%bluetooth%%network%%volume%%battery%%date%        "
+        }
     '';
   };
 }
