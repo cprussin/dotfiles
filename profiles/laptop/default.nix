@@ -51,7 +51,6 @@ in
     ../../modules/ui/launcher
     ../../modules/ui/log
     ../../modules/ui/minichrome
-    ../../modules/ui/numix-cursor-theme
     ../../modules/ui/opengl
     ../../modules/ui/rofi-pass
     ../../modules/ui/screen-locker
