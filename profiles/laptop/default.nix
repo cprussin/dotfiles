@@ -1,5 +1,9 @@
 { pkgs, ... }:
 
+let
+  themeUtil = pkgs.callPackage ../../lib/themes.nix {};
+in
+
 {
   imports = [
     ../base
@@ -66,11 +70,7 @@
     ../../modules/zone/pacific
   ];
 
-  fontTheme = import ../../modules/ui/theme/font/dejavu-sans-mono-11.nix {};
-  iconTheme = import ../../modules/ui/theme/icon/papirus-48.nix {
-    inherit pkgs;
-  };
-  cursorTheme = import ../../modules/ui/theme/cursor/numix.nix {
-    inherit pkgs;
-  };
+  fontTheme = themeUtil.font "dejavu-sans-mono-11";
+  iconTheme = themeUtil.icon "papirus-48";
+  cursorTheme = themeUtil.cursor "numix";
 }
