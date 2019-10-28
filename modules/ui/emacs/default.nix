@@ -97,7 +97,7 @@ in
     )
   ];
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
+  home-manager.users.${config.primaryUserName} = {
     home.file = {
       ".emacs.d/modules" = {
         source = ./modules;

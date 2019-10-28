@@ -30,7 +30,5 @@ in
     };
   };
 
-  config.home-manager.users.${config.primaryUserName} = { ... }: {
-    config.xresources.properties."*.font" = fontLib.xftFont config.fontTheme.primaryFont;
-  };
+  config.home-manager.users.${config.primaryUserName}.xresources.properties."*.font" = fontLib.xftFont config.fontTheme.primaryFont;
 }

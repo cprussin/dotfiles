@@ -9,10 +9,8 @@
     )
   ];
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
-    services.screen-locker = {
-      enable = true;
-      lockCmd = "${pkgs.lock-screen}/bin/lock-screen";
-    };
+  home-manager.users.${config.primaryUserName}.services.screen-locker = {
+    enable = true;
+    lockCmd = "${pkgs.lock-screen}/bin/lock-screen";
   };
 }

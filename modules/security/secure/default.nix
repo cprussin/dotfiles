@@ -31,14 +31,8 @@ in
 {
   options.secure = secureOption;
 
-  config = {
-    sudoCmds = [
-      "${pkgs.utillinux}/bin/mount ${config.secure.path}"
-      "${pkgs.utillinux}/bin/umount ${config.secure.path}"
-    ];
-
-    home-manager.users.${config.primaryUserName} = { ... }: {
-      options.secure = secureOption;
-    };
-  };
+  config.sudoCmds = [
+    "${pkgs.utillinux}/bin/mount ${config.secure.path}"
+    "${pkgs.utillinux}/bin/umount ${config.secure.path}"
+  ];
 }

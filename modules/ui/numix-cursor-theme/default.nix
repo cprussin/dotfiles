@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home-manager.users.${config.primaryUserName} = { ... }: {
+  home-manager.users.${config.primaryUserName} = {
     # FIXME: If numix-cursor-theme isn't in the environment, then the GTK
     # configuration won't be able to find it, since paths appear hardcoded in
     # GTK.  There's likely a way to pass the path to GTK apps instead.

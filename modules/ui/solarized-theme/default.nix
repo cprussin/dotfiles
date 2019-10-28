@@ -9,8 +9,8 @@
     )
   ];
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
-    xresources.extraConfig = builtins.readFile (
+  home-manager.users.${config.primaryUserName}.xresources = {
+    extraConfig = builtins.readFile (
       pkgs.fetchFromGitHub {
         owner = "solarized";
         repo = "xresources";
@@ -21,7 +21,7 @@
       #define S_base025 #0B5B70
     '';
 
-    xresources.properties = {
+    properties = {
       "*color8" = "S_base025";
     };
   };

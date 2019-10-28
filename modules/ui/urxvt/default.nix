@@ -17,7 +17,7 @@ in
 
   terminal = "${urxvt}/bin/urxvtc";
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
+  home-manager.users.${config.primaryUserName} = {
     programs.urxvt = {
       enable = true;
       package = urxvt;

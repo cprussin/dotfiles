@@ -18,8 +18,8 @@
     touch /run/display-change
   '';
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
-    systemd.user.services.watch-monitor-change = {
+  home-manager.users.${config.primaryUserName}.systemd.user.services = {
+    watch-monitor-change = {
       Unit = {
         Description = "Watch for monitor hotplugging and re-configure monitors";
         After = [ "graphical-session-pre.target" ];
@@ -35,7 +35,7 @@
       };
     };
 
-    systemd.user.services.setup-monitors = {
+    setup-monitors = {
       Unit = {
         Description = "Re-configure monitors";
         After = [ "graphical-session-pre.target" ];

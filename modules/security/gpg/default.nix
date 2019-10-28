@@ -1,12 +1,5 @@
 { config, ... }:
 
-#let
-#  gpg-config = pkgs.writeText "gpg-config" ''
-#    photo-viewer "${pkgs.launcher}/bin/open %i"
-#    keyserver hkp://pgp.mit.edu
-#  '';
-#in
-
 {
   nixpkgs.overlays = [
     (
@@ -19,10 +12,8 @@
     )
   ];
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
-    services.gpg-agent = {
-      enable = true;
-      enableSshSupport = true;
-    };
+  home-manager.users.${config.primaryUserName}.services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
   };
 }

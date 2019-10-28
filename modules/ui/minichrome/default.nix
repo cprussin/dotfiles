@@ -9,21 +9,19 @@
     )
   ];
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
-    systemd.user.services.minichrome = {
-      Unit = {
-        Description = "minichrome daemon";
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
-      };
+  home-manager.users.${config.primaryUserName}.systemd.user.services.minichrome = {
+    Unit = {
+      Description = "minichrome daemon";
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
 
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
 
-      Service = {
-        ExecStart = "${pkgs.minichrome}/bin/minichrome";
-      };
+    Service = {
+      ExecStart = "${pkgs.minichrome}/bin/minichrome";
     };
   };
 }

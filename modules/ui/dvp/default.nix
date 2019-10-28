@@ -14,9 +14,7 @@ in
     xkbOptions = "caps:escape";
   };
 
-  home-manager.users.${config.primaryUserName} = { ... }: {
-    home.keyboard = {
-      inherit layout variant;
-    };
+  home-manager.users.${config.primaryUserName}.home.keyboard = {
+    inherit layout variant;
   };
 }
