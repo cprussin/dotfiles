@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -55,6 +55,7 @@
     ../../modules/ui/solarized-theme
     ../../modules/ui/terminal
     ../../modules/ui/theme/font
+    ../../modules/ui/theme/icon
     ../../modules/ui/tray
     ../../modules/ui/urxvt
     ../../modules/ui/xmobar
@@ -64,5 +65,8 @@
     ../../modules/zone/pacific
   ];
 
-  fontTheme = import ../../modules/ui/theme/font/dejavu-sans-mono-11.nix;
+  fontTheme = import ../../modules/ui/theme/font/dejavu-sans-mono-11.nix {};
+  iconTheme = import ../../modules/ui/theme/icon/papirus-48.nix {
+    inherit pkgs;
+  };
 }

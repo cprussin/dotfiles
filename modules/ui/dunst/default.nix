@@ -19,11 +19,7 @@ in
   home-manager.users.${config.primaryUserName}.services.dunst = {
     enable = true;
 
-    iconTheme = {
-      package = pkgs.papirus-icon-theme;
-      name = "Papirus";
-      size = "48x48";
-    };
+    iconTheme = config.iconTheme;
 
     settings = {
       global = {

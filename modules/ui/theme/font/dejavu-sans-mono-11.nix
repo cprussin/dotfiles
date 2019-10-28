@@ -1,3 +1,5 @@
+{}:
+
 {
   primaryFont = {
     size = 11;
