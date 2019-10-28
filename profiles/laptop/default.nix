@@ -54,6 +54,7 @@
     ../../modules/ui/setup-monitors
     ../../modules/ui/solarized-theme
     ../../modules/ui/terminal
+    ../../modules/ui/theme/cursor
     ../../modules/ui/theme/font
     ../../modules/ui/theme/icon
     ../../modules/ui/tray
@@ -67,6 +68,9 @@
 
   fontTheme = import ../../modules/ui/theme/font/dejavu-sans-mono-11.nix {};
   iconTheme = import ../../modules/ui/theme/icon/papirus-48.nix {
+    inherit pkgs;
+  };
+  cursorTheme = import ../../modules/ui/theme/cursor/numix.nix {
     inherit pkgs;
   };
 }
