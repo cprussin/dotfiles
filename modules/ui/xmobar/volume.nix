@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils, volume, launcher }:
+{ writeScript, bash, coreutils, volume, launcher, config }:
 
 writeScript "volume" ''
   #! ${bash}/bin/sh
@@ -12,7 +12,7 @@ writeScript "volume" ''
 
   if $test $($volume get-mute) == "true"
   then
-      str="<fc=#586e75><fn=2></fn> $currentVolume</fc>"
+      str="<fc=${config.colorTheme.foreground}><fn=2></fn> $currentVolume</fc>"
   else
       if $test $currentVolume -lt 30
       then

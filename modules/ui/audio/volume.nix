@@ -1,4 +1,4 @@
-{ writeShellScriptBin, pamixer, gnugrep, gnused, coreutils, dunst, mk-progress-string }:
+{ writeShellScriptBin, pamixer, gnugrep, gnused, coreutils, dunst, mk-progress-string, config }:
 
 writeShellScriptBin "volume" ''
   pamixer=${pamixer}/bin/pamixer
@@ -38,7 +38,7 @@ writeShellScriptBin "volume" ''
   if $test $($0 get-mute) == 'true'
   then
       icon=notification-audio-volume-muted
-      color="#073642"
+      color="${config.colorTheme.highlightBackground}"
   elif $test $level -ge 50
   then
       icon=notification-audio-volume-high

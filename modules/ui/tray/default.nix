@@ -1,5 +1,10 @@
 { pkgs, config, ... }:
 
+let
+  background =
+    builtins.replaceStrings [ "#" ] [ "x" ] config.colorTheme.background;
+in
+
 {
   home-manager.users.${config.primaryUserName}.systemd.user.services.tray = {
     Unit = {
@@ -23,7 +28,7 @@
           --distance 6 \
           --transparent true \
           --alpha 0 \
-          --tint "0x002b36" \
+          --tint "0${background}" \
           --monitor primary
       '';
     };

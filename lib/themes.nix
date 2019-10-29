@@ -10,4 +10,5 @@ in
   font = theme "font";
   icon = theme "icon";
   cursor = theme "cursor";
+  color = theme "color";
 }

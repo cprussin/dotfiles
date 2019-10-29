@@ -7,8 +7,6 @@ in
 
 {
   home-manager.users.${config.primaryUserName} = homeManager: {
-    home.file.".zsh-dircolors.config".text = "dircolors.ansi-dark";
-
     programs.zsh = {
       enable = true;
       plugins = [
@@ -21,16 +19,6 @@ in
           name = "zsh-git-prompt";
           src = pkgs.callPackage ./zsh-git-prompt.nix {};
           file = "zshrc.sh";
-        }
-        {
-          name = "zsh-dircolors-solarized";
-          src = pkgs.fetchFromGitHub {
-            owner = "joel-porquet";
-            repo = "zsh-dircolors-solarized";
-            rev = "2d41598785ac7035c3f34a6beaba9c0973ab15e7";
-            sha256 = "1xdq1qsccggbdzv562acc88ra6cfwjwbvggcnkjpqyg1817gp2q0";
-            fetchSubmodules = true;
-          };
         }
       ];
       shellAliases = {
@@ -78,6 +66,8 @@ in
         setopt noflowcontrol                # Disable annoying useless flow control
         setopt noclobber                    # Keep me from overwriting files accidentally
         unsetopt notify                     # Don't print status of background jobs until a prompt is about to be printed
+
+        eval $(dircolors ${config.colorTheme.dircolors})
 
         ${clear}
       '';

@@ -55,8 +55,8 @@ in
     ../../modules/ui/rofi-pass
     ../../modules/ui/screen-locker
     ../../modules/ui/setup-monitors
-    ../../modules/ui/solarized-theme
     ../../modules/ui/terminal
+    ../../modules/ui/theme/color
     ../../modules/ui/theme/cursor
     ../../modules/ui/theme/font
     ../../modules/ui/theme/icon
@@ -72,4 +72,5 @@ in
   fontTheme = themeUtil.font "dejavu-sans-mono-11";
   iconTheme = themeUtil.icon "papirus-48";
   cursorTheme = themeUtil.cursor "numix";
+  colorTheme = themeUtil.color "solarized/dark";
 }

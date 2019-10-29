@@ -1,12 +1,12 @@
 { pkgs, config, ... }:
 
 let
-  email = pkgs.callPackage ./email.nix {};
-  vpn = pkgs.callPackage ./vpn.nix {};
-  volume = pkgs.callPackage ./volume.nix {};
-  bluetooth = pkgs.callPackage ./bluetooth.nix {};
-  battery = pkgs.callPackage ./battery.nix {};
-  network = pkgs.callPackage ./network.nix {};
+  email = pkgs.callPackage ./email.nix { inherit config; };
+  vpn = pkgs.callPackage ./vpn.nix { inherit config; };
+  volume = pkgs.callPackage ./volume.nix { inherit config; };
+  bluetooth = pkgs.callPackage ./bluetooth.nix { inherit config; };
+  battery = pkgs.callPackage ./battery.nix { inherit config; };
+  network = pkgs.callPackage ./network.nix { inherit config; };
   date = pkgs.callPackage ./date.nix {};
   mounts = pkgs.callPackage ./mounts.nix {};
   fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
@@ -23,12 +23,12 @@ in
         ]
       , position = BottomSize C 100 35
       , border = TopB
-      , borderColor = "#859900"
+      , borderColor = "${config.colorTheme.selection}"
       , borderWidth = 3
       , textOffset = 25
       , textOffsets = [ 25, 25, 25 ]
-      , bgColor = "#002b36"
-      , fgColor = "#268bd2"
+      , bgColor = "${config.colorTheme.background}"
+      , fgColor = "${config.colorTheme.bright}"
       , overrideRedirect = False
       , commands =
         [ Run UnsafeStdinReader

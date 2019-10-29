@@ -2,6 +2,7 @@
 
 let
   fontLib = callPackage ../../../../lib/fonts.nix {};
+  colors = config.colorTheme;
 in
 
 writeScript "prompt" ''
@@ -13,8 +14,8 @@ writeScript "prompt" ''
   $cat - | $rofi \
     -fixed-num-lines \
     -font "${fontLib.pangoFont config.fontTheme.primaryFont}" \
-    -color-normal "#002b36,#657b83,#002b36,#859900,#002b36" \
-    -color-window "#002b36,#859900" \
+    -color-normal "${colors.background},${colors.foreground},${colors.background},${colors.selection},${colors.background}" \
+    -color-window "${colors.background},${colors.selection}" \
     -bw 2 \
     -location 0 \
     -disable-history \

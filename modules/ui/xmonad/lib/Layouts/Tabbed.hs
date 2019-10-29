@@ -2,8 +2,7 @@ module Layouts.Tabbed
   ( layout
   ) where
 
-import NixConfig (NixConfig, primaryFont, face, size)
-import qualified Styles as Styles
+import NixConfig (NixConfig, primaryFont, colorTheme, face, size, selection, background, urgent, highlightForeground, highlightBackground)
 import qualified XMonad.Layout.NoBorders as NoBorders
 import qualified XMonad.Layout.Renamed as Renamed
 import qualified XMonad.Layout.Tabbed as Tabbed
@@ -21,14 +20,14 @@ fontName nixConfig = "xft:" <> fontFace <> ":size=" <> fontSize
 -- A tabbed layout
 layout nixConfig = NoBorders.noBorders $ Renamed.renamed [Renamed.Replace name] $
   Tabbed.tabbed Tabbed.shrinkText Tabbed.def
-    { Tabbed.activeColor = Styles.focusedBorderColor
-    , Tabbed.activeBorderColor = Styles.focusedBorderColor
-    , Tabbed.activeTextColor = Styles.activeTextColor
-    , Tabbed.inactiveColor = Styles.normalBorderColor
-    , Tabbed.inactiveBorderColor = Styles.inactiveTextColor
-    , Tabbed.inactiveTextColor = Styles.inactiveTextColor
-    , Tabbed.urgentColor = Styles.urgentColor
-    , Tabbed.urgentBorderColor = Styles.urgentColor
-    , Tabbed.urgentTextColor = Styles.activeTextColor
+    { Tabbed.activeColor = selection $ colorTheme nixConfig
+    , Tabbed.activeBorderColor = selection $ colorTheme nixConfig
+    , Tabbed.activeTextColor = background $ colorTheme nixConfig
+    , Tabbed.inactiveColor = highlightBackground $ colorTheme nixConfig
+    , Tabbed.inactiveBorderColor = highlightForeground $ colorTheme nixConfig
+    , Tabbed.inactiveTextColor = highlightForeground $ colorTheme nixConfig
+    , Tabbed.urgentColor = urgent $ colorTheme nixConfig
+    , Tabbed.urgentBorderColor = urgent $ colorTheme nixConfig
+    , Tabbed.urgentTextColor = background $ colorTheme nixConfig
     , Tabbed.fontName = fontName nixConfig
     }

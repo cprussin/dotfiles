@@ -54,21 +54,21 @@ in
         context = "ctrl+shift+period";
       };
       urgency_low = {
-        background = "#002b36";
-        foreground = "#888888";
-        frame_color = "#888888";
+        background = config.colorTheme.background;
+        foreground = config.colorTheme.foreground;
+        frame_color = config.colorTheme.highlightBackground;
         timeout = 10;
       };
       urgency_normal = {
-        background = "#002b36";
-        foreground = "#268bd2";
-        frame_color = "#073642";
+        background = config.colorTheme.background;
+        foreground = config.colorTheme.bright;
+        frame_color = config.colorTheme.highlightBackground;
         timeout = 10;
       };
       urgency_critical = {
-        background = "#002b36";
-        foreground = "#d33682";
-        frame_color = "#d33682";
+        background = config.colorTheme.background;
+        foreground = config.colorTheme.urgent;
+        frame_color = config.colorTheme.urgent;
         timeout = 0;
       };
     };

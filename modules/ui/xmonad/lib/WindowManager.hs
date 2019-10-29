@@ -1,11 +1,10 @@
 module WindowManager where
 
-import qualified Styles as Styles
 import qualified Keybindings as Keybindings
 import qualified Layouts as Layouts
 import qualified Logging as Logging
 import qualified Mousebindings as Mousebindings
-import qualified NixConfig as NixConfig
+import NixConfig (xmobar, paths, colorTheme, highlightBackground, selection)
 import qualified WindowRules as WindowRules
 import qualified Workspaces as Workspaces
 import qualified XMonad as XMonad
@@ -16,19 +15,19 @@ import qualified XMonad.Util.Run as Run
 
 start nixConfig = startXmobar nixConfig >>= startXmonad nixConfig
 
-startXmobar nixConfig = Run.spawnPipe $ NixConfig.xmobar $ NixConfig.paths nixConfig
+startXmobar nixConfig = Run.spawnPipe $ xmobar $ paths nixConfig
 
 startXmonad nixConfig statusbarPipe =
   XMonad.xmonad $ wmPlugins $ XMonad.def
   { XMonad.workspaces = Workspaces.workspaceNames
-  , XMonad.borderWidth = Styles.borderWidth
-  , XMonad.normalBorderColor = Styles.normalBorderColor
-  , XMonad.focusedBorderColor = Styles.focusedBorderColor
+  , XMonad.borderWidth = 3
+  , XMonad.normalBorderColor = highlightBackground $ colorTheme nixConfig
+  , XMonad.focusedBorderColor = selection $ colorTheme nixConfig
   , XMonad.keys = Keybindings.keybindings nixConfig
   , XMonad.mouseBindings = Mousebindings.mousebindings
   , XMonad.layoutHook = Layouts.layoutHook nixConfig
   , XMonad.manageHook = WindowRules.windowRules
-  , XMonad.logHook = Logging.logHook statusbarPipe
+  , XMonad.logHook = Logging.logHook nixConfig statusbarPipe
   }
 
 -- WM-level plugins

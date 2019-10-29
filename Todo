@@ -36,6 +36,13 @@
    - [ ] Email (postfix/dovecot/spamassassin/opendkim)
    - [ ] Chat / SIP?
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
+   - [X] dunst
+   - [X] volume
+   - [X] launcher/rofi
+   - [X] xmobar
+   - [X] xmonad
+   - [X] zsh
+   - [ ] emacs
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done

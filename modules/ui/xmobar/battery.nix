@@ -1,4 +1,4 @@
-{ writeScript, bash, acpi, coreutils, gnugrep, findutils }:
+{ writeScript, bash, acpi, coreutils, gnugrep, findutils, config }:
 
 writeScript "battery" ''
   #! ${bash}/bin/sh
@@ -38,9 +38,9 @@ writeScript "battery" ''
   str="$status $average%"
 
   if $test $average -lt 5; then
-      str="<fc=#dc322f>$str</fc>"
+      str="<fc=${config.colorTheme.urgent}>$str</fc>"
   elif $test $average -lt 15; then
-      str="<fc=#859900>$str</fc>"
+      str="<fc=${config.colorTheme.warn}>$str</fc>"
   fi
 
   $echo "$str    "

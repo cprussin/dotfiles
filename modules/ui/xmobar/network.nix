@@ -1,4 +1,4 @@
-{ writeScript, bash, iproute, gnugrep, gnused, coreutils, wirelesstools }:
+{ writeScript, bash, iproute, gnugrep, gnused, coreutils, wirelesstools, config }:
 
 writeScript "network" ''
   #! ${bash}/bin/sh
@@ -43,14 +43,14 @@ writeScript "network" ''
       strength=$($tail -n 1 /proc/net/wireless | $cut -d ' ' -f 5 | $sed 's/\.//')
       str="$icon $($iwgetid -r) $(getip $WIRELESS_INTERFACE) [$strength%]"
       if [ $strength -lt 20 ]; then
-          str="<fc=#dc322f>$str</fc>    "
+          str="<fc=${config.colorTheme.urgent}>$str</fc>    "
       elif [ $strength -lt 50 ]; then
-          str="<fc=#859900>$str</fc>    "
+          str="<fc=${config.colorTheme.warn}>$str</fc>    "
       else
           str="$str    "
       fi
   else
-      str="<fc=#586e75>$icon</fc>    "
+      str="<fc=${config.colorTheme.foreground}>$icon</fc>    "
   fi
 
   if isup $WIRED_INTERFACE

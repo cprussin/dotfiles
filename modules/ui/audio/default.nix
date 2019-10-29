@@ -4,7 +4,7 @@
   nixpkgs.overlays = [
     (
       _: super: {
-        volume = super.callPackage ./volume.nix {};
+        volume = super.callPackage ./volume.nix { inherit config; };
       }
     )
   ];

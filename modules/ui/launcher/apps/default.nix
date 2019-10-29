@@ -2,7 +2,6 @@
 , writeScript
 , bash
 , bluez
-, toggle-colors
 , setxkbmap
 , gimp
 , htop
@@ -62,7 +61,6 @@ in
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = mkScript "chrome" "@out@/bin/browse --browser chrome $*";
   chromium = mkScript "chromium" "@out@/bin/browse --browser chromium $*";
-  dark = mkScript "dark" "${toggle-colors}/bin/toggle-colors dark";
   dvorak = mkScript "dvorak" "${setxkbmap}/bin/setxkbmap us dvp";
   emacs = mkScript "emacs" "@out@/bin/open \${1-*scratch*}";
   email = mkScript "email" "sh -c \"${systemd}/bin/systemctl --user start mbsync & ${emacs}/bin/emacsclient -c --eval '(mu4e~headers-jump-to-maildir \\\"/PrussinNet/Inbox\\\")'\"";
@@ -75,7 +73,6 @@ in
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
   jira = mkWebApp "jira" "https://jira.netflix.com/secure/Dashboard.jspa?selectPageId=22387#";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
-  light = mkScript "light" "${toggle-colors}/bin/toggle-colors light";
   localhost = mkWebApp "localhost" "http://localhost:\${1-4200}";
   minichrome = mkScript "firefox" "@out@/bin/browse --browser minichrome $*";
   mixer = mkScript "mixer" "${pavucontrol}/bin/pavucontrol";

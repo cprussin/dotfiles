@@ -1,4 +1,4 @@
-{ writeScript, bash, systemd, coreutils }:
+{ writeScript, bash, systemd, coreutils, config }:
 
 writeScript "vpn" ''
   #! ${bash}/bin/sh
@@ -7,6 +7,6 @@ writeScript "vpn" ''
   systemctl=${systemd}/bin/systemctl
 
   if $systemctl is-active --quiet openvpn-netflix; then
-      $echo "<fc=#eee8d5,#dc322f> <fn=1>VPN</fn> </fc>    "
+      $echo "<fc=${config.colorTheme.white},${config.colorTheme.red}> <fn=1>VPN</fn> </fc>    "
   fi
 ''

@@ -1,6 +1,6 @@
 module Statusbar where
 
-import qualified Styles as Styles
+import NixConfig (NixConfig, selection, colorTheme)
 import qualified Data.List as List
 import qualified Data.Maybe as Maybe
 import qualified GHC.IO.Handle.Types as HandleTypes
@@ -11,16 +11,16 @@ import qualified XMonad.Hooks.DynamicLog as DynamicLog
 import qualified XMonad.Util.Run as Run
 
 -- Set up status bar output
-statusbar :: HandleTypes.Handle -> XMonad.X ()
-statusbar pipe = statusbarPlugins options >>= DynamicLog.dynamicLogWithPP
+statusbar :: NixConfig -> HandleTypes.Handle -> XMonad.X ()
+statusbar nixConfig pipe = statusbarPlugins options >>= DynamicLog.dynamicLogWithPP
   where
     options = DynamicLog.xmobarPP
       { DynamicLog.ppOutput = Run.hPutStrLn pipe
       , DynamicLog.ppSep = "    "
       , DynamicLog.ppLayout = showLayout
-      , DynamicLog.ppCurrent = showCurrentWorkspace
+      , DynamicLog.ppCurrent = showCurrentWorkspace nixConfig
       , DynamicLog.ppHidden = showHiddenWorkspace
-      , DynamicLog.ppTitle = showTitle
+      , DynamicLog.ppTitle = showTitle nixConfig
       }
 
 -- Plugins that apply to status bar output
@@ -32,8 +32,9 @@ showLayout :: String -> String
 showLayout = DynamicLog.wrap "<action=xdotool key super+Tab>" "</action>"
 
 -- Highlight visible workspace
-showCurrentWorkspace :: XMonad.WorkspaceId -> String
-showCurrentWorkspace = DynamicLog.wrap ("<fc=" ++ Styles.focusedBorderColor ++ ">[") "]</fc>"
+showCurrentWorkspace :: NixConfig -> XMonad.WorkspaceId -> String
+showCurrentWorkspace nixConfig =
+  DynamicLog.wrap ("<fc=" ++ (selection $ colorTheme nixConfig) ++ ">[") "]</fc>"
 
 -- Make workspace clickable
 showHiddenWorkspace :: XMonad.WorkspaceId -> String
@@ -44,7 +45,7 @@ showHiddenWorkspace workspace =
       XMonad.keysymToString <$> snd <$> List.find ((== workspace) . fst) Workspaces.workspaces
 
 -- Color and ellipsize the title
-showTitle :: String -> String
-showTitle
-  = DynamicLog.xmobarColor Styles.focusedBorderColor ""
+showTitle :: NixConfig -> String -> String
+showTitle nixConfig
+  = DynamicLog.xmobarColor (selection $ colorTheme nixConfig) ""
   . DynamicLog.shorten 100

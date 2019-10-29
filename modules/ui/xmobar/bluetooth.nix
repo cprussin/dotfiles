@@ -1,4 +1,4 @@
-{ writeScript, bash, bluez, gnugrep, gnused, coreutils, launcher }:
+{ writeScript, bash, bluez, gnugrep, gnused, coreutils, launcher, config }:
 
 writeScript "bluetooth" ''
   #! ${bash}/bin/sh
@@ -36,11 +36,11 @@ writeScript "bluetooth" ''
       then
           str="$str $devs"
       else
-          str="<fc=#859900>$str</fc>"
+          str="<fc=${config.colorTheme.warn}>$str</fc>"
       fi
   else
       togglePower="on"
-      str="<fc=#586e75>$str</fc>"
+      str="<fc=${config.colorTheme.foreground}>$str</fc>"
   fi
   str="<action=\`echo \"power $togglePower\" | $bluetoothctl\` button=3>$str</action>"
   str="<action=\`$bluetooth\` button=12>$str</action>"

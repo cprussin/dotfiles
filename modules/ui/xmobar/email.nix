@@ -1,4 +1,4 @@
-{ writeScript, bash, coreutils, launcher }:
+{ writeScript, bash, coreutils, launcher, config }:
 
 writeScript "email" ''
   #! ${bash}/bin/sh
@@ -25,7 +25,7 @@ writeScript "email" ''
       if $test $total -gt 0
       then
           mailbox="<action=\`$action\` button=123> $mailbox <fn=2></fn> $total</action>"
-          $test $new -ne 0 && mailbox="<fc=#859900>$mailbox</fc>"
+          $test $new -ne 0 && mailbox="<fc=${config.colorTheme.warn}>$mailbox</fc>"
           str="$str$mailbox    "
       fi
   done
