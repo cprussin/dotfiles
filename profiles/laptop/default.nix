@@ -50,7 +50,6 @@ in
     ../../modules/ui/gtk
     ../../modules/ui/launcher
     ../../modules/ui/log
-    ../../modules/ui/minichrome
     ../../modules/ui/opengl
     ../../modules/ui/rofi-pass
     ../../modules/ui/screen-locker

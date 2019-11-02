@@ -74,7 +74,6 @@ in
   jira = mkWebApp "jira" "https://jira.netflix.com/secure/Dashboard.jspa?selectPageId=22387#";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
   localhost = mkWebApp "localhost" "http://localhost:\${1-4200}";
-  minichrome = mkScript "firefox" "@out@/bin/browse --browser minichrome $*";
   mixer = mkScript "mixer" "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
