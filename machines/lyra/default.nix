@@ -8,4 +8,5 @@
 
   primaryUserName = "cprussin";
   networking.hostName = "lyra";
+  services.mingetty.greetingLine = builtins.readFile ./greeting;
 }

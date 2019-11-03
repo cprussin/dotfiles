@@ -8,4 +8,5 @@
 
   primaryUserName = "cprussin";
   networking.hostName = "gemini";
+  services.mingetty.greetingLine = builtins.readFile ./greeting;
 }
