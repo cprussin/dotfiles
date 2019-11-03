@@ -1,18 +1,12 @@
 { ... }:
 
-let
-  nixosVersion = import ../../nixos-version.nix;
-  home-manager = builtins.fetchTarball "https://github.com/rycee/home-manager/archive/release-${nixosVersion}.tar.gz";
-in
-
 {
   imports = [
-    "${home-manager}/nixos"
-
     ../../modules/data/session-vars
 
     ../../modules/devices/tmp
 
+    ../../modules/nix/home-manager
     ../../modules/nix/nixpkgs
     ../../modules/nix/plugins
     ../../modules/nix/trusted-users
