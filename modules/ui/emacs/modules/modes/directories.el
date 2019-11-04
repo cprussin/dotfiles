@@ -9,14 +9,8 @@
 ;; Use ranger instead of dired
 (use-package ranger
   :demand
-  :init (let* ((extensions '("o" "hi" "elc"))
-               (regex-parts (mapconcat (lambda (ext) (concat "\\." ext "$"))
-                                       extensions
-                                       "\\|")))
-          (setq ranger-cleanup-on-disable nil
-                ranger-cleanup-eagerly nil
-                ranger-show-hidden nil
-                ranger-hidden-regexp (concat "^\\.\\|" regex-parts)))
+  :init (setq ranger-cleanup-on-disable nil
+              ranger-cleanup-eagerly nil)
   :config (ranger-override-dired-mode)
   :general
   ('(normal motion emacs)
