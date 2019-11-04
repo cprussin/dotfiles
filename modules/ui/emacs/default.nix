@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 let
+  fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
+
   build = emacs:
     pkgs.callPackage <nixpkgs/pkgs/build-support/emacs/trivial.nix> {
       inherit emacs;
@@ -99,6 +101,8 @@ in
   ];
 
   home-manager.users.${config.primaryUserName} = {
+    xresources.properties."Emacs.font" = fontLib.pangoFont config.fontTheme.primaryFont;
+
     home.file = {
       ".emacs.d/modules" = {
         source = ./modules;
