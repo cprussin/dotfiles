@@ -29,8 +29,8 @@ writeScript "shakti" ''
 
     dvds) exec $browse 'dvd-www-test-baseline-stable.eng.dvdco.netflix.com' ;;
 
-    shell) exec ${config.terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell" ;;
+    shell) cd $SHAKTI_SRC && exec ${config.terminal} ;;
 
-    *) exec ${config.terminal} -e ${bash}/bin/sh -c "cd $SHAKTI_SRC && $nixShell --run 'shakti $*'" ;;
+    *) cd $SHAKTI_SRC && exec ${config.terminal} -e ${bash}/bin/sh -c "$nixShell --run 'shakti $*'" ;;
   esac
 ''

@@ -41,10 +41,6 @@ in
         xmonad = homeManager.config.xsession.windowManager.command;
       };
       initExtra = ''
-        shell() {
-            nix-shell --run "$*"
-        }
-
         chpwd() {
             ${ls}
         }
