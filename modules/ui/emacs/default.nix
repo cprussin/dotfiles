@@ -33,6 +33,7 @@ in
             epkgs.counsel-projectile
             epkgs.csv-mode
             epkgs.delight
+            epkgs.direnv
             epkgs.dhall-mode
             epkgs.dockerfile-mode
             epkgs.edit-indirect

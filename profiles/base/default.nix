@@ -17,6 +17,7 @@
     ../../modules/security/umask
 
     ../../modules/ui/bash
+    ../../modules/ui/direnv
     ../../modules/ui/dvp
     ../../modules/ui/greeting
     ../../modules/ui/readline

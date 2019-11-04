@@ -28,6 +28,7 @@
 (load-module "modules/system")
 
 ;; Tooling
+(load-module "modules/tools/direnv")
 (load-module "modules/tools/git")
 (load-module "modules/tools/help")
 (load-module "modules/tools/projects")
