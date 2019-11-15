@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, config, lib, ... }:
 
 {
   nixpkgs.overlays = [
@@ -11,4 +11,6 @@
       }
     )
   ];
+
+  home-manager.users.${config.primaryUserName}.home.packages = lib.mkForce [ pkgs.pass ];
 }

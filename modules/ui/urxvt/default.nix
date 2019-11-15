@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 let
   urxvt = pkgs.rxvt_unicode-with-plugins;
@@ -18,6 +18,8 @@ in
   terminal = "${urxvt}/bin/urxvtc";
 
   home-manager.users.${config.primaryUserName} = {
+    home.packages = lib.mkForce [ pkgs.setterminfo ];
+
     programs.urxvt = {
       enable = true;
       package = urxvt;
