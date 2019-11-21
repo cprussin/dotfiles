@@ -1,8 +1,6 @@
-{ writeScript, bash, fortune, findutils, coreutils, gnugrep, gnused }:
+{ writeShellScript, fortune, findutils, coreutils, gnugrep, gnused }:
 
-writeScript "launch" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "launch" ''
   fortune=${fortune}/bin/fortune
   prompt=@out@/bin/prompt
   open=@out@/bin/open

@@ -1,6 +1,6 @@
-{ writeScript, pass, gnugrep, gnused, coreutils }:
+{ writeShellScript, pass, gnugrep, gnused, coreutils }:
 
-writeScript "get-aws-field" ''
+writeShellScript "get-aws-field" ''
   pass=${pass}/bin/pass
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed

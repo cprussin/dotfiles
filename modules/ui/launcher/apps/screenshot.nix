@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, xdotool, imagemagick }:
+{ writeShellScript, coreutils, xdotool, imagemagick }:
 
-writeScript "screenshot" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "screenshot" ''
   ls=${coreutils}/bin/ls
   wc=${coreutils}/bin/wc
   test=${coreutils}/bin/test

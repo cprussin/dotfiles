@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils }:
+{ writeShellScript, coreutils }:
 
-writeScript "yes-no" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "yes-no" ''
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
   prompt=@out@/bin/prompt

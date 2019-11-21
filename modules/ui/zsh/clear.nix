@@ -1,8 +1,6 @@
-{ writeScript, bash, fortune, cowsay, lolcat, ncurses, ls }:
+{ writeShellScript, fortune, cowsay, lolcat, ncurses, ls }:
 
-writeScript "clear" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "clear" ''
   fortune=${fortune}/bin/fortune
   cowthink=${cowsay}/bin/cowthink
   lolcat=${lolcat}/bin/lolcat

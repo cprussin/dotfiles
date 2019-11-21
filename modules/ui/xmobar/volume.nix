@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, volume, launcher, config }:
+{ writeShellScript, coreutils, volume, launcher, config }:
 
-writeScript "volume" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "volume" ''
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
   volume=${volume}/bin/volume

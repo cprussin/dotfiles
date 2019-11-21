@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, xorg, gnugrep, gnused }:
+{ writeShellScript, coreutils, xorg, gnugrep, gnused }:
 
-writeScript "gaming" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "gaming" ''
   xinput=${xorg.xinput}/bin/xinput
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed

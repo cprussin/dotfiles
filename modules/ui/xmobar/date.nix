@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, launcher }:
+{ writeShellScript, coreutils, launcher }:
 
-writeScript "date" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "date" ''
   date=${coreutils}/bin/date
   echo=${coreutils}/bin/echo
   calendar=${launcher}/share/apps/calendar

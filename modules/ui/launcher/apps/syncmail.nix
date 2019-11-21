@@ -1,8 +1,6 @@
-{ writeScript, bash, dunst, systemd }:
+{ writeShellScript, dunst, systemd }:
 
-writeScript "syncmail" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "syncmail" ''
   dunstify=${dunst}/bin/dunstify
   systemctl=${systemd}/bin/systemctl
 

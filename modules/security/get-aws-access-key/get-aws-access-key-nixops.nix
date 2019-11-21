@@ -1,6 +1,6 @@
-{ writeScript, nixops }:
+{ writeShellScript, nixops }:
 
-writeScript "get-aws-access-key-nixops" ''
+writeShellScript "get-aws-access-key-nixops" ''
   getAwsField=@out@/bin/get-aws-field
   nixops=${nixops}/bin/nixops
 

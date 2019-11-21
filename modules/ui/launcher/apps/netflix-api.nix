@@ -1,8 +1,6 @@
-{ writeScript, bash }:
+{ writeShellScript }:
 
-writeScript "shakti" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "shakti" ''
   browse=@out@/bin/browse
 
   case "$1" in

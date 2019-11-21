@@ -1,8 +1,6 @@
-{ writeScript, bash, dunst, systemd }:
+{ writeShellScript, dunst, systemd }:
 
-writeScript "remacs" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "remacs" ''
   dunstify=${dunst}/bin/dunstify
   systemctl=${systemd}/bin/systemctl
 

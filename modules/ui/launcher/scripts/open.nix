@@ -1,5 +1,4 @@
-{ writeScript
-, bash
+{ writeShellScript
 , coreutils
 , file
 , gnused
@@ -10,9 +9,7 @@
 , emacs
 }:
 
-writeScript "open" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "open" ''
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
   file=${file}/bin/file

@@ -1,8 +1,6 @@
-{ writeScript, bash, acpi, coreutils, gnugrep, findutils, config }:
+{ writeShellScript, acpi, coreutils, gnugrep, findutils, config }:
 
-writeScript "battery" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "battery" ''
   acpi=${acpi}/bin/acpi
   wc=${coreutils}/bin/wc
   grep=${gnugrep}/bin/grep

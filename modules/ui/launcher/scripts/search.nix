@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, gnugrep, gnused }:
+{ writeShellScript, coreutils, gnugrep, gnused }:
 
-writeScript "search" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "search" ''
   printf=${coreutils}/bin/printf
   echo=${coreutils}/bin/echo
   grep=${gnugrep}/bin/grep

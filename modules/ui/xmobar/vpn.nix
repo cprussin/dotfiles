@@ -1,8 +1,6 @@
-{ writeScript, bash, systemd, coreutils, config }:
+{ writeShellScript, systemd, coreutils, config }:
 
-writeScript "vpn" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "vpn" ''
   echo=${coreutils}/bin/echo
   systemctl=${systemd}/bin/systemctl
 

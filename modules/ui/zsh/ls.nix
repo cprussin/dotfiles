@@ -1,8 +1,6 @@
-{ writeScript, coreutils, stdenv }:
+{ writeShellScript, coreutils }:
 
-writeScript "ls" ''
-  #! ${stdenv.shell}
-
+writeShellScript "ls" ''
   echo=${coreutils}/bin/echo
   realpath=${coreutils}/bin/realpath
   ls=${coreutils}/bin/ls

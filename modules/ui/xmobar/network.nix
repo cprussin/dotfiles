@@ -1,8 +1,6 @@
-{ writeScript, bash, iproute, gnugrep, gnused, coreutils, wirelesstools, config }:
+{ writeShellScript, iproute, gnugrep, gnused, coreutils, wirelesstools, config }:
 
-writeScript "network" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "network" ''
   ip=${iproute}/bin/ip
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed

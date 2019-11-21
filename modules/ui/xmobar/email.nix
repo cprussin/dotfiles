@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, launcher, config }:
+{ writeShellScript, coreutils, launcher, config }:
 
-writeScript "email" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "email" ''
   ls=${coreutils}/bin/ls
   wc=${coreutils}/bin/wc
   test=${coreutils}/bin/test

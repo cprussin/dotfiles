@@ -1,8 +1,6 @@
-{ writeScript, bash, bluez, gnugrep, gnused, coreutils, launcher, config }:
+{ writeShellScript, bluez, gnugrep, gnused, coreutils, launcher, config }:
 
-writeScript "bluetooth" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "bluetooth" ''
   bluetoothctl=${bluez}/bin/bluetoothctl
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed

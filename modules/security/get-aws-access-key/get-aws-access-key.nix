@@ -1,6 +1,6 @@
-{ writeScript }:
+{ writeShellScript }:
 
-writeScript "get-aws-access-key" ''
+writeShellScript "get-aws-access-key" ''
   getAwsField=@out@/bin/get-aws-field
 
   export AWS_ACCESS_KEY_ID=$($getAwsField "Access Key Id")

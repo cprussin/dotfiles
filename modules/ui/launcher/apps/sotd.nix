@@ -1,8 +1,6 @@
-{ writeScript, bash }:
+{ writeShellScript }:
 
-writeScript "sotd" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "sotd" ''
   open=@out@/bin/open
   browse=@out@/bin/browse
 

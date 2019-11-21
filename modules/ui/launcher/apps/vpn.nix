@@ -1,8 +1,6 @@
-{ writeScript, bash, systemd }:
+{ writeShellScript, systemd }:
 
-writeScript "vpn" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "vpn" ''
   systemctl=${systemd}/bin/systemctl
 
   if $systemctl is-active --quiet openvpn-netflix

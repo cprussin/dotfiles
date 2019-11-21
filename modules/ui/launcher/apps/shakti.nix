@@ -1,8 +1,6 @@
-{ writeScript, bash, nix, config }:
+{ writeShellScript, nix, config }:
 
-writeScript "shakti" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "shakti" ''
   open=@out@/bin/open
   browse=@out@/bin/browse
   nixShell=${nix}/bin/nix-shell
@@ -31,6 +29,6 @@ writeScript "shakti" ''
 
     shell) cd $SHAKTI_SRC && exec ${config.terminal} ;;
 
-    *) cd $SHAKTI_SRC && exec ${config.terminal} -e ${bash}/bin/sh -c "$nixShell --run 'shakti $*'" ;;
+    *) cd $SHAKTI_SRC && exec ${config.terminal} -e "$nixShell --run 'shakti $*'" ;;
   esac
 ''

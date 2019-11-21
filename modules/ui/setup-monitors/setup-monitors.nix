@@ -1,8 +1,6 @@
-{ writeScript, bash, xorg, coreutils, gnugrep, gawk, systemd, gnused, xdpyinfo }:
+{ writeShellScript, xorg, coreutils, gnugrep, gawk, systemd, gnused, xdpyinfo }:
 
-writeScript "setup-monitors" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "setup-monitors" ''
   xrandr=${xorg.xrandr}/bin/xrandr
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo

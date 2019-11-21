@@ -1,8 +1,6 @@
-{ writeScript, bash, inotify-tools, systemd }:
+{ writeShellScript, inotify-tools, systemd }:
 
-writeScript "watch-monitor-change" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "watch-monitor-change" ''
   inotifywait=${inotify-tools}/bin/inotifywait
   systemctl=${systemd}/bin/systemctl
 

@@ -1,13 +1,11 @@
-{ writeScript, callPackage, bash, coreutils, rofi, config }:
+{ writeShellScript, callPackage, coreutils, rofi, config }:
 
 let
   fontLib = callPackage ../../../../lib/fonts.nix {};
   colors = config.colorTheme;
 in
 
-writeScript "prompt" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "prompt" ''
   cat=${coreutils}/bin/cat
   rofi=${rofi}/bin/rofi
 

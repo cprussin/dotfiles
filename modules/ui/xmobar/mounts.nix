@@ -1,8 +1,6 @@
-{ writeScript, bash, utillinux, gnugrep, coreutils }:
+{ writeShellScript, utillinux, gnugrep, coreutils }:
 
-writeScript "mounts" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "mounts" ''
   mount=${utillinux}/bin/mount
   grep=${gnugrep}/bin/grep
   echo=${coreutils}/bin/echo

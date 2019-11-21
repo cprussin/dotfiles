@@ -1,8 +1,6 @@
-{ writeScript, bash, coreutils, dnsutils, unison, config }:
+{ writeShellScript, coreutils, dnsutils, unison, config }:
 
-writeScript "backup" ''
-  #! ${bash}/bin/sh
-
+writeShellScript "backup" ''
   dig=${dnsutils}/bin/dig
   test=${coreutils}/bin/test
   unison=${unison}/bin/unison
