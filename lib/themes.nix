@@ -1,9 +1,12 @@
-{ pkgs }:
+{ callPackage }:
 
 let
-  theme = type: name: import (../modules/ui/theme + "/${type}/${name}.nix") {
-    inherit pkgs;
-  };
+  stripOverrides = callPackage ./stripOverrides.nix {};
+
+  theme = type: name:
+    stripOverrides (
+      callPackage (../modules/ui/theme + "/${type}/${name}.nix") {}
+    );
 in
 
 {

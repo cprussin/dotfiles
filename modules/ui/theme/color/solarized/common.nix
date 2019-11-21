@@ -1,5 +1,7 @@
+{ callPackage }:
+
 let
-  colors = import ./colors.nix;
+  colors = callPackage ./colors.nix {};
 in
 
 {

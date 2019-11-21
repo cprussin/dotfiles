@@ -1,9 +1,9 @@
-{ pkgs }:
+{ callPackage }:
 
 let
-  colors = import ./colors.nix;
-  common = import ./common.nix;
-  dircolors = pkgs.callPackage ./dircolors.nix {};
+  colors = callPackage ./colors.nix {};
+  common = callPackage ./common.nix {};
+  dircolors = callPackage ./dircolors.nix {};
 in
 
 common // {
