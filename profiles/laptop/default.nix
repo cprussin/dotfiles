@@ -22,6 +22,7 @@ in
 
     ../../modules/devtools/docker
     ../../modules/devtools/git
+    ../../modules/devtools/inotify-max-user-watches
 
     ../../modules/net/wifi
 
