@@ -25,5 +25,5 @@ in
   selection = colors.green;
   bright = colors.blue;
   urgent = colors.red;
-  warn = colors.green;
+  warn = colors.yellow;
 }
