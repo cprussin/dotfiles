@@ -2,11 +2,12 @@
 
 {
   imports = [
+    <home-manager/nixos>
+
     ../../modules/data/session-vars
 
     ../../modules/devices/tmp
 
-    ../../modules/nix/home-manager
     ../../modules/nix/nixpkgs
     ../../modules/nix/plugins
     ../../modules/nix/trusted-users
