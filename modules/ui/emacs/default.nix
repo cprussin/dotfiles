@@ -120,7 +120,7 @@ in
                                                    "browse" "${pkgs.launcher}/bin/browse"
                                                    "git" "${pkgs.git}/bin/git"
                                                    "msmtp" "${pkgs.msmtp}/bin/msmtp"
-                                                   "sh" "${pkgs.bash}/bin/sh"
+                                                   "shell" "${pkgs.stdenv.shell}"
                                              ))
                                   "primaryFont" #s(hash-table
                                                    test equal
