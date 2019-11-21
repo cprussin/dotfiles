@@ -6,6 +6,8 @@ let
 in
 
 {
+  users.users.${config.primaryUserName}.shell = "${pkgs.zsh}/bin/zsh";
+
   home-manager.users.${config.primaryUserName}.programs.zsh = {
     enable = true;
     plugins = [

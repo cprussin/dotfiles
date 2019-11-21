@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
   options.primaryUserName = lib.mkOption {
@@ -9,6 +9,5 @@
   config.users.users.${config.primaryUserName} = {
     isNormalUser = true;
     uid = 1000;
-    shell = "${pkgs.zsh}/bin/zsh";
   };
 }
