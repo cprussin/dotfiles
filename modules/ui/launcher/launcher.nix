@@ -1,9 +1,11 @@
 { stdenv, lib, callPackage, config }:
 
 let
+  stripOverrides = callPackage ../../../lib/stripOverrides.nix {};
   installLib = callPackage ../../../lib/install.nix {};
-  scripts = callPackage ./scripts { inherit config; };
-  apps = callPackage ./apps { inherit config; };
+
+  scripts = stripOverrides (callPackage ./scripts { inherit config; });
+  apps = stripOverrides (callPackage ./apps { inherit config; });
 in
 
 stdenv.mkDerivation {
