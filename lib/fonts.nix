@@ -1,5 +1,3 @@
-{}:
-
 let
   xftFont = fontModule:
     "xft:${fontModule.face}:size=${toString fontModule.size}";
@@ -8,6 +6,6 @@ let
     "${fontModule.face} ${toString fontModule.size}";
 in
 
-{
+_: {
   inherit xftFont pangoFont;
 }
