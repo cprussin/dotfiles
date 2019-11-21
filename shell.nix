@@ -9,6 +9,7 @@ in
 
 pkgs.mkShell {
   buildInputs = [
+    pkgs.git
     pkgs.nixpkgs-fmt
     nix-linter-pkgs.nix-linter
   ];
