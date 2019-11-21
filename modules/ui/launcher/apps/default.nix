@@ -1,7 +1,6 @@
 { callPackage
 , writeShellScript
 , bluez
-, setxkbmap
 , gimp
 , htop
 , pavucontrol
@@ -42,13 +41,10 @@ in
 {
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
   aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
-  backup = callPackage ./backup.nix { inherit config; };
   bitwig = writeShellScript "bitwig" "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   brave = writeShellScript "firefox" "@out@/bin/browse --browser brave $*";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
-  dvorak = writeShellScript "dvorak" "${setxkbmap}/bin/setxkbmap us dvp";
-  gaming = callPackage ./gaming.nix {};
   chrome = writeShellScript "chrome" "@out@/bin/browse --browser chrome $*";
   chromium = writeShellScript "chromium" "@out@/bin/browse --browser chromium $*";
   emacs = writeShellScript "emacs" "@out@/bin/open \${1-*scratch*}";
@@ -59,9 +55,7 @@ in
   github = mkWebApp "github" "https://github.com/";
   gmail = mkGoogleApp "gmail" "https://mail.google.com/mail/u/@user@";
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
-  jira = mkWebApp "jira" "https://jira.netflix.com/secure/Dashboard.jspa?selectPageId=22387#";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
-  localhost = mkWebApp "localhost" "http://localhost:\${1-4200}";
   mixer = writeShellScript "mixer" "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
@@ -76,11 +70,8 @@ in
   slack = writeShellScript "slack" "${slack}/bin/slack";
   slackagain = writeShellScript "slackagain" "sh -c 'pkill -x slack; exec @out@/share/apps/slack'";
   sotd = callPackage ./sotd.nix {};
-  stash = mkWebApp "stash" "https://stash.corp.netflix.com";
   steam = writeShellScript "steam" "${steam}/bin/steam";
   syncmail = callPackage ./syncmail.nix {};
-  trello = mkWebApp "trello" "https://trello.com/b/mHhKhvTF/web-core";
-  us = writeShellScript "us" "${setxkbmap}/bin/setxkbmap us";
   vpn = callPackage ./vpn.nix {};
   windows-7 = writeShellScript "windows-7" "${qemu}/bin/qemu-system-x86_64 -enable-kvm -machine type=pc,accel=kvm -cpu host -m 1G -usb -device usb-tablet \"$HOME/Software/Microsoft/Windows 7 VM.iso\"";
 }

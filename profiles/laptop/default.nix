@@ -12,7 +12,6 @@ in
     ../../modules/boot/systemd-boot
 
     ../../modules/data/email
-    ../../modules/data/unison
     ../../modules/data/xdg-user-dirs
 
     ../../modules/devices/android
