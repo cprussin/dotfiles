@@ -1,7 +1,6 @@
-{ pkgs, lib, config, ... }:
+{ lib, ... }:
 
 let
-  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
   fontType = {
     options = {
       face = lib.mkOption {
@@ -29,6 +28,4 @@ in
       };
     };
   };
-
-  config.home-manager.users.${config.primaryUserName}.xresources.properties."*.font" = fontLib.xftFont config.fontTheme.primaryFont;
 }

@@ -1,7 +1,9 @@
 { pkgs, ... }:
 
 {
-  fonts.fonts = with pkgs; [
-    font-awesome_5
+  fonts.fonts = [
+    pkgs.dejavu_fonts
+    pkgs.font-awesome_5
+    pkgs.noto-fonts
   ];
 }

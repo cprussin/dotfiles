@@ -15,6 +15,7 @@ in
     ../../modules/data/xdg-user-dirs
 
     ../../modules/devices/android
+    ../../modules/devices/backlight
     ../../modules/devices/bluetooth
     ../../modules/devices/printers
     ../../modules/devices/touchpad
@@ -40,30 +41,29 @@ in
     ../../modules/security/ssh
     ../../modules/security/sshd
 
-    ../../modules/ui/autocutsel
     ../../modules/ui/audio
-    ../../modules/ui/backgrounds
-    ../../modules/ui/backlight
-    ../../modules/ui/dunst
     ../../modules/ui/emacs
     ../../modules/ui/fonts
     ../../modules/ui/gtk
+    ../../modules/ui/imv
     ../../modules/ui/launcher
     ../../modules/ui/log
+    ../../modules/ui/mako
+    ../../modules/ui/mpv
+    ../../modules/ui/notify-send
     ../../modules/ui/opengl
     ../../modules/ui/rofi-pass
-    ../../modules/ui/screen-locker
-    ../../modules/ui/setup-monitors
+    ../../modules/ui/slack
+    ../../modules/ui/sway
+    ../../modules/ui/swaylock
     ../../modules/ui/terminal
+    ../../modules/ui/termite
     ../../modules/ui/theme/color
     ../../modules/ui/theme/cursor
     ../../modules/ui/theme/font
     ../../modules/ui/theme/icon
-    ../../modules/ui/tray
-    ../../modules/ui/urxvt
-    ../../modules/ui/xmobar
-    ../../modules/ui/xmonad
-    ../../modules/ui/xorg
+    ../../modules/ui/waybar
+    ../../modules/ui/zathura
 
     ../../modules/zone/pacific
   ];

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 
 {
   options.iconTheme = lib.mkOption {
@@ -20,4 +20,8 @@
       };
     };
   };
+
+  config.home-manager.users.${config.primaryUserName}.home.packages = lib.mkForce [
+    config.iconTheme.package
+  ];
 }

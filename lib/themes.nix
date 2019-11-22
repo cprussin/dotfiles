@@ -10,8 +10,9 @@ let
 in
 
 {
+  color = theme "color";
+  cursor = theme "cursor";
   font = theme "font";
   icon = theme "icon";
-  cursor = theme "cursor";
-  color = theme "color";
+  keymap = theme "keymap";
 }

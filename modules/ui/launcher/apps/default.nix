@@ -34,7 +34,7 @@ let
   '';
 
   mkTerminalApp = name: bin: writeShellScript name ''
-    exec ${config.terminal} -name ${name} -e ${bin}
+    exec ${config.terminal} --title ${name} --name ${name} -e "${bin}"
   '';
 in
 

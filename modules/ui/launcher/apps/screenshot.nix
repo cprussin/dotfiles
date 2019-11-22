@@ -1,20 +1,27 @@
-{ writeShellScript, coreutils, xdotool, imagemagick }:
+{ writeShellScript, coreutils, grim, slurp, sway, jq }:
 
 writeShellScript "screenshot" ''
   ls=${coreutils}/bin/ls
   wc=${coreutils}/bin/wc
+  date=${coreutils}/bin/date
   test=${coreutils}/bin/test
-  xdotool=${xdotool}/bin/xdotool
-  import=${imagemagick}/bin/import
+  grim=${grim}/bin/grim
+  slurp=${slurp}/bin/slurp
+  swaymsg=${sway}/bin/swaymsg
+  jq=${jq}/bin/jq
 
-  num=$($ls -1 $HOME/Scratch/screenshot*.png 2>/dev/null | $wc -l)
+  file="$HOME/Scratch/screenshot-$($date +'%Y-%m-%d-%H%M%S').png"
 
-  if $test $1 == 'region'
+  if $test "$1" = 'region'
   then
-    args=""
+    exec $grim -g "$($slurp)" "$file"
+  elif $test "$1" = 'output'
+  then
+    exec $grim -g "$($swaymsg -t get_outputs | $jq -r '.[] | select(.active) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | $slurp)" "$file"
+  elif $test "$1" = 'full'
+  then
+    exec $grim "$file"
   else
-    args="-window $($xdotool selectwindow)"
+    exec $grim -g "$($swaymsg -t get_tree | $jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | $slurp)" "$file"
   fi
-
-  exec $import $args $HOME/Scratch/screenshot$num.png
 ''

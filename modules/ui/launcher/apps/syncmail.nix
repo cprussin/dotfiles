@@ -1,13 +1,13 @@
-{ writeShellScript, dunst, systemd }:
+{ writeShellScript, notify-send, systemd }:
 
 writeShellScript "syncmail" ''
-  dunstify=${dunst}/bin/dunstify
+  notifySend=${notify-send}/bin/notify-send
   systemctl=${systemd}/bin/systemctl
 
   if ! $systemctl --user is-active --quiet mbsync && ! $systemctl --user is-active --quiet mbsync-manual
   then
-    $dunstify -t 0 -r 47646 -i emblem-synchronizing "" "Syncing email..."
+    msgId=$($notifySend -p -t 0 -i emblem-synchronizing "Syncing email..." "")
     $systemctl --user start mbsync-manual
-    $dunstify -C 47646
+    $notifySend -s $msgId
   fi
 ''

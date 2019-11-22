@@ -24,8 +24,16 @@
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
-** TODO Switch to wayland (sway)
 * In Progress
+** TODO Replace rofi (launcher/rofi-pass/pinentry)
+** TODO Re-do session initialization
+  - [ ] start graphical-session@user?
+    . /etc/set-environment
+    . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+    systemctl --user import-environment
+    systemctl --wait --user start graphical-session.target
+  - [ ] Fix gpg-agent sometimes dying for ssh?
+  - [ ] Fix syncmail not prompting for password
 ** TODO Nixify/containerize/etc prussin.net [2/8]
    - [X] Web
    - [X] Identity (openldap)
@@ -46,6 +54,40 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Switch to wayland [17/17]
+   - [X] Fix window titles (emacs & termite)
+   - [X] Cursor theme
+   - [X] Replace dunst/dunstify fully
+     - [X] Volume OSD
+     - [X] Backlight OSD
+     - [X] Syncmail
+     - [X] Remacs
+     - [X] Icons
+   - [X] Backlight / Volume
+   - [X] Fix browser links in slack
+   - [X] Fix bluetooth float
+   - [X] Replace screenshot tool
+   - [X] Go through launcher scripts
+   - [X] Finish swaylock config
+   - [X] Switch to termite maybe?
+   - [X] Auto floats (bluetoothctl, volume control)
+   - [X] Bar [8/8]
+     - [X] Volume
+     - [X] Network
+     - [X] Bluetooth
+     - [X] Mounts
+     - [X] VPN
+     - [X] Email
+     - [X] Battery
+     - [X] Clock
+   - [X] Migrate stuff into dotfiles [3/3]
+     - [X] waybar (override { pulseSupport = true; })
+     - [X] sway
+     - [X] kitty/alacritty/etc
+   - [X] Notifications
+   - [X] Idle locker
+   - [X] Screen locker
+   - [X] sway config
 ** DONE Add nixfmt and nixlint
 ** DONE Fix editor for pass :user:
 ** DONE Consolidate font theme configs (and fix emacs fonts) :user:emacs:xmonad:

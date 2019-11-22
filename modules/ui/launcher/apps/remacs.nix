@@ -1,13 +1,13 @@
-{ writeShellScript, dunst, systemd }:
+{ writeShellScript, notify-send, systemd }:
 
 writeShellScript "remacs" ''
-  dunstify=${dunst}/bin/dunstify
+  notifySend=${notify-send}/bin/notify-send
   systemctl=${systemd}/bin/systemctl
 
   if $systemctl --user is-active --quiet emacs-daemon
   then
-    $dunstify -t 0 -r 47645 "" "Restarting emacs..."
+    msgId=$($notifySend -p -t 0 "Restarting emacs...")
     $systemctl --user restart emacs-daemon
-    $dunstify -C 47645
+    $notifySend -s $msgId
   fi
 ''
