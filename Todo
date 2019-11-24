@@ -25,6 +25,10 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
+** TODO Manage NIX_PATH from Makefile / nix.nixPath (switch to git submodules instead of nix channels)
+** TODO Separate configs from modules
+** TODO Redo theme config stuff
+** TODO Make shortcuts for various primaryUser stuff
 ** TODO Replace rofi (launcher/rofi-pass/pinentry)
 ** TODO Re-do session initialization
   - [ ] start graphical-session@user?
