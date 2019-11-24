@@ -1,11 +1,15 @@
-{ writeShellScript, coreutils, gnugrep, gnused }:
+{ writeShellScriptBin, callPackage, coreutils, gnugrep, gnused }:
 
-writeShellScript "search" ''
+let
+  browse = callPackage ./browse.nix {};
+in
+
+writeShellScriptBin "search" ''
   printf=${coreutils}/bin/printf
   echo=${coreutils}/bin/echo
   grep=${gnugrep}/bin/grep
   sed=${gnused}/bin/sed
-  browse=@out@/bin/browse
+  browse=${browse}/bin/browse
 
   amazon="https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%QUERY%"
   archWiki="https://wiki.archlinux.org/index.php?title=Special%3ASearch&search=%QUERY%"

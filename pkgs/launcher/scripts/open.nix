@@ -1,12 +1,25 @@
-{ writeShellScript, coreutils, file, gnused, zathura, imv, mpv, emacs }:
+{ writeShellScriptBin
+, callPackage
+, coreutils
+, file
+, gnused
+, zathura
+, imv
+, mpv
+, emacs
+}:
 
-writeShellScript "open" ''
+let
+  browse = callPackage ./browse.nix {};
+in
+
+writeShellScriptBin "open" ''
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
   file=${file}/bin/file
   sed=${gnused}/bin/sed
   zathura=${zathura}/bin/zathura
-  browse=@out@/bin/browse
+  browse=${browse}/bin/browse
   imv=${imv}/bin/imv
   mpv=${mpv}/bin/mpv
   emacsclient=${emacs}/bin/emacsclient

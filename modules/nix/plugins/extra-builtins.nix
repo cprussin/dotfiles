@@ -7,5 +7,12 @@ in
 
 {
   pass = pkgs: config: name:
-    runCmd pkgs "sudo -u ${config.primaryUserName} ${pkgs.pass}/bin/pass show '${name}'";
+    runCmd pkgs (
+      pkgs.writeShellScript "pass" ''
+        sudo -u ${config.primaryUserName} \
+          PASSWORD_STORE_DIR=${config.secure.passwords} \
+          GNUPGHOME=${config.secure.gnupg} \
+          ${pkgs.pass}/bin/pass show "${name}"
+      ''
+    );
 }

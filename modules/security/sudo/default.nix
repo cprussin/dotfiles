@@ -18,16 +18,6 @@ in
   };
 
   config = {
-    nixpkgs.overlays = [
-      (
-        _: super: {
-          sudo = super.sudo.override {
-            withInsults = true;
-          };
-        }
-      )
-    ];
-
     security.sudo = {
       extraConfig = "Defaults insults";
       extraRules = lib.mkAfter [

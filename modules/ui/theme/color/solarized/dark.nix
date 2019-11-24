@@ -1,9 +1,8 @@
-{ callPackage }:
+{ callPackage, dircolors-solarized }:
 
 let
   colors = callPackage ./colors.nix {};
   common = callPackage ./common.nix {};
-  dircolors = callPackage ./dircolors.nix {};
 in
 
 common // {
@@ -12,5 +11,5 @@ common // {
   highlightBackground = colors.base02;
   highlightForeground = colors.base1;
   secondaryContent = colors.base01;
-  dircolors = "${dircolors}/dircolors.ansi-dark";
+  dircolors = "${dircolors-solarized}/etc/dircolors/solarized/dircolors.ansi-dark";
 }

@@ -5,21 +5,10 @@ let
 in
 
 {
-  nixpkgs.overlays = [
-    (
-      _: super: {
-        setterminfo = super.callPackage ./setterminfo.nix {
-          terminfo = pkgs.termite.terminfo;
-        };
-      }
-    )
-  ];
-
   terminal = "${pkgs.termite}/bin/termite";
 
   home-manager.users.${config.primaryUserName} = {
     home.packages = lib.mkForce [
-      pkgs.setterminfo
       pkgs.termite.terminfo
     ];
 

@@ -50,10 +50,9 @@ in
     ../../modules/ui/log
     ../../modules/ui/mako
     ../../modules/ui/mpv
-    ../../modules/ui/notify-send
     ../../modules/ui/opengl
+    ../../modules/ui/rofi
     ../../modules/ui/rofi-pass
-    ../../modules/ui/slack
     ../../modules/ui/sway
     ../../modules/ui/swaylock
     ../../modules/ui/terminal

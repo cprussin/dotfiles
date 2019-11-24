@@ -10,18 +10,6 @@ in
 
   home-manager.users.${config.primaryUserName}.programs.zsh = {
     enable = true;
-    plugins = [
-      {
-        name = "zsh-syntax-highlighting";
-        src = pkgs.zsh-syntax-highlighting;
-        file = "share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
-      }
-      {
-        name = "zsh-git-prompt";
-        src = pkgs.callPackage ./zsh-git-prompt.nix {};
-        file = "zshrc.sh";
-      }
-    ];
     shellAliases = {
       ls = toString ls;
       clear = toString clear;
@@ -50,6 +38,9 @@ in
       unsetopt notify                     # Don't print status of background jobs until a prompt is about to be printed
 
       eval $(dircolors ${config.colorTheme.dircolors})
+
+      . ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      . ${pkgs.zsh-git-prompt}/share/zsh-git-prompt/zsh-git-prompt.zsh
 
       ${clear}
     '';

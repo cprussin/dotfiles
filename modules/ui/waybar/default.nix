@@ -5,16 +5,6 @@ let
 in
 
 {
-  nixpkgs.overlays = [
-    (
-      _: super: {
-        waybar = super.waybar.override {
-          pulseSupport = true;
-        };
-      }
-    )
-  ];
-
   home-manager.users.${config.primaryUserName} = _: {
     imports = [
       ./module.nix

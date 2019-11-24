@@ -3,7 +3,9 @@
 {
   home-manager.users.${config.primaryUserName}.xdg.configFile."rofi-pass/config".text = ''
     _rofi() {
-      ${pkgs.launcher}/bin/prompt \
+      ${pkgs.rofi}/bin/rofi \
+        -dmenu \
+        -show run \
         -theme-str "textbox-prompt-colon { enabled: false; }" \
         -columns 3 \
         -no-auto-select \

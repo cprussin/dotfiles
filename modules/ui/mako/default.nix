@@ -9,22 +9,6 @@ let
 in
 
 {
-  nixpkgs.overlays = [
-    (
-      self: super: {
-        mako = self.symlinkJoin {
-          name = "mako";
-          paths = [ super.mako ];
-          buildInputs = [ self.makeWrapper self.gdk-pixbuf self.librsvg ];
-          postBuild = ''
-            wrapProgram $out/bin/mako \
-              --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-          '';
-        };
-      }
-    )
-  ];
-
   home-manager.users.${config.primaryUserName} = _: {
     imports = [
       ./module.nix

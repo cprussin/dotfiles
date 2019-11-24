@@ -1,9 +1,9 @@
-{ writeShellScript, coreutils }:
+{ writeShellScriptBin, coreutils, rofi }:
 
-writeShellScript "yes-no" ''
+writeShellScriptBin "yes-no" ''
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo
-  prompt=@out@/bin/prompt
+  rofi=${rofi}/bin/rofi
 
   yes="Yes"
   no="No"
@@ -28,7 +28,7 @@ writeShellScript "yes-no" ''
     shift
   done
 
-  selection=$($echo -e "$no\n$yes" | $prompt -lines 1 -p "$message ")
+  selection=$($echo -e "$no\n$yes" | $rofi -dmenu show run -lines 1 -p "$message ")
   if $test "$selection" == "$yes"
   then
     exec $cmd

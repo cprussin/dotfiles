@@ -54,6 +54,7 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Extract out packages and overlays
 ** DONE Switch to wayland [17/17]
    - [X] Fix window titles (emacs & termite)
    - [X] Cursor theme
