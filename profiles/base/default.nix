@@ -12,6 +12,7 @@ in
 
     ../../modules/devices/tmp
 
+    ../../modules/nix/nix-path
     ../../modules/nix/nixpkgs
     ../../modules/nix/plugins
     ../../modules/nix/trusted-users

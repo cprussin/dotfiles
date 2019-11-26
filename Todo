@@ -25,7 +25,6 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
-** TODO Manage NIX_PATH from Makefile / nix.nixPath (switch to git submodules instead of nix channels)
 ** TODO Separate configs from modules
 ** TODO Redo theme config stuff
 ** TODO Make shortcuts for various primaryUser stuff
@@ -58,6 +57,7 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Manage NIX_PATH from Makefile / nix.nixPath (switch to git submodules instead of nix channels)
 ** DONE Extract out packages and overlays
 ** DONE Switch to wayland [17/17]
    - [X] Fix window titles (emacs & termite)

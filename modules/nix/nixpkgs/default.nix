@@ -1,31 +1,19 @@
 { config, ... }:
 
+let
+  load-overlay = overlay:
+    import "${toString <nixpkgs-overlays>}/${overlay}";
+
+  all-overlays =
+    builtins.attrNames (builtins.readDir (toString <nixpkgs-overlays>));
+in
+
 {
-  nixpkgs = {
-    config = import ./nixpkgs-config.nix;
-    overlays = [
-      (import ../../../overlays/dircolors-solarized.nix)
-      (import ../../../overlays/emacs-with-packages.nix)
-      (import ../../../overlays/get-aws-access-key.nix)
-      (import ../../../overlays/gnupg.nix)
-      (import ../../../overlays/launcher.nix)
-      (import ../../../overlays/mako.nix)
-      (import ../../../overlays/notify-send.nix)
-      (import ../../../overlays/pass-with-otp.nix)
-      (import ../../../overlays/slack.nix)
-      (import ../../../overlays/sudo-with-insults.nix)
-      (import ../../../overlays/waybar-with-pulse.nix)
-      (import ../../../overlays/zoom-frm.nix)
-      (import ../../../overlays/zsh-git-prompt.nix)
-    ];
-  };
+  nixpkgs.config = import ./nixpkgs-config.nix;
+  nixpkgs.overlays = map load-overlay all-overlays;
 
   home-manager.users.${config.primaryUserName} = {
-    nixpkgs = {
-      config = config.nixpkgs.config;
-      overlays = config.nixpkgs.overlays;
-    };
-
+    nixpkgs.config = config.nixpkgs.config;
     xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
   };
 }

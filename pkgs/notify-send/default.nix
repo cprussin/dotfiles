@@ -1,13 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, glib }:
+{ stdenv, lib, makeWrapper, glib }:
+
+let
+  sources = import ../../nix/sources.nix;
+in
 
 stdenv.mkDerivation {
   name = "notify-send";
-  src = fetchFromGitHub {
-    owner = "vlevit";
-    repo = "notify-send.sh";
-    rev = "4b90bb968dbe7364ec9526e76d349950627e967f";
-    sha256 = "04vj1spymn62ncpxgry1w5arlxvnhr2v77c8zq7f4k8814lpvzas";
-  };
+  src = sources.notify-send;
   buildInputs = [ makeWrapper ];
   phases = [ "installPhase" "fixupPhase" ];
   installPhase = ''

@@ -1,13 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python, git }:
+{ stdenv, makeWrapper, python, git }:
+
+let
+  sources = import ../../nix/sources.nix;
+in
 
 stdenv.mkDerivation rec {
   name = "zsh-git-prompt";
-  src = fetchFromGitHub {
-    owner = "starcraftman";
-    repo = name;
-    rev = "11b83ba3b85d14c66cf2ab79faefab6d838da28e";
-    sha256 = "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb";
-  };
+  src = sources.zsh-git-prompt;
   buildInputs = [ makeWrapper ];
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
   installPhase = ''
