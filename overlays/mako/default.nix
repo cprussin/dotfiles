@@ -1,5 +1,5 @@
 self: super: {
-  mako = self.callPackage ../pkgs/mako {
+  mako = self.callPackage ../../pkgs/mako {
     mako = super.mako;
   };
 }
