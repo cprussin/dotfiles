@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  mkCryptInitrd = pkgs.callPackage ../../lib/mkCryptInitrd.nix {};
+  mkCryptInitrd = pkgs.callPackage ../../../lib/mkCryptInitrd.nix {};
   boot = {
     device = "/dev/disk/by-uuid/31DB-5F66";
     fsType = "vfat";

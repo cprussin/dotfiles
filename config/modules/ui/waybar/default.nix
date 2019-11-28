@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 let
-  stripOverrides = pkgs.callPackage ../../../lib/stripOverrides.nix {};
+  stripOverrides = pkgs.callPackage ../../../../lib/stripOverrides.nix {};
 in
 
 {

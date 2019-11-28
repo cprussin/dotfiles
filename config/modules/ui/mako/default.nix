@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 let
-  fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
+  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
   font = {
     face = config.fontTheme.primaryFont.face;
     size = 1.1 * config.fontTheme.primaryFont.size;

@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 
 let
-  fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
+  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
 
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   notify-send = "${pkgs.notify-send}/bin/notify-send";

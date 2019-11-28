@@ -1,12 +1,13 @@
 { pkgs, ... }:
 
 let
-  themeUtil = pkgs.callPackage ../../lib/themes.nix {};
+  themeUtil = pkgs.callPackage ../../../lib/themes.nix {};
 in
 
 {
   imports = [
     <home-manager/nixos>
+    ../../../modules
 
     ../../modules/data/session-vars
 

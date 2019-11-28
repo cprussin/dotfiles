@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 let
-  fontLib = pkgs.callPackage ../../../lib/fonts.nix {};
+  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
   swaylockColor = builtins.replaceStrings [ "#" ] [ "" ];
   font = fontLib.pangoFont config.fontTheme.primaryFont;
   background = swaylockColor config.colorTheme.background;

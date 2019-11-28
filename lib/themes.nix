@@ -5,7 +5,7 @@ let
 
   theme = type: name:
     stripOverrides (
-      callPackage (../modules/ui/theme + "/${type}/${name}.nix") {}
+      callPackage (../config/modules/ui/theme + "/${type}/${name}.nix") {}
     );
 in
 
