@@ -13,49 +13,43 @@ let
 in
 
 {
-  home-manager.users.${config.primaryUserName} = _: {
-    imports = [
-      ./module.nix
-    ];
+  home-manager.users.${config.primaryUserName}.programs.swaylock = {
+    inherit font;
 
-    programs.swaylock = {
-      inherit font;
+    enable = true;
+    daemonize = true;
+    image = ../sway/background.png;
+    color = background;
 
-      enable = true;
-      daemonize = true;
-      image = ../sway/background.png;
-      color = background;
+    text-caps-lock-color = background;
+    text-ver-color = background;
+    text-wrong-color = background;
 
-      text-caps-lock-color = background;
-      text-ver-color = background;
-      text-wrong-color = background;
+    bs-hl-color = warn;
+    caps-lock-bs-hl-color = urgent;
+    caps-lock-key-hl-color = selection;
 
-      bs-hl-color = warn;
-      caps-lock-bs-hl-color = urgent;
-      caps-lock-key-hl-color = selection;
+    inside-color = "00000000";
+    inside-clear-color = warn + "D0";
+    inside-caps-lock-color = urgent + "D0";
+    inside-ver-color = selection + "D0";
+    inside-wrong-color = urgent + "D0";
 
-      inside-color = "00000000";
-      inside-clear-color = warn + "D0";
-      inside-caps-lock-color = urgent + "D0";
-      inside-ver-color = selection + "D0";
-      inside-wrong-color = urgent + "D0";
+    ring-color = bright;
+    ring-clear-color = warn;
+    ring-caps-lock-color = urgent;
+    ring-ver-color = selection;
+    ring-wrong-color = urgent;
 
-      ring-color = bright;
-      ring-clear-color = warn;
-      ring-caps-lock-color = urgent;
-      ring-ver-color = selection;
-      ring-wrong-color = urgent;
+    line-color = highlightBackground;
+    line-clear-color = highlightBackground;
+    line-caps-lock-color = highlightBackground;
+    line-ver-color = highlightBackground;
+    line-wrong-color = highlightBackground;
 
-      line-color = highlightBackground;
-      line-clear-color = highlightBackground;
-      line-caps-lock-color = highlightBackground;
-      line-ver-color = highlightBackground;
-      line-wrong-color = highlightBackground;
+    separator-color = highlightBackground;
 
-      separator-color = highlightBackground;
-
-      indicator-radius = 200;
-      indicator-thickness = 50;
-    };
+    indicator-radius = 200;
+    indicator-thickness = 50;
   };
 }
