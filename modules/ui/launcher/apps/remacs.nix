@@ -6,7 +6,7 @@ writeShellScript "remacs" ''
 
   if $systemctl --user is-active --quiet emacs-daemon
   then
-    msgId=$($notifySend -p -t 0 "Restarting emacs...")
+    msgId=$($notifySend -p -t 0 -i emacs "Restarting emacs...")
     $systemctl --user restart emacs-daemon
     $notifySend -s $msgId
   fi
