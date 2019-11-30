@@ -23,7 +23,12 @@ The way things are structured here is:
 - [lib](./lib): This folder contains various utility functions that are used
   throughout the codebase.
 - [modules](./modules): This folder contains custom abstract configuration
-  modules.
+  modules.  They provide for configuration programs and systems that are missing
+  in nixos or home-manager.  In many (but not all) cases, things in here are
+  things I'd eventually like to polish off and send as pull requests to nixos or
+  home-manager.  In other cases they are experimental ideas that likely don't
+  actually belong upstream, like configuring the whole system's color theme in
+  one place.
 - [overlays](./overlays): This directory contains nixpkgs overlays.
 - [pkgs](./pkgs): This directory contains custom packages.
 
