@@ -1,7 +1,6 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 
 let
-  mkCryptInitrd = pkgs.callPackage ../../../lib/mkCryptInitrd.nix {};
   boot = {
     device = "/dev/disk/by-uuid/31DB-5F66";
     fsType = "vfat";
@@ -16,17 +15,18 @@ in
   boot = {
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [];
-    initrd = mkCryptInitrd {
+    crypt-initrd = {
+      enable = true;
       device = "/dev/nvme0n1";
       key = {
         device = boot;
         keyPath = "/spitfire";
         headerPath = "/header.img";
       };
-      initRdOptions = {
-        availableKernelModules = [ "xhci_pci" "nvme" "sd_mod" "sr_mod" ];
-        kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
-      };
+    };
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "nvme" "sd_mod" "sr_mod" ];
+      kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
     };
   };
 
