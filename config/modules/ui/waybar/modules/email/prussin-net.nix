@@ -1,10 +1,11 @@
-{ callPackage, launcher, config }:
+{ callPackage, config }:
 
 let
   mkEmailModule = callPackage ./mkEmailModule.nix { inherit config; };
+  launcher-apps = callPackage ../../../launcher/apps { inherit config; };
 in
 
 mkEmailModule {
   folder = "PrussinNet";
-  script = "${launcher}/share/apps/email";
+  script = "${launcher-apps}/email";
 }

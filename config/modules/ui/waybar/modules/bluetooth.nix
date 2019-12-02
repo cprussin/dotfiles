@@ -29,6 +29,8 @@ let
       echo "{\"text\":\"\",\"class\":\"off\"}"
     fi
   '';
+
+  launcher-apps = pkgs.callPackage ../../launcher/apps { inherit config; };
 in
 
 {
@@ -36,7 +38,7 @@ in
 
   config = {
     exec = bluetooth;
-    on-click = "${pkgs.launcher}/share/apps/bluetooth";
+    on-click = "${launcher-apps}/bluetooth";
     interval = 1;
     return-type = "json";
   };
