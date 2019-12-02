@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home-manager.users.${config.primaryUserName}.home = {
+  home-manager.users.${config.primary-user.name}.home = {
     packages = lib.mkForce [ pkgs.launcher ];
 
     file.".launcher-apps".source = pkgs.callPackage ./apps { inherit config; };

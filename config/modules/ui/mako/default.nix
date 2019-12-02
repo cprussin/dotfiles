@@ -9,7 +9,7 @@ let
 in
 
 {
-  home-manager.users.${config.primaryUserName}.programs.mako = {
+  home-manager.users.${config.primary-user.name}.programs.mako = {
     enable = true;
     font = fontLib.pangoFont font;
     background-color = "${config.colorTheme.foreground}E0";

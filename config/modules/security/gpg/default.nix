@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 
 {
-  home-manager.users.${config.primaryUserName} = {
+  home-manager.users.${config.primary-user.name} = {
     home = {
       packages = lib.mkForce [ pkgs.gnupg ];
       sessionVariables.GNUPGHOME = config.secure.gnupg;

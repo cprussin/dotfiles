@@ -1,7 +1,7 @@
 { config, ... }:
 
 {
-  home-manager.users.${config.primaryUserName}.programs.git = {
+  home-manager.users.${config.primary-user.name}.programs.git = {
     enable = true;
     userName = "Connor Prussin";
     userEmail = "connor@prussin.net";

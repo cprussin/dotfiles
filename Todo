@@ -26,8 +26,18 @@
 * On Hold
 * In Progress
 ** TODO Separate configs from modules
+   - [ ] secure
+   - [ ] theme
+     - [ ] icon
+     - [ ] color
+     - [ ] font
+     - [ ] keymap
+     - [ ] cursor
+   - [ ] terminal
+   - [ ] shakti-nginx
+   - [X] sudo-cmds
+   - [X] primary-user
 ** TODO Redo theme config stuff
-** TODO Make shortcuts for various primaryUser stuff
 ** TODO Replace rofi (launcher/rofi-pass/pinentry)
 ** TODO Re-do session initialization
   - [ ] start graphical-session@user?
@@ -57,6 +67,7 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Make shortcuts for various primaryUser stuff
 ** DONE Manage NIX_PATH from Makefile / nix.nixPath (switch to git submodules instead of nix channels)
 ** DONE Extract out packages and overlays
 ** DONE Switch to wayland [17/17]

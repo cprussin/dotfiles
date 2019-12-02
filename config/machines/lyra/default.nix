@@ -6,7 +6,7 @@
     ../../profiles/laptop
   ];
 
-  primaryUserName = "cprussin";
+  primary-user.name = "cprussin";
   networking.hostName = "lyra";
   services.mingetty.greetingLine = builtins.readFile ./greeting;
 }

@@ -1,5 +1,5 @@
 { pkgs, config, lib, ... }:
 
 {
-  home-manager.users.${config.primaryUserName}.home.packages = lib.mkForce [ pkgs.get-aws-access-key ];
+  home-manager.users.${config.primary-user.name}.home.packages = lib.mkForce [ pkgs.get-aws-access-key ];
 }

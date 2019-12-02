@@ -5,7 +5,7 @@ let
 in
 
 {
-  home-manager.users.${config.primaryUserName} = {
+  home-manager.users.${config.primary-user.name} = {
     home.file = {
       ".profile".text = umask;
       ".bashrc".text = umask;

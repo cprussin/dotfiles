@@ -6,9 +6,9 @@ let
 in
 
 {
-  users.users.${config.primaryUserName}.shell = "${pkgs.zsh}/bin/zsh";
+  primary-user.shell = "${pkgs.zsh}/bin/zsh";
 
-  home-manager.users.${config.primaryUserName}.programs.zsh = {
+  home-manager.users.${config.primary-user.name}.programs.zsh = {
     enable = true;
     shellAliases = {
       ls = toString ls;

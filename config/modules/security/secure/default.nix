@@ -31,7 +31,7 @@ in
 {
   options.secure = secureOption;
 
-  config.sudoCmds = [
+  config.primary-user.sudo-cmds = [
     "${pkgs.utillinux}/bin/mount ${config.secure.path}"
     "${pkgs.utillinux}/bin/umount ${config.secure.path}"
   ];

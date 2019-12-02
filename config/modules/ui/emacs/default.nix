@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  home-manager.users.${config.primaryUserName} = {
+  home-manager.users.${config.primary-user.name} = {
     home.file = {
       ".emacs.d/modules" = {
         source = ./modules;

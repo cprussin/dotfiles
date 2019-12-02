@@ -9,7 +9,7 @@ in
   pass = pkgs: config: name:
     runCmd pkgs (
       pkgs.writeShellScript "pass" ''
-        sudo -u ${config.primaryUserName} \
+        sudo -u ${config.primary-user.name} \
           PASSWORD_STORE_DIR=${config.secure.passwords} \
           GNUPGHOME=${config.secure.gnupg} \
           ${pkgs.pass}/bin/pass show "${name}"

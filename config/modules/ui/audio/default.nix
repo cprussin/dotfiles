@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 {
   hardware.pulseaudio = {
@@ -7,5 +7,5 @@
     support32Bit = true;
   };
 
-  users.users.${config.primaryUserName}.extraGroups = [ "audio" ];
+  primary-user.extraGroups = [ "audio" ];
 }

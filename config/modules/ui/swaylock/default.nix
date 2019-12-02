@@ -13,7 +13,7 @@ let
 in
 
 {
-  home-manager.users.${config.primaryUserName}.programs.swaylock = {
+  home-manager.users.${config.primary-user.name}.programs.swaylock = {
     inherit font;
 
     enable = true;

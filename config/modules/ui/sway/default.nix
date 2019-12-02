@@ -88,7 +88,7 @@ let
 in
 
 {
-  home-manager.users.${config.primaryUserName} = {
+  home-manager.users.${config.primary-user.name} = {
     xdg.configFile."sway/config".text = ''
       set $mod Mod4
       set $left h
@@ -303,7 +303,7 @@ in
       ];
 
       environment = {
-        XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.${config.primaryUserName}.uid}";
+        XDG_RUNTIME_DIR = "/run/user/${toString config.primary-user.uid}";
         QT_QPA_PLATFORM = "wayland";
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
         QT_WAYLAND_FORCE_DPI = "physical";
@@ -311,7 +311,7 @@ in
       };
 
       serviceConfig = {
-        WorkingDirectory = config.users.users.${config.primaryUserName}.home;
+        WorkingDirectory = config.primary-user.home;
         ExecStartPre = "${pkgs.kbd}/bin/chvt 7";
         ExecStart = pkgs.writeShellScript "start-sway" ''
           . /etc/set-environment
@@ -320,7 +320,7 @@ in
         '';
 
         PAMName = "login";
-        User = config.primaryUserName;
+        User = config.primary-user.name;
 
         UtmpIdentifier = "tty7";
         TTYPath = "/dev/tty7";

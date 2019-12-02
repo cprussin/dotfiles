@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home-manager.users.${config.primaryUserName} = homeManager:
+  home-manager.users.${config.primary-user.name} = homeManager:
     let
       hm-session-vars = pkgs.writeTextFile {
         name = "hm-session-vars.sh";

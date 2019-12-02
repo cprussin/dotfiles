@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  home-manager.users.${config.primaryUserName} = {
+  home-manager.users.${config.primary-user.name} = {
     home.file = {
       ".ssh/known_hosts".source = ./known_hosts;
       ".ssh/authorized_keys".source = ./authorized_keys;

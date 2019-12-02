@@ -10,7 +10,7 @@ let
 in
 
 {
-  home-manager.users.${config.primaryUserName} = homeManager: {
+  home-manager.users.${config.primary-user.name} = homeManager: {
     accounts.email = {
       maildirBasePath = "Mail";
       accounts = {
