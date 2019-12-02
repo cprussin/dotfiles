@@ -1,10 +1,20 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   secret = name:
     pkgs.writeText name (
       builtins.extraBuiltins.pass pkgs config "Netflix/VPN/${name}"
     );
+  user-pass-data = lib.splitString "\n" (
+    builtins.extraBuiltins.pass pkgs config "Netflix/Domain"
+  );
+  username = lib.replaceStrings [ "Username: " ] [ "" ] (
+    lib.findFirst (lib.hasPrefix "Username: ") "" user-pass-data
+  );
+  user-pass = pkgs.writeText "user-pass" ''
+    ${username}
+    ${builtins.elemAt user-pass-data 0}
+  '';
 in
 
 {
@@ -30,7 +40,7 @@ in
       key-direction 1
       dev-type tun
       dev tun
-      auth-user-pass ${secret "user-pass"}
+      auth-user-pass ${user-pass}
       ca ${secret "ca"}
       tls-auth ${secret "tls-auth"}
       cert ${secret "cert"}
