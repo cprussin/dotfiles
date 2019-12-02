@@ -25,6 +25,12 @@ let
 
   format = pkgs.writeShellScriptBin "format" "nixpkgs-fmt ${files}";
 
+  deploy-root-cmd = pkgs.writeShellScript "deploy-root-cmd" ''
+    export dotfiles="$(nix-build --no-out-link)"
+    export NIX_PATH="${nix-path}"
+    nixos-rebuild switch --show-trace
+  '';
+
   deploy = pkgs.writeShellScriptBin "deploy" ''
     set -e
     lint
@@ -49,10 +55,7 @@ let
       exit 1
     fi
 
-    sudo sh -c '\
-      dotfiles="$(nix-build --no-out-link)" \
-      NIX_PATH="${nix-path}" \
-      nixos-rebuild switch --show-trace'
+    sudo sh -c ${deploy-root-cmd}
   '';
 
   collect-garbage =
