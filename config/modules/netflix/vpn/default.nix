@@ -1,20 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, config, ... }:
 
 let
-  secret = name:
-    pkgs.writeText name (
-      builtins.extraBuiltins.pass pkgs config "Netflix/VPN/${name}"
-    );
-  user-pass-data = lib.splitString "\n" (
-    builtins.extraBuiltins.pass pkgs config "Netflix/Domain"
+  user-pass = pkgs.writeText "user-pass" (
+    builtins.concatStringsSep "\n" [
+      (builtins.extraBuiltins.passwordField pkgs config "Netflix/Domain" "Username")
+      (builtins.extraBuiltins.password pkgs config "Netflix/Domain")
+    ]
   );
-  username = lib.replaceStrings [ "Username: " ] [ "" ] (
-    lib.findFirst (lib.hasPrefix "Username: ") "" user-pass-data
-  );
-  user-pass = pkgs.writeText "user-pass" ''
-    ${username}
-    ${builtins.elemAt user-pass-data 0}
-  '';
 in
 
 {
@@ -41,10 +33,10 @@ in
       dev-type tun
       dev tun
       auth-user-pass ${user-pass}
-      ca ${secret "ca"}
-      tls-auth ${secret "tls-auth"}
-      cert ${secret "cert"}
-      key ${secret "key"}
+      ca ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/ca"}
+      tls-auth ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/tls-auth"}
+      cert ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/cert"}
+      key ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/key"}
     '';
     autoStart = false;
     updateResolvConf = true;

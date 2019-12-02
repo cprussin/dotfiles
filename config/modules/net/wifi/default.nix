@@ -1,10 +1,5 @@
 { pkgs, config, ... }:
 
-let
-  getpassword = network:
-    builtins.extraBuiltins.pass pkgs config "Wifi/${network}";
-in
-
 {
   networking.wireless = {
     enable = true;
@@ -12,20 +7,20 @@ in
     networks = {
       # Home networks
       Centar = {
-        psk = getpassword "Centar";
+        psk = builtins.extraBuiltins.password pkgs config "Wifi/Centar";
         priority = 1;
       };
       CentarPhone = {
-        psk = getpassword "CentarPhone";
+        psk = builtins.extraBuiltins.password pkgs config "Wifi/CentarPhone";
         priority = 2;
       };
-      CentarCar.psk = getpassword "CentarCar";
+      CentarCar.psk = builtins.extraBuiltins.password pkgs config "Wifi/CentarCar";
 
       # Netflix networks
       Netflix = {};
 
       # Friends' networks
-      "PC House2".psk = getpassword "PC House2";
+      "PC House2".psk = builtins.extraBuiltins.password pkgs config "Wifi/PC House2";
 
       # Hotel networks
       Courtyard_GUEST = {};
