@@ -31,7 +31,6 @@ in
     ../../modules/netflix/hostname
     ../../modules/netflix/metatron
     ../../modules/netflix/newt
-    ../../modules/netflix/shakti-nginx
     ../../modules/netflix/vpn
 
     ../../modules/security/get-aws-access-key

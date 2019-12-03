@@ -33,7 +33,7 @@
      - [ ] keymap
      - [ ] cursor
    - [ ] terminal
-   - [ ] shakti-nginx
+   - [X] shakti-nginx
    - [X] sudo-cmds
    - [X] primary-user
 ** TODO Redo theme config stuff
