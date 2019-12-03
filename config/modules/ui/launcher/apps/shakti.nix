@@ -1,8 +1,8 @@
-{ writeShellScript, nix, config }:
+{ writeShellScript, nix, config, launcher }:
 
 writeShellScript "shakti" ''
-  open=@out@/bin/open
-  browse=@out@/bin/browse
+  open=${launcher}/bin/open
+  browse=${launcher}/bin/browse
   nixShell=${nix}/bin/nix-shell
 
   SHAKTI="$HOME/Projects/shakti"

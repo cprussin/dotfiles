@@ -1,8 +1,8 @@
-{ writeShellScript }:
+{ writeShellScript, launcher }:
 
 writeShellScript "sotd" ''
-  open=@out@/bin/open
-  browse=@out@/bin/browse
+  open=${launcher}/bin/open
+  browse=${launcher}/bin/browse
 
   case "$1" in
     list) exec $open "$HOME/Projects/songoftheday.net/Sources/sotdomizer/List" ;;

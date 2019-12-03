@@ -1,7 +1,7 @@
-{ writeShellScript }:
+{ writeShellScript, launcher }:
 
 writeShellScript "shakti" ''
-  browse=@out@/bin/browse
+  browse=${launcher}/bin/browse
 
   case "$1" in
     prod) url='https://api-internal.netflix.com/internal/repl' ;;
