@@ -28,7 +28,7 @@ writeShellScriptBin "yes-no" ''
     shift
   done
 
-  selection=$($echo -e "$no\n$yes" | $rofi -dmenu show run -lines 1 -p "$message ")
+  selection=$($echo -e "$no\n$yes" | $rofi -dmenu -i -show run -lines 1 -p "$message ")
   if $test "$selection" == "$yes"
   then
     exec $cmd

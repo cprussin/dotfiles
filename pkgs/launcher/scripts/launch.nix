@@ -34,7 +34,7 @@ writeShellScriptBin "launch" ''
 
   showPrompt() {
     $rofi \
-      -dmenu \
+      -dmenu -i \
       -show run \
       -columns 4 \
       -lines 7 \

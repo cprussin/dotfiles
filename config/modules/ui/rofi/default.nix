@@ -14,7 +14,6 @@ in
     rofi.bw: 3
     rofi.location: 0
     rofi.disable-history: true
-    rofi.case-sensitive: false
     rofi.modi: run
   '';
 }
