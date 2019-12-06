@@ -18,9 +18,9 @@ in
   };
 
   config = lib.mkIf (cfg.package != null) {
-    home.packages = [ config.iconTheme.package ];
+    home.packages = [ cfg.package ];
     programs.mako.icon-path = [
-      "${config.iconTheme.package}/share/icons/${config.iconTheme.name}"
+      "${cfg.package}/share/icons/${cfg.name}"
     ];
   };
 }

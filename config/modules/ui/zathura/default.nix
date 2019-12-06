@@ -1,8 +1,4 @@
-{ pkgs, config, ... }:
-
-let
-  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
-in
+{ config, ... }:
 
 {
   primary-user.home-manager.programs.zathura = {
@@ -35,7 +31,6 @@ in
       render-loading-fg = config.colorTheme.highlightForeground;
       window-title-home-tilde = true;
       window-title-page = true;
-      font = fontLib.pangoFont config.fontTheme.primaryFont;
     };
   };
 }

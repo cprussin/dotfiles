@@ -18,7 +18,7 @@ in
   };
 
   config = lib.mkIf (cfg.package != null) {
-    home.packages = [ config.cursorTheme.package ];
+    home.packages = [ cfg.package ];
     xsession.pointerCursor = cfg;
   };
 }

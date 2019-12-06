@@ -12,6 +12,7 @@
     imports = [
       ./home-manager/cursor-theme.nix
       ./home-manager/default-terminal.nix
+      ./home-manager/font.nix
       ./home-manager/icon-theme.nix
       ./home-manager/mako.nix
       ./home-manager/swaylock.nix

@@ -1,17 +1,8 @@
-{ pkgs, config, ... }:
-
-let
-  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
-  font = {
-    face = config.fontTheme.primaryFont.face;
-    size = 1.1 * config.fontTheme.primaryFont.size;
-  };
-in
+{ config, ... }:
 
 {
   primary-user.home-manager.programs.mako = {
     enable = true;
-    font = fontLib.pangoFont font;
     background-color = "${config.colorTheme.foreground}E0";
     text-color = config.colorTheme.background;
     border-size = 3;

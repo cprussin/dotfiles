@@ -42,8 +42,8 @@ in
 
     ../../modules/ui/audio
     ../../modules/ui/emacs
-    ../../modules/ui/fonts
     ../../modules/ui/gtk
+    ../../modules/ui/icon-fonts
     ../../modules/ui/imv
     ../../modules/ui/launcher
     ../../modules/ui/log
@@ -57,13 +57,11 @@ in
     ../../modules/ui/termite
     ../../modules/ui/theme
     ../../modules/ui/theme/color
-    ../../modules/ui/theme/font
     ../../modules/ui/waybar
     ../../modules/ui/zathura
 
     ../../modules/zone/pacific
   ];
 
-  fontTheme = themeUtil.font "dejavu-sans-mono-11";
   colorTheme = themeUtil.color "solarized/dark";
 }

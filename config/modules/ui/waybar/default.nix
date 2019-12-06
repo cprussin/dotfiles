@@ -14,8 +14,6 @@ in
       common = {
         border = "none";
         border-radius = "0";
-        font-family = config.fontTheme.primaryFont.face;
-        font-size = "${toString (1.25 * config.fontTheme.primaryFont.size)}px";
         min-height = "35px";
         padding = "0 20px";
         margin = "4px 10px 0 10px";

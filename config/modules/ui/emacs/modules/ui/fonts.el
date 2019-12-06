@@ -10,7 +10,7 @@
   :config (unicode-fonts-setup))
 
 (add-to-list 'default-frame-alist
-             `(font . ,(let ((font (gethash "primaryFont" nix-config)))
+             `(font . ,(let ((font (gethash "font" nix-config)))
                          (concat (gethash "face" font) "-" (gethash "size" font)))))
 
 (provide 'fonts)

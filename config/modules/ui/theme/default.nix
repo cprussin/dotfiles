@@ -2,20 +2,26 @@
 
 {
   primary-user.home-manager = {
-    # FIXME: If the cursor theme package isn't in the environment, then the GTK
-    # configuration won't be able to find it, since paths appear hardcoded in
-    # GTK.  There's likely a way to pass the path to GTK apps instead.
     home.packages = lib.mkForce [
       config.primary-user.home-manager.cursorTheme.package
+      config.primary-user.home-manager.iconTheme.package
+      config.primary-user.home-manager.font.package
     ];
+
+    cursorTheme = {
+      package = pkgs.numix-cursor-theme;
+      name = "Numix-Cursor";
+    };
 
     iconTheme = {
       package = pkgs.papirus-icon-theme;
       name = "Papirus";
     };
-    cursorTheme = {
-      package = pkgs.numix-cursor-theme;
-      name = "Numix-Cursor";
+
+    font = {
+      package = pkgs.dejavu_fonts;
+      face = "DejaVu Sans Mono";
+      size = 11;
     };
   };
 }

@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 
+let
+  font = config.primary-user.home-manager.font;
+in
+
 {
   primary-user.home-manager = {
     home.file = {
@@ -21,12 +25,12 @@
                                                    "msmtp" "${pkgs.msmtp}/bin/msmtp"
                                                    "shell" "${pkgs.stdenv.shell}"
                                              ))
-                                  "primaryFont" #s(hash-table
-                                                   test equal
-                                                   data (
-                                                         "face" "${config.fontTheme.primaryFont.face}"
-                                                         "size" "${toString config.fontTheme.primaryFont.size}"
-                                                   ))
+                                  "font" #s(hash-table
+                                            test equal
+                                            data (
+                                                  "face" "${font.face}"
+                                                  "size" "${toString font.size}"
+                                            ))
                                   )))
 
         (load (concat user-emacs-directory "modules/init"))

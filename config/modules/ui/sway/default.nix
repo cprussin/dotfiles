@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 
 let
-  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
+  font = config.primary-user.home-manager.font;
 
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   notify-send = "${pkgs.notify-send}/bin/notify-send";
@@ -104,7 +104,7 @@ in
       set $bright ${config.colorTheme.bright}
       set $urgent ${config.colorTheme.urgent}
 
-      set $font pango:${fontLib.pangoFont config.fontTheme.primaryFont}
+      set $font pango:${font.face} ${toString font.size}
 
       set $bgimage ${./background.png}
 

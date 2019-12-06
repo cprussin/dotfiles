@@ -1,9 +1,7 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 
 let
-  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
   swaylockColor = builtins.replaceStrings [ "#" ] [ "" ];
-  font = fontLib.pangoFont config.fontTheme.primaryFont;
   background = swaylockColor config.colorTheme.background;
   highlightBackground = swaylockColor config.colorTheme.highlightBackground;
   urgent = swaylockColor config.colorTheme.urgent;
@@ -14,8 +12,6 @@ in
 
 {
   primary-user.home-manager.programs.swaylock = {
-    inherit font;
-
     enable = true;
     daemonize = true;
     image = ../sway/background.png;

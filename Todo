@@ -28,7 +28,7 @@
    - [-] theme
      - [X] icon
      - [X] cursor
-     - [ ] font
+     - [X] font
      - [ ] keymap
      - [ ] color
    - [X] terminal

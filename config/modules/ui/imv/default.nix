@@ -2,7 +2,7 @@
 
 let
   imvColor = builtins.replaceStrings [ "#" ] [ "" ];
-  font = config.fontTheme.primaryFont;
+  font = config.primary-user.home-manager.font;
 in
 
 {

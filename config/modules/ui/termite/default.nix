@@ -1,9 +1,5 @@
 { pkgs, config, lib, ... }:
 
-let
-  fontLib = pkgs.callPackage ../../../../lib/fonts.nix {};
-in
-
 {
   primary-user.home-manager = {
     default-terminal = "${pkgs.termite}/bin/termite";
@@ -16,7 +12,6 @@ in
       enable = true;
       dynamicTitle = true;
       scrollbackLines = -1;
-      font = fontLib.pangoFont config.fontTheme.primaryFont;
       backgroundColor = config.colorTheme.background;
       foregroundColor = config.colorTheme.foreground;
       hintsActiveBackgroundColor = config.colorTheme.selection;
@@ -25,7 +20,6 @@ in
       hintsForegroundColor = config.colorTheme.highlightForeground;
       hintsBorderColor = config.colorTheme.highlightForeground;
       hintsBorderWidth = "1";
-      hintsFont = fontLib.pangoFont config.fontTheme.primaryFont;
       hintsPadding = 3;
       hintsRoundness = "0";
       cursorColor = config.colorTheme.foreground;
