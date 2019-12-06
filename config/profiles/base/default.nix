@@ -1,8 +1,4 @@
-{ pkgs, ... }:
-
-let
-  themeUtil = pkgs.callPackage ../../../lib/themes.nix {};
-in
+{ ... }:
 
 {
   imports = [
@@ -23,11 +19,9 @@ in
 
     ../../modules/ui/bash
     ../../modules/ui/direnv
+    ../../modules/ui/dvp
     ../../modules/ui/greeting
     ../../modules/ui/readline
-    ../../modules/ui/theme/keymap
     ../../modules/ui/zsh
   ];
-
-  keymap = themeUtil.keymap "dvp";
 }

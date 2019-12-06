@@ -29,7 +29,7 @@
      - [X] icon
      - [X] cursor
      - [X] font
-     - [ ] keymap
+     - [X] keymap
      - [ ] color
    - [X] terminal
    - [X] secure

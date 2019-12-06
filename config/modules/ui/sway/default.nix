@@ -2,6 +2,7 @@
 
 let
   font = config.primary-user.home-manager.font;
+  keymap = config.primary-user.home-manager.keymap;
 
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   notify-send = "${pkgs.notify-send}/bin/notify-send";
@@ -123,9 +124,9 @@ in
       # Inputs
       ##
       input * {
-        xkb_layout ${config.keymap.layout}
-        xkb_variant ${config.keymap.variant}
-        xkb_options ${config.keymap.options}
+        xkb_layout ${keymap.layout}
+        xkb_variant ${keymap.variant}
+        xkb_options ${keymap.options}
       }
 
 
