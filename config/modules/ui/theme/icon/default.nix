@@ -21,7 +21,7 @@
     };
   };
 
-  config.home-manager.users.${config.primary-user.name}.home.packages = lib.mkForce [
+  config.primary-user.home-manager.home.packages = lib.mkForce [
     config.iconTheme.package
   ];
 }

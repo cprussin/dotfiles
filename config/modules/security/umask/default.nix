@@ -1,11 +1,11 @@
-{ config, ... }:
+{ ... }:
 
 let
   umask = "umask 077";
 in
 
 {
-  home-manager.users.${config.primary-user.name} = {
+  primary-user.home-manager = {
     home.file = {
       ".profile".text = umask;
       ".bashrc".text = umask;

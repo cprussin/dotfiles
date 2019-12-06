@@ -45,6 +45,10 @@ in
     };
   };
 
+  imports = [
+    (lib.mkAliasOptionModule [ "primary-user" "home-manager" ] [ "home-manager" "users" cfg.name ])
+  ];
+
   config = lib.mkIf (cfg.name != null) {
     primary-user = {
       home = lib.mkDefault "/home/${cfg.name}";
@@ -58,7 +62,6 @@ in
       extraGroups = cfg.extraGroups;
       shell = cfg.shell;
     };
-    #home-manager.users.${cfg.name} = cfg.home;
     sudo-cmds.${cfg.name} = cfg.sudo-cmds;
     nix.trustedUsers = [ "root" cfg.name ];
   };

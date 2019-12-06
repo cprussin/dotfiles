@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 let
   pass = "${pkgs.pass}/bin/pass";
@@ -10,7 +10,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name} = homeManager: {
+  primary-user.home-manager = homeManager: {
     accounts.email = {
       maildirBasePath = "Mail";
       accounts = {

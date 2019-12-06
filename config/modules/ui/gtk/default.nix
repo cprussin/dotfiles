@@ -1,5 +1,5 @@
-{ config, ... }:
+{ ... }:
 
 {
-  home-manager.users.${config.primary-user.name}.gtk.enable = true;
+  primary-user.home-manager.gtk.enable = true;
 }

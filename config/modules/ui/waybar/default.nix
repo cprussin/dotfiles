@@ -5,7 +5,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name}.programs.waybar = {
+  primary-user.home-manager.programs.waybar = {
     enable = true;
     layer = "top";
     position = "bottom";

@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  home-manager.users.${config.primary-user.name}.xdg.configFile."rofi-pass/config".text = ''
+  primary-user.home-manager.xdg.configFile."rofi-pass/config".text = ''
     _rofi() {
       ${pkgs.rofi}/bin/rofi \
         -dmenu -i \

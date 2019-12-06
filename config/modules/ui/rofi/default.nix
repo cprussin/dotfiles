@@ -6,7 +6,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name}.xdg.configFile."rofi/config".text = ''
+  primary-user.home-manager.xdg.configFile."rofi/config".text = ''
     rofi.fixed-num-lines: true
     rofi.font: ${fontLib.pangoFont config.fontTheme.primaryFont}
     rofi.color-normal: ${colors.background},${colors.foreground},${colors.background},${colors.selection},${colors.background}

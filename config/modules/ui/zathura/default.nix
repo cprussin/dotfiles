@@ -5,7 +5,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name}.programs.zathura = {
+  primary-user.home-manager.programs.zathura = {
     enable = true;
     options = {
       default-bg = config.colorTheme.highlightBackground;

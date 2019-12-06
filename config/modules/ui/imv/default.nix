@@ -6,7 +6,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name}.xdg.configFile."imv/config".text = ''
+  primary-user.home-manager.xdg.configFile."imv/config".text = ''
     [options]
     background = ${imvColor config.colorTheme.background}
     overlay_font = ${font.face}:${toString font.size}

@@ -5,7 +5,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name}.xdg.configFile."user-dirs.dirs".text = ''
+  primary-user.home-manager.xdg.configFile."user-dirs.dirs".text = ''
     XDG_DESKTOP_DIR="${home}/"
     XDG_DOWNLOAD_DIR="${home}/Scratch"
     XDG_TEMPLATES_DIR="${home}/"

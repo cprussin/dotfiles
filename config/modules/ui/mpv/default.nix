@@ -1,7 +1,7 @@
-{ config, ... }:
+{ ... }:
 
 {
-  home-manager.users.${config.primary-user.name}.programs.mpv = {
+  primary-user.home-manager.programs.mpv = {
     enable = true;
     config = {
       gpu-context = "wayland";

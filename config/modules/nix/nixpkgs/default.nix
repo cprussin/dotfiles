@@ -12,7 +12,7 @@ in
   nixpkgs.config = import ./nixpkgs-config.nix;
   nixpkgs.overlays = map load-overlay all-overlays;
 
-  home-manager.users.${config.primary-user.name} = {
+  primary-user.home-manager = {
     nixpkgs.config = config.nixpkgs.config;
     xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
   };

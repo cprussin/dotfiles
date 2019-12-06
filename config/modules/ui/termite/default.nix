@@ -7,7 +7,7 @@ in
 {
   terminal = "${pkgs.termite}/bin/termite";
 
-  home-manager.users.${config.primary-user.name} = {
+  primary-user.home-manager = {
     home.packages = lib.mkForce [
       pkgs.termite.terminfo
     ];

@@ -1,5 +1,5 @@
-{ config, ... }:
+{ ... }:
 
 {
-  home-manager.users.${config.primary-user.name}.home.file.".inputrc".text = "set editing-mode vi";
+  primary-user.home-manager.home.file.".inputrc".text = "set editing-mode vi";
 }

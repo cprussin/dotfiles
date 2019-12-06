@@ -88,7 +88,7 @@ let
 in
 
 {
-  home-manager.users.${config.primary-user.name} = {
+  primary-user.home-manager = {
     xdg.configFile."sway/config".text = ''
       set $mod Mod4
       set $left h

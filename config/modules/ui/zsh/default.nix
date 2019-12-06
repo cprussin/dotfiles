@@ -8,7 +8,7 @@ in
 {
   primary-user.shell = "${pkgs.zsh}/bin/zsh";
 
-  home-manager.users.${config.primary-user.name}.programs.zsh = {
+  primary-user.home-manager.programs.zsh = {
     enable = true;
     shellAliases = {
       ls = toString ls;

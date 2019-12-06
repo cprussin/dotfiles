@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
-  home-manager.users.${config.primary-user.name} = {
+  primary-user.home-manager = {
     programs.direnv.enable = true;
     home.packages = lib.mkForce [ pkgs.direnv ];
   };
