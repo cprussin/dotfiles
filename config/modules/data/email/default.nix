@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
   pass = "${pkgs.pass}/bin/pass";
@@ -10,7 +10,7 @@ let
 in
 
 {
-  primary-user.home-manager = homeManager: {
+  primary-user.home-manager = {
     accounts.email = {
       maildirBasePath = "Mail";
       accounts = {
@@ -96,7 +96,7 @@ in
           Description = "mbsync manual mailbox synchronization (unlock key store)";
           PartOf = [ "network-online.target" ];
         };
-        Service = homeManager.config.systemd.user.services.mbsync.Service // { Environment = ""; };
+        Service = config.primary-user.home-manager.systemd.user.services.mbsync.Service // { Environment = ""; };
       };
     };
   };
