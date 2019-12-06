@@ -57,7 +57,6 @@ in
     ../../modules/ui/termite
     ../../modules/ui/theme
     ../../modules/ui/theme/color
-    ../../modules/ui/theme/cursor
     ../../modules/ui/theme/font
     ../../modules/ui/waybar
     ../../modules/ui/zathura
@@ -66,6 +65,5 @@ in
   ];
 
   fontTheme = themeUtil.font "dejavu-sans-mono-11";
-  cursorTheme = themeUtil.cursor "numix";
   colorTheme = themeUtil.color "solarized/dark";
 }

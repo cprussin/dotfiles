@@ -27,9 +27,9 @@
 ** TODO Separate configs from modules
    - [-] theme
      - [X] icon
+     - [X] cursor
      - [ ] font
      - [ ] keymap
-     - [ ] cursor
      - [ ] color
    - [X] terminal
    - [X] secure
