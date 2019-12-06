@@ -1,8 +1,5 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
-  primary-user.home-manager.home = {
-    packages = lib.mkForce [ pkgs.pass ];
-    sessionVariables.PASSWORD_STORE_DIR = config.secure.passwords;
-  };
+  primary-user.home-manager.home.packages = lib.mkForce [ pkgs.pass ];
 }

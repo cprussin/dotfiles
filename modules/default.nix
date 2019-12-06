@@ -4,6 +4,7 @@
   imports = [
     ./nixos/crypt-initrd.nix
     ./nixos/primary-user.nix
+    ./nixos/secure.nix
     ./nixos/sudo-cmds.nix
   ];
 

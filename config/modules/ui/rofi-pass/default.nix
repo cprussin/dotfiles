@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 {
   primary-user.home-manager.xdg.configFile."rofi-pass/config".text = ''
@@ -12,7 +12,6 @@
         "$@"
     }
 
-    PASSWORD_STORE_DIR=${config.secure.passwords}
     URL_field='URL'
     USERNAME_field='Username'
     AUTOTYPE_field='Autotype'

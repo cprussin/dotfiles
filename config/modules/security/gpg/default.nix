@@ -1,11 +1,8 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   primary-user.home-manager = {
-    home = {
-      packages = lib.mkForce [ pkgs.gnupg ];
-      sessionVariables.GNUPGHOME = config.secure.gnupg;
-    };
+    home.packages = lib.mkForce [ pkgs.gnupg ];
 
     services.gpg-agent = {
       enable = true;

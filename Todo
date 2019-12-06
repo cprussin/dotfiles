@@ -25,7 +25,6 @@
 * On Hold
 * In Progress
 ** TODO Separate configs from modules
-   - [ ] secure
    - [ ] theme
      - [ ] icon
      - [ ] color
@@ -33,6 +32,7 @@
      - [ ] keymap
      - [ ] cursor
    - [ ] terminal
+   - [X] secure
    - [X] shakti-nginx
    - [X] sudo-cmds
    - [X] primary-user
