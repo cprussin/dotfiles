@@ -1,4 +1,4 @@
-{ writeShellScript, nix, config, launcher }:
+{ writeShellScript, nix, terminal, launcher }:
 
 writeShellScript "shakti" ''
   open=${launcher}/bin/open
@@ -27,8 +27,8 @@ writeShellScript "shakti" ''
 
     dvds) exec $browse 'dvd-www-test-baseline-stable.eng.dvdco.netflix.com' ;;
 
-    shell) cd $SHAKTI_SRC && exec ${config.terminal} ;;
+    shell) cd $SHAKTI_SRC && exec ${terminal} ;;
 
-    *) cd $SHAKTI_SRC && exec ${config.terminal} -e "$nixShell --run 'shakti $*'" ;;
+    *) cd $SHAKTI_SRC && exec ${terminal} -e "$nixShell --run 'shakti $*'" ;;
   esac
 ''

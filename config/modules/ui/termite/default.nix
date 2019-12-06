@@ -5,9 +5,9 @@ let
 in
 
 {
-  terminal = "${pkgs.termite}/bin/termite";
-
   primary-user.home-manager = {
+    default-terminal = "${pkgs.termite}/bin/termite";
+
     home.packages = lib.mkForce [
       pkgs.termite.terminfo
     ];

@@ -108,7 +108,6 @@ in
 
       set $bgimage ${./background.png}
 
-      set $term ${config.terminal}
       set $menu ${pkgs.launcher}/bin/launch
       set $wl-paste ${pkgs.wl-clipboard}/bin/wl-paste
       set $passwords ${pkgs.rofi-pass}/bin/rofi-pass
@@ -187,7 +186,7 @@ in
         $mod+d exec $menu
         $mod+Shift+d exec $menu "$($wl-paste)"
         $mod+p exec $passwords
-        $mod+Return exec $term
+        $mod+Return exec ${config.primary-user.home-manager.default-terminal}
         $mod+Shift+Return exec $lock
         $mod+Shift+q kill
         $mod+Shift+c reload

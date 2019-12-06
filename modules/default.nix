@@ -10,6 +10,7 @@
 
   home-manager.users.${config.primary-user.name} = _: {
     imports = [
+      ./home-manager/default-terminal.nix
       ./home-manager/mako.nix
       ./home-manager/swaylock.nix
       ./home-manager/waybar.nix

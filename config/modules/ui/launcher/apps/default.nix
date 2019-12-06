@@ -36,8 +36,10 @@ let
     exec ${launcher}/bin/browse ''${url/@user@/$user}
   '';
 
+  terminal = config.primary-user.home-manager.default-terminal;
+
   mkTerminalApp = name: bin: writeShellScript name ''
-    exec ${config.terminal} --title ${name} --name ${name} -e "${bin}"
+    exec ${terminal} --title ${name} --name ${name} -e "${bin}"
   '';
 in
 
@@ -69,7 +71,7 @@ linkFarm "launcher-apps" (
     remacs = callPackage ./remacs.nix {};
     reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
     screenshot = callPackage ./screenshot.nix {};
-    shakti = callPackage ./shakti.nix { inherit config; };
+    shakti = callPackage ./shakti.nix { inherit terminal; };
     shutdown = writeShellScript "shutdown" "${launcher}/bin/yes-no -m 'Are you sure you want to shut down?' -y 'Yes, shut down' -n 'No, remain on' -- ${systemd}/bin/systemctl poweroff";
     slack = "${slack}/bin/slack";
     slackagain = writeShellScript "slackagain" "sh -c 'pkill -x slack; exec ${slack}/bin/slack'";

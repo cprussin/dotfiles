@@ -54,7 +54,6 @@ in
     ../../modules/ui/rofi-pass
     ../../modules/ui/sway
     ../../modules/ui/swaylock
-    ../../modules/ui/terminal
     ../../modules/ui/termite
     ../../modules/ui/theme/color
     ../../modules/ui/theme/cursor

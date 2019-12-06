@@ -31,7 +31,7 @@
      - [ ] font
      - [ ] keymap
      - [ ] cursor
-   - [ ] terminal
+   - [X] terminal
    - [X] secure
    - [X] shakti-nginx
    - [X] sudo-cmds
