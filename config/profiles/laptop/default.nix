@@ -55,10 +55,10 @@ in
     ../../modules/ui/sway
     ../../modules/ui/swaylock
     ../../modules/ui/termite
+    ../../modules/ui/theme
     ../../modules/ui/theme/color
     ../../modules/ui/theme/cursor
     ../../modules/ui/theme/font
-    ../../modules/ui/theme/icon
     ../../modules/ui/waybar
     ../../modules/ui/zathura
 
@@ -66,7 +66,6 @@ in
   ];
 
   fontTheme = themeUtil.font "dejavu-sans-mono-11";
-  iconTheme = themeUtil.icon "papirus-48";
   cursorTheme = themeUtil.cursor "numix";
   colorTheme = themeUtil.color "solarized/dark";
 }

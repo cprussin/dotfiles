@@ -22,8 +22,5 @@ in
     height = 600;
     progress-color = "source ${config.colorTheme.bright}";
     default-timeout = 10000;
-    icon-path = [
-      "${config.iconTheme.package}/share/icons/${config.iconTheme.name}"
-    ];
   };
 }

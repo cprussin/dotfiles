@@ -25,12 +25,12 @@
 * On Hold
 * In Progress
 ** TODO Separate configs from modules
-   - [ ] theme
-     - [ ] icon
-     - [ ] color
+   - [-] theme
+     - [X] icon
      - [ ] font
      - [ ] keymap
      - [ ] cursor
+     - [ ] color
    - [X] terminal
    - [X] secure
    - [X] shakti-nginx
