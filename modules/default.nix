@@ -1,4 +1,4 @@
-{ config, ... }:
+{ ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
     ./nixos/sudo-cmds.nix
   ];
 
-  home-manager.users.${config.primary-user.name} = _: {
+  primary-user.home-manager = _: {
     imports = [
       ./home-manager/cursor-theme.nix
       ./home-manager/default-terminal.nix
