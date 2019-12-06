@@ -5,64 +5,27 @@ let
 in
 
 {
-  options.primary-user = {
-    name = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "The name of the primary user account.";
-    };
-
-    home = lib.mkOption {
-      type = lib.types.str;
-      description = "The path to the primary user's home.";
-    };
-
-    shell = lib.mkOption {
-      type = lib.types.str;
-      description = "The path to the primary user's shell.";
-    };
-
-    extraGroups = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      description = ''
-        A list of additional groups that the primary user belongs to.
-      '';
-    };
-
-    sudo-cmds = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [];
-      description = ''
-        A of sudo commands to allow the primary user to run without entering a
-        password.
-      '';
-    };
-
-    uid = lib.mkOption {
-      type = lib.types.int;
-      description = "The user ID for the primary user account.";
-      default = 1000;
-    };
+  options.primary-user.name = lib.mkOption {
+    type = lib.types.nullOr lib.types.str;
+    default = null;
+    description = "The name of the primary user account.";
   };
 
   imports = [
     (lib.mkAliasOptionModule [ "primary-user" "home-manager" ] [ "home-manager" "users" cfg.name ])
+    (lib.mkAliasOptionModule [ "primary-user" "sudo-cmds" ] [ "sudo-cmds" cfg.name ])
+    (lib.mkAliasOptionModule [ "primary-user" "home" ] [ "users" "users" cfg.name "home" ])
+    (lib.mkAliasOptionModule [ "primary-user" "shell" ] [ "users" "users" cfg.name "shell" ])
+    (lib.mkAliasOptionModule [ "primary-user" "extraGroups" ] [ "users" "users" cfg.name "extraGroups" ])
+    (lib.mkAliasOptionModule [ "primary-user" "uid" ] [ "users" "users" cfg.name "uid" ])
   ];
 
   config = lib.mkIf (cfg.name != null) {
     primary-user = {
-      home = lib.mkDefault "/home/${cfg.name}";
-      shell = lib.mkDefault config.users.defaultUserShell;
       extraGroups = [ "wheel" ];
+      uid = lib.mkDefault 1000;
     };
-    users.users.${cfg.name} = {
-      isNormalUser = true;
-      home = cfg.home;
-      uid = cfg.uid;
-      extraGroups = cfg.extraGroups;
-      shell = cfg.shell;
-    };
-    sudo-cmds.${cfg.name} = cfg.sudo-cmds;
+    users.users.${cfg.name}.isNormalUser = true;
     nix.trustedUsers = [ "root" cfg.name ];
   };
 }
