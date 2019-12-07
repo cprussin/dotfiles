@@ -3,6 +3,7 @@
 let
   font = config.primary-user.home-manager.font;
   keymap = config.primary-user.home-manager.keymap;
+  colors = config.primary-user.home-manager.colorTheme;
 
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   notify-send = "${pkgs.notify-send}/bin/notify-send";
@@ -15,7 +16,7 @@ let
     if [ "$isMuted" == "true" ]
     then
       icon=notification-audio-volume-muted
-      # color="${config.colorTheme.highlightBackground}"
+      # color="${colors.highlightBackground}"
     elif [ $level -ge 50 ]
     then
       icon=notification-audio-volume-high
@@ -97,13 +98,13 @@ in
       set $up k
       set $right l
 
-      set $background ${config.colorTheme.background}
-      set $foreground ${config.colorTheme.foreground}
-      set $highlightBackground ${config.colorTheme.highlightBackground}
-      set $highlightForeground ${config.colorTheme.highlightForeground}
-      set $selection ${config.colorTheme.selection}
-      set $bright ${config.colorTheme.bright}
-      set $urgent ${config.colorTheme.urgent}
+      set $background ${colors.background}
+      set $foreground ${colors.foreground}
+      set $highlightBackground ${colors.highlightBackground}
+      set $highlightForeground ${colors.highlightForeground}
+      set $selection ${colors.selection}
+      set $bright ${colors.bright}
+      set $urgent ${colors.urgent}
 
       set $font pango:${font.face} ${toString font.size}
 
@@ -123,11 +124,13 @@ in
       ##
       # Inputs
       ##
+      ${if keymap == null then "" else ''
       input * {
         xkb_layout ${keymap.layout}
         xkb_variant ${keymap.variant}
         xkb_options ${keymap.options}
       }
+    ''}
 
 
       ##

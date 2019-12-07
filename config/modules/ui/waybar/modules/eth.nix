@@ -1,4 +1,4 @@
-{ config }:
+{ colors }:
 
 {
   name = "network#eth";
@@ -13,5 +13,5 @@
     format-alt = " {ifname}: {ipaddr}/{cidr}";
   };
 
-  style.":not(.ethernet)".color = config.colorTheme.foreground;
+  style.":not(.ethernet)".color = colors.foreground;
 }

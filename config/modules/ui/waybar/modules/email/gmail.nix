@@ -1,7 +1,7 @@
-{ callPackage, config }:
+{ callPackage, colors, config }:
 
 let
-  mkEmailModule = callPackage ./mkEmailModule.nix { inherit config; };
+  mkEmailModule = callPackage ./mkEmailModule.nix { inherit colors; };
   launcher-apps = callPackage ../../../launcher/apps { inherit config; };
 in
 

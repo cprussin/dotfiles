@@ -1,4 +1,4 @@
-{ writeShellScript, config }: { folder, script }:
+{ writeShellScript, colors }: { folder, script }:
 
 let
   exec = writeShellScript "email" ''
@@ -27,5 +27,5 @@ in
     return-type = "json";
   };
 
-  style.".new".color = config.colorTheme.selection;
+  style.".new".color = colors.selection;
 }

@@ -1,4 +1,4 @@
-{ config }:
+{ colors }:
 
 {
   name = "battery";
@@ -15,10 +15,10 @@
     format-icons = [ "" "" "" "" "" ];
   };
 
-  style.".warning".color = config.colorTheme.warn;
+  style.".warning".color = colors.warn;
   style.".critical" = {
-    background-color = config.colorTheme.urgent;
-    color = config.colorTheme.white;
+    background-color = colors.urgent;
+    color = colors.white;
   };
   style.".critical:not(.charging)" = {
     animation-name = "blink";

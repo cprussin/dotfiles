@@ -1,4 +1,4 @@
-{ config }:
+{ colors }:
 
 {
   name = "network#wireless";
@@ -13,5 +13,5 @@
     format-alt = " {ifname}: ({essid}) {ipaddr}/{cidr} {frequency}mhz [{signalStrength}%]";
   };
 
-  style.":not(.wifi)".color = config.colorTheme.foreground;
+  style.":not(.wifi)".color = colors.foreground;
 }

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./nixos/color-theme.nix
     ./nixos/crypt-initrd.nix
     ./nixos/keymap.nix
     ./nixos/primary-user.nix
@@ -11,6 +12,7 @@
 
   primary-user.home-manager = _: {
     imports = [
+      ./home-manager/color-theme.nix
       ./home-manager/cursor-theme.nix
       ./home-manager/default-terminal.nix
       ./home-manager/font.nix

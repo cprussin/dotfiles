@@ -24,19 +24,6 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
-** TODO Separate configs from modules
-   - [-] theme
-     - [X] icon
-     - [X] cursor
-     - [X] font
-     - [X] keymap
-     - [ ] color
-   - [X] terminal
-   - [X] secure
-   - [X] shakti-nginx
-   - [X] sudo-cmds
-   - [X] primary-user
-** TODO Redo theme config stuff
 ** TODO Replace rofi (launcher/rofi-pass/pinentry)
 ** TODO Re-do session initialization
   - [ ] start graphical-session@user?
@@ -66,6 +53,19 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 * Done
+** DONE Redo theme config stuff
+** DONE Separate configs from modules
+   - [X] theme
+     - [X] icon
+     - [X] cursor
+     - [X] font
+     - [X] keymap
+     - [X] color
+   - [X] terminal
+   - [X] secure
+   - [X] shakti-nginx
+   - [X] sudo-cmds
+   - [X] primary-user
 ** DONE Make shortcuts for various primaryUser stuff
 ** DONE Manage NIX_PATH from Makefile / nix.nixPath (switch to git submodules instead of nix channels)
 ** DONE Extract out packages and overlays

@@ -1,8 +1,4 @@
-{ pkgs, ... }:
-
-let
-  themeUtil = pkgs.callPackage ../../../lib/themes.nix {};
-in
+{ ... }:
 
 {
   imports = [
@@ -56,12 +52,9 @@ in
     ../../modules/ui/swaylock
     ../../modules/ui/termite
     ../../modules/ui/theme
-    ../../modules/ui/theme/color
     ../../modules/ui/waybar
     ../../modules/ui/zathura
 
     ../../modules/zone/pacific
   ];
-
-  colorTheme = themeUtil.color "solarized/dark";
 }

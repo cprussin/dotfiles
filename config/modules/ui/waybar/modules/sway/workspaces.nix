@@ -1,4 +1,4 @@
-{ config }:
+{ colors }:
 
 {
   name = "sway/workspaces";
@@ -10,7 +10,7 @@
 
   style = {
     " button" = {
-      color = config.colorTheme.bright;
+      color = colors.bright;
       padding = "0 5px";
       margin-right = "10px";
       border-radius = "0";
@@ -23,18 +23,18 @@
       border = "1px solid rgba(0, 0, 0, 0.0)";
     };
     " button.focused" = {
-      background = config.colorTheme.selection;
-      color = config.colorTheme.background;
+      background = colors.selection;
+      color = colors.background;
     };
     " button.focused:hover" = {
-      background = config.colorTheme.selection;
+      background = colors.selection;
       box-shadow = "inherit";
       text-shadow = "inherit";
       border = "1px solid rgba(0, 0, 0, 0.0)";
     };
     " button.urgent:not(:hover)" = {
-      background = config.colorTheme.urgent;
-      color = config.colorTheme.white;
+      background = colors.urgent;
+      color = colors.white;
       animation-name = "blink";
       animation-duration = "0.5s";
       animation-timing-function = "linear";
@@ -42,8 +42,8 @@
       animation-direction = "alternate";
     };
     " button.urgent:hover" = {
-      background = config.colorTheme.urgent;
-      color = config.colorTheme.white;
+      background = colors.urgent;
+      color = colors.white;
       box-shadow = "inherit";
       text-shadow = "inherit";
       border = "1px solid rgba(0, 0, 0, 0.0)";

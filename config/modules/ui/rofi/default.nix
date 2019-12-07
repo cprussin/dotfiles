@@ -1,7 +1,7 @@
 { config, ... }:
 
 let
-  colors = config.colorTheme;
+  colors = config.primary-user.home-manager.colorTheme;
 in
 
 {

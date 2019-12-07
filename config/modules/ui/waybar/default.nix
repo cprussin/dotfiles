@@ -2,6 +2,7 @@
 
 let
   stripOverrides = pkgs.callPackage ../../../../lib/stripOverrides.nix {};
+  colors = config.primary-user.home-manager.colorTheme;
 in
 
 {
@@ -19,38 +20,36 @@ in
         margin = "4px 10px 0 10px";
       };
       frame = {
-        color = config.colorTheme.bright;
-        border-top = "3px solid ${config.colorTheme.selection}";
-        background = config.colorTheme.background;
+        border-top = "3px solid ${colors.selection}";
       };
       pre."@keyframes blink" = {
         to = {
-          background-color = config.colorTheme.white;
-          color = config.colorTheme.urgent;
+          background-color = colors.white;
+          color = colors.urgent;
         };
       };
     };
 
     modules = {
       left = map stripOverrides [
-        (pkgs.callPackage ./modules/sway/workspaces.nix { inherit config; })
-        (pkgs.callPackage ./modules/sway/mode.nix { inherit config; })
+        (pkgs.callPackage ./modules/sway/workspaces.nix { inherit colors; })
+        (pkgs.callPackage ./modules/sway/mode.nix { inherit colors; })
         (pkgs.callPackage ./modules/sway/window.nix {})
       ];
 
       right = map stripOverrides [
-        (pkgs.callPackage ./modules/email/gmail.nix { inherit config; })
-        (pkgs.callPackage ./modules/email/netflix.nix { inherit config; })
-        (pkgs.callPackage ./modules/email/prussin-net.nix { inherit config; })
+        (pkgs.callPackage ./modules/email/gmail.nix { inherit config colors; })
+        (pkgs.callPackage ./modules/email/netflix.nix { inherit config colors; })
+        (pkgs.callPackage ./modules/email/prussin-net.nix { inherit config colors; })
         (pkgs.callPackage ./modules/mount/secure.nix {})
         (pkgs.callPackage ./modules/mount/boot.nix {})
-        (pkgs.callPackage ./modules/vpn.nix { inherit config; })
-        (pkgs.callPackage ./modules/bluetooth.nix { inherit config; })
-        (pkgs.callPackage ./modules/wifi.nix { inherit config; })
-        (pkgs.callPackage ./modules/eth.nix { inherit config; })
-        (pkgs.callPackage ./modules/audio.nix { inherit config; })
-        (pkgs.callPackage ./modules/mic.nix { inherit config; })
-        (pkgs.callPackage ./modules/battery.nix { inherit config; })
+        (pkgs.callPackage ./modules/vpn.nix { inherit colors; })
+        (pkgs.callPackage ./modules/bluetooth.nix { inherit config colors; })
+        (pkgs.callPackage ./modules/wifi.nix { inherit colors; })
+        (pkgs.callPackage ./modules/eth.nix { inherit colors; })
+        (pkgs.callPackage ./modules/audio.nix { inherit colors; })
+        (pkgs.callPackage ./modules/mic.nix { inherit colors; })
+        (pkgs.callPackage ./modules/battery.nix { inherit colors; })
         (pkgs.callPackage ./modules/clock.nix {})
         (pkgs.callPackage ./modules/tray.nix {})
       ];

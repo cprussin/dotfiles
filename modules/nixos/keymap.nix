@@ -2,27 +2,16 @@
 
 let
   cfg = config.keymap;
+  keymapType = pkgs.callPackage ../../lib/type/keymap.nix {};
 in
 
 {
-  options.keymap = {
-    layout = lib.mkOption {
-      description = "Keymap";
-      type = lib.types.str;
-    };
-
-    variant = lib.mkOption {
-      description = "Keymap variant";
-      type = lib.types.str;
-    };
-
-    options = lib.mkOption {
-      description = "Options to apply to the keymap";
-      type = lib.types.str;
-    };
+  options.keymap = lib.mkOption {
+    type = lib.types.nullOr keymapType;
+    default = null;
   };
 
-  config = lib.mkIf (cfg.layout != null) {
+  config = lib.mkIf (cfg != null) {
     i18n.consoleKeyMap = pkgs.runCommand "console-keymap" {} ''
       '${pkgs.ckbcomp}/bin/ckbcomp' \
         -layout '${cfg.layout}' \

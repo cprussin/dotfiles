@@ -1,4 +1,4 @@
-{ pkgs, config }:
+{ pkgs, colors }:
 
 let
   vpn = pkgs.writeShellScript "vpn" ''
@@ -18,8 +18,8 @@ in
   };
 
   style."" = {
-    background-color = config.colorTheme.red;
-    color = config.colorTheme.white;
+    background-color = colors.red;
+    color = colors.white;
     font-weight = "bold";
   };
 }

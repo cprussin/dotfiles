@@ -1,4 +1,4 @@
-{ pkgs, config }:
+{ pkgs, config, colors }:
 
 let
   bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
@@ -43,6 +43,6 @@ in
     return-type = "json";
   };
 
-  style.".disconnected".color = config.colorTheme.foreground;
-  style.".off".color = config.colorTheme.warn;
+  style.".disconnected".color = colors.foreground;
+  style.".off".color = colors.warn;
 }

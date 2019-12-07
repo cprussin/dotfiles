@@ -1,4 +1,4 @@
-{ config, pavucontrol, pamixer }:
+{ colors, pavucontrol, pamixer }:
 
 {
   name = "pulseaudio#sink";
@@ -21,5 +21,5 @@
     on-click-middle = "${pamixer}/bin/pamixer --toggle-mute";
   };
 
-  style.".muted".color = config.colorTheme.foreground;
+  style.".muted".color = colors.foreground;
 }

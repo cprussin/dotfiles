@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 let
   ls = pkgs.callPackage ./ls.nix {};
@@ -36,8 +36,6 @@ in
       setopt noflowcontrol                # Disable annoying useless flow control
       setopt noclobber                    # Keep me from overwriting files accidentally
       unsetopt notify                     # Don't print status of background jobs until a prompt is about to be printed
-
-      eval $(dircolors ${config.colorTheme.dircolors})
 
       . ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       . ${pkgs.zsh-git-prompt}/share/zsh-git-prompt/zsh-git-prompt.zsh

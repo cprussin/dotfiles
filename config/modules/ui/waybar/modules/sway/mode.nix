@@ -1,4 +1,4 @@
-{ config }:
+{ colors }:
 
 {
   name = "sway/mode";
@@ -6,8 +6,8 @@
   config.format = "{}";
 
   style."" = {
-    background-color = config.colorTheme.highlightBackground;
-    color = config.colorTheme.highlightForeground;
+    background-color = colors.highlightBackground;
+    color = colors.highlightForeground;
     font-weight = "bold";
   };
 }
