@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  config.security.sudo.extraConfig = "Defaults insults";
+  security.sudo.extraConfig = "Defaults insults";
 }
