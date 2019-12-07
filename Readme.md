@@ -35,18 +35,18 @@ The way things are structured here is:
 If you wanted to use my configurations directly, you would need to do the
 following:
 
-1. Create a new [machine configuration](./machines).
+1. Create a new [machine configuration](./config/machines).
 
 2. Symlink your machine configuration to to `./current-machine`:
 
 ```bash
-ln -s machines/<my machine> current-machine
+ln -s config/machines/<my machine> current-machine
 ```
 
 3. Remove your nix channels (This isn't strictly necessary, but I don't use
    channels and instead I manage my nixpkgs version using niv, see
    [shell.nix](./shell.nix) and
-   [nix-path/default.nix](./modules/nix/nix-path/default.nix)):
+   [nix-path/default.nix](./config/modules/nix/nix-path/default.nix)):
 
 ```bash
 nix-channel remove nixpkgs
