@@ -1,7 +1,7 @@
 { stdenv, lib, makeWrapper, glib }:
 
 let
-  sources = import ../../nix/sources.nix;
+  sources = import ../../niv-sources.nix;
 in
 
 stdenv.mkDerivation {

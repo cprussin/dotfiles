@@ -1,9 +1,19 @@
-{ sources ? import ./nix/sources.nix }:
+{ sources ? import ./niv-sources.nix }:
 
 let
   pkgs = import sources.nixpkgs {};
 
-  niv = import sources.niv {};
+  nivPkgs = import sources.niv {};
+
+  niv = pkgs.symlinkJoin {
+    name = "niv";
+    paths = [ nivPkgs.niv ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/niv \
+        --add-flags "--sources-json ${toString ./sources.json}"
+    '';
+  };
 
   nix-linter = pkgs.callPackage sources.nix-linter {};
 
@@ -19,7 +29,7 @@ let
     home-manager = sources.home-manager;
   };
 
-  files = "$(find . -name '*.nix' -not -path './nix/*')";
+  files = "$(find . -name '*.nix' -not -wholename './sources.nix')";
 
   lint = pkgs.writeShellScriptBin "lint" "nix-linter ${files}";
 
@@ -66,7 +76,7 @@ pkgs.mkShell {
   buildInputs = [
     pkgs.git
     pkgs.nixpkgs-fmt
-    niv.niv
+    niv
     nix-linter.nix-linter
     lint
     format
