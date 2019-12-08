@@ -17,7 +17,6 @@
     ../../modules/devices/touchpad
     ../../modules/devices/virtualization
 
-    ../../modules/devtools/docker
     ../../modules/devtools/git
     ../../modules/devtools/inotify-max-user-watches
 
