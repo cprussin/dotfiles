@@ -1,10 +1,9 @@
-{ writeShellScriptBin, coreutils, chromium, google-chrome, firefox, opera, brave }:
+{ writeShellScriptBin, coreutils, chromium, google-chrome, firefox, brave }:
 
 writeShellScriptBin "browse" ''
   chromium=${chromium}/bin/chromium
   chrome=${google-chrome}/bin/google-chrome-stable
   firefox=${firefox}/bin/firefox
-  opera=${opera}/bin/opera
   brave=${brave}/bin/brave
   test=${coreutils}/bin/test
 
@@ -38,6 +37,5 @@ writeShellScriptBin "browse" ''
     chromium) exec $chromium --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
     chrome) exec $chrome --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
     firefox) exec $firefox $target >/dev/null 2>&1 ;;
-    opera) exec $opera $target >/dev/null 2>&1 ;;
   esac
 ''
