@@ -13,7 +13,7 @@ writeShellScript "shakti" ''
     todo) exec $open $SHAKTI_TODO ;;
     edit) exec $open $SHAKTI_SRC ;;
 
-    testers) exec $browse 'https://tenfootuiapps.netflix.com/' ;;
+    testers) exec $browse 'https://subview.prod.netflix.net/create' ;;
 
     jenkins) exec $browse 'https://merch.builds.test.netflix.net/view/Shakti/' ;;
 
