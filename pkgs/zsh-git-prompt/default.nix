@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, python, git }:
 
 let
-  sources = import ../../niv-sources.nix;
+  sources = import ../../sources.nix;
 in
 
 stdenv.mkDerivation rec {

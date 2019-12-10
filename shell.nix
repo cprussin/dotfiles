@@ -1,17 +1,15 @@
-{ sources ? import ./niv-sources.nix }:
+{ sources ? import ./sources.nix }:
 
 let
   pkgs = import sources.nixpkgs {};
 
-  nivPkgs = import sources.niv {};
-
   niv = pkgs.symlinkJoin {
     name = "niv";
-    paths = [ nivPkgs.niv ];
+    paths = [ sources.niv ];
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/niv \
-        --add-flags "--sources-json ${toString ./sources.json}"
+        --add-flags "--sources-file ${toString ./sources.json}"
     '';
   };
 

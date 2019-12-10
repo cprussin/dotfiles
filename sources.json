@@ -23,18 +23,6 @@
         "url": "https://github.com/rycee/home-manager/archive/5e7a4c55ed110ff3c9d16906d9feeb710e4d0859.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "niv": {
-        "branch": "master",
-        "description": "Easy dependency management for Nix projects",
-        "homepage": "https://github.com/nmattia/niv",
-        "owner": "nmattia",
-        "repo": "niv",
-        "rev": "22e1f901df0c747aa61cbe31b23e12975822b2cd",
-        "sha256": "17d848pvh94qndzzwz8k7lb1vfgbbhqzrdf9mcqxn1n8mnwa1b89",
-        "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/22e1f901df0c747aa61cbe31b23e12975822b2cd.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "nix-linter": {
         "branch": "master",
         "description": "Linter for the Nix expression language",
