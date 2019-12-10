@@ -67,7 +67,7 @@ let
   '';
 
   collect-garbage =
-    pkgs.writeShellScriptBin "collect-garbage" "nix-collect-garbage -d";
+    pkgs.writeShellScriptBin "collect-garbage" "sudo nix-collect-garbage -d";
 in
 
 pkgs.mkShell {
