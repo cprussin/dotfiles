@@ -21,6 +21,7 @@
     ../../modules/ui/direnv
     ../../modules/ui/dvp
     ../../modules/ui/greeting
+    ../../modules/ui/lorri
     ../../modules/ui/readline
     ../../modules/ui/zsh
   ];
