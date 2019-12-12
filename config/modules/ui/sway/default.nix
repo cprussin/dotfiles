@@ -267,8 +267,8 @@ in
       }
 
       exec $idle -w \
-        timeout 120 $lock \
-        timeout 120 '$swaymsg "output * dpms off"' \
+        timeout 300 $lock \
+        timeout 300 '$swaymsg "output * dpms off"' \
           resume '$swaymsg "output * dpms on"' \
         before-sleep $lock \
         lock $lock
