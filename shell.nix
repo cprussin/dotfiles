@@ -63,7 +63,7 @@ let
       exit 1
     fi
 
-    sudo sh -c ${deploy-root-cmd}
+    sudo ${deploy-root-cmd}
   '';
 
   collect-garbage =
