@@ -1,6 +1,16 @@
 -*- mode: org; -*-
 
 * To Do
+** TODO Consolidate solarized theme configs :user:emacs:xmonad:
+   - [X] dunst
+   - [X] volume
+   - [X] launcher/rofi
+   - [X] xmobar
+   - [X] xmonad
+   - [X] zsh
+   - [ ] emacs
+** TODO Auto-mount /secure :user:system:
+** TODO Clear environment more betterer :user:system:
 ** TODO Get a smart card
 ** TODO Extract identity to common module [0/2] :user:
    - [ ] GPG keys (including keygrip)
@@ -42,16 +52,6 @@
    - [ ] Calendar / Contacts
    - [ ] Email (postfix/dovecot/spamassassin/opendkim)
    - [ ] Chat / SIP?
-** TODO Consolidate solarized theme configs :user:emacs:xmonad:
-   - [X] dunst
-   - [X] volume
-   - [X] launcher/rofi
-   - [X] xmobar
-   - [X] xmonad
-   - [X] zsh
-   - [ ] emacs
-** TODO Auto-mount /secure :user:system:
-** TODO Clear environment more betterer :user:system:
 * Done
 ** DONE Redo theme config stuff
 ** DONE Separate configs from modules
