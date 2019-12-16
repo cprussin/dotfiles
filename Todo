@@ -52,6 +52,11 @@
    - [ ] Calendar / Contacts
    - [ ] Email (postfix/dovecot/spamassassin/opendkim)
    - [ ] Chat / SIP?
+   - [ ] Backup system
+     - [ ] Local backup
+     - [ ] Local filing folder scans
+     - [ ] Offsite (AWS glacier?) data backup
+     - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 * Done
 ** DONE Redo theme config stuff
 ** DONE Separate configs from modules
