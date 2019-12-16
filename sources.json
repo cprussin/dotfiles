@@ -5,10 +5,10 @@
         "homepage": "http://ethanschoonover.com/solarized",
         "owner": "seebi",
         "repo": "dircolors-solarized",
-        "rev": "c8b07046acdfe4c07fa3bbafb0dd41327dc4e357",
-        "sha256": "1a1sv5k9y96ryindaxx6w2ni3a1b6a5da8g03p9i5022f3fvq0ji",
+        "rev": "5fb86a3f947f0e8b3005871c2f97df80e80f3016",
+        "sha256": "1bcdnfdagwjfrkrwnmdy8p2dnhl9xrii7xg6pjwhgvfm4cak7fgy",
         "type": "tarball",
-        "url": "https://github.com/seebi/dircolors-solarized/archive/c8b07046acdfe4c07fa3bbafb0dd41327dc4e357.tar.gz",
+        "url": "https://github.com/seebi/dircolors-solarized/archive/5fb86a3f947f0e8b3005871c2f97df80e80f3016.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "home-manager": {
@@ -41,10 +41,10 @@
         "homepage": "https://github.com/NixOS/nixpkgs",
         "owner": "NixOS",
         "repo": "nixpkgs-channels",
-        "rev": "45ea60922036b7be302b95d107595f6eb5cd0675",
-        "sha256": "11wm7af6ab2979z8yrpcprb6d99kbrjq44a48ayi4a7c58a2xb6q",
+        "rev": "d85e435b7bded2596d7b201bcd938c94d8a921c1",
+        "sha256": "1msjm4kx1z73v444i1iybvmc7z0kfkbn9nzr21rn5yc4ql1jwf99",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs-channels/archive/45ea60922036b7be302b95d107595f6eb5cd0675.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/d85e435b7bded2596d7b201bcd938c94d8a921c1.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "notify-send": {
