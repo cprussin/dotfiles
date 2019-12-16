@@ -65,7 +65,6 @@ linkFarm "launcher-apps" (
     mixer = "${pavucontrol}/bin/pavucontrol";
     netflix = mkWebApp "netflix" "http://www.netflix.com";
     netflix-api = callPackage ./netflix-api.nix {};
-    opera = writeShellScript "firefox" "${launcher}/bin/browse --browser opera $*";
     "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
     reboot = writeShellScript "reboot" "${launcher}/bin/yes-no -m 'Are you sure you want to reboot?' -y 'Yes, reboot' -n 'No, remain on' -- ${systemd}/bin/systemctl reboot";
     remacs = callPackage ./remacs.nix {};
