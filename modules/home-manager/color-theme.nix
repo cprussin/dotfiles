@@ -110,6 +110,22 @@ in
       };
 
       zsh.initExtra = "eval $(dircolors ${config.colorTheme.dircolors})";
+
+      fzf.colors = {
+        fg = cfg.foreground;
+        bg = cfg.background;
+        hl = cfg.bright;
+        "fg+" = cfg.highlightForeground;
+        "bg+" = cfg.highlightBackground;
+        "hl+" = cfg.bright;
+        info = cfg.bright;
+        prompt = cfg.selection;
+        pointer = cfg.selection;
+        marker = cfg.selection;
+        spinner = cfg.selection;
+        header = cfg.secondaryContent;
+        gutter = cfg.highlightBackground;
+      };
     };
   };
 }

@@ -45,8 +45,6 @@
     ../../modules/ui/mako
     ../../modules/ui/mpv
     ../../modules/ui/opengl
-    ../../modules/ui/rofi
-    ../../modules/ui/rofi-pass
     ../../modules/ui/sway
     ../../modules/ui/swaylock
     ../../modules/ui/termite

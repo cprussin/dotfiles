@@ -34,7 +34,6 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
-** TODO Replace rofi (launcher/rofi-pass/pinentry)
 ** TODO Re-do session initialization
   - [ ] start graphical-session@user?
     . /etc/set-environment
@@ -58,6 +57,7 @@
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 * Done
+** DONE Replace rofi (launcher/rofi-pass/pinentry)
 ** DONE Redo theme config stuff
 ** DONE Separate configs from modules
    - [X] theme

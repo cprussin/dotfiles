@@ -6,7 +6,7 @@ symlinkJoin {
     (callPackage ./scripts/browse.nix {})
     (callPackage ./scripts/launch.nix {})
     (callPackage ./scripts/open.nix {})
+    (callPackage ./scripts/run.nix {})
     (callPackage ./scripts/search.nix {})
-    (callPackage ./scripts/yes-no.nix {})
   ];
 }

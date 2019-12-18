@@ -5,6 +5,8 @@ let
   keymap = config.primary-user.home-manager.keymap;
   colors = config.primary-user.home-manager.colorTheme;
 
+  launcher-apps = pkgs.callPackage ../launcher/apps { inherit config; };
+
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   notify-send = "${pkgs.notify-send}/bin/notify-send";
   pamixer = "${pkgs.pamixer}/bin/pamixer";
@@ -110,9 +112,10 @@ in
 
       set $bgimage ${./background.png}
 
-      set $menu ${pkgs.launcher}/bin/launch
+      set $launch ${pkgs.launcher}/bin/launch
+      set $run ${pkgs.launcher}/bin/run
       set $wl-paste ${pkgs.wl-clipboard}/bin/wl-paste
-      set $passwords ${pkgs.rofi-pass}/bin/rofi-pass
+      set $passwords ${launcher-apps.passwords}
       set $waybar ${pkgs.waybar}/bin/waybar
       set $lock ${pkgs.swaylock}/bin/swaylock
       set $idle ${pkgs.swayidle}/bin/swayidle
@@ -159,6 +162,15 @@ in
       ##
       for_window [app_id="pavucontrol"] floating enable
       for_window [app_id="bluetooth"] floating enable
+      for_window [app_id="launcher"] {
+        floating enable
+        sticky enable
+        resize set 1500 1000
+      }
+      for_window [app_id="modal"] {
+        floating enable
+        sticky enable
+      }
       for_window [app_id="waybar" floating] {
         move position cursor
         move up 80px
@@ -187,8 +199,8 @@ in
       workspace_auto_back_and_forth yes
       bindsym {
         # Launchers
-        $mod+d exec $menu
-        $mod+Shift+d exec $menu "$($wl-paste)"
+        $mod+d exec ${config.primary-user.home-manager.default-terminal} --title launcher --name launcher -e '$launch $swaymsg exec'
+        $mod+Shift+d exec $run "$($wl-paste)"
         $mod+p exec $passwords
         $mod+Return exec ${config.primary-user.home-manager.default-terminal}
         $mod+Shift+Return exec $lock

@@ -7,5 +7,5 @@ in
 
 mkEmailModule {
   folder = "GMail";
-  script = "${launcher-apps}/gmail";
+  script = launcher-apps.gmail;
 }

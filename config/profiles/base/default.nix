@@ -20,6 +20,7 @@
     ../../modules/ui/bash
     ../../modules/ui/direnv
     ../../modules/ui/dvp
+    ../../modules/ui/fzf
     ../../modules/ui/greeting
     ../../modules/ui/lorri
     ../../modules/ui/readline

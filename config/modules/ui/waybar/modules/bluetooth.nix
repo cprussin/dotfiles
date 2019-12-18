@@ -38,7 +38,7 @@ in
 
   config = {
     exec = bluetooth;
-    on-click = "${launcher-apps}/bluetooth";
+    on-click = "${launcher-apps.bluetooth}";
     interval = 1;
     return-type = "json";
   };

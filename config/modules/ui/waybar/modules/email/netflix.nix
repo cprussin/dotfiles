@@ -7,5 +7,5 @@ in
 
 mkEmailModule {
   folder = "Netflix";
-  script = "${launcher-apps}/gmail netflix";
+  script = "${launcher-apps.gmail} netflix";
 }

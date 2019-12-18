@@ -7,5 +7,5 @@ in
 
 mkEmailModule {
   folder = "PrussinNet";
-  script = "${launcher-apps}/email";
+  script = launcher-apps.email;
 }

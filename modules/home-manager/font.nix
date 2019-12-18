@@ -32,7 +32,6 @@ in
         font = pangoFont;
         hintsFont = pangoFont;
       };
-      rofi.font = pangoFont;
       swaylock.font = pangoFont;
       mako.font = pangoFont;
       zathura.options.font = pangoFont;
