@@ -167,6 +167,10 @@ in
         sticky enable
         resize set 1500 1000
       }
+      for_window [class="Pinentry"] {
+        floating enable
+        sticky enable
+      }
       for_window [app_id="modal"] {
         floating enable
         sticky enable
