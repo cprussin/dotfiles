@@ -35,6 +35,7 @@ writeShellScriptBin "open" ''
     text/html) exec $browse "$1" ;;
     image/*) exec $imv "$1" ;;
     video/*) exec $mpv "$1" ;;
+    audio/*) exec $mpv --force-window=yes "$1" ;;
     *) exec $emacsclient -c "$1" ;;
   esac
 ''
