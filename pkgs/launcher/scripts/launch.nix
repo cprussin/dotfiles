@@ -9,6 +9,7 @@
 
 let
   run = callPackage ./run.nix {};
+  preview = callPackage ./preview.nix {};
 in
 
 writeShellScriptBin "launch" ''
@@ -21,9 +22,15 @@ writeShellScriptBin "launch" ''
   ls=${coreutils}/bin/ls
   sed=${gnused}/bin/sed
   run=${run}/bin/run
+  preview=${preview}/bin/preview
 
   showPrompt() {
-    $fzf --exact --print-query --layout=reverse --header "$($fortune)"
+    $fzf \
+      --preview "$preview {}" \
+      --exact \
+      --print-query \
+      --layout=reverse \
+      --header "$($fortune)"
   }
 
   listTopLevelFiles() {

@@ -62,11 +62,11 @@ mkModal "passwords" ''
     fi
   }
 
-  password=$(passwords | $fzf --preview "" --layout reverse)
+  password=$(passwords | $fzf --layout reverse)
   if $test "$password"
   then
     data="$($pass show "$password")"
-    field="$(getFields "$data" | $fzf --preview "" --layout reverse)"
+    field="$(getFields "$data" | $fzf --layout reverse)"
     fieldData="$(readField "$password" "$data" "$field")"
     if $test "$fieldData"
     then

@@ -13,6 +13,7 @@ in
   };
 
   config = lib.mkIf (cfg != null) {
+    home.sessionVariables.LS_COLORS = "$(dircolors ${config.colorTheme.dircolors} | head -n 1 | sed \"s/LS_COLORS='\\(.*\\)';/\\1/\")";
     programs = {
       termite = {
         backgroundColor = cfg.background;
@@ -108,8 +109,6 @@ in
         color = cfg.bright;
         background = cfg.background;
       };
-
-      zsh.initExtra = "eval $(dircolors ${config.colorTheme.dircolors})";
 
       fzf.colors = {
         fg = cfg.foreground;

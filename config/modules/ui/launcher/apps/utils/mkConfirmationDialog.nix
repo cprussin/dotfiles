@@ -10,7 +10,7 @@ name: yes: no: prompt: cmd: mkModal name ''
   fzf=${fzf}/bin/fzf
 
   prompt() {
-    $fzf --preview "" --layout=reverse --prompt "${prompt} "
+    $fzf --layout=reverse --prompt "${prompt} "
   }
 
   selection=$($echo -e "${no}\n${yes}" | prompt)

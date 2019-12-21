@@ -29,12 +29,6 @@ in
 
 {
   options.programs.fzf = {
-    preview = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "The program to use to preview items with.";
-    };
-
     inline-info = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -68,7 +62,6 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.fzf.defaultOptions = lib.flatten [
-      (if cfg.preview == null then [] else [ "--preview" cfg.preview ])
       (if cfg.colors == null then [] else [ "--color=${colors}" ])
       (if cfg.inline-info then [ "--inline-info" ] else [])
     ];
