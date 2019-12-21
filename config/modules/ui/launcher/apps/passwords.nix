@@ -71,7 +71,7 @@ mkModal "passwords" ''
     if $test "$fieldData"
     then
       pkill wl-copy
-      $nohup $shell -c "$echo \"$fieldData\" | $wlCopy --trim-newline; sleep 15; $wlCopy --clear" >/dev/null &
+      $nohup $shell -c "$echo ''${fieldData@Q} | $wlCopy --trim-newline; sleep 15; $wlCopy --clear" >/dev/null &
       disown
     fi
   fi
