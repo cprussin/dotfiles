@@ -291,11 +291,8 @@ in
         lock $lock
 
       exec $mako
-      exec $xrdb -load ~/.Xresources
       exec "$systemctl --user import-environment; $systemctl --user start sway-session.target"
     '';
-
-    home.file.".Xresources".text = "Xft.dpi: 96\n";
 
     home.packages = lib.mkForce [
       pkgs.xwayland
