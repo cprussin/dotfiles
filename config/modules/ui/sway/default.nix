@@ -322,7 +322,7 @@ in
       export QT_WAYLAND_FORCE_DPI=physical
       export MOZ_ENABLE_WAYLAND=1
 
-      exec ${pkgs.dbus}/bin/dbus-launch --exit-with-session ${pkgs.sway}/bin/sway
+      exec ${pkgs.sway}/bin/sway
     '';
   };
 }
