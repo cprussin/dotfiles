@@ -53,7 +53,7 @@ in
   shakti = callPackage ./shakti.nix { inherit terminal; };
   shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${systemd}/bin/systemctl poweroff";
   slack = "${slack}/bin/slack";
-  slackagain = writeShellScript "slackagain" "sh -c 'pkill -x slack; exec ${slack}/bin/slack'";
+  slackagain = writeShellScript "slackagain" "pkill -x slack; exec ${slack}/bin/slack";
   sotd = callPackage ./sotd.nix {};
   steam = "${steam}/bin/steam";
   syncmail = callPackage ./syncmail.nix {};
