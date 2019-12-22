@@ -122,6 +122,7 @@ in
       set $swaymsg ${pkgs.sway}/bin/swaymsg
       set $mako ${pkgs.mako}/bin/mako
       set $xrdb ${pkgs.xorg.xrdb}/bin/xrdb
+      set $systemctl ${pkgs.systemd}/bin/systemctl
 
 
       ##
@@ -291,71 +292,40 @@ in
 
       exec $mako
       exec $xrdb -load ~/.Xresources
+      exec "$systemctl --user import-environment; $systemctl --user start sway-session.target"
     '';
 
-    home.file.".Xresources".text = "Xft.dpi: 96";
+    home.file.".Xresources".text = "Xft.dpi: 96\n";
 
     home.packages = lib.mkForce [
       pkgs.xwayland
       pkgs.libappindicator-gtk3
     ];
+
+    systemd.user.targets.sway-session.Unit = {
+      Description = "sway compositor session";
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
   };
 
   security.pam.services.swaylock.text = "auth include login";
 
-  systemd = {
-    defaultUnit = "graphical.target";
+  autologin-graphical-session = {
+    enable = true;
 
-    services.sway = {
-      enable = true;
-      description = "Sway compositor";
-      wantedBy = [ "graphical.target" ];
-      aliases = [ "display-manager.service" ];
-      after = [
-        "systemd-user-sessions.service"
-        "getty@tty7.service"
-        "plymouth-quit-wait.service"
-      ];
-      conflicts = [
-        "getty@tty7.service"
-        "plymouth-quit.service"
-      ];
+    user = config.primary-user.name;
 
-      environment = {
-        XDG_RUNTIME_DIR = "/run/user/${toString config.primary-user.uid}";
-        QT_QPA_PLATFORM = "wayland";
-        QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        QT_WAYLAND_FORCE_DPI = "physical";
-        MOZ_ENABLE_WAYLAND = "1";
-      };
+    sessionScript = pkgs.writeShellScript "sway-session-script" ''
+      . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 
-      serviceConfig = {
-        WorkingDirectory = config.primary-user.home;
-        ExecStartPre = "${pkgs.kbd}/bin/chvt 7";
-        ExecStart = pkgs.writeShellScript "start-sway" ''
-          . /etc/set-environment
-          . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-          exec ${pkgs.dbus}/bin/dbus-launch --exit-with-session ${pkgs.sway}/bin/sway
-        '';
+      export QT_QPA_PLATFORM=wayland
+      export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+      export QT_WAYLAND_FORCE_DPI=physical
+      export MOZ_ENABLE_WAYLAND=1
 
-        PAMName = "login";
-        User = config.primary-user.name;
-
-        UtmpIdentifier = "tty7";
-        TTYPath = "/dev/tty7";
-        TTYReset = "yes";
-        TTYHangup = "yes";
-        TTYVTDisallocate = "yes";
-
-        SyslogIdentifier = "sway";
-        StandardInput = "tty";
-        StandardError = "journal";
-        StandardOutput = "journal";
-
-        Restart = "always";
-        RestartSec = "2";
-        Nice = "-5";
-      };
-    };
+      exec ${pkgs.dbus}/bin/dbus-launch --exit-with-session ${pkgs.sway}/bin/sway
+    '';
   };
 }

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./nixos/autologin-graphical-session.nix
     ./nixos/color-theme.nix
     ./nixos/crypt-initrd.nix
     ./nixos/keymap.nix

@@ -34,14 +34,6 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
-** TODO Re-do session initialization
-  - [ ] start graphical-session@user?
-    . /etc/set-environment
-    . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-    systemctl --user import-environment
-    systemctl --wait --user start graphical-session.target
-  - [ ] Fix gpg-agent sometimes dying for ssh?
-  - [ ] Fix syncmail not prompting for password
 ** TODO Nixify/containerize/etc prussin.net [2/8]
    - [X] Web
    - [X] Identity (openldap)
@@ -57,6 +49,9 @@
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 * Done
+** DONE Re-do session initialization
+  - [X] Fix gpg-agent sometimes dying for ssh?
+  - [X] Fix syncmail not prompting for password
 ** DONE Replace rofi (launcher/rofi-pass/pinentry)
 ** DONE Redo theme config stuff
 ** DONE Separate configs from modules
