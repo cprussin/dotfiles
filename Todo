@@ -1,6 +1,7 @@
 -*- mode: org; -*-
 
 * To Do
+** TODO Move sway things to systemd units
 ** TODO Replace stuff with modules
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
    - [X] dunst
