@@ -15,12 +15,11 @@
 }:
 
 let
-  terminal = config.primary-user.home-manager.default-terminal;
   mkWebApp = callPackage ./utils/mkWebApp.nix {};
   mkGoogleApp = callPackage ./utils/mkGoogleApp.nix {};
-  mkTerminalApp' = callPackage ./utils/mkTerminalApp.nix { inherit terminal; };
+  mkTerminalApp' = callPackage ./utils/mkTerminalApp.nix { inherit config; };
   mkTerminalApp = name: mkTerminalApp' name name;
-  mkConfirmationDialog = callPackage ./utils/mkConfirmationDialog.nix { inherit terminal; };
+  mkConfirmationDialog = callPackage ./utils/mkConfirmationDialog.nix { inherit config; };
 in
 
 {
@@ -44,13 +43,13 @@ in
   mixer = "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
-  passwords = callPackage ./passwords.nix { inherit terminal; secure = config.primary-user.secure; };
+  passwords = callPackage ./passwords.nix { inherit config; };
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};
   reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
   screenshot = callPackage ./screenshot.nix {};
-  shakti = callPackage ./shakti.nix { inherit terminal; };
+  shakti = callPackage ./shakti.nix { inherit config; };
   shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${systemd}/bin/systemctl poweroff";
   slack = "${slack}/bin/slack";
   slackagain = writeShellScript "slackagain" "pkill -x slack; exec ${slack}/bin/slack";

@@ -1,4 +1,4 @@
-{ writeShellScript, coreutils, terminal }:
+{ writeShellScript, coreutils, config }:
 
 name: terminalname: bin: writeShellScript name ''
   test=${coreutils}/bin/test
@@ -7,6 +7,9 @@ name: terminalname: bin: writeShellScript name ''
   then
     exec ${bin}
   else
-    exec ${terminal} --title ${name} --name ${terminalname} -e "${bin}"
+    exec ${config.primary-user.home-manager.default-terminal} \
+      --title ${name} \
+      --name ${terminalname} \
+      -e "${bin}"
   fi
 ''

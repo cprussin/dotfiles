@@ -1,6 +1,4 @@
 { callPackage
-, terminal
-, secure
 , findutils
 , fzf
 , less
@@ -10,10 +8,11 @@
 , gnugrep
 , wl-clipboard
 , stdenv
+, config
 }:
 
 let
-  mkModal = callPackage ./utils/mkModal.nix { inherit terminal; };
+  mkModal = callPackage ./utils/mkModal.nix { inherit config; };
 in
 
 mkModal "passwords" ''
@@ -31,11 +30,11 @@ mkModal "passwords" ''
   shell=${stdenv.shell}
 
   passwordFiles() {
-    $find ${secure.passwords} -type f -not -path "*/\.*"
+    $find ${config.primary-user.secure.passwords} -type f -not -path "*/\.*"
   }
 
   passwords() {
-    passwordFiles | $less | $sed 's|${secure.passwords}/\(.*\).gpg|\1|'
+    passwordFiles | $less | $sed 's|${config.primary-user.secure.passwords}/\(.*\).gpg|\1|'
   }
 
   getFields() {

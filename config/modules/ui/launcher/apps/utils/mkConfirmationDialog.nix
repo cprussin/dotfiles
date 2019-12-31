@@ -1,7 +1,7 @@
-{ callPackage, coreutils, fzf, terminal }:
+{ callPackage, coreutils, fzf, config }:
 
 let
-  mkModal = callPackage ./mkModal.nix { inherit terminal; };
+  mkModal = callPackage ./mkModal.nix { inherit config; };
 in
 
 name: yes: no: prompt: cmd: mkModal name ''

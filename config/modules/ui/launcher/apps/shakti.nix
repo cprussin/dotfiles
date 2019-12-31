@@ -1,4 +1,8 @@
-{ writeShellScript, nix, terminal, launcher }:
+{ writeShellScript, nix, config, launcher }:
+
+let
+  terminal = config.primary-user.home-manager.default-terminal;
+in
 
 writeShellScript "shakti" ''
   open=${launcher}/bin/open
