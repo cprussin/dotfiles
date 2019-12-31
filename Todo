@@ -36,6 +36,9 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 * On Hold
 * In Progress
+** TODO Fix search for '
+** TODO Fix mako
+** TODO Add "go to site" link to password UI
 ** TODO Nixify/containerize/etc prussin.net [2/8]
    - [X] Web
    - [X] Identity (openldap)
