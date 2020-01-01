@@ -204,10 +204,10 @@ in
       workspace_auto_back_and_forth yes
       bindsym {
         # Launchers
-        $mod+d exec ${config.primary-user.home-manager.default-terminal} --title launcher --name launcher -e '$launch $swaymsg exec'
+        $mod+d exec ${config.primary-user.home-manager.default-terminal.bin} --title launcher --name launcher -e '$launch $swaymsg exec'
         $mod+Shift+d exec $run "$($wl-paste)"
         $mod+p exec $passwords
-        $mod+Return exec ${config.primary-user.home-manager.default-terminal}
+        $mod+Return exec ${config.primary-user.home-manager.default-terminal.bin}
         $mod+Shift+Return exec $lock
         $mod+Shift+q kill
         $mod+Shift+c reload

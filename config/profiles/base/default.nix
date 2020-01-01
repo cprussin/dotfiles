@@ -24,6 +24,8 @@
     ../../modules/ui/greeting
     ../../modules/ui/lorri
     ../../modules/ui/readline
+    ../../modules/ui/termite
+    ../../modules/ui/terminfo
     ../../modules/ui/zsh
   ];
 }

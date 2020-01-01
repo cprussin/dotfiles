@@ -1,7 +1,7 @@
 { writeShellScript, nix, config, launcher }:
 
 let
-  terminal = config.primary-user.home-manager.default-terminal;
+  terminal = config.primary-user.home-manager.default-terminal.bin;
 in
 
 writeShellScript "shakti" ''

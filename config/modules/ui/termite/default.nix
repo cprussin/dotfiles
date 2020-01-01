@@ -1,12 +1,13 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   primary-user.home-manager = {
-    default-terminal = "${pkgs.termite}/bin/termite";
-
-    home.packages = lib.mkForce [
-      pkgs.termite.terminfo
-    ];
+    default-terminal = {
+      enable = true;
+      bin = "${pkgs.termite}/bin/termite";
+      pkg = pkgs.termite;
+      terminfo = pkgs.termite.terminfo;
+    };
 
     programs.termite = {
       enable = true;

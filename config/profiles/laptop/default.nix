@@ -47,7 +47,6 @@
     ../../modules/ui/opengl
     ../../modules/ui/sway
     ../../modules/ui/swaylock
-    ../../modules/ui/termite
     ../../modules/ui/theme
     ../../modules/ui/waybar
     ../../modules/ui/zathura
