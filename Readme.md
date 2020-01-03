@@ -17,6 +17,8 @@ The way things are structured here is:
     For the most part, modules in here are not actually loaded directly but
     instead collected into profiles, which are consumed by machine
     configurations (see below).
+  - [networks](./config/networks): These folders contain physical network
+    descriptions for cloud networks managed by `nixops`.
   - [profiles](./config/profiles): This directory contains collections of
     modules packaged into common configuration sets.  For the most part, machine
     configs import profiles, which then import modules.
@@ -37,7 +39,9 @@ following:
 
 1. Create a new [machine configuration](./config/machines).
 
-2. Symlink your machine configuration to to `./current-machine`:
+2. If you are deploying a cloud configuration (e.g. managed by `nixops`), create
+   a new [network description](./config/networks).  Otherwise, symlink your
+   machine configuration to to `./current-machine`:
 
 ```bash
 ln -s config/machines/<my machine> current-machine
@@ -54,6 +58,14 @@ nix-channel remove nixpkgs
 
 4. Deploy it!
 
+For a cloud deployment:
+
 ```bash
-nix-shell --run deploy
+nix-shell --run 'deploy <network name>'
+```
+
+For a local deployment:
+
+```bash
+nix-shell --run 'deploy'
 ```

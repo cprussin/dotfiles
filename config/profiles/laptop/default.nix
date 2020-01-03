@@ -28,20 +28,23 @@
     ../../modules/netflix/newt
     ../../modules/netflix/vpn
 
+    ../../modules/nix/nix-path
+    ../../modules/nix/plugins
+
     ../../modules/security/get-aws-access-key
     ../../modules/security/gpg
     ../../modules/security/pass
-    ../../modules/security/secure
     ../../modules/security/ssh
-    ../../modules/security/sshd
 
     ../../modules/ui/audio
+    ../../modules/ui/direnv
     ../../modules/ui/emacs
     ../../modules/ui/gtk
     ../../modules/ui/icon-fonts
     ../../modules/ui/imv
     ../../modules/ui/launcher
     ../../modules/ui/log
+    ../../modules/ui/lorri
     ../../modules/ui/mako
     ../../modules/ui/mpv
     ../../modules/ui/opengl
@@ -53,4 +56,10 @@
 
     ../../modules/zone/pacific
   ];
+
+  promptColor = "cyan";
+  enableTermiteApplicationConfig = true;
+  enableSshdAtBoot = false;
+  services.openssh.permitRootLogin = "no";
+  primary-user.secure.enableMount = true;
 }

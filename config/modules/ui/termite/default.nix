@@ -1,7 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 {
-  primary-user.home-manager = {
+  options.enableTermiteApplicationConfig = lib.mkEnableOption "Termite application config";
+
+  config.primary-user.home-manager = {
     default-terminal = {
       enable = true;
       bin = "${pkgs.termite}/bin/termite";
@@ -9,7 +11,7 @@
       terminfo = pkgs.termite.terminfo;
     };
 
-    programs.termite = {
+    programs.termite = lib.mkIf config.enableTermiteApplicationConfig {
       enable = true;
       dynamicTitle = true;
       scrollbackLines = -1;

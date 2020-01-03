@@ -9,20 +9,18 @@
 
     ../../modules/devices/tmp
 
-    ../../modules/nix/nix-path
     ../../modules/nix/nixpkgs
-    ../../modules/nix/plugins
 
     ../../modules/security/process-information-hiding
+    ../../modules/security/secure
+    ../../modules/security/sshd
     ../../modules/security/sudo
     ../../modules/security/umask
 
     ../../modules/ui/bash
-    ../../modules/ui/direnv
     ../../modules/ui/dvp
     ../../modules/ui/fzf
     ../../modules/ui/greeting
-    ../../modules/ui/lorri
     ../../modules/ui/readline
     ../../modules/ui/termite
     ../../modules/ui/terminfo

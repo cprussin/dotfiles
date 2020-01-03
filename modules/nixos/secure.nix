@@ -2,6 +2,8 @@
 
 let
   cfg = config.secure;
+
+  mountEnabledCfg = lib.filterAttrs (_: secure: secure.enableMount) cfg;
 in
 
 {
@@ -16,6 +18,8 @@ in
       lib.types.submodule (
         { config, ... }: {
           options = {
+            enableMount = lib.mkEnableOption "Mounting secure filesystem";
+
             mountPoint = lib.mkOption {
               type = lib.types.str;
               description = "Location of the mounted the file system.";
@@ -67,14 +71,14 @@ in
           PASSWORD_STORE_DIR = secure.passwords;
         };
       }
-    ) cfg;
+    ) mountEnabledCfg;
 
     sudo-cmds = lib.mapAttrs (
       _: secure: [
         "${pkgs.utillinux}/bin/mount ${secure.mountPoint}"
         "${pkgs.utillinux}/bin/umount ${secure.mountPoint}"
       ]
-    ) cfg;
+    ) mountEnabledCfg;
 
     fileSystems = lib.mapAttrs' (
       _: secure:
@@ -83,6 +87,6 @@ in
           fsType = secure.fsType;
           options = secure.options;
         }
-    ) cfg;
+    ) mountEnabledCfg;
   };
 }

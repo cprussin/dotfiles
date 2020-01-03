@@ -35,4 +35,13 @@ in
         passSplit pkgs config name
       )
     );
+
+  publicSshKey = pkgs: config:
+    runCmd pkgs (
+      pkgs.writeShellScript "get-public-ssh-key" ''
+        sudo -u ${config.primary-user.name} \
+          GNUPGHOME=${config.primary-user.secure.gnupg} \
+          ${pkgs.gnupg}/bin/gpg --export-ssh-key $(cat ${config.primary-user.secure.passwords}/.gpg-id)
+      ''
+    );
 }
