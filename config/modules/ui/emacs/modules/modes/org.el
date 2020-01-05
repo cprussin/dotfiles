@@ -6,18 +6,15 @@
 ;;;
 ;;; Code:
 
-(defun load-todo ()
-  "Load the TODO file."
-  (interactive)
-  (find-file "/home/cprussin/Notes/Todo"))
-
 ;; Set up org-mode
 (use-package org
   :demand
-  :init (setq org-tags-column 0)
+  :init (setq org-tags-column 0
+              org-log-done 'time
+              org-agenda-files (list "~/Notes/Personal.org"))
   :general
   ('(normal motion emacs)
-   "SPC at" '(load-todo :which-key "Todo"))
+   "SPC aa" '(org-agenda :which-key "Agenda"))
   ('(normal motion emacs)
    :prefix "SPC eo"
    "" '(:ignore t :which-key "Org links")
