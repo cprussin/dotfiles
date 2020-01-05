@@ -8,6 +8,7 @@
     ../../modules/boot/systemd-boot
 
     ../../modules/data/email
+    ../../modules/data/syncthing
     ../../modules/data/xdg-user-dirs
 
     ../../modules/devices/android
