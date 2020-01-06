@@ -1,11 +1,4 @@
-{ lib, ... }:
-
-let
-  boot = {
-    device = "/dev/disk/by-uuid/31DB-5F66";
-    fsType = "vfat";
-  };
-in
+{ lib, config, ... }:
 
 {
   imports = [
@@ -19,7 +12,7 @@ in
       enable = true;
       device = "/dev/nvme0n1";
       key = {
-        device = boot;
+        device = { inherit (config.primary-user.secure) device fsType; };
         keyPath = "/spitfire";
         headerPath = "/header.img";
       };
@@ -36,7 +29,9 @@ in
       fsType = "ext4";
     };
 
-    "/boot" = boot // {
+    "/boot" = {
+      device = "/dev/disk/by-uuid/31DB-5F66";
+      fsType = "vfat";
       options = [ "noauto" ];
     };
 
