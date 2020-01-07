@@ -1,10 +1,10 @@
-{ epkgs }:
+{ trivialBuild }:
 
 let
   sources = import ../../sources.nix;
 in
 
-epkgs.trivialBuild {
+trivialBuild {
   pname = "zoom-frm";
   src = sources.zoom-frm;
 }
