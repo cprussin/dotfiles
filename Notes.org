@@ -1,6 +1,6 @@
--*- mode: org; -*-
+#+TODO: TODO NEXT | DONE
 
-* To Do
+* Tasks
 ** TODO Move sway things to systemd units
 ** TODO Replace stuff with modules
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
@@ -34,11 +34,9 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
-* On Hold
-* In Progress
-** TODO Fix search for '
-** TODO Add "go to site" link to password UI
-** TODO Nixify/containerize/etc prussin.net [3/9]
+** NEXT Fix search for '
+** NEXT Add "go to site" link to password UI
+** NEXT Nixify/containerize/etc prussin.net [3/9]
    - [X] Web
    - [X] Identity (openldap)
    - [X] SSL (certbot/acme)
@@ -52,7 +50,6 @@
      - [ ] Local filing folder scans
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
-* Done
 ** DONE Fix mako
    CLOSED: [2020-01-06 Mon 20:57]
 ** DONE Re-do session initialization
