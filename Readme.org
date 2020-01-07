@@ -8,7 +8,7 @@ The way things are structured here is:
 
 - [[./config][config]]: This folder contains all configurations.  It is organized
   into the following subdirectories:
-  - [[./config/machines][machines/\<name>]]: These folders contain
+  - [[./config/machines][machines/<name>]]: These folders contain
     machine-specific configurations.  Each folder should contain a
     ~default.nix~, which is the entry point to the nixos configuration (this
     file is used as ~/etc/nixos/configuration.nix~).
@@ -43,28 +43,28 @@ following:
    a new [[./config/networks][network description]].  Otherwise, symlink your machine configuration to
    to ~./current-machine~:
 
-#+BEGIN_SRC bash
-ln -s config/machines/<my machine> current-machine
-#+END_SRC
+   #+BEGIN_SRC bash
+     ln -s config/machines/$MY_NEW_MACHINE current-machine
+   #+END_SRC
 
 3. Remove your nix channels (This isn't strictly necessary, but I don't use
    channels and instead I manage my nixpkgs version using niv, see [[./shell.nix][shell.nix]] and
    [[./config/modules/nix/nix-path/default.nix][nix-path/default.nix]]):
 
-#+BEGIN_SRC bash
-nix-channel remove nixpkgs
-#+END_SRC
+   #+BEGIN_SRC bash
+     nix-channel remove nixpkgs
+   #+END_SRC
 
 4. Deploy it!
 
-For a cloud deployment:
+   For a cloud deployment:
 
-#+BEGIN_SRC bash
-nix-shell --run 'deploy <network name>'
-#+END_SRC
+   #+BEGIN_SRC bash
+     nix-shell --run 'deploy <network name>'
+   #+END_SRC
 
-For a local deployment:
+   For a local deployment:
 
-#+BEGIN_SRC bash
-nix-shell --run 'deploy'
-#+END_SRC
+   #+BEGIN_SRC bash
+     nix-shell --run 'deploy'
+   #+END_SRC
