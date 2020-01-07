@@ -37,7 +37,6 @@
 * On Hold
 * In Progress
 ** TODO Fix search for '
-** TODO Fix mako
 ** TODO Add "go to site" link to password UI
 ** TODO Nixify/containerize/etc prussin.net [2/8]
    - [X] Web
@@ -54,6 +53,8 @@
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 * Done
+** DONE Fix mako
+   CLOSED: [2020-01-06 Mon 20:57]
 ** DONE Re-do session initialization
   - [X] Fix gpg-agent sometimes dying for ssh?
   - [X] Fix syncmail not prompting for password

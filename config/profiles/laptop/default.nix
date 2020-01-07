@@ -37,6 +37,8 @@
     ../../modules/security/pass
     ../../modules/security/ssh
 
+    ../../modules/system/dbus
+
     ../../modules/ui/audio
     ../../modules/ui/direnv
     ../../modules/ui/emacs
