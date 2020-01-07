@@ -38,13 +38,13 @@
 * In Progress
 ** TODO Fix search for '
 ** TODO Add "go to site" link to password UI
-** TODO Nixify/containerize/etc prussin.net [2/8]
+** TODO Nixify/containerize/etc prussin.net [3/9]
    - [X] Web
    - [X] Identity (openldap)
-   - [ ] SSL (certbot/acme)
-   - [ ] DNS caching (named)
+   - [X] SSL (certbot/acme)
    - [ ] Authentication (dovecot sasl)
    - [ ] Calendar / Contacts
+   - [ ] DNS caching (named)
    - [ ] Email (postfix/dovecot/spamassassin/opendkim)
    - [ ] Chat / SIP?
    - [ ] Backup system
