@@ -52,6 +52,7 @@ in
             remove = "none";
             patterns = [
               "INBOX"
+              "\\[Gmail\\]/All Mail"
               "\\[Gmail\\]/Drafts"
               "\\[Gmail\\]/Spam"
             ];
