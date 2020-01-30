@@ -20,7 +20,7 @@ in
           realName = "Connor Prussin";
           imap.host = "prussin.net";
           userName = "connor";
-          passwordCommand = getPassword "Infrastructure/prussin.net";
+          passwordCommand = getPassword "Infrastructure/connor@prussin.net";
           maildir.path = "PrussinNet";
           msmtp.enable = true;
           smtp = {
