@@ -10,6 +10,7 @@
 , steam
 , systemd
 , bitwig-studio
+, emacs
 , launcher
 , config
 }:
@@ -23,6 +24,7 @@ let
 in
 
 {
+  agenda = writeShellScript "agenda" "${emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
   amazon = mkWebApp "amazon" "https://www.amazon.com/";
   aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
   bitwig = "${bitwig-studio}/bin/bitwig-studio";
