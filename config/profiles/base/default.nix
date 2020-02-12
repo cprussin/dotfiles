@@ -1,8 +1,12 @@
 { ... }:
 
+let
+  sources = import ../../../sources.nix;
+in
+
 {
   imports = [
-    <home-manager/nixos>
+    "${sources.home-manager}/nixos"
     ../../../modules
 
     ../../modules/data/session-vars

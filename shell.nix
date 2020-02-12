@@ -3,18 +3,6 @@
 let
   pkgs = import sources.nixpkgs {};
 
-  niv = pkgs.symlinkJoin {
-    name = "niv";
-    paths = [ sources.niv ];
-    buildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/niv \
-        --add-flags "--sources-file ${toString ./sources.json}"
-    '';
-  };
-
-  nix-linter = pkgs.callPackage sources.nix-linter {};
-
   build-nix-path-env-var = path:
     builtins.concatStringsSep ":" (
       pkgs.lib.mapAttrsToList (k: v: "${k}=${v}") path
@@ -24,10 +12,9 @@ let
     nixpkgs = sources.nixpkgs;
     nixpkgs-overlays = "$dotfiles/overlays";
     nixos-config = "$dotfiles/current-machine";
-    home-manager = sources.home-manager;
   };
 
-  files = "$(find . -name '*.nix' -not -wholename './sources.nix')";
+  files = "$(find . -name '*.nix')";
 
   lint = pkgs.writeShellScriptBin "lint" "nix-linter ${files}";
 
@@ -45,8 +32,8 @@ let
 
   deploy = pkgs.writeShellScriptBin "deploy" ''
     set -e
-    lint
-    format
+    ${lint}/bin/lint
+    ${format}/bin/format
 
     if ! $(mount | grep /secure >/dev/null)
     then
@@ -88,8 +75,8 @@ pkgs.mkShell {
     pkgs.nixpkgs-fmt
     pkgs.get-aws-access-key
     pkgs.nixops
-    niv
-    nix-linter.nix-linter
+    pkgs.niv
+    pkgs.nix-linter
     lint
     format
     deploy
