@@ -6,6 +6,7 @@
   epkgs.cask-mode
   epkgs.company
   epkgs.company-emoji
+  epkgs.company-lsp
   epkgs.company-quickhelp
   epkgs.counsel
   epkgs.counsel-projectile
@@ -41,6 +42,8 @@
   epkgs.indent-guide
   epkgs.ivy
   epkgs.link-hint
+  epkgs.lsp-mode
+  epkgs.lsp-ui
   epkgs.magit
   epkgs.markdown-mode
   epkgs.mmm-mode
