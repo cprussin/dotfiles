@@ -3,6 +3,16 @@
 let
   pkgs = import sources.nixpkgs {};
 
+  niv = pkgs.symlinkJoin {
+    name = "niv";
+    paths = [ sources.niv ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/niv \
+        --add-flags "--sources-file ${toString ./sources.json}"
+    '';
+  };
+
   build-nix-path-env-var = path:
     builtins.concatStringsSep ":" (
       pkgs.lib.mapAttrsToList (k: v: "${k}=${v}") path
@@ -75,8 +85,8 @@ pkgs.mkShell {
     pkgs.nixpkgs-fmt
     pkgs.get-aws-access-key
     pkgs.nixops
-    pkgs.niv
     pkgs.nix-linter
+    niv
     lint
     format
     deploy
