@@ -20,7 +20,7 @@ in
       extraConfig = "PermitUserEnvironment yes";
     };
 
-    systemd.services.sshd.wantedBy = lib.mkIf config.enableSshdAtBoot (lib.mkForce []);
+    systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce []);
 
     primary-user = {
       openssh.authorizedKeys.keys = [
