@@ -12,6 +12,7 @@
 , bitwig-studio
 , emacs
 , launcher
+, fzf-pass
 , config
 }:
 
@@ -20,6 +21,7 @@ let
   mkGoogleApp = callPackage ./utils/mkGoogleApp.nix {};
   mkTerminalApp' = callPackage ./utils/mkTerminalApp.nix { inherit config; };
   mkTerminalApp = name: mkTerminalApp' name name;
+  mkModal = callPackage ./utils/mkModal.nix { inherit config; };
   mkConfirmationDialog = callPackage ./utils/mkConfirmationDialog.nix { inherit config; };
 in
 
@@ -45,7 +47,7 @@ in
   mixer = "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
-  passwords = callPackage ./passwords.nix { inherit config; };
+  passwords = mkModal "passwords" "${fzf-pass}/bin/fzf-pass";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};

@@ -11,6 +11,18 @@
         "url": "https://github.com/seebi/dircolors-solarized/archive/5fb86a3f947f0e8b3005871c2f97df80e80f3016.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "fzf-pass": {
+        "branch": "master",
+        "description": "Wayland client for pass using fzf as the user interface",
+        "homepage": null,
+        "owner": "cprussin",
+        "repo": "fzf-pass",
+        "rev": "5e40adf72bef298d5efd496209d851a2b9380738",
+        "sha256": "115s65ab02k1nd6h02960bls2ihi6wmimx8bhhqdmqvda2jx7lap",
+        "type": "tarball",
+        "url": "https://github.com/cprussin/fzf-pass/archive/5e40adf72bef298d5efd496209d851a2b9380738.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "home-manager": {
         "branch": "release-19.09",
         "description": "Manage a user environment using Nix",
