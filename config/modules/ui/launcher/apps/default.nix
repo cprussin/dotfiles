@@ -8,6 +8,7 @@
 , slack
 , qemu
 , steam
+, sway
 , systemd
 , bitwig-studio
 , emacs
@@ -35,6 +36,7 @@ in
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = writeShellScript "chrome" "${launcher}/bin/browse --browser chrome $*";
   chromium = writeShellScript "chromium" "${launcher}/bin/browse --browser chromium $*";
+  dvp = writeShellScript "dvp" "${sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
   emacs = writeShellScript "emacs" "${launcher}/bin/open \${1-*scratch*}";
   email = callPackage ./email.nix {};
   firefox = writeShellScript "firefox" "${launcher}/bin/browse --browser firefox $*";
@@ -61,6 +63,7 @@ in
   steam = "${steam}/bin/steam";
   syncmail = callPackage ./syncmail.nix {};
   syncthing = mkWebApp "syncthing" "http://localhost:8384";
+  us = writeShellScript "dvp" "${sway}/bin/swaymsg \"input * xkb_variant ''\"";
   vpn = callPackage ./vpn.nix {};
   windows-7 = writeShellScript "windows-7" "${qemu}/bin/qemu-system-x86_64 -enable-kvm -machine type=pc,accel=kvm -cpu host -m 1G -usb -device usb-tablet \"$HOME/Software/Microsoft/Windows 7 VM.iso\"";
 }

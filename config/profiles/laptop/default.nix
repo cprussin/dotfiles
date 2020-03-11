@@ -30,7 +30,6 @@
     ../../modules/netflix/vpn
 
     ../../modules/nix/nix-path
-    ../../modules/nix/plugins
 
     ../../modules/security/get-aws-access-key
     ../../modules/security/gpg

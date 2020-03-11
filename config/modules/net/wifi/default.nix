@@ -1,4 +1,8 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
+
+let
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+in
 
 {
   networking.wireless = {
@@ -7,20 +11,20 @@
     networks = {
       # Home networks
       Centar = {
-        psk = builtins.extraBuiltins.password pkgs config "Wifi/Centar";
+        psk = passwords.get-password "Wifi/Centar";
         priority = 1;
       };
       CentarPhone = {
-        psk = builtins.extraBuiltins.password pkgs config "Wifi/CentarPhone";
+        psk = passwords.get-password "Wifi/CentarPhone";
         priority = 2;
       };
-      CentarCar.psk = builtins.extraBuiltins.password pkgs config "Wifi/CentarCar";
+      CentarCar.psk = passwords.get-password "Wifi/CentarCar";
 
       # Netflix networks
       Netflix = {};
 
       # Friends' networks
-      "PC House2".psk = builtins.extraBuiltins.password pkgs config "Wifi/PC House2";
+      "PC House2".psk = passwords.get-password "Wifi/PC House2";
 
       # Hotel networks
       Courtyard_GUEST = {};

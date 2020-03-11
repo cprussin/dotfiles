@@ -8,6 +8,8 @@ let
     pkgs.git
     pkgs.openssh
   ];
+
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
 in
 
 {
@@ -23,9 +25,7 @@ in
     systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce []);
 
     primary-user = {
-      openssh.authorizedKeys.keys = [
-        (builtins.extraBuiltins.publicSshKey pkgs config)
-      ];
+      openssh.authorizedKeys.keys = [ passwords.public-ssh-key ];
 
       home-manager.home.file.".ssh/environment".text = "PATH=${ssh-path}";
     };

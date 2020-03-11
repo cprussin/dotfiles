@@ -1,12 +1,19 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 let
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+
   user-pass = pkgs.writeText "user-pass" (
     builtins.concatStringsSep "\n" [
-      (builtins.extraBuiltins.passwordField pkgs config "Netflix/Domain" "Username")
-      (builtins.extraBuiltins.password pkgs config "Netflix/Domain")
+      (passwords.get-password-field "Netflix/Domain" "Username")
+      (passwords.get-password "Netflix/Domain")
     ]
   );
+
+  write-secret-file = pass:
+    pkgs.writeText (builtins.replaceStrings [ "/" ] [ "-" ] pass) (
+      passwords.get-password-field pass "Full"
+    );
 in
 
 {
@@ -33,10 +40,10 @@ in
       dev-type tun
       dev tun
       auth-user-pass ${user-pass}
-      ca ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/ca"}
-      tls-auth ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/tls-auth"}
-      cert ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/cert"}
-      key ${builtins.extraBuiltins.passwordFile pkgs config "Netflix/VPN/key"}
+      ca ${write-secret-file "Netflix/VPN/ca"}
+      tls-auth ${write-secret-file "Netflix/VPN/tls-auth"}
+      cert ${write-secret-file "Netflix/VPN/cert"}
+      key ${write-secret-file "Netflix/VPN/key"}
     '';
     autoStart = false;
     updateResolvConf = true;
