@@ -1,6 +1,6 @@
-{ sources ? import ./sources.nix }:
-
 let
+  sources = import ./sources.nix;
+
   niv-overlay = self: _: {
     niv = self.symlinkJoin {
       name = "niv";
