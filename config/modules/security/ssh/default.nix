@@ -6,17 +6,12 @@
 
     programs.ssh = {
       enable = true;
-      matchBlocks = [
-        {
-          host = "prussin.net *.bci-incorporated.com";
+      matchBlocks = {
+        "prussin.net *.bci-incorporated.com" = {
           user = "connor";
           port = 3580;
-        }
-        {
-          host = "aur.archlinux.org";
-          user = "aur";
-        }
-      ];
+        };
+      };
     };
   };
 }

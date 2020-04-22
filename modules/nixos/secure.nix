@@ -47,17 +47,9 @@ in
               type = lib.types.str;
               description = "The path to the password store.";
             };
-
-            gnupg = lib.mkOption {
-              type = lib.types.str;
-              description = "The path to the gnupg home directory.";
-            };
           };
 
-          config = {
-            passwords = lib.mkDefault "${config.mountPoint}/passwords";
-            gnupg = lib.mkDefault "${config.mountPoint}/gnupg";
-          };
+          config.passwords = lib.mkDefault "${config.mountPoint}/passwords";
         }
       )
     );
@@ -66,10 +58,7 @@ in
   config = {
     home-manager.users = lib.mapAttrs (
       _: secure: {
-        home.sessionVariables = {
-          GNUPGHOME = secure.gnupg;
-          PASSWORD_STORE_DIR = secure.passwords;
-        };
+        home.sessionVariables.PASSWORD_STORE_DIR = secure.passwords;
       }
     ) mountEnabledCfg;
 

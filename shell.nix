@@ -1,16 +1,25 @@
 { sources ? import ./sources.nix }:
 
 let
-  pkgs = import sources.nixpkgs {};
+  niv-overlay = self: _: {
+    niv = self.symlinkJoin {
+      name = "niv";
+      paths = [ sources.niv ];
+      buildInputs = [ self.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/niv \
+          --add-flags "--sources-file ${toString ./sources.json}"
+      '';
+    };
+  };
 
-  niv = pkgs.symlinkJoin {
-    name = "niv";
-    paths = [ sources.niv ];
-    buildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/niv \
-        --add-flags "--sources-file ${toString ./sources.json}"
-    '';
+  pkgs = import sources.nixpkgs {
+    overlays = [
+      niv-overlay
+      (import ./overlays/get-aws-access-key)
+      (import ./overlays/nix-linter)
+    ];
+    config = {};
   };
 
   build-nix-path-env-var = path:
@@ -116,12 +125,14 @@ in
 
 pkgs.mkShell {
   buildInputs = [
-    pkgs.git
-    pkgs.nixpkgs-fmt
+    pkgs.direnv
     pkgs.get-aws-access-key
-    pkgs.nixops
+    pkgs.git
+    pkgs.lorri
+    pkgs.niv
     pkgs.nix-linter
-    niv
+    pkgs.nixops
+    pkgs.nixpkgs-fmt
     lint
     format
     deploy

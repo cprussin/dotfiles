@@ -99,10 +99,10 @@ in
       };
 
       mako = {
-        background-color = "${cfg.foreground}E0";
-        text-color = cfg.background;
-        border-color = cfg.highlightForeground;
-        progress-color = "source ${cfg.bright}";
+        backgroundColor = "${cfg.foreground}E0";
+        textColor = cfg.background;
+        borderColor = cfg.highlightForeground;
+        progressColor = "source ${cfg.bright}";
       };
 
       waybar.styles.frame = {

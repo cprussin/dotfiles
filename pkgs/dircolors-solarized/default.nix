@@ -12,6 +12,6 @@ stdenv.mkDerivation {
     for file in $src/dircolors.*
     do
       install -m644 -D $file $out/etc/dircolors/solarized/''${file##*/}
-        done
+    done
   '';
 }

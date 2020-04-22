@@ -12,7 +12,7 @@ in
   };
 
   config = lib.mkIf (cfg != null) {
-    i18n.consoleKeyMap = pkgs.runCommand "console-keymap" {} ''
+    console.keyMap = pkgs.runCommand "console-keymap" {} ''
       '${pkgs.ckbcomp}/bin/ckbcomp' \
         -layout '${cfg.layout}' \
         -option '${cfg.options}' \
