@@ -140,7 +140,7 @@ in
       ##
       # Outputs
       ##
-      output eDP-1 pos 0,0
+      output eDP-1 pos 0,0 scale 1
 
 
       ##
