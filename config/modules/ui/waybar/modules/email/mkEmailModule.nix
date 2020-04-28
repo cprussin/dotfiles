@@ -1,10 +1,11 @@
-{ writeShellScript, colors }: { folder, script }:
+{ writeShellScript, mu, colors }: { folder, script }:
 
 let
   exec = writeShellScript "email" ''
-    cur=$(ls -1 $HOME/Mail/${folder}/Inbox/cur | wc -l)
-    new=$(ls -1 $HOME/Mail/${folder}/Inbox/new | wc -l)
-    total=$((cur + new))
+    mu=${mu}/bin/mu
+
+    new=$($mu find maildir:"/${folder}/Inbox" flag:new 2>/dev/null | wc -l)
+    total=$($mu find maildir:"/${folder}/Inbox" 2>/dev/null | wc -l)
 
     if [ $total -gt 0 ]
     then
