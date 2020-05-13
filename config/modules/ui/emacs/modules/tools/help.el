@@ -57,8 +57,8 @@
   :demand
   :after ivy
   :config
-  (setq counsel-ag-base-command (concat (gethash "ag" (gethash "paths" nix-config))
-                                        " --nocolor --nogroup --hidden %s"))
+  (setq counsel-rg-base-command (concat (gethash "rg" (gethash "paths" nix-config))
+                                        " -M 240 --with-filename --no-heading --line-number --color never %s"))
   (ivy-set-display-transformer 'counsel-M-x #'transform-func)
   (counsel-mode)
   :general ('(normal motion emacs)

@@ -19,7 +19,7 @@ in
                                   "paths" #s(hash-table
                                              test equal
                                              data (
-                                                   "ag" "${pkgs.silver-searcher}/bin/ag"
+                                                   "rg" "${pkgs.ripgrep}/bin/rg"
                                                    "browse" "${pkgs.launcher}/bin/browse"
                                                    "git" "${pkgs.git}/bin/git"
                                                    "msmtp" "${pkgs.msmtp}/bin/msmtp"

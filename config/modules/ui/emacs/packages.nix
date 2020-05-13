@@ -33,6 +33,7 @@
   epkgs.general
   epkgs.git-gutter
   epkgs.go-mode
+  epkgs.graphql-mode
   epkgs.groovy-mode
   epkgs.haskell-mode
   epkgs.helpful

@@ -31,6 +31,9 @@
   (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
   )
 
+(use-package typescript-mode
+  :config (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode)))
+
 ;;(defun use-flow-from-node-modules ()
 ;;  (let* ((root (locate-dominating-file
 ;;                (or (buffer-file-name) default-directory)
