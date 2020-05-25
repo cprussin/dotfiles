@@ -1,6 +1,1 @@
-self: super: {
-  mu = super.mu.override { emacs = super.emacs; };
-  emacs = (self.emacsPackagesGen super.emacs).emacsWithPackages (
-    epkgs: self.callPackage ../../config/modules/ui/emacs/packages.nix { inherit epkgs; }
-  );
-}
+import ../../pkgs/emacs-with-packages/overlay.nix

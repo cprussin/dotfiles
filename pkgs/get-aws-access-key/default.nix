@@ -1,9 +1,12 @@
-{ symlinkJoin, callPackage }:
+{ nixpkgs ? (import ../../sources.nix).nixpkgs
+}:
 
-symlinkJoin {
-  name = "get-aws-access-key";
-  paths = [
-    (callPackage ./scripts/get-aws-access-key.nix {})
-    (callPackage ./scripts/get-aws-access-key-nixops.nix {})
-  ];
-}
+let
+  pkgs = import nixpkgs {
+    overlays = [
+      (import ./overlay.nix)
+    ];
+  };
+in
+
+pkgs.get-aws-access-key

@@ -40,7 +40,7 @@ let
   format = pkgs.writeShellScriptBin "format" "nixpkgs-fmt ${files}";
 
   set-nix-path = ''
-    export dotfiles="$(nix-build --no-out-link)"
+    export dotfiles="$(NIX_PATH=nixpkgs=${sources.nixpkgs} nix-build --no-out-link)"
     export NIX_PATH="${nix-path}"
   '';
 

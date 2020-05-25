@@ -1,5 +1,1 @@
-_: super: {
-  sudo = super.sudo.override {
-    withInsults = true;
-  };
-}
+import ../../pkgs/sudo-with-insults/overlay.nix

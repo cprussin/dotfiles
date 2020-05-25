@@ -1,13 +1,12 @@
-{ symlinkJoin, callPackage }:
+{ nixpkgs ? (import ../../sources.nix).nixpkgs
+}:
 
-symlinkJoin {
-  name = "launcher";
-  paths = [
-    (callPackage ./scripts/browse.nix {})
-    (callPackage ./scripts/launch.nix {})
-    (callPackage ./scripts/open.nix {})
-    (callPackage ./scripts/preview.nix {})
-    (callPackage ./scripts/run.nix {})
-    (callPackage ./scripts/search.nix {})
-  ];
-}
+let
+  pkgs = import nixpkgs {
+    overlays = [
+      (import ./overlay.nix)
+    ];
+  };
+in
+
+pkgs.launcher

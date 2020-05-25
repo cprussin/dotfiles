@@ -1,9 +1,5 @@
-_: super: {
-  emacsPackagesFor = emacs: (
-    (super.emacsPackagesFor emacs).overrideScope' (
-      epkgs: _: {
-        zoom-frm = epkgs.callPackage ../../pkgs/zoom-frm {};
-      }
-    )
-  );
-}
+let
+  sources = import ../../sources.nix;
+in
+
+import ../../pkgs/zoom-frm/overlay.nix { src = sources.zoom-frm; }

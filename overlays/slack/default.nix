@@ -1,5 +1,1 @@
-self: super: {
-  slack = self.callPackage ../../pkgs/slack {
-    slack = super.slack;
-  };
-}
+import ../../pkgs/slack/overlay.nix

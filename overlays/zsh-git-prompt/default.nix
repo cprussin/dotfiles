@@ -1,3 +1,5 @@
-self: _: {
-  zsh-git-prompt = self.callPackage ../../pkgs/zsh-git-prompt {};
-}
+let
+  sources = import ../../sources.nix;
+in
+
+import ../../pkgs/zsh-git-prompt/overlay.nix { src = sources.zsh-git-prompt; }

@@ -1,5 +1,1 @@
-_: super: {
-  waybar = super.waybar.override {
-    pulseSupport = true;
-  };
-}
+import ../../pkgs/waybar-with-pulse/overlay.nix

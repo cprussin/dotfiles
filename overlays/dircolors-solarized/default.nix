@@ -1,3 +1,7 @@
-self: _: {
-  dircolors-solarized = self.callPackage ../../pkgs/dircolors-solarized {};
+let
+  sources = import ../../sources.nix;
+in
+
+import ../../pkgs/dircolors-solarized/overlay.nix {
+  src = sources.dircolors-solarized;
 }

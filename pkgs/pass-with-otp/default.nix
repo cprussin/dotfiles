@@ -9,4 +9,4 @@ let
   };
 in
 
-pkgs.slack
+pkgs.pass

@@ -1,3 +1,1 @@
-self: _: {
-  launcher = self.callPackage ../../pkgs/launcher {};
-}
+import ../../pkgs/launcher/overlay.nix

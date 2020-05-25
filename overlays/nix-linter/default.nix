@@ -1,3 +1,7 @@
-self: _: {
-  nix-linter = self.callPackage ../../pkgs/nix-linter {};
+let
+  sources = import ../../sources.nix;
+in
+
+import ../../pkgs/nix-linter/overlay.nix {
+  src = sources.nix-linter;
 }
