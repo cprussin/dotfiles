@@ -59,7 +59,7 @@ in
   shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${systemd}/bin/systemctl poweroff";
   slack = "${slack}/bin/slack";
   slackagain = writeShellScript "slackagain" "pkill -x slack; exec ${slack}/bin/slack";
-  sotd = callPackage ./sotd.nix {};
+  sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/11yYp4Ma5t7wJxSBZQYyVcO7FlWuG6cEOJrPXcQCv3AI";
   steam = "${steam}/bin/steam";
   syncmail = callPackage ./syncmail.nix {};
   syncthing = mkWebApp "syncthing" "http://localhost:8384";
