@@ -7,5 +7,7 @@
     support32Bit = true;
   };
 
-  primary-user.extraGroups = [ "audio" ];
+  services.jack.jackd.enable = true;
+
+  primary-user.extraGroups = [ "audio" "jackaudio" ];
 }

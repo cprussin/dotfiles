@@ -7,6 +7,7 @@
 , openssh
 , slack
 , qemu
+, qjackctl
 , steam
 , sway
 , systemd
@@ -45,6 +46,7 @@ in
   github = mkWebApp "github" "https://github.com/";
   gmail = mkGoogleApp "gmail" "https://mail.google.com/mail/u/@user@";
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
+  jack = "${qjackctl}/bin/qjackctl";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
   mixer = "${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";

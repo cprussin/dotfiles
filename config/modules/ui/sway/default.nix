@@ -162,6 +162,7 @@ in
       # Window Rules
       ##
       for_window [app_id="pavucontrol"] floating enable
+      for_window [title=".*QjackCtl"] floating enable
       for_window [app_id="bluetooth"] floating enable
       for_window [app_id="launcher"] {
         floating enable
