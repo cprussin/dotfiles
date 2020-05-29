@@ -1,3 +1,3 @@
-{ lib }:
+_:
 
-lib.filterAttrs (name: _: name != "override" && name != "overrideDerivation")
+attrset: builtins.removeAttrs attrset [ "override" "overrideDerivation" ]
