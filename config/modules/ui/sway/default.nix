@@ -176,11 +176,6 @@ in
         floating enable
         sticky enable
       }
-      for_window [app_id="waybar" floating] {
-        move position cursor
-        move up 80px
-        move left 100px
-      }
 
 
       ##
