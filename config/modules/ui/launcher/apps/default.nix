@@ -48,7 +48,7 @@ in
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
   jack = "${qjackctl}/bin/qjackctl";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
-  mixer = "${pavucontrol}/bin/pavucontrol";
+  mixer = writeShellScript "mixer" "exec ${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
   passwords = mkModal "passwords" "${fzf-pass}/bin/fzf-pass";
