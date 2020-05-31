@@ -33,7 +33,7 @@ in
   aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
   bitwig = "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
-  brave = writeShellScript "firefox" "${launcher}/bin/browse --browser brave $*";
+  brave = writeShellScript "brave" "${launcher}/bin/browse --browser brave $*";
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = writeShellScript "chrome" "${launcher}/bin/browse --browser chrome $*";
   chromium = writeShellScript "chromium" "${launcher}/bin/browse --browser chromium $*";
