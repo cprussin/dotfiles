@@ -11,7 +11,13 @@
   :demand
   :init (setq org-tags-column 0
               org-log-done 'time
-              org-agenda-files (list "~/Notes/Personal.org"))
+              org-agenda-files (list "~/Notes/Personal.org")
+              org-agenda-window-setup 'only-window
+              org-agenda-custom-commands '(("p" . "Personal searches")
+                                           ("pc" tags-todo "+2019_Subaru_Ascent")
+                                           ("ph" tags-todo "+720_Natoma_Drive")
+                                           ("ps" tags-todo "+shakti")
+                                           ("pp" tags-todo "-shakti-720_Natoma_Drive-2019_Subaru_Ascent")))
   :general
   ('(normal motion emacs)
    "SPC aa" '(org-agenda :which-key "Agenda"))
