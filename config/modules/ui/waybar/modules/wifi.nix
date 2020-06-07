@@ -1,10 +1,10 @@
-{ colors }:
+{ config, colors }:
 
 {
   name = "network#wireless";
 
   config = {
-    interface = "wlp61s0";
+    interface = config.wifi-interface;
     interval = "5";
     format = "";
     format-disconnected = "";

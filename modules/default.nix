@@ -9,6 +9,7 @@
     ./nixos/primary-user.nix
     ./nixos/secure.nix
     ./nixos/sudo-cmds.nix
+    ./nixos/wifi-interface.nix
   ];
 
   primary-user.home-manager = _: {

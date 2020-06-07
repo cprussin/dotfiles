@@ -133,6 +133,7 @@ pkgs.mkShell {
     pkgs.nix-linter
     pkgs.nixops
     pkgs.nixpkgs-fmt
+    pkgs.pass
     lint
     format
     deploy

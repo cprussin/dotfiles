@@ -5,6 +5,8 @@
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
   ];
 
+  wifi-interface = "wlp61s0";
+
   boot = {
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [];
@@ -44,6 +46,12 @@
       device = "/dev/disk/by-uuid/faf29f4a-44f9-4703-8c07-2f257aa51fa2";
       fsType = "ext4";
     };
+  };
+
+  primary-user.secure = {
+    device = "/dev/disk/by-uuid/c00737cd-c285-4aeb-961d-89cb40fbf4bc";
+    fsType = "ext4";
+    options = [ "noauto" ];
   };
 
   swapDevices = [

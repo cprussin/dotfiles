@@ -45,7 +45,7 @@ in
         (pkgs.callPackage ./modules/mount/boot.nix {})
         (pkgs.callPackage ./modules/vpn.nix { inherit colors; })
         (pkgs.callPackage ./modules/bluetooth.nix { inherit config colors; })
-        (pkgs.callPackage ./modules/wifi.nix { inherit colors; })
+        (pkgs.callPackage ./modules/wifi.nix { inherit config colors; })
         (pkgs.callPackage ./modules/eth.nix { inherit colors; })
         (pkgs.callPackage ./modules/audio.nix { inherit colors; })
         (pkgs.callPackage ./modules/mic.nix { inherit colors; })
