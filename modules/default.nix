@@ -5,7 +5,7 @@
     ./nixos/autologin-graphical-session.nix
     ./nixos/color-theme.nix
     ./nixos/keymap.nix
-    ./nixos/luks-external-key-devices.nix
+    ./nixos/preLVMTempMount.nix
     ./nixos/primary-user.nix
     ./nixos/secure.nix
     ./nixos/sudo-cmds.nix

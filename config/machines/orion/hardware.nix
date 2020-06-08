@@ -1,9 +1,5 @@
 { lib, config, ... }:
 
-let
-  keyFilesystem = { inherit (config.primary-user.secure) device fsType; };
-in
-
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
@@ -14,23 +10,24 @@ in
   boot = {
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [];
-    luks-external-key-devices = {
-      crypt-root = {
-        inherit keyFilesystem;
-        device = "/dev/disk/by-id/ata-SanDisk_SDSSDHII240G_154435401807";
-        keyPath = "/crypt/orion/root/key";
-        headerPath = "/crypt/orion/root/header";
-      };
-      crypt-home = {
-        inherit keyFilesystem;
-        device = "/dev/disk/by-id/ata-TOSHIBA_DT01ACA200_459YR4PTS";
-        keyPath = "/crypt/orion/home/key";
-        headerPath = "/crypt/orion/home/header";
-      };
+    preLVMTempMount."/key" = {
+      inherit (config.primary-user.secure) device fsType;
     };
     initrd = {
       availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "xhci_pci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
+      luks.devices = {
+        crypt-root = {
+          device = "/dev/disk/by-id/ata-SanDisk_SDSSDHII240G_154435401807";
+          keyFile = "/key/crypt/orion/root/key";
+          header = "/key/crypt/orion/root/header";
+        };
+        crypt-home = {
+          device = "/dev/disk/by-id/ata-TOSHIBA_DT01ACA200_459YR4PTS";
+          keyFile = "/key/crypt/orion/home/key";
+          header = "/key/crypt/orion/home/header";
+        };
+      };
     };
   };
 
@@ -48,11 +45,6 @@ in
 
     "/home" = {
       device = "/dev/disk/by-uuid/c99fa7ac-d55f-4c4f-baa0-e1a0dda2a45b";
-      fsType = "ext4";
-    };
-
-    "/secure" = {
-      device = "/dev/disk/by-uuid/0063ea5a-2cd5-4202-8e00-862590b49802";
       fsType = "ext4";
     };
 
