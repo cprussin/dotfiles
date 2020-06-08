@@ -10,14 +10,11 @@
   boot = {
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [];
-    crypt-initrd = {
-      enable = true;
-      device = "/dev/nvme0n1";
-      key = {
-        device = { inherit (config.primary-user.secure) device fsType; };
-        keyPath = "/spitfire";
-        headerPath = "/header.img";
-      };
+    luks-external-key-devices.crypt-root = {
+      device = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987";
+      keyFilesystem = { inherit (config.primary-user.secure) device fsType; };
+      keyPath = "/spitfire";
+      headerPath = "/header.img";
     };
     initrd = {
       availableKernelModules = [ "xhci_pci" "nvme" "sd_mod" "sr_mod" ];

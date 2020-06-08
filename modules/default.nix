@@ -4,8 +4,8 @@
   imports = [
     ./nixos/autologin-graphical-session.nix
     ./nixos/color-theme.nix
-    ./nixos/crypt-initrd.nix
     ./nixos/keymap.nix
+    ./nixos/luks-external-key-devices.nix
     ./nixos/primary-user.nix
     ./nixos/secure.nix
     ./nixos/sudo-cmds.nix
