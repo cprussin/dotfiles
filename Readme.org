@@ -40,12 +40,10 @@ following:
 1. Create a new [[./config/machines][machine configuration]].
 
 2. If you are deploying a cloud configuration (e.g. managed by ~nixops~), create
-   a new [[./config/networks][network description]].  Otherwise, symlink your machine configuration to
-   to ~./current-machine~:
-
-   #+BEGIN_SRC bash
-     ln -s config/machines/$MY_NEW_MACHINE current-machine
-   #+END_SRC
+   a new [[./config/networks][network description]].  Otherwise, make sure your hostname matches the
+   machine configuration you added (if it doesn't, then either set your hostname
+   with ~hostnamectl~ or change the name of your machine configuration to match
+   your current hostname).
 
 3. Remove your nix channels (This isn't strictly necessary, but I don't use
    channels and instead I manage my nixpkgs version using niv, see [[./shell.nix][shell.nix]] and

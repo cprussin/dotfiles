@@ -30,7 +30,7 @@ let
   nix-path = build-nix-path-env-var {
     nixpkgs = sources.nixpkgs;
     nixpkgs-overlays = "$dotfiles/overlays";
-    nixos-config = "$dotfiles/current-machine";
+    nixos-config = "$dotfiles/config/machines/$(hostname)";
   };
 
   files = "$(find . -name '*.nix')";
@@ -104,13 +104,6 @@ let
       if ! $(mount | grep /boot >/dev/null)
       then
         echo "/boot is not mounted!"
-        exit 1
-      fi
-
-      if [ ! -s ./current-machine ]
-      then
-        echo "You must link to a current-machine"
-        echo "Try \`ln -s ./machines/<machine-name> current-machine\`"
         exit 1
       fi
 
