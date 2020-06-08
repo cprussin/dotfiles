@@ -3,6 +3,6 @@
 {
   options.wifi-interface = lib.mkOption {
     description = "The wifi interface.";
-    type = lib.types.string;
+    type = lib.types.str;
   };
 }
