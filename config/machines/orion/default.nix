@@ -4,6 +4,7 @@
   imports = [
     ./hardware.nix
     ../../profiles/laptop
+    ../../modules/system/devices/wifi
   ];
 
   primary-user.name = "cprussin";

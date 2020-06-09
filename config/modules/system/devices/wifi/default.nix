@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../../../../lib/passwords.nix {};
 in
 
 {
