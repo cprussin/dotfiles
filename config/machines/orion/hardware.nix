@@ -38,9 +38,8 @@
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/CAEC-1652";
+      device = "/dev/disk/by-uuid/98BB-45B7";
       fsType = "vfat";
-      options = [ "noauto" ];
     };
 
     "/home" = {
@@ -52,12 +51,6 @@
       device = "/dev/disk/by-uuid/d72292ba-3170-4156-9edd-7a465340f28c";
       fsType = "ext4";
     };
-  };
-
-  primary-user.secure = {
-    device = "/dev/disk/by-uuid/0063ea5a-2cd5-4202-8e00-862590b49802";
-    fsType = "ext4";
-    options = [ "noauto" ];
   };
 
   swapDevices = [

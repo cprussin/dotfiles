@@ -101,12 +101,6 @@ let
       ${set-nix-path}
       get-aws-access-key-nixops deploy -d $1 --show-trace
     else
-      if ! $(mount | grep /boot >/dev/null)
-      then
-        echo "/boot is not mounted!"
-        exit 1
-      fi
-
       echo Deploying local...
       sudo PASS_DATA="${pass-data}" ${deploy-root-cmd} $1
     fi

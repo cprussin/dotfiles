@@ -18,8 +18,8 @@
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
       luks.devices.crypt-root = {
         device = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987";
-        keyFile = "/key/spitfire";
-        header = "/key/header.img";
+        keyFile = "/key/crypt/lyra/key";
+        header = "/key/crypt/lyra/header";
       };
     };
   };
@@ -31,9 +31,8 @@
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/31DB-5F66";
+      device = "/dev/disk/by-uuid/515A-A18A";
       fsType = "vfat";
-      options = [ "noauto" ];
     };
 
     "/home" = {
@@ -45,12 +44,6 @@
       device = "/dev/disk/by-uuid/faf29f4a-44f9-4703-8c07-2f257aa51fa2";
       fsType = "ext4";
     };
-  };
-
-  primary-user.secure = {
-    device = "/dev/disk/by-uuid/c00737cd-c285-4aeb-961d-89cb40fbf4bc";
-    fsType = "ext4";
-    options = [ "noauto" ];
   };
 
   swapDevices = [
