@@ -18,6 +18,7 @@ in
     ../../modules/security/umask
 
     ../../modules/system/devices/tmp
+    ../../modules/system/nixjs
     ../../modules/system/nixpkgs
 
     ../../modules/ui/bash
