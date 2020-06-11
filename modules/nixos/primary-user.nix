@@ -28,6 +28,6 @@ in
       uid = lib.mkDefault 1000;
     };
     users.users.${cfg.name}.isNormalUser = true;
-    nix.trustedUsers = [ "root" cfg.name ];
+    nix.trustedUsers = [ cfg.name ];
   };
 }
