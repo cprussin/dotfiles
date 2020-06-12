@@ -18,7 +18,7 @@ in
     ../../modules/security/umask
 
     ../../modules/system/devices/tmp
-    ../../modules/system/nixjs
+    ../../modules/system/nix-binary-caches
     ../../modules/system/nixpkgs
 
     ../../modules/ui/bash
