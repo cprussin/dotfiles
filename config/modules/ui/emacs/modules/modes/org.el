@@ -11,6 +11,7 @@
   :demand
   :init (setq org-tags-column 0
               org-log-done 'time
+              org-log-repeat nil
               org-agenda-files (list "~/Notes/Personal.org")
               org-agenda-window-setup 'only-window
               org-agenda-custom-commands '(("p" . "Personal searches")
