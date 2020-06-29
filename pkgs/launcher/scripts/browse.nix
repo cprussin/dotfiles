@@ -33,9 +33,9 @@ writeShellScriptBin "browse" ''
   done
 
   case $browser in
-    brave) exec $brave --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
-    chromium) exec $chromium --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
-    chrome) exec $chrome --enable-native-gpu-memory-buffers --app=$target >/dev/null 2>&1 ;;
+    brave) exec $brave --app=$target >/dev/null 2>&1 ;;
+    chromium) exec $chromium --app=$target >/dev/null 2>&1 ;;
+    chrome) exec $chrome --app=$target >/dev/null 2>&1 ;;
     firefox) exec $firefox $target >/dev/null 2>&1 ;;
   esac
 ''
