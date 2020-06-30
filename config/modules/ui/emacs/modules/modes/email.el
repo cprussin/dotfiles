@@ -49,6 +49,7 @@
         mu4e-view-prefer-html t
         mu4e-view-show-addresses t
         mu4e-hide-index-messages t
+        mu4e-index-cleanup nil
         mu4e-change-filenames-when-moving t
         mu4e-headers-include-related nil
         mu4e-maildir (expand-file-name "~/Mail")
