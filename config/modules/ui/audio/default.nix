@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   hardware.pulseaudio = {
@@ -7,10 +7,5 @@
     support32Bit = true;
   };
 
-  services.jack.jackd = {
-    enable = true;
-    session = lib.mkForce "";
-  };
-
-  primary-user.extraGroups = [ "audio" "jackaudio" ];
+  primary-user.extraGroups = [ "audio" ];
 }
