@@ -99,7 +99,7 @@ let
     then
       echo Deploying network $1...
       ${set-nix-path}
-      get-aws-access-key-nixops deploy -d $1 --show-trace
+      PASS_DATA="${pass-data}" get-aws-access-key-nixops deploy -d $1 --show-trace
     else
       echo Deploying local...
       sudo PASS_DATA="${pass-data}" ${deploy-root-cmd} $1

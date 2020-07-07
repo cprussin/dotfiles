@@ -12,13 +12,12 @@ in
     ../../modules/data/session-vars
 
     ../../modules/security/process-information-hiding
-    ../../modules/security/secure
     ../../modules/security/sshd
     ../../modules/security/sudo
     ../../modules/security/umask
 
-    ../../modules/system/devices/tmp
     ../../modules/system/nix-binary-caches
+    ../../modules/system/nix-path
     ../../modules/system/nixpkgs
 
     ../../modules/ui/bash

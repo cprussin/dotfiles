@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../base
+    ../physical-machine
 
     ../../modules/data/email
     ../../modules/data/git
@@ -18,6 +18,7 @@
     ../../modules/security/get-aws-access-key
     ../../modules/security/gpg
     ../../modules/security/pass
+    ../../modules/security/secure
     ../../modules/security/ssh
 
     ../../modules/system/dbus
@@ -26,9 +27,6 @@
     ../../modules/system/devices/virtualization
     ../../modules/system/docker
     ../../modules/system/inotify-max-user-watches
-    ../../modules/system/nix-path
-    ../../modules/system/systemd-boot
-    ../../modules/system/zone/pacific
 
     ../../modules/ui/audio
     ../../modules/ui/direnv

@@ -1,0 +1,14 @@
+{ ... }:
+
+{
+  imports = [
+    ./hardware.nix
+    ../../profiles/physical-machine
+    ../../profiles/server
+    ../../modules/data/syncthing
+  ];
+
+  primary-user.name = "cprussin";
+  networking.hostName = "crux";
+  services.mingetty.greetingLine = builtins.readFile ./greeting;
+}

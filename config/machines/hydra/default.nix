@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../profiles/cloud
+    ../../profiles/server
   ];
 
   primary-user.name = "cprussin";
