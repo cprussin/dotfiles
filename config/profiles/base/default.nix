@@ -27,6 +27,7 @@ in
     ../../modules/ui/readline
     ../../modules/ui/termite
     ../../modules/ui/terminfo
+    ../../modules/ui/theme
     ../../modules/ui/zsh
   ];
 }
