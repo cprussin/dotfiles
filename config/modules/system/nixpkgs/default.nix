@@ -18,6 +18,7 @@ in
 
   primary-user.home-manager = {
     nixpkgs.config = config.nixpkgs.config;
+    nixpkgs.overlays = config.nixpkgs.overlays;
     xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
   };
 }

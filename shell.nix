@@ -73,16 +73,6 @@ let
     ]
   );
 
-  build-env = variables:
-    builtins.concatStringsSep " " (
-      pkgs.lib.mapAttrsToList (k: v: "${k}=\"${v}\"") variables
-    );
-
-  env = build-env {
-    NIX_PATH = nix-path;
-    PASS_DATA = pass-data;
-  };
-
   deploy = pkgs.writeShellScriptBin "deploy" ''
     set -e
     ${lint}/bin/lint
@@ -97,10 +87,12 @@ let
     if [ "$1" -a -d config/networks/$1 ]
     then
       echo Deploying network $1...
-      ${env} get-aws-access-key-nixops deploy -d $1 --show-trace
+      NIX_PATH="${nix-path}" PASS_DATA="${pass-data}" \
+        get-aws-access-key-nixops deploy -d $1 --show-trace
     else
       echo Deploying local...
-      sudo ${env} nixos-rebuild ''${1-switch} --show-trace
+      sudo PASS_DATA="${pass-data}" \
+        sh -c 'NIX_PATH="${nix-path}" nixos-rebuild ''${1-switch} --show-trace'
     fi
   '';
 
