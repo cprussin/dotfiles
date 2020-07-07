@@ -1,11 +1,15 @@
 { config, ... }:
 
 let
+  dotfiles = import ../../../../default.nix {};
+
+  overlays = "${dotfiles}/overlays";
+
   load-overlay = overlay:
-    import "${toString <nixpkgs-overlays>}/${overlay}";
+    import "${overlays}/${overlay}";
 
   all-overlays =
-    builtins.attrNames (builtins.readDir (toString <nixpkgs-overlays>));
+    builtins.attrNames (builtins.readDir overlays);
 in
 
 {

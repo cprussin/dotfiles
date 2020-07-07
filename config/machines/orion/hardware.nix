@@ -1,8 +1,12 @@
 { lib, config, ... }:
 
+let
+  sources = import ../../../sources.nix;
+in
+
 {
   imports = [
-    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
   wifi-interface = "wlp12s0";

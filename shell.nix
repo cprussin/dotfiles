@@ -22,6 +22,12 @@ let
     config = {};
   };
 
+  files = "$(find . -name '*.nix')";
+
+  lint = pkgs.writeShellScriptBin "lint" "nix-linter ${files}";
+
+  format = pkgs.writeShellScriptBin "format" "nixpkgs-fmt ${files}";
+
   build-nix-path-env-var = path:
     builtins.concatStringsSep ":" (
       pkgs.lib.mapAttrsToList (k: v: "${k}=${v}") path
@@ -29,25 +35,8 @@ let
 
   nix-path = build-nix-path-env-var {
     nixpkgs = sources.nixpkgs;
-    nixpkgs-overlays = "$dotfiles/overlays";
-    nixos-config = "$dotfiles/config/machines/$(hostname)";
+    nixos-config = "$(NIX_PATH=nixpkgs=${sources.nixpkgs} nix-build --no-out-link)/config/machines/$(hostname)";
   };
-
-  files = "$(find . -name '*.nix')";
-
-  lint = pkgs.writeShellScriptBin "lint" "nix-linter ${files}";
-
-  format = pkgs.writeShellScriptBin "format" "nixpkgs-fmt ${files}";
-
-  set-nix-path = ''
-    export dotfiles="$(NIX_PATH=nixpkgs=${sources.nixpkgs} nix-build --no-out-link)"
-    export NIX_PATH="${nix-path}"
-  '';
-
-  deploy-root-cmd = pkgs.writeShellScript "deploy-root-cmd" ''
-    ${set-nix-path}
-    nixos-rebuild ''${1-switch} --show-trace
-  '';
 
   exported-password-data = {
     "Netflix/Domain" = [ "Username" "Password" ];
@@ -84,6 +73,16 @@ let
     ]
   );
 
+  build-env = variables:
+    builtins.concatStringsSep " " (
+      pkgs.lib.mapAttrsToList (k: v: "${k}=\"${v}\"") variables
+    );
+
+  env = build-env {
+    NIX_PATH = nix-path;
+    PASS_DATA = pass-data;
+  };
+
   deploy = pkgs.writeShellScriptBin "deploy" ''
     set -e
     ${lint}/bin/lint
@@ -98,11 +97,10 @@ let
     if [ "$1" -a -d config/networks/$1 ]
     then
       echo Deploying network $1...
-      ${set-nix-path}
-      PASS_DATA="${pass-data}" get-aws-access-key-nixops deploy -d $1 --show-trace
+      ${env} get-aws-access-key-nixops deploy -d $1 --show-trace
     else
       echo Deploying local...
-      sudo PASS_DATA="${pass-data}" ${deploy-root-cmd} $1
+      sudo ${env} nixos-rebuild ''${1-switch} --show-trace
     fi
   '';
 

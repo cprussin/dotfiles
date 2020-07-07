@@ -1,9 +1,13 @@
 { lib, ... }:
 
+let
+  sources = import ../../../../sources.nix;
+  dotfiles = import ../../../../default.nix {};
+in
+
 {
   nix.nixPath = lib.mapAttrsToList (k: v: "${k}=${v}") {
-    nixpkgs = toString <nixpkgs>;
-    nixpkgs-overlays = toString <nixpkgs-overlays>;
-    nixos-config = toString <nixos-config>;
+    nixpkgs = sources.nixpkgs;
+    nixpkgs-overlays = "${dotfiles}/overlays";
   };
 }
