@@ -15,10 +15,32 @@
               org-agenda-files (list "~/Notes/Personal.org")
               org-agenda-window-setup 'only-window
               org-agenda-custom-commands '(("p" . "Personal searches")
-                                           ("pc" tags-todo "+2019_Subaru_Ascent")
-                                           ("ph" tags-todo "+720_Natoma_Drive")
-                                           ("ps" tags-todo "+shakti")
-                                           ("pp" tags-todo "-shakti-720_Natoma_Drive-2019_Subaru_Ascent")))
+
+                                           ("pc" . "2019 Subaru Ascent")
+                                           ("pca" tags-todo  "+2019_Subaru_Ascent")
+                                           ("pcr" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
+                                           ("pcs" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
+                                           ("pcu" tags-todo  "+2019_Subaru_Ascent-SCHEDULED={.+}")
+
+                                           ("ph" . "720 Natoma Drive")
+                                           ("pha" tags-todo  "+720_Natoma_Drive")
+                                           ("phr" tags-todo  "+720_Natoma_Drive+SCHEDULED={.+\\+.+}")
+                                           ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}")
+                                           ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}")
+
+                                           ("ps" . "Shakti")
+                                           ("psa" tags-todo  "+shakti")
+                                           ("psr" tags-todo  "+shakti+SCHEDULED={.+\\+.+}")
+                                           ("pss" tags-todo  "+shakti+SCHEDULED={^[^\\+]+$}")
+                                           ("psu" tags-todo  "+shakti-SCHEDULED={.+}")
+
+                                           ("pp" . "Other")
+                                           ("ppa" tags-todo "-shakti-720_Natoma_Drive-2019_Subaru_Ascent")
+                                           ("ppr" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
+                                           ("pps" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
+                                           ("ppu" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}")
+
+                                           ))
   :general
   ('(normal motion emacs)
    "SPC aa" '(org-agenda :which-key "Agenda"))
