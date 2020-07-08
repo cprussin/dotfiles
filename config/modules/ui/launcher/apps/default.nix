@@ -7,7 +7,6 @@
 , openssh
 , slack
 , qemu
-, qjackctl
 , steam
 , sway
 , systemd
@@ -47,7 +46,6 @@ in
   github = mkWebApp "github" "https://github.com/";
   gmail = mkGoogleApp "gmail" "https://mail.google.com/mail/u/@user@";
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
-  jack = "${qjackctl}/bin/qjackctl";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
   mixer = writeShellScript "mixer" "exec ${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
@@ -56,7 +54,6 @@ in
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};
-  reno = mkWebApp "shakti-reno" "https://map.builds.test.netflix.net/view/Reno/";
   screenshot = callPackage ./screenshot.nix {};
   shakti = callPackage ./shakti.nix { inherit config; };
   shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${systemd}/bin/systemctl poweroff";
@@ -66,7 +63,7 @@ in
   steam = "${steam}/bin/steam";
   syncmail = callPackage ./syncmail.nix {};
   syncthing = mkWebApp "syncthing" "http://localhost:8384";
-  us = writeShellScript "dvp" "${sway}/bin/swaymsg \"input * xkb_variant ''\"";
+  us = writeShellScript "us" "${sway}/bin/swaymsg \"input * xkb_variant ''\"";
   vpn = callPackage ./vpn.nix {};
   windows-7 = writeShellScript "windows-7" "${qemu}/bin/qemu-system-x86_64 -enable-kvm -machine type=pc,accel=kvm -cpu host -m 1G -usb -device usb-tablet \"$HOME/Software/Microsoft/Windows 7 VM.iso\"";
 }
