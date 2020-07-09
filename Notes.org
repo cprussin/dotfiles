@@ -29,13 +29,11 @@
 ** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
 ** TODO Fix FIXME/TODO items :user:
 ** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
-** TODO Add widevine in minichrome/chromium/firefox :user:
 ** TODO Add local caching DNS server :system:
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
 ** NEXT Fix search for '
-** NEXT Add "go to site" link to password UI
 ** NEXT Nixify/containerize/etc prussin.net [3/9]
    - [X] Web
    - [X] Identity (openldap)
@@ -50,6 +48,10 @@
      - [ ] Local filing folder scans
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
+** DONE Add widevine in minichrome/chromium/firefox :user:
+   CLOSED: [2020-07-09 Thu 10:32]
+** DONE Add "go to site" link to password UI
+   CLOSED: [2020-07-09 Thu 10:31]
 ** DONE Fix mako
    CLOSED: [2020-01-06 Mon 20:57]
 ** DONE Re-do session initialization
