@@ -14,6 +14,7 @@
 , emacs
 , launcher
 , fzf-pass
+, utillinux
 , config
 }:
 
@@ -46,6 +47,7 @@ in
   github = mkWebApp "github" "https://github.com/";
   gmail = mkGoogleApp "gmail" "https://mail.google.com/mail/u/@user@";
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
+  insecure = writeShellScript "secure" "sudo ${utillinux}/bin/umount /secure";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
   mixer = writeShellScript "mixer" "exec ${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
@@ -55,6 +57,7 @@ in
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};
   screenshot = callPackage ./screenshot.nix {};
+  secure = writeShellScript "secure" "sudo ${utillinux}/bin/mount /secure";
   shakti = callPackage ./shakti.nix { inherit config; };
   shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${systemd}/bin/systemctl poweroff";
   slack = "${slack}/bin/slack";
