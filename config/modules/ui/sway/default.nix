@@ -89,6 +89,11 @@ let
     ${brightnessctl} set 5%-
     ${show-brightness}
   '';
+
+  lock = pkgs.writeShellScript "lock" ''
+    sudo umount /secure
+    exec ${pkgs.swaylock}/bin/swaylock "$@"
+  '';
 in
 
 {
@@ -117,7 +122,6 @@ in
       set $wl-paste ${pkgs.wl-clipboard}/bin/wl-paste
       set $passwords ${launcher-apps.passwords}
       set $waybar ${pkgs.waybar}/bin/waybar
-      set $lock ${pkgs.swaylock}/bin/swaylock
       set $idle ${pkgs.swayidle}/bin/swayidle
       set $swaymsg ${pkgs.sway}/bin/swaymsg
       set $mako ${pkgs.mako}/bin/mako
@@ -204,7 +208,7 @@ in
         $mod+Shift+d exec $run "$($wl-paste)"
         $mod+p exec $passwords
         $mod+Return exec ${config.primary-user.home-manager.default-terminal.bin}
-        $mod+Shift+Return exec $lock
+        $mod+Shift+Return exec ${lock}
         $mod+Shift+q kill
         $mod+Shift+c reload
         XF86AudioRaiseVolume exec ${raise-volume}
@@ -280,11 +284,11 @@ in
       }
 
       exec $idle -w \
-        timeout 300 $lock \
+        timeout 300 ${lock} \
         timeout 300 '$swaymsg "output * dpms off"' \
           resume '$swaymsg "output * dpms on"' \
-        before-sleep $lock \
-        lock $lock
+        before-sleep ${lock} \
+        lock ${lock}
 
       exec $mako
       exec $xrdb -load ~/.Xresources
