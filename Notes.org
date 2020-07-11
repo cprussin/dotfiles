@@ -26,9 +26,8 @@
    - [X] Secrets
 ** TODO Sync mail using imap idle
 ** TODO Investigate using ssh certificate based auth
-** TODO Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
 ** TODO Fix FIXME/TODO items :user:
-** TODO Fix emacs colorscheme so toggle-colors preserves overrides :user:emacs:
+** TODO Rebuild toggle-colors :user:
 ** TODO Add local caching DNS server :system:
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
@@ -48,10 +47,13 @@
      - [ ] Local filing folder scans
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
+** NEXT Replace nix-linter custom package with simple haskellPackages overlay
 ** DONE Add widevine in minichrome/chromium/firefox :user:
    CLOSED: [2020-07-09 Thu 10:32]
 ** DONE Add "go to site" link to password UI
    CLOSED: [2020-07-09 Thu 10:31]
+** DONE Remove /bin/bash (used for shakti API scripts - use chroot similar to steam for shakti) :system:
+   CLOSED: [2020-03-23 Mon 21:45]
 ** DONE Fix mako
    CLOSED: [2020-01-06 Mon 20:57]
 ** DONE Re-do session initialization
