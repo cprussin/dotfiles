@@ -1,7 +1,7 @@
-{ sources ? import ./sources.nix }:
+{ nixpkgs ? (import ./sources.nix).nixpkgs }:
 
 let
-  pkgs = import sources.nixpkgs {};
+  pkgs = import nixpkgs {};
 in
 
 pkgs.stdenv.mkDerivation {
