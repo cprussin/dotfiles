@@ -55,14 +55,12 @@
         mu4e-maildir (expand-file-name "~/Mail")
         mu4e-user-mail-address-list '("connor@prussin.net"
                                       "cprussin@bci-incorporated.com"
-                                      "cprussin@netflix.com"
                                       "cprussin@gmail.com")
         mu4e-contexts `(,(make-mail-context "PrussinNet" "connor@prussin.net")
                         ,(make-mail-context
                           "BCI Incorporated"
                           "cprussin@bci-incorporated.com"
                           "PrussinNet")
-                        ,(make-mail-context "Neflix" "cprussin@netflix.com")
                         ,(make-mail-context "GMail" "cprussin@gmail.com")))
   :general
   ('(normal) mu4e-headers-mode-map
@@ -79,7 +77,6 @@
    :prefix "SPC am"
    "" '(:ignore t :which-key "email")
    "g" `(,(load-mailbox "GMail") :which-key "GMail")
-   "n" `(,(load-mailbox "Netflix") :which-key "Netflix")
    "p" `(,(load-mailbox "PrussinNet") :which-key "PrussinNet"))
   (mu4e-headers-mode-map
    :prefix "SPC m"

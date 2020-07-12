@@ -39,7 +39,6 @@ in
 
       right = map stripOverrides [
         (pkgs.callPackage ./modules/email/gmail.nix { inherit config colors; })
-        (pkgs.callPackage ./modules/email/netflix.nix { inherit config colors; })
         (pkgs.callPackage ./modules/email/prussin-net.nix { inherit config colors; })
         (pkgs.callPackage ./modules/secure.nix {})
         (pkgs.callPackage ./modules/vpn.nix { inherit colors; })

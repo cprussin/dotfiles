@@ -38,26 +38,6 @@ in
             remove = "none";
           };
         };
-        "Netflix" = {
-          address = "cprussin@netflix.com";
-          realName = "Connor Prussin";
-          flavor = "gmail.com";
-          passwordCommand = getAppPassword "Netflix/Google";
-          maildir.path = "Netflix";
-          msmtp.enable = true;
-          mbsync = {
-            enable = true;
-            create = "both";
-            expunge = "both";
-            remove = "none";
-            patterns = [
-              "INBOX"
-              "\\[Gmail\\]/All Mail"
-              "\\[Gmail\\]/Drafts"
-              "\\[Gmail\\]/Spam"
-            ];
-          };
-        };
         "GMail" = {
           address = "cprussin@gmail.com";
           realName = "Connor Prussin";
