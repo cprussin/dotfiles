@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  primary-user.extraGroups = [ "dialout" ];
+}
