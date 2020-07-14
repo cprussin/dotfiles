@@ -37,7 +37,7 @@ in
   calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
   chrome = writeShellScript "chrome" "${launcher}/bin/browse --browser chrome $*";
   chromium = writeShellScript "chromium" "${launcher}/bin/browse --browser chromium $*";
-  crux = mkTerminalApp "crux" "${openssh}/bin/ssh -t crux nix-shell -p tmux --run \\\'tmux new-session -A -s 0\\\'";
+  crux = mkTerminalApp "crux" "${openssh}/bin/ssh -t crux load-session";
   dvp = writeShellScript "dvp" "${sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
   emacs = writeShellScript "emacs" "${launcher}/bin/open \${1-*scratch*}";
   email = callPackage ./email.nix {};

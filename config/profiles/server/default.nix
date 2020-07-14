@@ -3,6 +3,7 @@
 {
   imports = [
     ../base
+    ../../modules/ui/session
   ];
 
   promptColor = "red";
