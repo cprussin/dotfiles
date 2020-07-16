@@ -8,6 +8,9 @@
   ];
 
   primary-user.name = "cprussin";
-  networking.hostName = "orion";
+  networking = {
+    hostName = "orion";
+    hostId = "4dcafc70";
+  };
   services.mingetty.greetingLine = builtins.readFile ./greeting;
 }

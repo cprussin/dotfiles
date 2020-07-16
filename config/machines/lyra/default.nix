@@ -7,6 +7,9 @@
   ];
 
   primary-user.name = "cprussin";
-  networking.hostName = "lyra";
+  networking = {
+    hostName = "lyra";
+    hostId = "72b0fa88";
+  };
   services.mingetty.greetingLine = builtins.readFile ./greeting;
 }

@@ -9,6 +9,9 @@
   ];
 
   primary-user.name = "cprussin";
-  networking.hostName = "crux";
+  networking = {
+    hostName = "crux";
+    hostId = "a362c6ea";
+  };
   services.mingetty.greetingLine = builtins.readFile ./greeting;
 }
