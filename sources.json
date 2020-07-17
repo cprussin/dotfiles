@@ -47,6 +47,18 @@
         "url": "https://github.com/Synthetica9/nix-linter/archive/8f1037ddb3c03a12f285b4a9702e73c0eb15f972.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nixops": {
+        "branch": "master",
+        "description": "NixOps is a tool for deploying to NixOS machines in a network or cloud.",
+        "homepage": "https://nixos.org/nixops",
+        "owner": "NixOS",
+        "repo": "nixops",
+        "rev": "0330ead36be75c0b0f80cf84c227f13380daf414",
+        "sha256": "0sdbzzhbjy3vly5zvzybalyc116gzg9lyikqps62drq7k6phpcnl",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixops/archive/0330ead36be75c0b0f80cf84c227f13380daf414.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixpkgs": {
         "branch": "nixos-20.03",
         "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",

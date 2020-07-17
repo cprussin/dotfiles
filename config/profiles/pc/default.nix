@@ -50,5 +50,4 @@
   promptColor = "cyan";
   enableTermiteApplicationConfig = true;
   enableSshdAtBoot = false;
-  services.openssh.permitRootLogin = "no";
 }

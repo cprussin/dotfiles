@@ -11,7 +11,13 @@ in
     services.openssh = {
       enable = true;
       passwordAuthentication = false;
+      permitRootLogin = "no";
       extraConfig = "PermitUserEnvironment yes";
+    };
+
+    security.pam = {
+      enableSSHAgentAuth = true;
+      services.sudo.sshAgentAuth = true;
     };
 
     systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce []);
