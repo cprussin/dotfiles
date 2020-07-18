@@ -12,4 +12,5 @@ in
       lib.findFirst (lib.hasPrefix "${field}: ") "" (passEntrySplit name)
     );
   get-full-password = passEntry;
+  get-base64-encoded-password = builtins.extraBuiltins.base64Password pkgs;
 }

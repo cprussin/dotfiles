@@ -27,7 +27,6 @@
     ../../modules/system/devices/printers
     ../../modules/system/devices/virtualization
     ../../modules/system/docker
-    ../../modules/system/inotify-max-user-watches
 
     ../../modules/ui/audio
     ../../modules/ui/direnv
