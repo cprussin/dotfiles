@@ -1,22 +1,40 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
-
-  user-pass = pkgs.writeText "user-pass" (
-    builtins.concatStringsSep "\n" [
-      (passwords.get-password-field "Netflix/Domain" "Username")
-      (passwords.get-password "Netflix/Domain")
-    ]
-  );
-
-  write-secret-file = pass:
-    pkgs.writeText (builtins.replaceStrings [ "/" ] [ "-" ] pass) (
-      passwords.get-password-field pass "Full"
-    );
 in
 
 {
+  deployment.keys = {
+    netflix-vpn-user-pass = {
+      text = builtins.concatStringsSep "\n" [
+        (passwords.get-password-field "Netflix/Domain" "Username")
+        (passwords.get-password "Netflix/Domain")
+      ];
+      destDir = "/secrets";
+    };
+
+    netflix-vpn-ca = {
+      text = passwords.get-full-password "Netflix/VPN/ca";
+      destDir = "/secrets";
+    };
+
+    netflix-vpn-tls-auth = {
+      text = passwords.get-full-password "Netflix/VPN/tls-auth";
+      destDir = "/secrets";
+    };
+
+    netflix-vpn-cert = {
+      text = passwords.get-full-password "Netflix/VPN/cert";
+      destDir = "/secrets";
+    };
+
+    netflix-vpn-key = {
+      text = passwords.get-full-password "Netflix/VPN/key";
+      destDir = "/secrets";
+    };
+  };
+
   services.openvpn.servers.netflix = {
     config = ''
       client
@@ -39,11 +57,11 @@ in
       key-direction 1
       dev-type tun
       dev tun
-      auth-user-pass ${user-pass}
-      ca ${write-secret-file "Netflix/VPN/ca"}
-      tls-auth ${write-secret-file "Netflix/VPN/tls-auth"}
-      cert ${write-secret-file "Netflix/VPN/cert"}
-      key ${write-secret-file "Netflix/VPN/key"}
+      auth-user-pass ${config.deployment.keys.netflix-vpn-user-pass.path}
+      ca ${config.deployment.keys.netflix-vpn-ca.path}
+      tls-auth ${config.deployment.keys.netflix-vpn-tls-auth.path}
+      cert ${config.deployment.keys.netflix-vpn-cert.path}
+      key ${config.deployment.keys.netflix-vpn-key.path}
     '';
     autoStart = false;
     updateResolvConf = true;

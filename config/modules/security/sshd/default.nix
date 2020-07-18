@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+  public-key = builtins.extraBuiltins.publicSshKey pkgs "connor@prussin.net";
 in
 
 {
@@ -22,6 +22,6 @@ in
 
     systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce []);
 
-    primary-user.openssh.authorizedKeys.keys = [ passwords.public-ssh-key ];
+    primary-user.openssh.authorizedKeys.keys = [ public-key ];
   };
 }

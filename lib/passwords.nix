@@ -1,11 +1,15 @@
-{}:
+{ lib, pkgs }:
 
 let
-  pass-data = builtins.fromJSON (builtins.getEnv "PASS_DATA");
+  passEntry = builtins.extraBuiltins.password pkgs;
+  passEntrySplit = name: lib.splitString "\n" (passEntry name);
 in
 
-rec {
-  get-password-field = pass: field: pass-data."${pass}"."${field}";
-  get-password = pass: get-password-field pass "Password";
-  public-ssh-key = pass-data.public-ssh-key;
+{
+  get-password = name: builtins.elemAt (passEntrySplit name) 0;
+  get-password-field = name: field:
+    lib.replaceStrings [ "${field}: " ] [ "" ] (
+      lib.findFirst (lib.hasPrefix "${field}: ") "" (passEntrySplit name)
+    );
+  get-full-password = passEntry;
 }
