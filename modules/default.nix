@@ -4,6 +4,7 @@
   imports = [
     ./nixos/autologin-graphical-session.nix
     ./nixos/color-theme.nix
+    ./nixos/detachedLuksWithNixopsKeys.nix
     ./nixos/keymap.nix
     ./nixos/preLVMTempMount.nix
     ./nixos/primary-user.nix

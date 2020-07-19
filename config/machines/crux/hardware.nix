@@ -5,53 +5,14 @@ let
 
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
 
+  getLuksFile = drive: file:
+    passwords.get-base64-encoded-password "Infrastructure/luks/crux/${drive}/${file}";
+
   drives = [
     "ata-ST10000VN0008-2JJ101_ZHZ06Y2A"
     "ata-ST10000VN0008-2JJ101_ZHZ08V0G"
     "ata-ST10000VN0008-2JJ101_ZHZ0L7WG"
   ];
-
-  base64Decode = path: "${pkgs.coreutils}/bin/base64 -d ${path}";
-
-  unlock-crypt-drive-service = drive: {
-    enable = true;
-    description = "Unlock encrypted device ${drive}.";
-    wantedBy = [ "zfs.target" ];
-    after = [
-      "${drive}-key-key.service"
-      "${drive}-key-header.service"
-    ];
-    wants = [
-      "${drive}-key-key.service"
-      "${drive}-key-header.service"
-    ];
-    serviceConfig = {
-      ExecStart = pkgs.writeShellScript "unlock-${drive}" ''
-        ${pkgs.coreutils}/bin/mkdir -p /tmp/${drive}
-        ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${drive}
-        ${base64Decode config.deployment.keys."${drive}-header".path} > /tmp/${drive}/header
-
-        ${pkgs.cryptsetup}/bin/cryptsetup open \
-          --key-file <(${base64Decode config.deployment.keys."${drive}-key".path}) \
-          --header /tmp/${drive}/header \
-          /dev/disk/by-id/${drive} crypt-${drive}
-
-        ${pkgs.coreutils}/bin/shred -u /tmp/${drive}/header
-        ${pkgs.utillinux}/bin/umount /tmp/${drive}
-        ${pkgs.coreutils}/bin/rmdir /tmp/${drive}
-      '';
-      Type = "oneshot";
-    };
-  };
-
-  unlock-crypt-drive-services = builtins.listToAttrs (
-    map (drive:
-      {
-        name = "unlock-${drive}";
-        value = unlock-crypt-drive-service drive;
-      }
-    ) drives
-  );
 in
 
 {
@@ -60,28 +21,18 @@ in
   ];
 
   config = {
-    deployment.keys = builtins.listToAttrs (
-      lib.flatten (
-        map (
-          drive: [
-            {
-              name = "${drive}-key";
-              value.text = passwords.get-base64-encoded-password "Infrastructure/luks/crux/${drive}/key";
-            }
-            {
-              name = "${drive}-header";
-              value.text = passwords.get-base64-encoded-password "Infrastructure/luks/crux/${drive}/header";
-            }
-          ]
-        ) drives
-      )
+    detachedLuksWithNixopsKeys = builtins.listToAttrs (
+      map (drive: lib.nameValuePair drive {
+        key = getLuksFile drive "key";
+        header = getLuksFile drive "header";
+      }) drives
     );
 
-    systemd.services = unlock-crypt-drive-services // {
+    systemd.services = {
       import-zfs = {
         enable = true;
-        after = map (name: "${name}.service") (builtins.attrNames unlock-crypt-drive-services);
-        wants = map (name: "${name}.service") (builtins.attrNames unlock-crypt-drive-services);
+        after = map (drive: "unlock-${drive}.service") drives;
+        wants = map (drive: "unlock-${drive}.service") drives;
         wantedBy = [ "zfs.target" ];
         serviceConfig = {
           ExecStart = "${pkgs.zfs}/bin/zpool import -a -d /dev/mapper";
