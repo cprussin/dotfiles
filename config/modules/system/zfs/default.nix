@@ -2,5 +2,8 @@
 
 {
   boot.supportedFilesystems = [ "zfs" ];
-  services.zfs.autoSnapshot.enable = true;
+  services.zfs = {
+    autoSnapshot.enable = true;
+    autoScrub.enable = true;
+  };
 }
