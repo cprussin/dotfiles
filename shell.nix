@@ -48,11 +48,11 @@ in
     files = "$(find . -name '*.nix')";
 
     lint = pkgs.writeShellScriptBin "lint" ''
-      ${pkgs.nix-linter}/bin/nix-linter ${files}
+      ${pkgs.nix-linter}/bin/nix-linter ${files} "$@"
     '';
 
     format = pkgs.writeShellScriptBin "format" ''
-      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt ${files}
+      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt ${files} "$@"
     '';
 
     deploy = pkgs.writeShellScriptBin "deploy" ''
