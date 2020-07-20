@@ -5,6 +5,16 @@ let
 
   base64Decode = path: "${pkgs.coreutils}/bin/base64 -d ${path}";
 
+  keys =
+    lib.mapAttrs'
+      (k: v: lib.nameValuePair "${k}-key" { text = v.key; })
+      cfg;
+
+  headers =
+    lib.mapAttrs'
+      (k: v: lib.nameValuePair "${k}-header" { text = v.header; })
+      cfg;
+
   mkUnlockScript = drive: pkgs.writeShellScript "unlock-${drive}" ''
     ${pkgs.coreutils}/bin/mkdir -p /tmp/${drive}
     ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${drive}
@@ -29,49 +39,50 @@ in
       drives.  For each drive, a systemd unit named unlock-<drive>.service will
       be created.
     '';
-    type = lib.types.nullOr (lib.types.attrsOf (
-      lib.types.submodule {
-        options = {
-          key = lib.mkOption {
-            type = lib.types.str;
-            description = ''
-              The base64-encoded contents of the luks key for this drive
-            '';
+    type = lib.types.nullOr (
+      lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            key = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                The base64-encoded contents of the luks key for this drive
+              '';
+            };
+            header = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                The base64-encoded contents of the luks header for this drive
+              '';
+            };
           };
-          header = lib.mkOption {
-            type = lib.types.str;
-            description = ''
-              The base64-encoded contents of the luks header for this drive
-            '';
-          };
-        };
-      }
-    ));
+        }
+      )
+    );
   };
 
   config = lib.mkIf (cfg != null) {
-    deployment.keys =
-      lib.mapAttrs' (k: v: lib.nameValuePair "${k}-key" { text = v.key; }) cfg //
-      lib.mapAttrs' (k: v: lib.nameValuePair "${k}-header" { text = v.header; }) cfg;
+    deployment.keys = keys // headers;
 
-    systemd.services = lib.mapAttrs' (drive: _:
-      lib.nameValuePair "unlock-${drive}" {
-        enable = true;
-        description = "Unlock encrypted device ${drive}.";
-        wantedBy = [ "zfs.target" ];
-        after = [
-          "${drive}-key-key.service"
-          "${drive}-header-key.service"
-        ];
-        wants = [
-          "${drive}-key-key.service"
-          "${drive}-header-key.service"
-        ];
-        serviceConfig = {
-          ExecStart = mkUnlockScript drive;
-          Type = "oneshot";
-        };
-      }
+    systemd.services = lib.mapAttrs' (
+      drive: _:
+        lib.nameValuePair "unlock-${drive}" {
+          enable = true;
+          description = "Unlock encrypted device ${drive}.";
+          wantedBy = [ "zfs.target" ];
+          after = [
+            "${drive}-key-key.service"
+            "${drive}-header-key.service"
+          ];
+          wants = [
+            "${drive}-key-key.service"
+            "${drive}-header-key.service"
+          ];
+          serviceConfig = {
+            ExecStart = mkUnlockScript drive;
+            Type = "oneshot";
+          };
+        }
     ) cfg;
   };
 }

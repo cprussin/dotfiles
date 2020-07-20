@@ -21,10 +21,12 @@ in
   ];
 
   detachedLuksWithNixopsKeys = builtins.listToAttrs (
-    map (drive: lib.nameValuePair drive {
-      key = getLuksFile drive "key";
-      header = getLuksFile drive "header";
-    }) drives
+    map (
+      drive: lib.nameValuePair drive {
+        key = getLuksFile drive "key";
+        header = getLuksFile drive "header";
+      }
+    ) drives
   );
 
   systemd.services = {
