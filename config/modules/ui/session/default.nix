@@ -9,5 +9,11 @@ let
 in
 
 {
-  primary-user.home-manager.home.packages = lib.mkForce [ load-session ];
+  primary-user.home-manager = {
+    home.packages = lib.mkForce [ load-session ];
+    programs.tmux = {
+      enable = true;
+      extraConfig = "set -g mouse on";
+    };
+  };
 }
