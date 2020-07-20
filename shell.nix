@@ -20,20 +20,16 @@ in
       };
     };
 
-    nixops-unwrapped = import nixops;
+    nixops-overlay = _: _: {
+      nixops = import nixops;
+    };
 
-    nixops-overlay = self: _: {
-      nixops = nixops-unwrapped;
+    nixops-wrapped-overlay = self: _: {
       nixops-wrapped = self.symlinkJoin {
         name = "nixops";
         paths = [
-          (
-            self.callPackage ./nixops-deploy-wrapper.nix {
-              inherit nixpkgs;
-              nixops = nixops-unwrapped;
-            }
-          )
-          nixops-unwrapped
+          (self.callPackage ./nixops-deploy-wrapper.nix { inherit nixpkgs; })
+          self.nixops
         ];
       };
     };
@@ -42,6 +38,7 @@ in
       overlays = [
         niv-overlay
         nixops-overlay
+        nixops-wrapped-overlay
         (import ./overlays/get-aws-access-key)
         (import ./overlays/nix-linter)
       ];
@@ -59,7 +56,7 @@ in
     '';
 
     deploy = pkgs.writeShellScriptBin "deploy" ''
-      ${pkgs.nixops-wrapped}/bin/nixops deploy \"$@\"
+      ${pkgs.nixops-wrapped}/bin/nixops deploy "$@"
     '';
 
     collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
@@ -69,15 +66,9 @@ in
 
     pkgs.mkShell {
       buildInputs = [
-        pkgs.direnv
-        pkgs.get-aws-access-key
         pkgs.git
-        pkgs.lorri
         pkgs.niv
-        pkgs.nix-linter
         pkgs.nixops-wrapped
-        pkgs.nixpkgs-fmt
-        pkgs.pass
         lint
         format
         deploy
