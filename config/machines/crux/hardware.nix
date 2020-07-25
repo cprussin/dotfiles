@@ -29,16 +29,14 @@ in
     ) drives
   );
 
-  systemd.services = {
-    import-zfs = {
-      enable = true;
-      after = map (drive: "unlock-${drive}.service") drives;
-      wants = map (drive: "unlock-${drive}.service") drives;
-      wantedBy = [ "zfs.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.zfs}/bin/zpool import -a -d /dev/mapper";
-        Type = "oneshot";
-      };
+  systemd.services.import-zfs = {
+    enable = true;
+    after = map (drive: "unlock-${drive}.service") drives;
+    wants = map (drive: "unlock-${drive}.service") drives;
+    wantedBy = [ "zfs.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.zfs}/bin/zpool import -a -d /dev/mapper";
+      Type = "oneshot";
     };
   };
 
