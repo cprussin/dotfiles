@@ -40,4 +40,9 @@ in
     borgbackup.text = passwords.get-password "Infrastructure/borg/crux";
     "rsync.net-ssh".text = passwords.get-full-password "Infrastructure/ssh/11795@ch-s011.rsync.net";
   };
+
+  systemd.services.borgbackup-job-crux = {
+    after = [ "borgbackup-key.service" "rsync.net-ssh-key.service" ];
+    wants = [ "borgbackup-key.service" "rsync.net-ssh-key.service" ];
+  };
 }
