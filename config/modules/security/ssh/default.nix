@@ -14,6 +14,10 @@
           user = "connor";
           port = 3580;
         };
+        "rsync" = {
+          user = "11795";
+          hostname = "ch-s011.rsync.net";
+        };
       };
     };
   };
