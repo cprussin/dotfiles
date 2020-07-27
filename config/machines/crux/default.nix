@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware.nix
-    ./backp.nix
+    ./backup.nix
     ../../profiles/physical-machine
     ../../profiles/server
     ../../modules/data/syncthing
