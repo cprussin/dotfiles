@@ -25,7 +25,7 @@ in
     };
     environment.BORG_RSH = "ssh -i ${config.deployment.keys."rsync.net-ssh".path}";
     compression = "auto,lzma";
-    startAt = "daily";
+    startAt = "hourly";
     prune.keep = {
       within = "1d";
       daily = 7;
