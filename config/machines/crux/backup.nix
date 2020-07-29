@@ -34,6 +34,7 @@ in
     };
     preHook = "${pkgs.zfs}/bin/zfs snapshot -r tank@borgsnap";
     postHook = "${pkgs.zfs}/bin/zfs destroy -r tank@borgsnap";
+    extraArgs = "--remote-path=borg1";
   };
 
   deployment.keys = {
