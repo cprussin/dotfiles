@@ -53,6 +53,7 @@ in
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
   passwords = mkModal "passwords" "${fzf-pass}/bin/fzf-pass";
+  plex = mkWebApp "plex" "https://app.plex.tv/desktop";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix {};
