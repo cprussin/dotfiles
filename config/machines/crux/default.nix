@@ -4,6 +4,7 @@
   imports = [
     ./hardware.nix
     ./backup.nix
+    ./plex.nix
     ../../profiles/physical-machine
     ../../profiles/server
     ../../modules/data/syncthing
