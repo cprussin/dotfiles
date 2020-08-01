@@ -8,10 +8,14 @@ let
   getLuksFile = drive: file:
     passwords.get-base64-encoded-password "Infrastructure/luks/crux/${drive}/${file}";
 
-  drives = [
+  zfsDrives = [
     "ata-ST10000VN0008-2JJ101_ZHZ06Y2A"
     "ata-ST10000VN0008-2JJ101_ZHZ08V0G"
     "ata-ST10000VN0008-2JJ101_ZHZ0L7WG"
+  ];
+
+  drives = zfsDrives ++ [
+    "usb-WD_Elements_25A3_564347414D34534D-0:0"
   ];
 in
 
@@ -31,8 +35,8 @@ in
 
   systemd.services.import-zfs = {
     enable = true;
-    after = map (drive: "unlock-${drive}.service") drives;
-    wants = map (drive: "unlock-${drive}.service") drives;
+    after = map (drive: "unlock-${drive}.service") zfsDrives;
+    wants = map (drive: "unlock-${drive}.service") zfsDrives;
     wantedBy = [ "zfs.target" ];
     serviceConfig = {
       ExecStart = "${pkgs.zfs}/bin/zpool import -a -d /dev/mapper";

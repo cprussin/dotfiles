@@ -7,28 +7,29 @@ let
 
   keys =
     lib.mapAttrs'
-      (k: v: lib.nameValuePair "${k}-key" { text = v.key; })
+      (_: v: lib.nameValuePair "${v.filenameBase}-key" { text = v.key; })
       cfg;
 
   headers =
     lib.mapAttrs'
-      (k: v: lib.nameValuePair "${k}-header" { text = v.header; })
+      (_: v: lib.nameValuePair "${v.filenameBase}-header" { text = v.header; })
       cfg;
 
-  mkUnlockScript = drive: pkgs.writeShellScript "unlock-${drive}" ''
-    ${pkgs.coreutils}/bin/mkdir -p /tmp/${drive}
-    ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${drive}
-    ${base64Decode config.deployment.keys."${drive}-header".path} > /tmp/${drive}/header
+  mkUnlockScript = drive: filenameBase:
+    pkgs.writeShellScript "unlock-${filenameBase}" ''
+      ${pkgs.coreutils}/bin/mkdir -p /tmp/${filenameBase}
+      ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${filenameBase}
+      ${base64Decode config.deployment.keys."${filenameBase}-header".path} > /tmp/${filenameBase}/header
 
-    ${pkgs.cryptsetup}/bin/cryptsetup open \
-      --key-file <(${base64Decode config.deployment.keys."${drive}-key".path}) \
-      --header /tmp/${drive}/header \
-      /dev/disk/by-id/${drive} crypt-${drive}
+      ${pkgs.cryptsetup}/bin/cryptsetup open \
+        --key-file <(${base64Decode config.deployment.keys."${filenameBase}-key".path}) \
+        --header /tmp/${filenameBase}/header \
+        /dev/disk/by-id/${drive} crypt-${filenameBase}
 
-    ${pkgs.coreutils}/bin/shred -u /tmp/${drive}/header
-    ${pkgs.utillinux}/bin/umount /tmp/${drive}
-    ${pkgs.coreutils}/bin/rmdir /tmp/${drive}
-  '';
+      ${pkgs.coreutils}/bin/shred -u /tmp/${filenameBase}/header
+      ${pkgs.utillinux}/bin/umount /tmp/${filenameBase}
+      ${pkgs.coreutils}/bin/rmdir /tmp/${filenameBase}
+    '';
 in
 
 {
@@ -41,22 +42,34 @@ in
     '';
     type = lib.types.nullOr (
       lib.types.attrsOf (
-        lib.types.submodule {
-          options = {
-            key = lib.mkOption {
-              type = lib.types.str;
-              description = ''
-                The base64-encoded contents of the luks key for this drive
-              '';
+        lib.types.submodule (
+          { name, ... }: {
+            options = {
+              key = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The base64-encoded contents of the luks key for this drive
+                '';
+              };
+              header = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The base64-encoded contents of the luks header for this drive
+                '';
+              };
+              filenameBase = lib.mkOption {
+                type = lib.types.str;
+                default = builtins.replaceStrings [ ":" ] [ "" ] name;
+                description = ''
+                  The base string used to construct the key files and systemd
+                  tasks for this drive.  Usually this is the same as the drive ID,
+                  but sometimes you may want to use a different name for some
+                  reason.
+                '';
+              };
             };
-            header = lib.mkOption {
-              type = lib.types.str;
-              description = ''
-                The base64-encoded contents of the luks header for this drive
-              '';
-            };
-          };
-        }
+          }
+        )
       )
     );
   };
@@ -65,21 +78,21 @@ in
     deployment.keys = keys // headers;
 
     systemd.services = lib.mapAttrs' (
-      drive: _:
-        lib.nameValuePair "unlock-${drive}" {
+      drive: opts:
+        lib.nameValuePair "unlock-${opts.filenameBase}" {
           enable = true;
           description = "Unlock encrypted device ${drive}.";
           wantedBy = [ "zfs.target" ];
           after = [
-            "${drive}-key-key.service"
-            "${drive}-header-key.service"
+            "${opts.filenameBase}-key-key.service"
+            "${opts.filenameBase}-header-key.service"
           ];
           wants = [
-            "${drive}-key-key.service"
-            "${drive}-header-key.service"
+            "${opts.filenameBase}-key-key.service"
+            "${opts.filenameBase}-header-key.service"
           ];
           serviceConfig = {
-            ExecStart = mkUnlockScript drive;
+            ExecStart = mkUnlockScript drive opts.filenameBase;
             Type = "oneshot";
           };
         }
