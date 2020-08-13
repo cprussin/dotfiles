@@ -20,7 +20,6 @@ in
       "/Users/cprussin/Camera"
       "/Users/cprussin/Notes"
       "/Users/cprussin/Projects"
-      "/Users/cprussin/Scratch"
     ];
     repo = "11795@ch-s011.rsync.net:crux-bak";
     encryption = {
