@@ -38,7 +38,7 @@ writeShellScriptBin "launch" ''
   }
 
   listOtherFiles() {
-    $find ~/{Documents,Notes,Scratch} -mindepth 2 -not -path '*/\.*'
+    $find ~/{Notes,Scratch} -mindepth 2 -not -path '*/\.*'
   }
 
   files() {
