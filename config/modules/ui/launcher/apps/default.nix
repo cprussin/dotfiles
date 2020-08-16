@@ -6,7 +6,6 @@
 , pavucontrol
 , openssh
 , slack
-, qemu
 , steam
 , sway
 , systemd
@@ -69,5 +68,4 @@ in
   syncthing = mkWebApp "syncthing" "http://localhost:8384";
   us = writeShellScript "us" "${sway}/bin/swaymsg \"input * xkb_variant ''\"";
   vpn = callPackage ./vpn.nix {};
-  windows-7 = writeShellScript "windows-7" "${qemu}/bin/qemu-system-x86_64 -enable-kvm -machine type=pc,accel=kvm -cpu host -m 1G -usb -device usb-tablet \"$HOME/Software/Microsoft/Windows 7 VM.iso\"";
 }
