@@ -1,10 +1,10 @@
-{ colors }:
+{ config, colors }:
 
 {
   name = "network#eth";
 
   config = {
-    interface = "enp0s31f6";
+    interface = config.interfaces.eth;
     interval = "5";
     format = "";
     format-disconnected = "";

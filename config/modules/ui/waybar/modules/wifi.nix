@@ -4,7 +4,7 @@
   name = "network#wireless";
 
   config = {
-    interface = config.wifi-interface;
+    interface = config.interfaces.wifi;
     interval = "5";
     format = "";
     format-disconnected = "";

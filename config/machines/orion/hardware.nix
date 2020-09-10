@@ -9,7 +9,7 @@ in
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
-  wifi-interface = "wlp12s0";
+  interfaces.eth = "enp3s0";
 
   boot = {
     kernelModules = [ "kvm-amd" ];

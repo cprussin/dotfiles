@@ -37,20 +37,30 @@ in
         (pkgs.callPackage ./modules/sway/window.nix {})
       ];
 
-      right = map stripOverrides [
-        (pkgs.callPackage ./modules/email/gmail.nix { inherit config colors; })
-        (pkgs.callPackage ./modules/email/prussin-net.nix { inherit config colors; })
-        (pkgs.callPackage ./modules/secure.nix {})
-        (pkgs.callPackage ./modules/vpn.nix { inherit colors; })
-        (pkgs.callPackage ./modules/bluetooth.nix { inherit config colors; })
-        (pkgs.callPackage ./modules/wifi.nix { inherit config colors; })
-        (pkgs.callPackage ./modules/eth.nix { inherit colors; })
-        (pkgs.callPackage ./modules/audio.nix { inherit colors; })
-        (pkgs.callPackage ./modules/mic.nix { inherit colors; })
-        (pkgs.callPackage ./modules/battery.nix { inherit colors; })
-        (pkgs.callPackage ./modules/clock.nix {})
-        (pkgs.callPackage ./modules/tray.nix {})
-      ];
+      right = map stripOverrides (
+        builtins.filter (m: m != null) [
+          (pkgs.callPackage ./modules/email/gmail.nix { inherit config colors; })
+          (pkgs.callPackage ./modules/email/prussin-net.nix { inherit config colors; })
+          (pkgs.callPackage ./modules/secure.nix {})
+          (pkgs.callPackage ./modules/vpn.nix { inherit colors; })
+          (pkgs.callPackage ./modules/bluetooth.nix { inherit config colors; })
+          (
+            if config.interfaces.wifi == null
+            then null
+            else pkgs.callPackage ./modules/wifi.nix { inherit config colors; }
+          )
+          (
+            if config.interfaces.eth == null
+            then null
+            else pkgs.callPackage ./modules/eth.nix { inherit config colors; }
+          )
+          (pkgs.callPackage ./modules/audio.nix { inherit colors; })
+          (pkgs.callPackage ./modules/mic.nix { inherit colors; })
+          (pkgs.callPackage ./modules/battery.nix { inherit colors; })
+          (pkgs.callPackage ./modules/clock.nix {})
+          (pkgs.callPackage ./modules/tray.nix {})
+        ]
+      );
     };
   };
 }

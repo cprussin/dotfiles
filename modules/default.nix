@@ -6,11 +6,11 @@
     ./nixos/color-theme.nix
     ./nixos/detachedLuksWithNixopsKeys.nix
     ./nixos/keymap.nix
+    ./nixos/network-interfaces.nix
     ./nixos/preLVMTempMount.nix
     ./nixos/primary-user.nix
     ./nixos/secure.nix
     ./nixos/sudo-cmds.nix
-    ./nixos/wifi-interface.nix
   ];
 
   primary-user.home-manager = _: {

@@ -9,7 +9,10 @@ in
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
-  wifi-interface = "wlp61s0";
+  interfaces = {
+    wifi = "wlp61s0";
+    eth = "enp0s31f6";
+  };
 
   boot = {
     kernelModules = [ "kvm-intel" ];

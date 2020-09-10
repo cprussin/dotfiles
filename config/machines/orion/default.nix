@@ -3,8 +3,7 @@
 {
   imports = [
     ./hardware.nix
-    ../../profiles/laptop
-    ../../modules/system/devices/wifi
+    ../../profiles/pc
   ];
 
   primary-user.name = "cprussin";
