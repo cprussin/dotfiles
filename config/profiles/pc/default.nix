@@ -7,7 +7,6 @@
     ../../modules/data/email
     ../../modules/data/git
     ../../modules/data/syncthing
-    ../../modules/data/xdg-user-dirs
 
     ../../modules/netflix/ca
     ../../modules/netflix/hostname

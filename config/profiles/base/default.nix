@@ -10,6 +10,7 @@ in
     ../../../modules
 
     ../../modules/data/session-vars
+    ../../modules/data/xdg-user-dirs
 
     ../../modules/security/process-information-hiding
     ../../modules/security/sshd
