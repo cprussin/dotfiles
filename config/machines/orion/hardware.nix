@@ -20,48 +20,57 @@ in
     initrd = {
       availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "xhci_pci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
-      luks.devices = {
-        crypt-root = {
-          device = "/dev/disk/by-id/ata-SanDisk_SDSSDHII240G_154435401807";
-          keyFile = "/key/crypt/orion/root/key";
-          header = "/key/crypt/orion/root/header";
-        };
-        crypt-home = {
-          device = "/dev/disk/by-id/ata-TOSHIBA_DT01ACA200_459YR4PTS";
-          keyFile = "/key/crypt/orion/home/key";
-          header = "/key/crypt/orion/home/header";
-        };
+      luks.devices.crypt-ata-SanDisk_SDSSDHII240G_154435401807 = {
+        device = "/dev/disk/by-id/ata-SanDisk_SDSSDHII240G_154435401807";
+        keyFile = "/key/crypt/orion/ata-SanDisk_SDSSDHII240G_154435401807/key";
+        header = "/key/crypt/orion/ata-SanDisk_SDSSDHII240G_154435401807/header";
       };
     };
   };
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/a65c4ce0-a420-4ae0-b1ca-b50516a79e6f";
-      fsType = "ext4";
+      device = "tank-fast/system/root";
+      fsType = "zfs";
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-uuid/98BB-45B7";
-      fsType = "vfat";
-    };
-
-    "/home" = {
-      device = "/dev/disk/by-uuid/c99fa7ac-d55f-4c4f-baa0-e1a0dda2a45b";
-      fsType = "ext4";
+    "/nix" = {
+      device = "tank-fast/system/nix";
+      fsType = "zfs";
     };
 
     "/var" = {
-      device = "/dev/disk/by-uuid/d72292ba-3170-4156-9edd-7a465340f28c";
-      fsType = "ext4";
+      device = "tank-fast/system/var";
+      fsType = "zfs";
+    };
+
+    "/var/log" = {
+      device = "tank-fast/system/var/log";
+      fsType = "zfs";
+    };
+
+    "/var/log/journal" = {
+      device = "tank-fast/system/var/log/journal";
+      fsType = "zfs";
+    };
+
+    "/home" = {
+      device = "tank-fast/home";
+      fsType = "zfs";
+    };
+
+    "/home/cprussin" = {
+      device = "tank-fast/home/cprussin";
+      fsType = "zfs";
+    };
+
+    "/boot" = {
+      device = "/dev/disk/by-uuid/FC73-AD7E";
+      fsType = "vfat";
     };
   };
 
-  swapDevices = [
-    {
-      device = "/dev/disk/by-uuid/d4ac6676-9829-4498-8624-39ced6e5ed9d";
-    }
-  ];
+  swapDevices = [];
 
   nix.maxJobs = lib.mkDefault 8;
 }
