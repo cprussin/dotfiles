@@ -8,12 +8,12 @@
       options = {
         wifi = lib.mkOption {
           default = null;
-          type = lib.types.str;
+          type = lib.types.nullOr lib.types.str;
           description = "The wifi interface.";
         };
         eth = lib.mkOption {
           default = null;
-          type = lib.types.str;
+          type = lib.types.nullOr lib.types.str;
           description = "The ethernet interface.";
         };
       };
