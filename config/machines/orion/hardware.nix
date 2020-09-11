@@ -64,6 +64,31 @@ in
       fsType = "zfs";
     };
 
+    "/home/cprussin/Camera" = {
+      device = "tank-fast/home/cprussin/Camera";
+      fsType = "zfs";
+    };
+
+    "/home/cprussin/Mail" = {
+      device = "tank-fast/home/cprussin/Mail";
+      fsType = "zfs";
+    };
+
+    "/home/cprussin/Notes" = {
+      device = "tank-fast/home/cprussin/Notes";
+      fsType = "zfs";
+    };
+
+    "/home/cprussin/Projects" = {
+      device = "tank-fast/home/cprussin/Projects";
+      fsType = "zfs";
+    };
+
+    "/home/cprussin/Scratch" = {
+      device = "tank-fast/home/cprussin/Scratch";
+      fsType = "zfs";
+    };
+
     "/boot" = {
       device = "/dev/disk/by-uuid/FC73-AD7E";
       fsType = "vfat";
