@@ -16,22 +16,18 @@ in
 writeShellScriptBin "nixops" ''
   set -e
 
-  if [ $1 == "deploy" ]
+  cmd=$1
+  if [ $cmd == "deploy" ]
   then
-    if ! $(mount | grep /secure >/dev/null)
-    then
-      echo "/secure is not mounted!"
-      exit 1
-    fi
-
-    shift
-
-    NIX_PATH="${nix-path}" \
-      ${get-aws-access-key}/bin/get-aws-access-key-nixops deploy \
-      --option plugin-files ${nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so \
-      --option extra-builtins-file ${./extra-builtins.nix} \
-      "$@"
+    bin=${get-aws-access-key}/bin/get-aws-access-key-nixops
   else
-    ${nixops}/bin/nixops "$@"
+    bin=${nixops}/bin/nixops
   fi
+
+  shift
+
+  NIX_PATH="${nix-path}" $bin $cmd \
+    --option plugin-files ${nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so \
+    --option extra-builtins-file ${./extra-builtins.nix} \
+    "$@"
 ''

@@ -5,12 +5,12 @@ let
       targetUser = config.primary-user.name;
       sshOptions = [ "-A" ];
     };
-    imports = [ (../../machines + "/${targetHost}") ];
+    imports = [ (./config/machines + "/${targetHost}") ];
   };
 in
 
 {
-  network.description = "Home servers";
+  network.description = "PrussinNet";
   crux = mkMachine "crux";
   lyra = mkMachine "lyra";
   orion = mkMachine "orion";
