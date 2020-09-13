@@ -6,20 +6,16 @@ in
 
 {
   services.borgbackup.jobs.crux = {
-    paths = map (folder: "/tank/${folder}/.zfs/snapshot/borgsnap") [
-      "/"
-      "/Library"
-      "/Library/Movies"
-      "/Library/Music"
-      "/Library/Photos"
-      "/Library/Software"
-      "/Library/TV Shows"
-      "/Users"
-      "/Users/cprussin"
-      "/Users/cprussin/Backups"
-      "/Users/cprussin/Camera"
-      "/Users/cprussin/Notes"
-      "/Users/cprussin/Projects"
+    paths = map (folder: "${folder}/.zfs/snapshot/borgsnap") [
+      "/srv/Library/Movies"
+      "/srv/Library/Music"
+      "/srv/Library/Photos"
+      "/srv/Library/Software"
+      "/srv/Library/TV Shows"
+      "/home/cprussin/Backups"
+      "/home/cprussin/Camera"
+      "/home/cprussin/Notes"
+      "/home/cprussin/Projects"
     ];
     repo = "11795@ch-s011.rsync.net:crux-bak";
     encryption = {
