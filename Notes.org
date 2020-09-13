@@ -1,6 +1,7 @@
 #+TODO: TODO NEXT | DONE
 
 * Tasks
+** TODO Manage printers
 ** TODO Create /secure when deploying new machine
 ** TODO Symlink gpg files automatically
 ** TODO Create nixops deployment configuration automatically
