@@ -1,6 +1,12 @@
 #+TODO: TODO NEXT | DONE
 
 * Tasks
+** TODO Create /secure when deploying new machine
+** TODO Symlink gpg files automatically
+** TODO Create nixops deployment configuration automatically
+** TODO Manage syncthing automatically
+** TODO Make zfs configuration more declarative somehow
+** TODO Manage slack/chromium/etc configs
 ** TODO Move sway things to systemd units
 ** TODO Replace stuff with modules
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
