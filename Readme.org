@@ -1,9 +1,10 @@
 * Dotfiles
 
-This repository contains all of my personal configurations.  You can use my
-configurations!
+This repository contains all of my personal configurations.  You are welcome to
+use my configurations!
 
-Probably, you'll want to extract stuff out of my configuration for your own use.
+** Structure
+
 The way things are structured here is:
 
 - [[./config][config]]: This folder contains all configurations.  It is organized
@@ -17,8 +18,6 @@ The way things are structured here is:
     For the most part, modules in here are not actually loaded directly but
     instead collected into profiles, which are consumed by machine
     configurations (see below).
-  - [[./config/networks][networks]]: These folders contain physical network
-    descriptions for cloud networks managed by ~nixops~.
   - [[./config/profiles][profiles]]: This directory contains collections of
     modules packaged into common configuration sets.  For the most part, machine
     configs import profiles, which then import modules.
@@ -34,28 +33,92 @@ The way things are structured here is:
 - [[./overlays][overlays]]: This directory contains nixpkgs overlays.
 - [[./pkgs][pkgs]]: This directory contains custom packages.
 
-If you wanted to use my configurations directly, you would need to do the
-following:
+** Usage
 
-1. Create a new [[./config/machines][machine configuration]].
+*** Setting up a machine to be able to deploy
 
-2. Add your machine to an existing [[./config/networks][network description]].  Or, create a new one
-   and add it to nixops:
+For a machine to be able to deploy the configurations (even to itself), the
+nixops network must be created:
 
-   #+BEGIN_SRC bash
-     nix-shell --run 'nixops create -d <name> ./config/networks/<name>'
+#+BEGIN_SRC bash
+  nix-shell --run 'nixops create -d PrussinNet ./network.nix'
+#+END_SRC
+
+Note that because this setup doesn't really utilize anything important that
+relies on nixops state, it's not necessary to share the nixops state between
+machines--you can just create a new nixops network on each machine you want to
+deploy from.
+
+*** Adding a new machine
+
+To initialize a new machine into the network, follow these steps:
+
+1. Follow the [[https://nixos.org/manual/nixos/stable/index.html#ch-installation][NixOS installation guide]] to install & boot into a minimal bootable
+   NixOS on the new machine.  Make sure to set the hostname, and make sure to
+   enable sshd and create your primary user.  You also must enable passwordless
+   sudo via ssh agent for your primary user (see [[https://github.com/NixOS/nixops/pull/1270][here]]).  For example, the
+   ~configuration.nix~ may look like:
+
+   #+BEGIN_SRC nix
+     { config, pkgs, ... }: {
+       imports = [ ./hardware-configuration.nix ];
+       networking.hostName = "foobar";
+       services.sshd.enable = true;
+       security.pam = {
+         enableSSHAgentAuth = true;
+         services.sudo.sshAgentAuth = true;
+       };
+       user.users.cprussin = {
+         isNormalUser = true;
+         extraGroups = [ "wheel" ];
+         openssh.authorizedKeys.keys = [ "..." ];
+       };
+     }
    #+END_SRC
 
-3. Remove your nix channels (This isn't strictly necessary, but I don't use
-   channels and instead I manage my nixpkgs version using niv, see [[./shell.nix][shell.nix]] and
-   [[./config/modules/system/nix-path/default.nix][nix-path/default.nix]]):
+2. Create a new [[./config/machines][machine configuration]] in this repository for the new machine
+   (make sure the folder name for the machine configuration matches the hostname
+   of the new machine).
+
+3. Deploy the configuration to the new machine (this can be from any computer
+   that has the nixops network created, including the new computer if you clone
+   the repo and follow the instructions above to create the nixops network):
+
+   #+BEGIN_SRC bash
+     nix-shell --run 'deploy --include <new machine>'
+   #+END_SRC
+
+*** Deploying changes
+
+This one is pretty simple:
+
+#+BEGIN_SRC bash
+  nix-shell --run deploy
+#+END_SRC
+
+You can also deploy to only the machines you want to touch:
+
+#+BEGIN_SRC bash
+  nix-shell --run 'deploy --include crux'
+#+END_SRC
+
+** Channels
+
+While this isn't strictly necessary, with this configuration you can remove your
+nixpkgs channels--this configuration manages nixpkgs versions (and other
+dependencies) via niv.  To remove the channels that NixOS installs by default,
+run:
 
    #+BEGIN_SRC bash
      nix-channel remove nixpkgs
    #+END_SRC
 
-4. Deploy it!
+The way this repository is able to work without channels has two parts:
 
-   #+BEGIN_SRC bash
-     nix-shell --run 'nixops deploy -d <network name>'
-   #+END_SRC
+1. ~NIX_PATH~ is overridden when deploying in [[./nixops-deploy-wrapper.nix][nixops-deploy-wrapper.nix]].  This
+   ensures that, when deploying, the version of nixpkgs pinned by niv is used.
+
+2. The system nix path is set in [[./config/modules/system/nix-path/default.nix][nix-path/default.nix]].  This enables using things
+   like ~nix-shell -p foo~ or ~<nixpkgs>~ on a deployed machine, with a
+   guarantee that the version of ~nixpkgs~ used for those tools is the same as
+   the version that was deployed to the system.
