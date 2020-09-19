@@ -20,6 +20,7 @@ in
     ../../modules/system/nix-binary-caches
     ../../modules/system/nix-path
     ../../modules/system/nixpkgs
+    ../../modules/system/users
 
     ../../modules/ui/bash
     ../../modules/ui/dvp

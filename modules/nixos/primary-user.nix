@@ -1,7 +1,8 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.primary-user;
+  passwords = pkgs.callPackage ../../lib/passwords.nix {};
 in
 
 {
@@ -21,13 +22,19 @@ in
     (lib.mkAliasOptionModule [ "primary-user" "uid" ] [ "users" "users" cfg.name "uid" ])
     (lib.mkAliasOptionModule [ "primary-user" "openssh" ] [ "users" "users" cfg.name "openssh" ])
     (lib.mkAliasOptionModule [ "primary-user" "isNormalUser" ] [ "users" "users" cfg.name "isNormalUser" ])
+    (lib.mkAliasOptionModule [ "primary-user" "passwordFile" ] [ "users" "users" cfg.name "passwordFile" ])
   ];
 
   config = lib.mkIf (cfg.name != null) {
+    deployment.keys.primary-user-password = {
+      text = passwords.get-hashed-user-password "${config.primary-user.name}@${config.networking.hostName}";
+      destDir = "/secrets";
+    };
     primary-user = {
       extraGroups = [ "wheel" ];
       uid = lib.mkDefault 1000;
       isNormalUser = true;
+      passwordFile = config.deployment.keys.primary-user-password.path;
     };
     nix.trustedUsers = [ cfg.name ];
   };
