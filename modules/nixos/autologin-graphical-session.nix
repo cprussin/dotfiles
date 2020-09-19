@@ -52,7 +52,6 @@ in
           UtmpIdentifier = "tty7";
           TTYPath = "/dev/tty7";
           TTYReset = "yes";
-          TTYHangup = "yes";
           TTYVTDisallocate = "yes";
 
           SyslogIdentifier = "autologin-graphical-session";
