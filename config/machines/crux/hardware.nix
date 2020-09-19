@@ -59,47 +59,36 @@ in
         header = "/key/crypt/nvme-WDS500G3X0C-00SJG0_2017A3806951/header";
       };
     };
+    postBootCommands = ''
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.config
+    '';
   };
 
   fileSystems = {
     "/" = {
-      device = "tank-fast/system/root";
-      fsType = "zfs";
-    };
-
-    "/nix" = {
-      device = "tank-fast/system/nix";
-      fsType = "zfs";
-    };
-
-    "/var" = {
-      device = "tank-fast/system/var";
-      fsType = "zfs";
-    };
-
-    "/var/log" = {
-      device = "tank-fast/system/var/log";
-      fsType = "zfs";
-    };
-
-    "/var/log/journal" = {
-      device = "tank-fast/system/var/log/journal";
-      fsType = "zfs";
-    };
-
-    "/home" = {
-      device = "tank-fast/home";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin" = {
-      device = "tank-fast/home/cprussin";
-      fsType = "zfs";
+      fsType = "tmpfs";
+      options = [ "defaults" "mode=755" ];
     };
 
     "/boot" = {
       device = "/dev/disk/by-uuid/4641-BCB3";
       fsType = "vfat";
+    };
+
+    "/secrets" = {
+      device = "tank-fast/persisted-state/secrets";
+      fsType = "zfs";
+      neededForBoot = true;
+    };
+
+    "/home/cprussin/.config/syncthing" = {
+      device = "tank-fast/persisted-state/syncthing";
+      fsType = "zfs";
+    };
+
+    "/nix" = {
+      device = "tank-fast/nix";
+      fsType = "zfs";
     };
   };
 

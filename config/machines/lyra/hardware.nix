@@ -2,6 +2,29 @@
 
 let
   sources = import ../../../sources.nix;
+
+  mkZfsMount = device: mountpoint:
+    lib.nameValuePair mountpoint {
+      inherit device;
+      fsType = "zfs";
+    };
+
+  zfsMounts = lib.mapAttrs' mkZfsMount {
+    "tank/nix" = "/nix";
+    "tank/data/Camera" = "/home/cprussin/Camera";
+    "tank/data/Mail" = "/home/cprussin/Mail";
+    "tank/data/Notes" = "/home/cprussin/Notes";
+    "tank/data/Projects" = "/home/cprussin/Projects";
+    "tank/data/Scratch" = "/home/cprussin/Scratch";
+    "tank/persisted-state/BitwigStudio" = "/home/cprussin/.BitwigStudio";
+    "tank/persisted-state/Brave-Browser" = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
+    "tank/persisted-state/Slack" = "/home/cprussin/.config/Slack";
+    "tank/persisted-state/bluetooth" = "/var/lib/bluetooth";
+    "tank/persisted-state/direnv-allow" = "/home/cprussin/.local/share/direnv/allow";
+    "tank/persisted-state/mu" = "/home/cprussin/.mu";
+    "tank/persisted-state/nixops" = "/home/cprussin/.nixops";
+    "tank/persisted-state/syncthing" = "/home/cprussin/.config/syncthing";
+  };
 in
 
 {
@@ -29,72 +52,30 @@ in
         header = "/key/crypt/lyra/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987/header";
       };
     };
+    postBootCommands = ''
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.config
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.config/BraveSoftware
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.local
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.local/share
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.local/share/direnv
+    '';
   };
 
-  fileSystems = {
+  fileSystems = zfsMounts // {
     "/" = {
-      device = "tank/system/root";
-      fsType = "zfs";
-    };
-
-    "/nix" = {
-      device = "tank/system/nix";
-      fsType = "zfs";
-    };
-
-    "/var" = {
-      device = "tank/system/var";
-      fsType = "zfs";
-    };
-
-    "/var/log" = {
-      device = "tank/system/var/log";
-      fsType = "zfs";
-    };
-
-    "/var/log/journal" = {
-      device = "tank/system/var/log/journal";
-      fsType = "zfs";
-    };
-
-    "/home" = {
-      device = "tank/home";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin" = {
-      device = "tank/home/cprussin";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Camera" = {
-      device = "tank/home/cprussin/Camera";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Mail" = {
-      device = "tank/home/cprussin/Mail";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Notes" = {
-      device = "tank/home/cprussin/Notes";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Projects" = {
-      device = "tank/home/cprussin/Projects";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Scratch" = {
-      device = "tank/home/cprussin/Scratch";
-      fsType = "zfs";
+      fsType = "tmpfs";
+      options = [ "defaults" "mode=755" ];
     };
 
     "/boot" = {
       device = "/dev/disk/by-uuid/770A-9E89";
       fsType = "vfat";
+    };
+
+    "/secrets" = {
+      device = "tank/persisted-state/secrets";
+      fsType = "zfs";
+      neededForBoot = true;
     };
   };
 

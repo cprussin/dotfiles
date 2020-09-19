@@ -2,6 +2,28 @@
 
 let
   sources = import ../../../sources.nix;
+
+  mkZfsMount = device: mountpoint:
+    lib.nameValuePair mountpoint {
+      inherit device;
+      fsType = "zfs";
+    };
+
+  zfsMounts = lib.mapAttrs' mkZfsMount {
+    "tank-fast/nix" = "/nix";
+    "tank-fast/data/Camera" = "/home/cprussin/Camera";
+    "tank-fast/data/Mail" = "/home/cprussin/Mail";
+    "tank-fast/data/Notes" = "/home/cprussin/Notes";
+    "tank-fast/data/Projects" = "/home/cprussin/Projects";
+    "tank-fast/data/Scratch" = "/home/cprussin/Scratch";
+    "tank-fast/persisted-state/BitwigStudio" = "/home/cprussin/.BitwigStudio";
+    "tank-fast/persisted-state/Brave-Browser" = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
+    "tank-fast/persisted-state/Slack" = "/home/cprussin/.config/Slack";
+    "tank-fast/persisted-state/direnv-allow" = "/home/cprussin/.local/share/direnv/allow";
+    "tank-fast/persisted-state/mu" = "/home/cprussin/.mu";
+    "tank-fast/persisted-state/nixops" = "/home/cprussin/.nixops";
+    "tank-fast/persisted-state/syncthing" = "/home/cprussin/.config/syncthing";
+  };
 in
 
 {
@@ -38,72 +60,30 @@ in
         };
       };
     };
+    postBootCommands = ''
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.config
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.config/BraveSoftware
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.local
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.local/share
+      install -m 0700 -g users -o cprussin -d /home/cprussin/.local/share/direnv
+    '';
   };
 
-  fileSystems = {
+  fileSystems = zfsMounts // {
     "/" = {
-      device = "tank-fast/system/root";
-      fsType = "zfs";
-    };
-
-    "/nix" = {
-      device = "tank-fast/system/nix";
-      fsType = "zfs";
-    };
-
-    "/var" = {
-      device = "tank-fast/system/var";
-      fsType = "zfs";
-    };
-
-    "/var/log" = {
-      device = "tank-fast/system/var/log";
-      fsType = "zfs";
-    };
-
-    "/var/log/journal" = {
-      device = "tank-fast/system/var/log/journal";
-      fsType = "zfs";
-    };
-
-    "/home" = {
-      device = "tank-fast/home";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin" = {
-      device = "tank-fast/home/cprussin";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Camera" = {
-      device = "tank-fast/home/cprussin/Camera";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Mail" = {
-      device = "tank-fast/home/cprussin/Mail";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Notes" = {
-      device = "tank-fast/home/cprussin/Notes";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Projects" = {
-      device = "tank-fast/home/cprussin/Projects";
-      fsType = "zfs";
-    };
-
-    "/home/cprussin/Scratch" = {
-      device = "tank-fast/home/cprussin/Scratch";
-      fsType = "zfs";
+      fsType = "tmpfs";
+      options = [ "defaults" "mode=755" ];
     };
 
     "/boot" = {
       device = "/dev/disk/by-uuid/FC73-AD7E";
       fsType = "vfat";
+    };
+
+    "/secrets" = {
+      device = "tank-fast/persisted-state/secrets";
+      fsType = "zfs";
+      neededForBoot = true;
     };
   };
 

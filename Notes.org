@@ -2,12 +2,7 @@
 
 * Tasks
 ** TODO Manage printers
-** TODO Create /secure when deploying new machine
-** TODO Symlink gpg files automatically
-** TODO Create nixops deployment configuration automatically
-** TODO Manage syncthing automatically
 ** TODO Make zfs configuration more declarative somehow
-** TODO Manage slack/chromium/etc configs
 ** TODO Move sway things to systemd units
 ** TODO Replace stuff with modules
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
@@ -24,13 +19,6 @@
 ** TODO Extract identity to common module [0/2] :user:
    - [ ] GPG keys (including keygrip)
    - [ ] Name / emails / etc
-** TODO Figure out a better way to manage data :user:
-   - [ ] Chromium profile
-   - [ ] Slack config
-   - [ ] Emacs data
-   - [ ] Game data
-   - [ ] Mu database
-   - [X] Secrets
 ** TODO Sync mail using imap idle
 ** TODO Investigate using ssh certificate based auth
 ** TODO Fix FIXME/TODO items :user:
@@ -55,6 +43,29 @@
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 ** NEXT Replace nix-linter custom package with simple haskellPackages overlay
+** DONE tmpfs on root
+   CLOSED: [2020-09-18 Fri 22:55]
+   - [X] /secrets
+   - [X] Create /secure automatically
+   - [X] Ensure user password exists
+   - [X] Fix .gnupg permissions
+   - [X] Symlink gpg files automatically
+   - [X] Slack
+   - [X] Emails
+   - [X] nixops deployments
+   - [X] direnv allow cache
+   - [X] Brave
+   - [X] bitwig
+   - [X] htop - https://github.com/nix-community/home-manager/blob/master/modules/programs/htop.nix
+   - [X] syncthing
+** DONE Figure out a better way to manage data :user:
+   CLOSED: [2020-09-18 Fri 22:56]
+   - [X] Chromium profile
+   - [X] Slack config
+   - [X] Emacs data
+   - [X] Game data
+   - [X] Mu database
+   - [X] Secrets
 ** DONE Add widevine in minichrome/chromium/firefox :user:
    CLOSED: [2020-07-09 Thu 10:32]
 ** DONE Add "go to site" link to password UI
