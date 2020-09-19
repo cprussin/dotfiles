@@ -25,6 +25,7 @@ in
     ../../modules/ui/dvp
     ../../modules/ui/fzf
     ../../modules/ui/greeting
+    ../../modules/ui/htop
     ../../modules/ui/less
     ../../modules/ui/readline
     ../../modules/ui/termite
