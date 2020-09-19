@@ -5,6 +5,6 @@
     mountPoint = "/secure";
     device = "/dev/disk/by-label/secure";
     fsType = "ext4";
-    options = [ "ro" ];
+    options = [ "nofail" "ro" ];
   };
 }
