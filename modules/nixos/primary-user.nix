@@ -20,14 +20,15 @@ in
     (lib.mkAliasOptionModule [ "primary-user" "extraGroups" ] [ "users" "users" cfg.name "extraGroups" ])
     (lib.mkAliasOptionModule [ "primary-user" "uid" ] [ "users" "users" cfg.name "uid" ])
     (lib.mkAliasOptionModule [ "primary-user" "openssh" ] [ "users" "users" cfg.name "openssh" ])
+    (lib.mkAliasOptionModule [ "primary-user" "isNormalUser" ] [ "users" "users" cfg.name "isNormalUser" ])
   ];
 
   config = lib.mkIf (cfg.name != null) {
     primary-user = {
       extraGroups = [ "wheel" ];
       uid = lib.mkDefault 1000;
+      isNormalUser = true;
     };
-    users.users.${cfg.name}.isNormalUser = true;
     nix.trustedUsers = [ cfg.name ];
   };
 }
