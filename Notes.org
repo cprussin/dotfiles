@@ -43,6 +43,8 @@
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 ** NEXT Replace nix-linter custom package with simple haskellPackages overlay
+** DONE Fix plex w/tmpfs on root
+   CLOSED: [2020-09-20 Sun 04:56]
 ** DONE Fix borgbackup w/tmpfs on root
    CLOSED: [2020-09-19 Sat 23:38]
 ** DONE tmpfs on root

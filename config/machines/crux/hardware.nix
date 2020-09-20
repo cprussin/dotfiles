@@ -5,6 +5,8 @@ let
 
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
 
+  zfs = pkgs.callPackage ../../../lib/zfs.nix {};
+
   getLuksFile = drive: file:
     passwords.get-base64-encoded-password "Infrastructure/luks/crux/${drive}/${file}";
 
@@ -74,23 +76,18 @@ in
       device = "/dev/disk/by-uuid/4641-BCB3";
       fsType = "vfat";
     };
-
-    "/secrets" = {
-      device = "tank-fast/persisted-state/secrets";
-      fsType = "zfs";
-      neededForBoot = true;
-    };
-
-    "/home/cprussin/.config/syncthing" = {
-      device = "tank-fast/persisted-state/syncthing";
-      fsType = "zfs";
-    };
-
-    "/nix" = {
-      device = "tank-fast/nix";
-      fsType = "zfs";
-    };
-  };
+  } // (
+    zfs.mkZfsFileSystems {
+      "tank-fast/nix".mountpoint = "/nix";
+      "tank-fast/persisted-state/borg-cache".mountpoint = "/root/.cache/borg";
+      "tank-fast/persisted-state/plex".mountpoint = "/var/lib/plex";
+      "tank-fast/persisted-state/secrets" = {
+        mountpoint = "/secrets";
+        neededForBoot = true;
+      };
+      "tank-fast/persisted-state/syncthing".mountpoint = "/home/cprussin/.config/syncthing";
+    }
+  );
 
   swapDevices = [];
 

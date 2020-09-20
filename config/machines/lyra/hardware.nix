@@ -1,30 +1,8 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 
 let
   sources = import ../../../sources.nix;
-
-  mkZfsMount = device: mountpoint:
-    lib.nameValuePair mountpoint {
-      inherit device;
-      fsType = "zfs";
-    };
-
-  zfsMounts = lib.mapAttrs' mkZfsMount {
-    "tank/nix" = "/nix";
-    "tank/data/Camera" = "/home/cprussin/Camera";
-    "tank/data/Mail" = "/home/cprussin/Mail";
-    "tank/data/Notes" = "/home/cprussin/Notes";
-    "tank/data/Projects" = "/home/cprussin/Projects";
-    "tank/data/Scratch" = "/home/cprussin/Scratch";
-    "tank/persisted-state/BitwigStudio" = "/home/cprussin/.BitwigStudio";
-    "tank/persisted-state/Brave-Browser" = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
-    "tank/persisted-state/Slack" = "/home/cprussin/.config/Slack";
-    "tank/persisted-state/bluetooth" = "/var/lib/bluetooth";
-    "tank/persisted-state/direnv-allow" = "/home/cprussin/.local/share/direnv/allow";
-    "tank/persisted-state/mu" = "/home/cprussin/.mu";
-    "tank/persisted-state/nixops" = "/home/cprussin/.nixops";
-    "tank/persisted-state/syncthing" = "/home/cprussin/.config/syncthing";
-  };
+  zfs = pkgs.callPackage ../../../lib/zfs.nix {};
 in
 
 {
@@ -52,16 +30,9 @@ in
         header = "/key/crypt/lyra/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987/header";
       };
     };
-    postBootCommands = ''
-      install -m 0700 -g users -o cprussin -d /home/cprussin/.config
-      install -m 0700 -g users -o cprussin -d /home/cprussin/.config/BraveSoftware
-      install -m 0700 -g users -o cprussin -d /home/cprussin/.local
-      install -m 0700 -g users -o cprussin -d /home/cprussin/.local/share
-      install -m 0700 -g users -o cprussin -d /home/cprussin/.local/share/direnv
-    '';
   };
 
-  fileSystems = zfsMounts // {
+  fileSystems = {
     "/" = {
       fsType = "tmpfs";
       options = [ "defaults" "mode=755" ];
@@ -71,13 +42,28 @@ in
       device = "/dev/disk/by-uuid/770A-9E89";
       fsType = "vfat";
     };
-
-    "/secrets" = {
-      device = "tank/persisted-state/secrets";
-      fsType = "zfs";
-      neededForBoot = true;
-    };
-  };
+  } // (
+    zfs.mkZfsFileSystems {
+      "tank/nix".mountpoint = "/nix";
+      "tank/data/Camera".mountpoint = "/home/cprussin/Camera";
+      "tank/data/Mail".mountpoint = "/home/cprussin/Mail";
+      "tank/data/Notes".mountpoint = "/home/cprussin/Notes";
+      "tank/data/Projects".mountpoint = "/home/cprussin/Projects";
+      "tank/data/Scratch".mountpoint = "/home/cprussin/Scratch";
+      "tank/persisted-state/BitwigStudio".mountpoint = "/home/cprussin/.BitwigStudio";
+      "tank/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
+      "tank/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
+      "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
+      "tank/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
+      "tank/persisted-state/mu".mountpoint = "/home/cprussin/.mu";
+      "tank/persisted-state/nixops".mountpoint = "/home/cprussin/.nixops";
+      "tank/persisted-state/secrets" = {
+        mountpoint = "/secrets";
+        neededForBoot = true;
+      };
+      "tank/persisted-state/syncthing".mountpoint = "/home/cprussin/.config/syncthing";
+    }
+  );
 
   swapDevices = [];
 
