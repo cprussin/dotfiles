@@ -76,4 +76,7 @@ in
       ];
     };
   };
+
+  programs.ssh.knownHosts."ch-s011.rsync.net".publicKey =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYEyoL8HADxd4D1md7t2LGcM8nNhShc5qCjttVH1vTg";
 }
