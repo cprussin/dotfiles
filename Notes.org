@@ -43,6 +43,8 @@
      - [ ] Offsite (AWS glacier?) data backup
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 ** NEXT Replace nix-linter custom package with simple haskellPackages overlay
+** DONE Fix borgbackup w/tmpfs on root
+   CLOSED: [2020-09-19 Sat 23:38]
 ** DONE tmpfs on root
    CLOSED: [2020-09-18 Fri 22:55]
    - [X] /secrets
