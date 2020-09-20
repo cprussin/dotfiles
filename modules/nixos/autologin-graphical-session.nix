@@ -22,7 +22,6 @@ in
       defaultUnit = "graphical.target";
 
       services.autologin-graphical-session = {
-        enable = true;
         description = "Autologin graphical session";
         wantedBy = [ "graphical.target" ];
         aliases = [ "display-manager.service" ];

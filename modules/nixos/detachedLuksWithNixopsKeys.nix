@@ -80,7 +80,6 @@ in
     systemd.services = lib.mapAttrs' (
       drive: opts:
         lib.nameValuePair "unlock-${opts.filenameBase}" {
-          enable = true;
           description = "Unlock encrypted device ${drive}.";
           wantedBy = [ "zfs.target" ];
           after = [
@@ -93,6 +92,7 @@ in
           ];
           serviceConfig = {
             ExecStart = mkUnlockScript drive opts.filenameBase;
+            RemainAfterExit = true;
             Type = "oneshot";
           };
         }

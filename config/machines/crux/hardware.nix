@@ -33,13 +33,13 @@ in
     ) drives
   );
 
-  systemd.services.import-zfs = {
-    enable = true;
+  systemd.services.import-tank = {
     after = map (drive: "unlock-${drive}.service") zfsDrives;
     wants = map (drive: "unlock-${drive}.service") zfsDrives;
     wantedBy = [ "zfs.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.zfs}/bin/zpool import -a -d /dev/mapper";
+      ExecStart = "${pkgs.zfs}/bin/zpool import tank";
+      RemainAfterExit = true;
       Type = "oneshot";
     };
   };
