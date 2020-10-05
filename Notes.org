@@ -1,6 +1,22 @@
 #+TODO: TODO NEXT | DONE
 
 * Tasks
+** TODO Nixify/containerize/etc prussin.net [3/9]
+   - [X] Web
+   - [X] Identity (openldap)
+   - [X] SSL (certbot/acme)
+   - [ ] Authentication (dovecot sasl)
+   - [ ] Calendar / Contacts
+   - [ ] DNS caching (named)
+   - [ ] Email (postfix/dovecot/spamassassin/opendkim)
+   - [ ] Chat / SIP?
+   - [ ] Backup system
+     - [ ] Local backup
+     - [ ] Local filing folder scans
+     - [ ] Offsite (AWS glacier?) data backup
+     - [ ] Offsite (Bank?) document/pw safe/gpg key storage
+** TODO Fix search for special characters
+** TODO Replace nix-linter custom package with simple haskellPackages overlay
 ** TODO Manage printers
 ** TODO Make zfs configuration more declarative somehow
 ** TODO Move sway things to systemd units
@@ -27,22 +43,7 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
-** NEXT Fix search for '
-** NEXT Nixify/containerize/etc prussin.net [3/9]
-   - [X] Web
-   - [X] Identity (openldap)
-   - [X] SSL (certbot/acme)
-   - [ ] Authentication (dovecot sasl)
-   - [ ] Calendar / Contacts
-   - [ ] DNS caching (named)
-   - [ ] Email (postfix/dovecot/spamassassin/opendkim)
-   - [ ] Chat / SIP?
-   - [ ] Backup system
-     - [ ] Local backup
-     - [ ] Local filing folder scans
-     - [ ] Offsite (AWS glacier?) data backup
-     - [ ] Offsite (Bank?) document/pw safe/gpg key storage
-** NEXT Replace nix-linter custom package with simple haskellPackages overlay
+** NEXT Prune out local temporary fixes & modules
 ** DONE Fix plex w/tmpfs on root
    CLOSED: [2020-09-20 Sun 04:56]
 ** DONE Fix borgbackup w/tmpfs on root
