@@ -1,11 +1,11 @@
-{ lib, slack, xdg_utils, makeWrapper }:
+{ lib, slack, xdg_utils, makeWrapper, symlinkJoin }:
 
-slack.overrideAttrs (
-  oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ makeWrapper ];
-    postInstall = ''
-      ${oldAttrs.postInstall or ""}
-      wrapProgram $out/bin/slack --prefix PATH : ${lib.makeBinPath [ xdg_utils ]}
-    '';
-  }
-)
+symlinkJoin {
+  name = "slack";
+  paths = [ slack ];
+  buildInputs = [ makeWrapper ];
+  postBuild = ''
+    wrapProgram $out/bin/slack \
+      --prefix PATH : ${lib.makeBinPath [ xdg_utils ]}
+  '';
+}
