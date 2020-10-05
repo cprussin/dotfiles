@@ -20,13 +20,15 @@ in
       };
     };
 
+    nixops-built = (import nixops).default;
+
     nixops-wrapped = pkgs: pkgs.writeShellScriptBin "nixops" ''
       cmd=$1
       shift
 
       export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(NIX_PATH=nixpkgs=${nixpkgs} nix-build --no-out-link)/overlays"
 
-      exec ${import nixops}/bin/nixops $cmd \
+      exec ${nixops-built}/bin/nixops $cmd \
         --option plugin-files ${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so \
         --option extra-builtins-file ${./extra-builtins.nix} \
         "$@"
@@ -37,7 +39,7 @@ in
         name = "nixops";
         paths = [
           (nixops-wrapped self)
-          (import nixops)
+          nixops-built
         ];
       };
     };
