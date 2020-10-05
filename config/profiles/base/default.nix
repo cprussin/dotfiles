@@ -18,7 +18,6 @@ in
     ../../modules/security/umask
 
     ../../modules/system/nix-binary-caches
-    ../../modules/system/nix-path
     ../../modules/system/nixpkgs
     ../../modules/system/users
 

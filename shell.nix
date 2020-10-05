@@ -20,16 +20,24 @@ in
       };
     };
 
-    nixops-overlay = _: _: {
-      nixops = import nixops;
-    };
+    nixops-wrapped = pkgs: pkgs.writeShellScriptBin "nixops" ''
+      cmd=$1
+      shift
 
-    nixops-wrapped-overlay = self: _: {
-      nixops-wrapped = self.symlinkJoin {
+      export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(NIX_PATH=nixpkgs=${nixpkgs} nix-build --no-out-link)/overlays"
+
+      exec ${import nixops}/bin/nixops $cmd \
+        --option plugin-files ${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so \
+        --option extra-builtins-file ${./extra-builtins.nix} \
+        "$@"
+    '';
+
+    nixops-overlay = self: _: {
+      nixops = self.symlinkJoin {
         name = "nixops";
         paths = [
-          (self.callPackage ./nixops-deploy-wrapper.nix { inherit nixpkgs; })
-          self.nixops
+          (nixops-wrapped self)
+          (import nixops)
         ];
       };
     };
@@ -38,8 +46,6 @@ in
       overlays = [
         niv-overlay
         nixops-overlay
-        nixops-wrapped-overlay
-        (import ./overlays/get-aws-access-key)
         (import ./overlays/nix-linter)
       ];
       config = {};
@@ -56,7 +62,7 @@ in
     '';
 
     deploy = pkgs.writeShellScriptBin "deploy" ''
-      ${pkgs.nixops-wrapped}/bin/nixops deploy "$@"
+      ${pkgs.nixops}/bin/nixops deploy "$@"
     '';
 
     collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
@@ -68,7 +74,7 @@ in
       buildInputs = [
         pkgs.git
         pkgs.niv
-        pkgs.nixops-wrapped
+        pkgs.nixops
         lint
         format
         deploy
