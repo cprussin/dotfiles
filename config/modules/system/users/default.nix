@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 
 let
   userMountpoints = builtins.filter (lib.hasPrefix "/home") (
@@ -16,15 +16,13 @@ in
     wants = [ "local-fs-pre.target" ];
     before = [ "local-fs-pre.target" ];
     unitConfig.DefaultDependencies = false;
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "install-user-mountpoints" ''
-        ${builtins.concatStringsSep "\n" (map installMountpoint userMountpoints)}
-        for homedir in /home/*
-        do
-          chown --recursive ''${homedir##/home/}:users $homedir
-        done
-      '';
-    };
+    script = ''
+      ${builtins.concatStringsSep "\n" (map installMountpoint userMountpoints)}
+      for homedir in /home/*
+      do
+        chown --recursive ''${homedir##/home/}:users $homedir
+      done
+    '';
+    serviceConfig.Type = "oneshot";
   };
 }

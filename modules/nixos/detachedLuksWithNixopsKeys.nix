@@ -15,21 +15,20 @@ let
       (_: v: lib.nameValuePair "${v.filenameBase}-header" { text = v.header; })
       cfg;
 
-  mkUnlockScript = drive: filenameBase:
-    pkgs.writeShellScript "unlock-${filenameBase}" ''
-      ${pkgs.coreutils}/bin/mkdir -p /tmp/${filenameBase}
-      ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${filenameBase}
-      ${base64Decode config.deployment.keys."${filenameBase}-header".path} > /tmp/${filenameBase}/header
+  mkUnlockScript = drive: filenameBase: ''
+    ${pkgs.coreutils}/bin/mkdir -p /tmp/${filenameBase}
+    ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${filenameBase}
+    ${base64Decode config.deployment.keys."${filenameBase}-header".path} > /tmp/${filenameBase}/header
 
-      ${pkgs.cryptsetup}/bin/cryptsetup open \
-        --key-file <(${base64Decode config.deployment.keys."${filenameBase}-key".path}) \
-        --header /tmp/${filenameBase}/header \
-        /dev/disk/by-id/${drive} crypt-${filenameBase}
+    ${pkgs.cryptsetup}/bin/cryptsetup open \
+      --key-file <(${base64Decode config.deployment.keys."${filenameBase}-key".path}) \
+      --header /tmp/${filenameBase}/header \
+      /dev/disk/by-id/${drive} crypt-${filenameBase}
 
-      ${pkgs.coreutils}/bin/shred -u /tmp/${filenameBase}/header
-      ${pkgs.utillinux}/bin/umount /tmp/${filenameBase}
-      ${pkgs.coreutils}/bin/rmdir /tmp/${filenameBase}
-    '';
+    ${pkgs.coreutils}/bin/shred -u /tmp/${filenameBase}/header
+    ${pkgs.utillinux}/bin/umount /tmp/${filenameBase}
+    ${pkgs.coreutils}/bin/rmdir /tmp/${filenameBase}
+  '';
 in
 
 {
@@ -90,8 +89,8 @@ in
             "${opts.filenameBase}-key-key.service"
             "${opts.filenameBase}-header-key.service"
           ];
+          script = mkUnlockScript drive opts.filenameBase;
           serviceConfig = {
-            ExecStart = mkUnlockScript drive opts.filenameBase;
             RemainAfterExit = true;
             Type = "oneshot";
           };

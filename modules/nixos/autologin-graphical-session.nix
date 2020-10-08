@@ -37,13 +37,14 @@ in
 
         environment.XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.${cfg.user}.uid}";
 
+        script = ''
+          . /etc/set-environment
+          ${cfg.sessionScript}
+        '';
+
         serviceConfig = {
           WorkingDirectory = config.users.users.${cfg.user}.home;
           ExecStartPre = "${pkgs.kbd}/bin/chvt 7";
-          ExecStart = pkgs.writeShellScript "start-autologin-graphical-session" ''
-            . /etc/set-environment
-            ${cfg.sessionScript}
-          '';
 
           PAMName = "login";
           User = cfg.user;
