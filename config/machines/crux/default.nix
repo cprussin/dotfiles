@@ -16,4 +16,6 @@
     hostId = "a362c6ea";
   };
   services.mingetty.greetingLine = builtins.readFile ./greeting;
+
+  programs.powerpanel.enable = true;
 }

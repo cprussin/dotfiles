@@ -7,6 +7,7 @@
     ./nixos/detachedLuksWithNixopsKeys.nix
     ./nixos/keymap.nix
     ./nixos/network-interfaces.nix
+    ./nixos/powerpanel.nix
     ./nixos/preLVMTempMount.nix
     ./nixos/primary-user.nix
     ./nixos/secure.nix
