@@ -5,6 +5,7 @@
     ./hardware.nix
     ./backup.nix
     ./plex.nix
+    ./dynamic-dns.nix
     ../../profiles/physical-machine
     ../../profiles/server
     ../../modules/data/syncthing

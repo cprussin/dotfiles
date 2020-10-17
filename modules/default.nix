@@ -10,6 +10,7 @@
     ./nixos/powerpanel.nix
     ./nixos/preLVMTempMount.nix
     ./nixos/primary-user.nix
+    ./nixos/route53DynamicDns.nix
     ./nixos/secure.nix
     ./nixos/sudo-cmds.nix
   ];
