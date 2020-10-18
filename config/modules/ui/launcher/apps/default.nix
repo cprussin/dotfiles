@@ -51,6 +51,7 @@ in
   mixer = writeShellScript "mixer" "exec ${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix {};
+  nix-shell = writeShellScript "nix-shell" "exec nix-shell -p $1 --run \"$*\"";
   passwords = mkModal "passwords" "${fzf-pass}/bin/fzf-pass";
   plex = mkWebApp "plex" "https://app.plex.tv/desktop";
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
