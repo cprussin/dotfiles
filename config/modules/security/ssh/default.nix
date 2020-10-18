@@ -7,7 +7,11 @@
     programs.ssh = {
       enable = true;
       matchBlocks = {
-        "crux lyra orion" = {
+        "crux" = {
+          checkHostIP = false;
+          hostname = "crux.prussin.net";
+        };
+        "lyra orion" = {
           checkHostIP = false;
         };
         "prussin.net *.bci-incorporated.com" = {
