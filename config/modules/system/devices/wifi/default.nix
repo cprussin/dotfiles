@@ -8,6 +8,11 @@ in
   networking.wireless = {
     enable = true;
 
+    extraConfig = ''
+      ctrl_interface=/run/wpa_supplicant
+      ctrl_interface_group=wheel
+    '';
+
     networks = {
       # Home networks
       Centar = {
