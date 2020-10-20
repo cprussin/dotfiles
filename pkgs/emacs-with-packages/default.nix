@@ -1,13 +1,18 @@
-{ nixpkgs ? (import ../../sources.nix).nixpkgs
-}:
-
 let
-  pkgs = import nixpkgs {
-    overlays = [
-      (import ../zoom-frm/overlay.nix)
-      (import ./overlay.nix)
-    ];
-  };
+  sources = import ../../sources.nix;
 in
 
-pkgs.emacs
+{ nixpkgs ? sources.nixpkgs
+, zoom-frm ? sources.zoom-frm
+}:
+
+  let
+    pkgs = import nixpkgs {
+      overlays = [
+        (import ../zoom-frm/overlay.nix { src = zoom-frm; })
+        (import ./overlay.nix)
+      ];
+    };
+  in
+
+    pkgs.emacs
