@@ -7,5 +7,5 @@ let
 in
 
 _: _: {
-  inherit (pkgs-unstable) syncthing bitwig-studio;
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant;
 }

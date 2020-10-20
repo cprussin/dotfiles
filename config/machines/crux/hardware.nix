@@ -80,6 +80,7 @@ in
     zfs.mkZfsFileSystems {
       "tank-fast/nix".mountpoint = "/nix";
       "tank-fast/persisted-state/borg-cache".mountpoint = "/root/.cache/borg";
+      "tank-fast/persisted-state/hass".mountpoint = "/var/lib/hass";
       "tank-fast/persisted-state/plex".mountpoint = "/var/lib/plex";
       "tank-fast/persisted-state/secrets" = {
         mountpoint = "/secrets";

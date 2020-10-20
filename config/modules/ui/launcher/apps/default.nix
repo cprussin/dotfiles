@@ -45,6 +45,7 @@ in
   gimp = "${gimp}/bin/gimp";
   github = mkWebApp "github" "https://github.com/";
   gmail = mkGoogleApp "gmail" "https://mail.google.com/mail/u/@user@";
+  home = mkWebApp "home" "https://720-natoma-drive.prussin.net";
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
   insecure = writeShellScript "secure" "sudo ${utillinux}/bin/umount /secure";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
