@@ -24,7 +24,6 @@
     ../../modules/system/devices/android
     ../../modules/system/devices/dialout
     ../../modules/system/devices/printers
-    ../../modules/system/devices/virtualization
     ../../modules/system/docker
 
     ../../modules/ui/audio
