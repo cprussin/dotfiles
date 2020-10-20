@@ -17,4 +17,15 @@ in
     accessKeyFile = config.deployment.keys.route53-dynamic-dns-aws-access-key.path;
     secretAccessKeyFile = config.deployment.keys.route53-dynamic-dns-aws-secret-access-key.path;
   };
+
+  systemd.services.route53-dynamic-dns-update = {
+    after = [
+      "route53-dynamic-dns-aws-access-key-key.service"
+      "route53-dynamic-dns-aws-secret-access-key-key.service"
+    ];
+    wants = [
+      "route53-dynamic-dns-aws-access-key-key.service"
+      "route53-dynamic-dns-aws-secret-access-key-key.service"
+    ];
+  };
 }
