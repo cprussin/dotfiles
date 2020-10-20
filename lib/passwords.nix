@@ -14,4 +14,5 @@ in
   get-full-password = passEntry;
   get-base64-encoded-password = builtins.extraBuiltins.base64Password pkgs;
   get-hashed-user-password = builtins.extraBuiltins.hashedUserPassword pkgs;
+  get-hashed-mosquitto-password = builtins.extraBuiltins.hashedMosquittoPassword pkgs;
 }
