@@ -9,4 +9,4 @@ let
   };
 in
 
-pkgs.python3Packages.tuyaha
+pkgs.python3Packages.hacs-frontend

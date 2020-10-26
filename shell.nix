@@ -22,16 +22,22 @@ in
 
     nixops-built = (import nixops).default;
 
+    mkExtraBuiltinsCli = pkgs: opts: builtins.concatStringsSep " " (
+      pkgs.lib.mapAttrsToList (option: value: "--option ${option} ${value}") opts
+    );
+
+    extraBuiltinsOptions = pkgs: mkExtraBuiltinsCli pkgs {
+      plugin-files = "${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so";
+      extra-builtins-file = ./extra-builtins.nix;
+    };
+
     nixops-wrapped = pkgs: pkgs.writeShellScriptBin "nixops" ''
       cmd=$1
       shift
 
-      export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(NIX_PATH=nixpkgs=${nixpkgs} nix-build --no-out-link)/overlays"
+      export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(nix-build --no-out-link)/overlays"
 
-      exec ${nixops-built}/bin/nixops $cmd \
-        --option plugin-files ${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so \
-        --option extra-builtins-file ${./extra-builtins.nix} \
-        "$@"
+      exec ${nixops-built}/bin/nixops $cmd ${extraBuiltinsOptions pkgs} "$@"
     '';
 
     nixops-overlay = self: _: {
@@ -49,6 +55,7 @@ in
         niv-overlay
         nixops-overlay
         (import ./overlays/nix-linter)
+        (import ./pkgs/esphome/overlay.nix { inherit nixpkgs; })
       ];
       config = {};
     };
@@ -70,6 +77,14 @@ in
     collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
       sudo ${pkgs.nix}/bin/nix-collect-garbage -d
     '';
+
+    iot = pkgs.writeShellScriptBin "iot" ''
+      set -e
+
+      rm -f iot-build/result.yaml*
+      nix-build ${extraBuiltinsOptions pkgs} --out-link "iot-build/result.yaml" --attr "$2" ./config/iot
+      ${pkgs.esphome}/bin/esphome iot-build/result.yaml** $1
+    '';
   in
 
     pkgs.mkShell {
@@ -81,5 +96,6 @@ in
         format
         deploy
         collect-garbage
+        iot
       ];
     }
