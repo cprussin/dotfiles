@@ -5,16 +5,19 @@
   ps.aioesphomeapi
   ps.aiofiles
   ps.aiogithubapi
+  ps.aiohomekit
   ps.aiohttp-cors
   ps.defusedxml
   ps.distro
   ps.emoji
+  ps.gtts-token
   ps.ha-ffmpeg
   ps.hacs-frontend
   ps.hass-nabucasa
   ps.mutagen
   ps.netdisco
   ps.paho-mqtt
+  ps.pyipp
   ps.pymetno
   ps.pynacl
   ps.pysmartapp

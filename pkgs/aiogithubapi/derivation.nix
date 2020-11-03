@@ -1,6 +1,5 @@
-{ callPackage, buildPythonPackage, fetchPypi, aiohttp }:
+{ buildPythonPackage, fetchPypi, aiohttp, backoff }:
 let
-  backoff = callPackage ./backoff.nix { };
   pname = "aiogithubapi";
   version = "2.0.0";
 in
