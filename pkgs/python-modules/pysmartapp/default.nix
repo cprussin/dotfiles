@@ -1,4 +1,4 @@
-{ nixpkgs ? (import ../../sources.nix).nixpkgs
+{ nixpkgs ? (import ../../../sources.nix).nixpkgs
 }:
 let
   pkgs = import nixpkgs {
@@ -7,4 +7,4 @@ let
     ];
   };
 in
-pkgs.python3Packages.ring_doorbell
+pkgs.python3Packages.pysmartapp
