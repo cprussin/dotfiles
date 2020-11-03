@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.detachedLuksWithNixopsKeys;
 
@@ -30,7 +29,6 @@ let
     ${pkgs.coreutils}/bin/rmdir /tmp/${filenameBase}
   '';
 in
-
 {
   options.detachedLuksWithNixopsKeys = lib.mkOption {
     default = null;
@@ -76,25 +74,27 @@ in
   config = lib.mkIf (cfg != null) {
     deployment.keys = keys // headers;
 
-    systemd.services = lib.mapAttrs' (
-      drive: opts:
-        lib.nameValuePair "unlock-${opts.filenameBase}" {
-          description = "Unlock encrypted device ${drive}.";
-          wantedBy = [ "zfs.target" ];
-          after = [
-            "${opts.filenameBase}-key-key.service"
-            "${opts.filenameBase}-header-key.service"
-          ];
-          wants = [
-            "${opts.filenameBase}-key-key.service"
-            "${opts.filenameBase}-header-key.service"
-          ];
-          script = mkUnlockScript drive opts.filenameBase;
-          serviceConfig = {
-            RemainAfterExit = true;
-            Type = "oneshot";
-          };
-        }
-    ) cfg;
+    systemd.services = lib.mapAttrs'
+      (
+        drive: opts:
+          lib.nameValuePair "unlock-${opts.filenameBase}" {
+            description = "Unlock encrypted device ${drive}.";
+            wantedBy = [ "zfs.target" ];
+            after = [
+              "${opts.filenameBase}-key-key.service"
+              "${opts.filenameBase}-header-key.service"
+            ];
+            wants = [
+              "${opts.filenameBase}-key-key.service"
+              "${opts.filenameBase}-header-key.service"
+            ];
+            script = mkUnlockScript drive opts.filenameBase;
+            serviceConfig = {
+              RemainAfterExit = true;
+              Type = "oneshot";
+            };
+          }
+      )
+      cfg;
   };
 }

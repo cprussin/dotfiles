@@ -1,10 +1,8 @@
 { lib, config, pkgs, ... }:
-
 let
   sources = import ../../../sources.nix;
-  zfs = pkgs.callPackage ../../../lib/zfs.nix {};
+  zfs = pkgs.callPackage ../../../lib/zfs.nix { };
 in
-
 {
   imports = [
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
@@ -17,7 +15,7 @@ in
 
   boot = {
     kernelModules = [ "kvm-intel" ];
-    extraModulePackages = [];
+    extraModulePackages = [ ];
     preLVMTempMount."/key" = {
       inherit (config.primary-user.secure) device fsType;
     };
@@ -65,7 +63,7 @@ in
     }
   );
 
-  swapDevices = [];
+  swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

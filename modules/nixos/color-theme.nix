@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.colorTheme;
-  colorThemeType = pkgs.callPackage ../../lib/type/colorTheme.nix {};
+  colorThemeType = pkgs.callPackage ../../lib/type/colorTheme.nix { };
 in
-
 {
   options.colorTheme = lib.mkOption {
     type = lib.types.nullOr colorThemeType;

@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.primary-user;
-  passwords = pkgs.callPackage ../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../lib/passwords.nix { };
 in
-
 {
   options.primary-user.name = lib.mkOption {
     type = lib.types.nullOr lib.types.str;

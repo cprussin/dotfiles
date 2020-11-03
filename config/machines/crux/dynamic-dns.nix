@@ -1,9 +1,7 @@
 { pkgs, config, ... }:
-
 let
-  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
 in
-
 {
   deployment.keys = {
     route53-dynamic-dns-aws-access-key.text = passwords.get-password-field "Computer Services/AWS/crux dynamic dns" "Access Key Id";

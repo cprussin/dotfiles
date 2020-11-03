@@ -1,5 +1,4 @@
 { pkgs, config, lib, ... }:
-
 let
   font = config.primary-user.home-manager.font;
   keymap = config.primary-user.home-manager.keymap;
@@ -95,204 +94,203 @@ let
     exec ${pkgs.swaylock}/bin/swaylock "$@"
   '';
 in
-
 {
   primary-user.home-manager = {
     xdg.configFile."sway/config".text = ''
-      set $mod Mod4
-      set $left h
-      set $down j
-      set $up k
-      set $right l
+        set $mod Mod4
+        set $left h
+        set $down j
+        set $up k
+        set $right l
 
-      set $background ${colors.background}
-      set $foreground ${colors.foreground}
-      set $highlightBackground ${colors.highlightBackground}
-      set $highlightForeground ${colors.highlightForeground}
-      set $selection ${colors.selection}
-      set $bright ${colors.bright}
-      set $urgent ${colors.urgent}
+        set $background ${colors.background}
+        set $foreground ${colors.foreground}
+        set $highlightBackground ${colors.highlightBackground}
+        set $highlightForeground ${colors.highlightForeground}
+        set $selection ${colors.selection}
+        set $bright ${colors.bright}
+        set $urgent ${colors.urgent}
 
-      set $font pango:${font.face} ${toString font.size}
+        set $font pango:${font.face} ${toString font.size}
 
-      set $bgimage ${./background.png}
+        set $bgimage ${./background.png}
 
-      set $launch ${pkgs.launcher}/bin/launch
-      set $run ${pkgs.launcher}/bin/run
-      set $wl-paste ${pkgs.wl-clipboard}/bin/wl-paste
-      set $passwords ${launcher-apps.passwords}
-      set $waybar ${pkgs.waybar}/bin/waybar
-      set $idle ${pkgs.swayidle}/bin/swayidle
-      set $swaymsg ${pkgs.sway}/bin/swaymsg
-      set $mako ${pkgs.mako}/bin/mako
-      set $xrdb ${pkgs.xorg.xrdb}/bin/xrdb
-      set $systemctl ${pkgs.systemd}/bin/systemctl
-
-
-      ##
-      # Inputs
-      ##
-      ${if keymap == null then "" else ''
-      input * {
-        xkb_layout ${keymap.layout}
-        xkb_variant ${keymap.variant}
-        xkb_options ${keymap.options}
-      }
-    ''}
+        set $launch ${pkgs.launcher}/bin/launch
+        set $run ${pkgs.launcher}/bin/run
+        set $wl-paste ${pkgs.wl-clipboard}/bin/wl-paste
+        set $passwords ${launcher-apps.passwords}
+        set $waybar ${pkgs.waybar}/bin/waybar
+        set $idle ${pkgs.swayidle}/bin/swayidle
+        set $swaymsg ${pkgs.sway}/bin/swaymsg
+        set $mako ${pkgs.mako}/bin/mako
+        set $xrdb ${pkgs.xorg.xrdb}/bin/xrdb
+        set $systemctl ${pkgs.systemd}/bin/systemctl
 
 
-      ##
-      # Outputs
-      ##
-      output eDP-1 pos 0,0 scale 1
-
-
-      ##
-      # Styles
-      ##
-      output * bg $bgimage fill
-      font $font
-      default_border pixel 3
-      gaps inner 20
-      smart_gaps on
-      hide_edge_borders --i3 smart_no_gaps
-      client.focused $selection $selection $background $bright $selection
-      client.focused_inactive $highlightForeground $highlightForeground $highlightBackground $highlightForeground $highlightForeground
-      client.unfocused $highlightForeground $highlightBackground $highlightForeground $highlightBackground $highlightBackground
-      client.urgent $urgent $urgent $background $urgent $urgent
-
-
-      ##
-      # Window Rules
-      ##
-      for_window [app_id="pavucontrol"] floating enable
-      for_window [title=".*QjackCtl"] floating enable
-      for_window [app_id="bluetooth"] floating enable
-      for_window [app_id="launcher"] {
-        floating enable
-        sticky enable
-        resize set 1500 1000
-      }
-      for_window [class="Pinentry"] {
-        floating enable
-        sticky enable
-      }
-      for_window [app_id="modal"] {
-        floating enable
-        sticky enable
-      }
-
-
-      ##
-      # Bar
-      ##
-      bar {
-        swaybar_command $waybar
-      }
-
-
-      ##
-      # Mousebindings
-      ##
-      mouse_warping container
-      floating_modifier $mod normal
-
-
-      ##
-      # Keybindings
-      ##
-      workspace_auto_back_and_forth yes
-      bindsym {
-        # Launchers
-        $mod+d exec ${config.primary-user.home-manager.default-terminal.bin} --title launcher --name launcher -e '$launch $swaymsg exec'
-        $mod+Shift+d exec $run "$($wl-paste)"
-        $mod+p exec $passwords
-        $mod+Return exec ${config.primary-user.home-manager.default-terminal.bin}
-        $mod+Shift+Return exec ${lock}
-        $mod+Shift+q kill
-        $mod+Shift+c reload
-        XF86AudioRaiseVolume exec ${raise-volume}
-        $mod+Page_Up exec ${raise-volume}
-        XF86AudioLowerVolume exec ${lower-volume}
-        $mod+Page_Down exec ${lower-volume}
-        XF86AudioMute exec ${toggle-mute}
-        $mod+End exec ${toggle-mute}
-        XF86MonBrightnessUp exec ${raise-brightness}
-        XF86Launch6 exec ${raise-brightness}
-        XF86MonBrightnessDown exec ${lower-brightness}
-        XF86Launch5 exec ${lower-brightness}
-
-        # Layout/window management
-        $mod+b splith
-        $mod+v splitv
-        $mod+s layout stacking
-        $mod+w layout tabbed
-        $mod+e layout toggle split
-        $mod+f fullscreen
-        $mod+Shift+space floating toggle
-        $mod+space focus mode_toggle
-        $mod+a focus parent
-        $mod+Shift+a focus child
-
-        # Focus management
-        $mod+$left focus left
-        $mod+$down focus down
-        $mod+$up focus up
-        $mod+$right focus right
-        $mod+Shift+$left move left
-        $mod+Shift+$down move down
-        $mod+Shift+$up move up
-        $mod+Shift+$right move right
-
-        # Workspaces
-        $mod+Shift+minus move scratchpad
-        $mod+minus scratchpad show
-        $mod+parenleft workspace 1
-        $mod+parenright workspace 2
-        $mod+braceright workspace 3
-        $mod+plus workspace 4
-        $mod+braceleft workspace 5
-        $mod+bracketright workspace 6
-        $mod+bracketleft workspace 7
-        $mod+exclam workspace 8
-        $mod+equal workspace 9
-        $mod+asterisk workspace 10
-        $mod+Shift+parenleft move container to workspace 1
-        $mod+Shift+parenright move container to workspace 2
-        $mod+Shift+braceright move container to workspace 3
-        $mod+Shift+plus move container to workspace 4
-        $mod+Shift+braceleft move container to workspace 5
-        $mod+Shift+bracketright move container to workspace 6
-        $mod+Shift+bracketleft move container to workspace 7
-        $mod+Shift+exclam move container to workspace 8
-        $mod+Shift+equal move container to workspace 9
-        $mod+Shift+asterisk move container to workspace 10
-
-        # Modes
-        $mod+r mode "resize"
-      }
-
-      mode "resize" {
-        bindsym {
-          $left resize shrink width 30px
-          $down resize grow height 30px
-          $up resize shrink height 30px
-          $right resize grow width 30px
-          Return mode "default"
-          Escape mode "default"
+        ##
+        # Inputs
+        ##
+        ${if keymap == null then "" else ''
+        input * {
+          xkb_layout ${keymap.layout}
+          xkb_variant ${keymap.variant}
+          xkb_options ${keymap.options}
         }
-      }
+      ''}
 
-      exec $idle -w \
-        timeout 300 ${lock} \
-        timeout 300 '$swaymsg "output * dpms off"' \
-          resume '$swaymsg "output * dpms on"' \
-        before-sleep ${lock} \
-        lock ${lock}
 
-      exec $mako
-      exec $xrdb -load ~/.Xresources
-      exec "$systemctl --user import-environment; $systemctl --user start sway-session.target"
+        ##
+        # Outputs
+        ##
+        output eDP-1 pos 0,0 scale 1
+
+
+        ##
+        # Styles
+        ##
+        output * bg $bgimage fill
+        font $font
+        default_border pixel 3
+        gaps inner 20
+        smart_gaps on
+        hide_edge_borders --i3 smart_no_gaps
+        client.focused $selection $selection $background $bright $selection
+        client.focused_inactive $highlightForeground $highlightForeground $highlightBackground $highlightForeground $highlightForeground
+        client.unfocused $highlightForeground $highlightBackground $highlightForeground $highlightBackground $highlightBackground
+        client.urgent $urgent $urgent $background $urgent $urgent
+
+
+        ##
+        # Window Rules
+        ##
+        for_window [app_id="pavucontrol"] floating enable
+        for_window [title=".*QjackCtl"] floating enable
+        for_window [app_id="bluetooth"] floating enable
+        for_window [app_id="launcher"] {
+          floating enable
+          sticky enable
+          resize set 1500 1000
+        }
+        for_window [class="Pinentry"] {
+          floating enable
+          sticky enable
+        }
+        for_window [app_id="modal"] {
+          floating enable
+          sticky enable
+        }
+
+
+        ##
+        # Bar
+        ##
+        bar {
+          swaybar_command $waybar
+        }
+
+
+        ##
+        # Mousebindings
+        ##
+        mouse_warping container
+        floating_modifier $mod normal
+
+
+        ##
+        # Keybindings
+        ##
+        workspace_auto_back_and_forth yes
+        bindsym {
+          # Launchers
+          $mod+d exec ${config.primary-user.home-manager.default-terminal.bin} --title launcher --name launcher -e '$launch $swaymsg exec'
+          $mod+Shift+d exec $run "$($wl-paste)"
+          $mod+p exec $passwords
+          $mod+Return exec ${config.primary-user.home-manager.default-terminal.bin}
+          $mod+Shift+Return exec ${lock}
+          $mod+Shift+q kill
+          $mod+Shift+c reload
+          XF86AudioRaiseVolume exec ${raise-volume}
+          $mod+Page_Up exec ${raise-volume}
+          XF86AudioLowerVolume exec ${lower-volume}
+          $mod+Page_Down exec ${lower-volume}
+          XF86AudioMute exec ${toggle-mute}
+          $mod+End exec ${toggle-mute}
+          XF86MonBrightnessUp exec ${raise-brightness}
+          XF86Launch6 exec ${raise-brightness}
+          XF86MonBrightnessDown exec ${lower-brightness}
+          XF86Launch5 exec ${lower-brightness}
+
+          # Layout/window management
+          $mod+b splith
+          $mod+v splitv
+          $mod+s layout stacking
+          $mod+w layout tabbed
+          $mod+e layout toggle split
+          $mod+f fullscreen
+          $mod+Shift+space floating toggle
+          $mod+space focus mode_toggle
+          $mod+a focus parent
+          $mod+Shift+a focus child
+
+          # Focus management
+          $mod+$left focus left
+          $mod+$down focus down
+          $mod+$up focus up
+          $mod+$right focus right
+          $mod+Shift+$left move left
+          $mod+Shift+$down move down
+          $mod+Shift+$up move up
+          $mod+Shift+$right move right
+
+          # Workspaces
+          $mod+Shift+minus move scratchpad
+          $mod+minus scratchpad show
+          $mod+parenleft workspace 1
+          $mod+parenright workspace 2
+          $mod+braceright workspace 3
+          $mod+plus workspace 4
+          $mod+braceleft workspace 5
+          $mod+bracketright workspace 6
+          $mod+bracketleft workspace 7
+          $mod+exclam workspace 8
+          $mod+equal workspace 9
+          $mod+asterisk workspace 10
+          $mod+Shift+parenleft move container to workspace 1
+          $mod+Shift+parenright move container to workspace 2
+          $mod+Shift+braceright move container to workspace 3
+          $mod+Shift+plus move container to workspace 4
+          $mod+Shift+braceleft move container to workspace 5
+          $mod+Shift+bracketright move container to workspace 6
+          $mod+Shift+bracketleft move container to workspace 7
+          $mod+Shift+exclam move container to workspace 8
+          $mod+Shift+equal move container to workspace 9
+          $mod+Shift+asterisk move container to workspace 10
+
+          # Modes
+          $mod+r mode "resize"
+        }
+
+        mode "resize" {
+          bindsym {
+            $left resize shrink width 30px
+            $down resize grow height 30px
+            $up resize shrink height 30px
+            $right resize grow width 30px
+            Return mode "default"
+            Escape mode "default"
+          }
+        }
+
+        exec $idle -w \
+          timeout 300 ${lock} \
+          timeout 300 '$swaymsg "output * dpms off"' \
+            resume '$swaymsg "output * dpms on"' \
+          before-sleep ${lock} \
+          lock ${lock}
+
+        exec $mako
+        exec $xrdb -load ~/.Xresources
+        exec "$systemctl --user import-environment; $systemctl --user start sway-session.target"
     '';
 
     home.file.".Xresources".text = "Xft.dpi: 96\n";

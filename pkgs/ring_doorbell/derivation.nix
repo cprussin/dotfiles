@@ -5,12 +5,10 @@
 , pytest
 , requests-mock
 }:
-
 let
   pname = "ring_doorbell";
   version = "0.6.1";
 in
-
 buildPythonPackage {
   inherit pname version;
 

@@ -1,12 +1,10 @@
 { pkgs, config, ... }:
-
 let
-  stripOverrides = pkgs.callPackage ../../../../lib/stripOverrides.nix {};
+  stripOverrides = pkgs.callPackage ../../../../lib/stripOverrides.nix { };
   colors = config.primary-user.home-manager.colorTheme;
 in
-
 {
-  primary-user.home-manager.programs.waybar = {
+  primary-user.home-manager.programs.waybar-custom = {
     enable = true;
     layer = "top";
     position = "bottom";
@@ -34,14 +32,14 @@ in
       left = map stripOverrides [
         (pkgs.callPackage ./modules/sway/workspaces.nix { inherit colors; })
         (pkgs.callPackage ./modules/sway/mode.nix { inherit colors; })
-        (pkgs.callPackage ./modules/sway/window.nix {})
+        (pkgs.callPackage ./modules/sway/window.nix { })
       ];
 
       right = map stripOverrides (
         builtins.filter (m: m != null) [
           (pkgs.callPackage ./modules/email/gmail.nix { inherit config colors; })
           (pkgs.callPackage ./modules/email/prussin-net.nix { inherit config colors; })
-          (pkgs.callPackage ./modules/secure.nix {})
+          (pkgs.callPackage ./modules/secure.nix { })
           (pkgs.callPackage ./modules/vpn.nix { inherit colors; })
           (pkgs.callPackage ./modules/bluetooth.nix { inherit config colors; })
           (
@@ -57,8 +55,8 @@ in
           (pkgs.callPackage ./modules/audio.nix { inherit colors; })
           (pkgs.callPackage ./modules/mic.nix { inherit colors; })
           (pkgs.callPackage ./modules/battery.nix { inherit colors; })
-          (pkgs.callPackage ./modules/clock.nix {})
-          (pkgs.callPackage ./modules/tray.nix {})
+          (pkgs.callPackage ./modules/clock.nix { })
+          (pkgs.callPackage ./modules/tray.nix { })
         ]
       );
     };

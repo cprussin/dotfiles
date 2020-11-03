@@ -1,10 +1,8 @@
 { callPackage, dircolors-solarized }:
-
 let
-  colors = callPackage ./colors.nix {};
-  common = callPackage ./common.nix {};
+  colors = callPackage ./colors.nix { };
+  common = callPackage ./common.nix { };
 in
-
 common // {
   background = colors.base03;
   foreground = colors.base0;

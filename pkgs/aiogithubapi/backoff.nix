@@ -1,10 +1,8 @@
 { buildPythonPackage, fetchFromGitHub, pytestCheckHook, poetry, pytest-asyncio }:
-
 let
   pname = "backoff";
   version = "1.10.0";
 in
-
 buildPythonPackage {
   inherit pname version;
 

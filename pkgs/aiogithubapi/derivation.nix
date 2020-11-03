@@ -1,11 +1,9 @@
 { callPackage, buildPythonPackage, fetchPypi, aiohttp }:
-
 let
-  backoff = callPackage ./backoff.nix {};
+  backoff = callPackage ./backoff.nix { };
   pname = "aiogithubapi";
   version = "2.0.0";
 in
-
 buildPythonPackage {
   inherit pname version;
 

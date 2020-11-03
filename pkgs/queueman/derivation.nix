@@ -1,10 +1,8 @@
 { buildPythonPackage, fetchPypi }:
-
 let
   pname = "queueman";
   version = "0.5";
 in
-
 buildPythonPackage {
   inherit pname version;
 

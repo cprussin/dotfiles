@@ -1,11 +1,9 @@
 { stdenv, autoPatchelfHook }:
-
 let
   pname = "powerpanel";
   version = "1.3.3";
   unpacked = "${pname}-${version}";
 in
-
 stdenv.mkDerivation {
   inherit pname version;
 

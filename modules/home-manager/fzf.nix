@@ -1,5 +1,4 @@
 { lib, config, ... }:
-
 let
   cfg = config.programs.fzf;
 
@@ -26,7 +25,6 @@ let
     }
   );
 in
-
 {
   options.programs.fzf = {
     inline-info = lib.mkOption {
@@ -62,8 +60,8 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.fzf.defaultOptions = lib.flatten [
-      (if cfg.colors == null then [] else [ "--color=${colors}" ])
-      (if cfg.inline-info then [ "--inline-info" ] else [])
+      (if cfg.colors == null then [ ] else [ "--color=${colors}" ])
+      (if cfg.inline-info then [ "--inline-info" ] else [ ])
     ];
   };
 }

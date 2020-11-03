@@ -1,12 +1,10 @@
 { config, pkgs, ... }:
-
 let
-  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
   rsyncUser = "11795";
   rsyncHost = "ch-s011.rsync.net";
   userAtHost = "${rsyncUser}@${rsyncHost}";
 in
-
 {
   services.borgbackup.jobs."rsync.net" = {
     paths = map (folder: "${folder}/.zfs/snapshot/borgsnap") [

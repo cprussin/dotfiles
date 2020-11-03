@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.programs.powerpanel;
   yesNo = bool: if bool then "yes" else "no";
 in
-
 {
   options.programs.powerpanel = {
     enable = lib.mkEnableOption "PowerPanel";

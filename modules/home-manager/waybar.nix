@@ -1,7 +1,6 @@
 { pkgs, lib, config, ... }:
-
 let
-  cfg = config.programs.waybar;
+  cfg = config.programs.waybar-custom;
 
   styleBlockType = lib.types.attrsOf (
     lib.types.oneOf [
@@ -27,7 +26,7 @@ let
 
       config = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         description = "The module config";
       };
 
@@ -42,7 +41,7 @@ let
   allModules = cfg.modules.left ++ cfg.modules.center ++ cfg.modules.right;
 
   getModuleConfigs =
-    lib.foldl (acc: module: acc // { ${module.name} = module.config; }) {};
+    lib.foldl (acc: module: acc // { ${module.name} = module.config; }) { };
   getName = map (builtins.getAttr "name");
 
   printCssBlockContents = lib.mapAttrsToList (
@@ -57,10 +56,12 @@ let
 
   printCssBlockSet = selectorPrefix: blockSet:
     builtins.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        selector: block:
-          "${selectorPrefix}${printCssBlock selector block}"
-      ) blockSet
+      lib.mapAttrsToList
+        (
+          selector: block:
+            "${selectorPrefix}${printCssBlock selector block}"
+        )
+        blockSet
     );
 
   defaultStyleSelector = module:
@@ -77,9 +78,8 @@ let
     map styleSelector allModules
   );
 in
-
 {
-  options.programs.waybar = {
+  options.programs.waybar-custom = {
     enable = lib.mkEnableOption "Waybar";
 
     layer = lib.mkOption {
@@ -168,19 +168,19 @@ in
         options = {
           left = lib.mkOption {
             type = lib.types.listOf moduleModule;
-            default = [];
+            default = [ ];
             description = "Modules that will be displayed on the left.";
           };
 
           center = lib.mkOption {
             type = lib.types.listOf moduleModule;
-            default = [];
+            default = [ ];
             description = "Modules that will be displayed in the center.";
           };
 
           right = lib.mkOption {
             type = lib.types.listOf moduleModule;
-            default = [];
+            default = [ ];
             description = "Modules that will be displayed on the right.";
           };
         };
@@ -188,7 +188,7 @@ in
     };
 
     styles = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.submodule {
         options = {
           pre = lib.mkOption {

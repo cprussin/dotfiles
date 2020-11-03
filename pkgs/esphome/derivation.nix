@@ -1,18 +1,18 @@
 { callPackage, fetchFromGitHub, nixpkgs, lib, python3, platformio, esptool, git, locale }:
-
 let
   python = python3.override {
-    packageOverrides = _: super: let
-      mkOverride = { version, name, sha256 ? "", pname ? name, customOverrides ? _: {} }:
-        super.${name}.overrideAttrs (
-          oldAttrs: {
-            inherit version;
-            src = python3.pkgs.fetchPypi {
-              inherit version pname sha256;
-            };
-          } // (customOverrides oldAttrs)
-        );
-    in
+    packageOverrides = _: super:
+      let
+        mkOverride = { version, name, sha256 ? "", pname ? name, customOverrides ? _: { } }:
+          super.${name}.overrideAttrs (
+            oldAttrs: {
+              inherit version;
+              src = python3.pkgs.fetchPypi {
+                inherit version pname sha256;
+              };
+            } // (customOverrides oldAttrs)
+          );
+      in
       {
         protobuf = super.protobuf.override {
           protobuf = callPackage "${nixpkgs}/pkgs/development/libraries/protobuf/generic-v3.nix" {
@@ -91,7 +91,6 @@ let
   version = "1.15.3-git";
 
 in
-
 python.pkgs.buildPythonApplication {
   inherit pname version;
 

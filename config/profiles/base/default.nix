@@ -1,9 +1,7 @@
 { ... }:
-
 let
   sources = import ../../../sources.nix;
 in
-
 {
   imports = [
     "${sources.home-manager}/nixos"

@@ -1,9 +1,7 @@
 { ... }:
-
 let
   sources = import ../../../../sources.nix;
 in
-
 {
   nix.nixPath = [ "nixpkgs=${sources.nixpkgs}" ];
   nixpkgs.config = import ./nixpkgs-config.nix;

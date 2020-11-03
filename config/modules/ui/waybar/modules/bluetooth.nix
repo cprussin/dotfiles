@@ -1,5 +1,4 @@
 { pkgs, config, colors }:
-
 let
   bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
 
@@ -32,7 +31,6 @@ let
 
   launcher-apps = pkgs.callPackage ../../launcher/apps { inherit config; };
 in
-
 {
   name = "custom/bluetooth";
 

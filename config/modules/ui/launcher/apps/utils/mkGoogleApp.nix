@@ -1,15 +1,13 @@
 { writeShellScript, callPackage, coreutils }:
 
 name: url:
-
 let
-  mkWebApp = callPackage ./mkWebApp.nix {};
+  mkWebApp = callPackage ./mkWebApp.nix { };
   webappForUser = user:
     mkWebApp "${name}-webapp-${user}" (
       builtins.replaceStrings [ "@user@" ] [ user ] url
     );
 in
-
 writeShellScript name ''
   test=${coreutils}/bin/test
 

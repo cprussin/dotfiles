@@ -1,6 +1,5 @@
 { nixpkgs ? (import ../../sources.nix).nixpkgs
 }:
-
 let
   pkgs = import nixpkgs {
     overlays = [
@@ -8,5 +7,4 @@ let
     ];
   };
 in
-
 pkgs.get-aws-access-key

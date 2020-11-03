@@ -1,10 +1,8 @@
 { buildPythonPackage, fetchPypi }:
-
 let
   pname = "hacs-frontend";
   version = "20200522214300";
 in
-
 buildPythonPackage {
   inherit pname version;
 

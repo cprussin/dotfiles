@@ -1,10 +1,8 @@
 { lib, config, ... }:
-
 let
   cfg = config.font;
   pangoFont = "${cfg.face} ${toString cfg.size}";
 in
-
 {
   options.font = {
     package = lib.mkOption {
@@ -35,7 +33,7 @@ in
       swaylock.font = pangoFont;
       mako.font = pangoFont;
       zathura.options.font = pangoFont;
-      waybar.styles.common = {
+      waybar-custom.styles.common = {
         font-family = cfg.face;
         font-size = "${toString cfg.size}pt";
       };

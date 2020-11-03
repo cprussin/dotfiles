@@ -1,10 +1,8 @@
 { pkgs, lib, config, ... }:
-
 let
-  ls = pkgs.callPackage ./ls.nix {};
+  ls = pkgs.callPackage ./ls.nix { };
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
 in
-
 {
   options.promptColor = lib.mkOption {
     type = lib.types.str;

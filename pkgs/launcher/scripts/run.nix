@@ -1,11 +1,9 @@
 { writeShellScriptBin, callPackage, coreutils, gnugrep }:
-
 let
-  open = callPackage ./open.nix {};
-  browse = callPackage ./browse.nix {};
-  search = callPackage ./search.nix {};
+  open = callPackage ./open.nix { };
+  browse = callPackage ./browse.nix { };
+  search = callPackage ./search.nix { };
 in
-
 writeShellScriptBin "run" ''
   open=${open}/bin/open
   browse=${browse}/bin/browse

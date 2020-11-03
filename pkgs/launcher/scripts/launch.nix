@@ -6,12 +6,10 @@
 , fortune
 , fzf
 }:
-
 let
-  run = callPackage ./run.nix {};
-  preview = callPackage ./preview.nix {};
+  run = callPackage ./run.nix { };
+  preview = callPackage ./preview.nix { };
 in
-
 writeShellScriptBin "launch" ''
   fzf=${fzf}/bin/fzf
   find=${findutils}/bin/find

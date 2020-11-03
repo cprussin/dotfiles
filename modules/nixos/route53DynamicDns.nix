@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.route53DynamicDns;
 in
-
 {
   options.services.route53DynamicDns = {
     enable = lib.mkEnableOption "Route 53 Dynamic DNS";

@@ -1,9 +1,7 @@
 { pkgs, config, ... }:
-
 let
-  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
 in
-
 {
   deployment.keys = {
     netflix-vpn-user-pass = {

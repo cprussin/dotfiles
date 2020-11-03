@@ -1,9 +1,7 @@
 { lib, config, ... }:
-
 let
   cfg = config.default-terminal;
 in
-
 {
   options.default-terminal = {
     enable = lib.mkEnableOption "Default terminal";

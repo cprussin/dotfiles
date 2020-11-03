@@ -1,9 +1,7 @@
 { callPackage }:
-
 let
-  colors = callPackage ./colors.nix {};
+  colors = callPackage ./colors.nix { };
 in
-
 {
   black = colors.base02;
   white = colors.base3;

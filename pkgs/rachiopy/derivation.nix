@@ -1,10 +1,8 @@
 { buildPythonPackage, fetchPypi, requests }:
-
 let
   pname = "RachioPy";
   version = "1.0.3";
 in
-
 buildPythonPackage {
   inherit pname version;
 

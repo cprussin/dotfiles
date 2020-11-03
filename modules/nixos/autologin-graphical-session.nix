@@ -1,9 +1,7 @@
 { pkgs, lib, config, ... }:
-
 let
   cfg = config.autologin-graphical-session;
 in
-
 {
   options.autologin-graphical-session = {
     enable = lib.mkEnableOption "Autologin graphical session";

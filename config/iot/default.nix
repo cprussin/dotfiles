@@ -1,9 +1,8 @@
 { nixpkgs ? (import ../../sources.nix).nixpkgs }:
-
 let
-  pkgs = import nixpkgs {};
+  pkgs = import nixpkgs { };
 
-  passwords = pkgs.callPackage ../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../lib/passwords.nix { };
 
   templateOptions = config: config // {
     id = builtins.replaceStrings [ " " "'" ] [ "_" "" ] (pkgs.lib.toLower config.name);
@@ -19,24 +18,24 @@ let
     let
       options = templateOptions config;
     in
-      {
-        inherit (config) name;
-        value = pkgs.writeText "${options.id}.yaml" (
-          builtins.toJSON (template options)
-        );
-      };
+    {
+      inherit (config) name;
+      value = pkgs.writeText "${options.id}.yaml" (
+        builtins.toJSON (template options)
+      );
+    };
 
   mkDevices = template: deviceNames:
     builtins.listToAttrs (map (mkDevice template) deviceNames);
 
-  fans = mkDevices (pkgs.callPackage ./fan.nix {}) [
+  fans = mkDevices (pkgs.callPackage ./fan.nix { }) [
     { name = "Aiden's Room Fan"; }
     { name = "Guest Room Fan"; }
     { name = "Master Bedroom Fan"; }
     { name = "Office Fan"; }
   ];
 
-  dimmers = mkDevices (pkgs.callPackage ./dimmer.nix {}) [
+  dimmers = mkDevices (pkgs.callPackage ./dimmer.nix { }) [
     { name = "Aiden's Room Lights"; }
     { name = "Bar Lights"; }
     { name = "Dining Room Lights"; }
@@ -51,12 +50,12 @@ let
     #{ name = "Fireplace Lights"; }
   ];
 
-  plugs = mkDevices (pkgs.callPackage ./plug.nix {}) [
+  plugs = mkDevices (pkgs.callPackage ./plug.nix { }) [
     { name = "Left Turtle Tank Lamp"; }
     { name = "Right Turtle Tank Lamp"; }
   ];
 
-  switches = mkDevices (pkgs.callPackage ./switch.nix {}) [
+  switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
     { name = "Entry Light"; }
     { name = "Front Porch Light"; }
     #{ name = "Back Porch Light"; }
@@ -65,7 +64,6 @@ let
 
   devices = fans // dimmers // plugs // switches;
 in
-
 devices // {
   fans = builtins.attrValues fans;
   dimmers = builtins.attrValues dimmers;

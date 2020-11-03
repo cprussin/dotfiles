@@ -1,5 +1,4 @@
 { lib, config, ... }:
-
 let
   userMountpoints = builtins.filter (lib.hasPrefix "/home") (
     builtins.attrNames config.fileSystems
@@ -7,7 +6,6 @@ let
 
   installMountpoint = mountpoint: "mkdir -m 0700 -p ${mountpoint}";
 in
-
 {
   users.mutableUsers = false;
 

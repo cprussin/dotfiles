@@ -1,9 +1,7 @@
 { writeShellScriptBin, callPackage, coreutils, gnugrep, gnused }:
-
 let
-  browse = callPackage ./browse.nix {};
+  browse = callPackage ./browse.nix { };
 in
-
 writeShellScriptBin "search" ''
   printf=${coreutils}/bin/printf
   echo=${coreutils}/bin/echo

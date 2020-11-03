@@ -1,4 +1,4 @@
-{ writeShellScriptBin, bat, coreutils, figlet, file, gnused, gnutar, pythonPackages }:
+{ writeShellScriptBin, bat, coreutils, figlet, file, gnused, gnutar, python3Packages }:
 
 writeShellScriptBin "preview" ''
   bat=${bat}/bin/bat
@@ -8,7 +8,7 @@ writeShellScriptBin "preview" ''
   file=${file}/bin/file
   sed=${gnused}/bin/sed
   tar=${gnutar}/bin/tar
-  eyeD3=${pythonPackages.eyeD3}/bin/eyeD3
+  eyeD3=${python3Packages.eyeD3}/bin/eyeD3
 
   lineLimit=100
 

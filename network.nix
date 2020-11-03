@@ -15,7 +15,6 @@ let
       (machine: _: mkMachine machine)
       (builtins.readDir machineDir);
 in
-
 all-machines // {
   network.description = "PrussinNet";
 }

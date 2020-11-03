@@ -1,5 +1,4 @@
 { pkgs, lib, config, ... }:
-
 let
   hmCfg = config.primary-user.home-manager;
 
@@ -14,8 +13,6 @@ let
     '';
   };
 in
-
-
 {
   # FIXME: This is done under the hood in home-manager to set sessionVariables.
   # We do still want this in the environment, even if we want to clear out the

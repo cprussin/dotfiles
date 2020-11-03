@@ -8,11 +8,9 @@
 , mpv
 , emacs
 }:
-
 let
-  browse = callPackage ./browse.nix {};
+  browse = callPackage ./browse.nix { };
 in
-
 writeShellScriptBin "open" ''
   test=${coreutils}/bin/test
   echo=${coreutils}/bin/echo

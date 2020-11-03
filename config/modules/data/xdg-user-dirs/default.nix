@@ -1,9 +1,7 @@
 { config, ... }:
-
 let
   home = config.primary-user.home;
 in
-
 {
   primary-user.home-manager.xdg.configFile."user-dirs.dirs".text = ''
     XDG_DESKTOP_DIR="${home}/"

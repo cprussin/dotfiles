@@ -1,5 +1,4 @@
 { pkgs, config, ... }:
-
 let
   pass = "${pkgs.pass}/bin/pass";
   head = "${pkgs.coreutils}/bin/head";
@@ -8,7 +7,6 @@ let
   getPassword = service: "${pass} show '${service}' | ${head} -n 1";
   getAppPassword = service: "${pass} show '${service}' | ${grep} \"App Password\" | ${sed} 's/.*: //'";
 in
-
 {
   primary-user.home-manager = {
     accounts.email = {

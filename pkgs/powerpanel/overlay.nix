@@ -1,3 +1,3 @@
 self: _: {
-  powerpanel = self.callPackage ./derivation.nix {};
+  powerpanel = self.callPackage ./derivation.nix { };
 }

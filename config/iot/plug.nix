@@ -1,10 +1,8 @@
 { callPackage, lib }: args:
-
 let
-  common = callPackage ./common.nix {};
+  common = callPackage ./common.nix { };
   base = common args;
 in
-
 lib.recursiveUpdate base {
   binary_sensor = [
     {
@@ -15,7 +13,7 @@ lib.recursiveUpdate base {
         inverted = true;
       };
       name = "${args.name} Button";
-      on_press = [ { "switch.toggle" = "relay"; } ];
+      on_press = [{ "switch.toggle" = "relay"; }];
     }
   ];
 

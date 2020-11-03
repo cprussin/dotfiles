@@ -1,11 +1,10 @@
 { lib, config, pkgs, ... }:
-
 let
   sources = import ../../../sources.nix;
 
-  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
+  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
 
-  zfs = pkgs.callPackage ../../../lib/zfs.nix {};
+  zfs = pkgs.callPackage ../../../lib/zfs.nix { };
 
   getLuksFile = drive: file:
     passwords.get-base64-encoded-password "Infrastructure/luks/crux/${drive}/${file}";
@@ -20,19 +19,20 @@ let
     "usb-WD_Elements_25A3_564347414D34534D-0:0"
   ];
 in
-
 {
   imports = [
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
   detachedLuksWithNixopsKeys = builtins.listToAttrs (
-    map (
-      drive: lib.nameValuePair drive {
-        key = getLuksFile drive "key";
-        header = getLuksFile drive "header";
-      }
-    ) drives
+    map
+      (
+        drive: lib.nameValuePair drive {
+          key = getLuksFile drive "key";
+          header = getLuksFile drive "header";
+        }
+      )
+      drives
   );
 
   systemd.services.import-tank = {
@@ -48,7 +48,7 @@ in
 
   boot = {
     kernelModules = [ "kvm-intel" ];
-    extraModulePackages = [];
+    extraModulePackages = [ ];
     preLVMTempMount."/key" = {
       inherit (config.fileSystems."/boot") device fsType;
     };
@@ -90,7 +90,7 @@ in
     }
   );
 
-  swapDevices = [];
+  swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 16;
 }

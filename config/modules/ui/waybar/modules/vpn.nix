@@ -1,5 +1,4 @@
 { pkgs, colors }:
-
 let
   vpn = pkgs.writeShellScript "vpn" ''
     if systemctl is-active --quiet openvpn-netflix
@@ -8,7 +7,6 @@ let
     fi
   '';
 in
-
 {
   name = "custom/vpn";
 

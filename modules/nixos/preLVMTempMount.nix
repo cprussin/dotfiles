@@ -1,5 +1,4 @@
 { config, lib, ... }:
-
 let
   cfg = config.boot.preLVMTempMount;
 
@@ -24,30 +23,33 @@ let
 
   doMounting = filesystems:
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        mountPoint: opts:
-          ''
-            mkdir -m 0755 -p "${mountPoint}"
-            mount -n \
-              -t ${opts.fsType} \
-              -o ro \
-              "${opts.device}" "${mountPoint}"
-          ''
-      ) filesystems
+      lib.mapAttrsToList
+        (
+          mountPoint: opts:
+            ''
+              mkdir -m 0755 -p "${mountPoint}"
+              mount -n \
+                -t ${opts.fsType} \
+                -o ro \
+                "${opts.device}" "${mountPoint}"
+            ''
+        )
+        filesystems
     );
 
   cleanUp = filesystems:
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        mountPoint: _:
-          ''
-            umount "${mountPoint}"
-            rmdir "${mountPoint}"
-          ''
-      ) filesystems
+      lib.mapAttrsToList
+        (
+          mountPoint: _:
+            ''
+              umount "${mountPoint}"
+              rmdir "${mountPoint}"
+            ''
+        )
+        filesystems
     );
 in
-
 {
   options.boot.preLVMTempMount = lib.mkOption {
     description = ''

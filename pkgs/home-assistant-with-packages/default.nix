@@ -1,6 +1,5 @@
 { nixpkgs ? (import ../../sources.nix).nixpkgs-unstable
 }:
-
 let
   pkgs = import nixpkgs {
     overlays = [
@@ -8,5 +7,4 @@ let
     ];
   };
 in
-
 pkgs.home-assistant

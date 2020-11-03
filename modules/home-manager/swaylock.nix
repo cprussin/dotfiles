@@ -1,5 +1,4 @@
 { pkgs, lib, config, ... }:
-
 let
   cfg = config.programs.swaylock;
 
@@ -20,7 +19,6 @@ let
       else value != null
     );
 in
-
 {
   options.programs.swaylock = {
     enable = lib.mkEnableOption "Swaylock";

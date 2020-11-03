@@ -1,9 +1,7 @@
 { lib, config, ... }:
-
 let
   cfg = config.iconTheme;
 in
-
 {
   options.iconTheme = {
     package = lib.mkOption {

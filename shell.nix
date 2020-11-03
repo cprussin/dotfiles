@@ -1,101 +1,98 @@
 let
   sources = import ./sources.nix;
 in
-
 { nixpkgs ? sources.nixpkgs
 , niv ? sources.niv
 , nixops ? sources.nixops
 }:
-
-  let
-    niv-overlay = self: _: {
-      niv = self.symlinkJoin {
-        name = "niv";
-        paths = [ niv ];
-        buildInputs = [ self.makeWrapper ];
-        postBuild = ''
-          wrapProgram $out/bin/niv \
-            --add-flags "--sources-file ${toString ./sources.json}"
-        '';
-      };
+let
+  niv-overlay = self: _: {
+    niv = self.symlinkJoin {
+      name = "niv";
+      paths = [ niv ];
+      buildInputs = [ self.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/niv \
+          --add-flags "--sources-file ${toString ./sources.json}"
+      '';
     };
+  };
 
-    nixops-built = (import nixops).default;
+  nixops-built = (import nixops).default;
 
-    mkExtraBuiltinsCli = pkgs: opts: builtins.concatStringsSep " " (
-      pkgs.lib.mapAttrsToList (option: value: "--option ${option} ${value}") opts
-    );
+  mkExtraBuiltinsCli = pkgs: opts: builtins.concatStringsSep " " (
+    pkgs.lib.mapAttrsToList (option: value: "--option ${option} ${value}") opts
+  );
 
-    extraBuiltinsOptions = pkgs: mkExtraBuiltinsCli pkgs {
-      plugin-files = "${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so";
-      extra-builtins-file = ./extra-builtins.nix;
-    };
+  extraBuiltinsOptions = pkgs: mkExtraBuiltinsCli pkgs {
+    plugin-files = "${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so";
+    extra-builtins-file = ./extra-builtins.nix;
+  };
 
-    nixops-wrapped = pkgs: pkgs.writeShellScriptBin "nixops" ''
-      cmd=$1
-      shift
+  nixops-wrapped = pkgs: pkgs.writeShellScriptBin "nixops" ''
+    cmd=$1
+    shift
 
-      export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(nix-build --no-out-link)/overlays"
+    export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(nix-build --no-out-link)/overlays"
 
-      exec ${nixops-built}/bin/nixops $cmd ${extraBuiltinsOptions pkgs} "$@"
-    '';
+    exec ${nixops-built}/bin/nixops $cmd ${extraBuiltinsOptions pkgs} "$@"
+  '';
 
-    nixops-overlay = self: _: {
-      nixops = self.symlinkJoin {
-        name = "nixops";
-        paths = [
-          (nixops-wrapped self)
-          nixops-built
-        ];
-      };
-    };
-
-    pkgs = import nixpkgs {
-      overlays = [
-        niv-overlay
-        nixops-overlay
-        (import ./overlays/nix-linter)
-        (import ./pkgs/esphome/overlay.nix { inherit nixpkgs; })
+  nixops-overlay = self: _: {
+    nixops = self.symlinkJoin {
+      name = "nixops";
+      paths = [
+        (nixops-wrapped self)
+        nixops-built
       ];
-      config = {};
     };
+  };
 
-    files = "$(find . -name '*.nix')";
+  pkgs = import nixpkgs {
+    overlays = [
+      niv-overlay
+      nixops-overlay
+      (import ./overlays/nix-linter)
+      (import ./pkgs/esphome/overlay.nix { inherit nixpkgs; })
+    ];
+    config = { };
+  };
 
-    lint = pkgs.writeShellScriptBin "lint" ''
-      ${pkgs.nix-linter}/bin/nix-linter ${files} "$@"
-    '';
+  files = "$(find . -name '*.nix')";
 
-    format = pkgs.writeShellScriptBin "format" ''
-      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt ${files} "$@"
-    '';
+  lint = pkgs.writeShellScriptBin "lint" ''
+    ${pkgs.nix-linter}/bin/nix-linter ${files} "$@"
+  '';
 
-    deploy = pkgs.writeShellScriptBin "deploy" ''
-      ${pkgs.nixops}/bin/nixops deploy "$@"
-    '';
+  format = pkgs.writeShellScriptBin "format" ''
+    ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt ${files} "$@"
+  '';
 
-    collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
-      sudo ${pkgs.nix}/bin/nix-collect-garbage -d
-    '';
+  deploy = pkgs.writeShellScriptBin "deploy" ''
+    ${pkgs.nixops}/bin/nixops deploy "$@"
+  '';
 
-    iot = pkgs.writeShellScriptBin "iot" ''
-      set -e
+  collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
+    sudo ${pkgs.nix}/bin/nix-collect-garbage -d
+  '';
 
-      rm -f iot-build/result.yaml*
-      nix-build ${extraBuiltinsOptions pkgs} --out-link "iot-build/result.yaml" --attr "$2" ./config/iot
-      ${pkgs.esphome}/bin/esphome iot-build/result.yaml** $1
-    '';
-  in
+  iot = pkgs.writeShellScriptBin "iot" ''
+    set -e
 
-    pkgs.mkShell {
-      buildInputs = [
-        pkgs.git
-        pkgs.niv
-        pkgs.nixops
-        lint
-        format
-        deploy
-        collect-garbage
-        iot
-      ];
-    }
+    rm -f iot-build/result.yaml*
+    nix-build ${extraBuiltinsOptions pkgs} --out-link "iot-build/result.yaml" --attr "$2" ./config/iot
+    ${pkgs.esphome}/bin/esphome iot-build/result.yaml** $1
+  '';
+in
+pkgs.mkShell {
+  buildInputs = [
+    pkgs.git
+    pkgs.niv
+    pkgs.nixops
+    lint
+    format
+    deploy
+    collect-garbage
+    iot
+  ];
+}

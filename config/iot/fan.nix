@@ -1,11 +1,9 @@
 { callPackage, lib }: args:
-
 let
-  common = callPackage ./common.nix {};
-  common_tuya = callPackage ./common_tuya.nix {};
+  common = callPackage ./common.nix { };
+  common_tuya = callPackage ./common_tuya.nix { };
   base = lib.recursiveUpdate (common args) (common_tuya args);
 in
-
 lib.recursiveUpdate base {
   uart.baud_rate = 115200;
   light = [

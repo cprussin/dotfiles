@@ -1,9 +1,7 @@
 { lib, config, ... }:
-
 let
   cfg = config.cursorTheme;
 in
-
 {
   options.cursorTheme = {
     package = lib.mkOption {

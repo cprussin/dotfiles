@@ -1,10 +1,8 @@
 { pkgs, lib, config, ... }:
-
 let
   launcher-apps = pkgs.callPackage ./apps { inherit config; };
-  stripOverrides = pkgs.callPackage ../../../../lib/stripOverrides.nix {};
+  stripOverrides = pkgs.callPackage ../../../../lib/stripOverrides.nix { };
 in
-
 {
   primary-user.home-manager.home = {
     packages = lib.mkForce [ pkgs.launcher ];

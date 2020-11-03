@@ -1,10 +1,8 @@
 { config, ... }:
-
 let
   umask = 077;
   umaskCmd = "umask ${toString umask}";
 in
-
 {
   primary-user.home-manager = {
     home.file = {

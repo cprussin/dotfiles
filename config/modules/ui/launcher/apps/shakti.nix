@@ -1,9 +1,7 @@
 { writeShellScript, nix, config, launcher }:
-
 let
   terminal = config.primary-user.home-manager.default-terminal.bin;
 in
-
 writeShellScript "shakti" ''
   open=${launcher}/bin/open
   browse=${launcher}/bin/browse

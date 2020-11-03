@@ -1,10 +1,8 @@
 { callPackage, lib }: args:
-
 let
-  common = callPackage ./common.nix {};
+  common = callPackage ./common.nix { };
   base = common args;
 in
-
 lib.recursiveUpdate base {
   binary_sensor = [
     {
@@ -14,7 +12,7 @@ lib.recursiveUpdate base {
         inverted = true;
       };
       name = "${args.name} Button";
-      on_release = [ { "switch.toggle" = "relay"; } ];
+      on_release = [{ "switch.toggle" = "relay"; }];
     }
   ];
 
@@ -24,8 +22,8 @@ lib.recursiveUpdate base {
       platform = "gpio";
       pin = "GPIO12";
       id = "relay";
-      on_turn_on = [ { "switch.turn_off" = "nightlight"; } ];
-      on_turn_off = [ { "switch.turn_on" = "nightlight"; } ];
+      on_turn_on = [{ "switch.turn_off" = "nightlight"; }];
+      on_turn_off = [{ "switch.turn_on" = "nightlight"; }];
     }
     {
       platform = "gpio";

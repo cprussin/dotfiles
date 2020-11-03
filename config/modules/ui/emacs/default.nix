@@ -1,9 +1,7 @@
 { config, pkgs, ... }:
-
 let
   font = config.primary-user.home-manager.font;
 in
-
 {
   primary-user.home-manager = {
     home.file = {

@@ -1,9 +1,7 @@
 { pkgs, lib, config, ... }:
-
 let
   public-key = builtins.extraBuiltins.publicSshKey pkgs "connor@prussin.net";
 in
-
 {
   options.enableSshdAtBoot = lib.mkEnableOption "SSH daemon auto-start at boot";
 
@@ -32,7 +30,7 @@ in
       services.sudo.sshAgentAuth = true;
     };
 
-    systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce []);
+    systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce [ ]);
 
     primary-user.openssh.authorizedKeys.keys = [ public-key ];
   };

@@ -1,3 +1,3 @@
 { callPackage, src }:
 
-(callPackage src {}).nix-linter
+(callPackage src { }).nix-linter

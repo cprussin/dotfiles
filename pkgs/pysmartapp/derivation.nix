@@ -1,10 +1,8 @@
 { buildPythonPackage, fetchPypi, httpsig, tox, pytest }:
-
 let
   pname = "pysmartapp";
   version = "0.3.2";
 in
-
 buildPythonPackage {
   inherit pname version;
 

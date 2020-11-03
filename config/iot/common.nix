@@ -19,7 +19,7 @@
   };
 
   logger.baud_rate = 0;
-  captive_portal = {};
+  captive_portal = { };
   api.password = secrets.api;
   ota.password = secrets.ota;
 

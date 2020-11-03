@@ -1,5 +1,4 @@
 { writeShellScript, mu, colors }: { folder, script }:
-
 let
   exec = writeShellScript "email" ''
     mu=${mu}/bin/mu
@@ -17,7 +16,6 @@ let
     fi
   '';
 in
-
 {
   name = "custom/email-${folder}";
 
