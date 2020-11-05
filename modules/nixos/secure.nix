@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 let
   cfg = config.secure;
 in
@@ -61,8 +61,8 @@ in
     sudo-cmds = lib.mapAttrs
       (
         _: secure: [
-          "${pkgs.utillinux}/bin/mount ${secure.mountPoint}"
-          "${pkgs.utillinux}/bin/umount ${secure.mountPoint}"
+          "${config.security.wrapperDir}/mount ${secure.mountPoint}"
+          "${config.security.wrapperDir}/umount ${secure.mountPoint}"
         ]
       )
       cfg;

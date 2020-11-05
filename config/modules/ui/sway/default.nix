@@ -90,7 +90,7 @@ let
   '';
 
   lock = pkgs.writeShellScript "lock" ''
-    sudo umount /secure
+    sudo ${config.security.wrapperDir}/umount /secure
     exec ${pkgs.swaylock}/bin/swaylock "$@"
   '';
 in

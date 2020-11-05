@@ -16,7 +16,7 @@ let
 
   mkUnlockScript = drive: filenameBase: ''
     ${pkgs.coreutils}/bin/mkdir -p /tmp/${filenameBase}
-    ${pkgs.utillinux}/bin/mount -t tmpfs tmpfs /tmp/${filenameBase}
+    ${config.security.wrapperDir}/mount -t tmpfs tmpfs /tmp/${filenameBase}
     ${base64Decode config.deployment.keys."${filenameBase}-header".path} > /tmp/${filenameBase}/header
 
     ${pkgs.cryptsetup}/bin/cryptsetup open \
@@ -25,7 +25,7 @@ let
       /dev/disk/by-id/${drive} crypt-${filenameBase}
 
     ${pkgs.coreutils}/bin/shred -u /tmp/${filenameBase}/header
-    ${pkgs.utillinux}/bin/umount /tmp/${filenameBase}
+    ${config.security.wrapperDir}/umount /tmp/${filenameBase}
     ${pkgs.coreutils}/bin/rmdir /tmp/${filenameBase}
   '';
 in
