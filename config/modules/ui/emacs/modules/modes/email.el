@@ -14,8 +14,6 @@
 
 (use-package mu4e
   :demand
-  :load-path "/usr/share/emacs/site-lisp/mu4e"
-  :commands mu4e~headers-jump-to-maildir
   :config
   (defun make-mail-context (ctx email &optional folder)
     (let ((maildir (concat "/" (or folder ctx))))
@@ -23,9 +21,7 @@
        :name ctx
        :match-func `(lambda (msg)
                       (when msg
-                        (string-match-p
-                         (concat "^" ,maildir)
-                         (mu4e-message-field msg :maildir))))
+                        (mu4e-message-contact-field-matches msg '(:to :from :cc :bcc) ,email)))
        :vars `((user-mail-address . ,email)
                (mu4e-sent-folder . ,(concat maildir "/Archive"))
                (mu4e-drafts-folder . ,(concat maildir "/Drafts"))
@@ -39,17 +35,16 @@
   (setq mail-user-agent 'mu4e-user-agent
         user-full-name "Connor Prussin"
         message-sendmail-f-is-evil 't
-        message-sendmail-extra-arguments '("--read-envelope-from")
         message-send-mail-function 'message-send-mail-with-sendmail
         sendmail-program (gethash "msmtp" (gethash "paths" nix-config))
         mu4e-completing-read-function 'completing-read
-        mu4e-get-mail-command "checkmail"
+        mu4e-compose-format-flowed t
+        visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)
         mu4e-view-show-images t
         mu4e-use-fancy-chars t
         mu4e-view-prefer-html t
         mu4e-view-show-addresses t
         mu4e-hide-index-messages t
-        mu4e-index-cleanup nil
         mu4e-change-filenames-when-moving t
         mu4e-headers-include-related nil
         mu4e-maildir (expand-file-name "~/Mail")
@@ -61,7 +56,9 @@
                           "BCI Incorporated"
                           "cprussin@bci-incorporated.com"
                           "PrussinNet")
-                        ,(make-mail-context "GMail" "cprussin@gmail.com")))
+                        ,(make-mail-context "GMail" "cprussin@gmail.com"))
+        mu4e-context-policy 'pick-first)
+  (mu4e~start)
   :general
   ('(normal) mu4e-headers-mode-map
    "?" nil
