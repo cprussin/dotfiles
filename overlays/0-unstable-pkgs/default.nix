@@ -6,5 +6,5 @@ let
   };
 in
 _: _: {
-  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant;
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar;
 }
