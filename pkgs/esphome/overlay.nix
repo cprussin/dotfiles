@@ -1,5 +1,3 @@
-{ nixpkgs }:
-
 self: _: {
-  esphome = self.callPackage ./derivation.nix { inherit nixpkgs; };
+  esphome = self.callPackage ./derivation.nix { };
 }

@@ -53,7 +53,7 @@ let
       niv-overlay
       nixops-overlay
       (import ./overlays/nix-linter)
-      (import ./pkgs/esphome/overlay.nix { inherit nixpkgs; })
+      (import ./pkgs/esphome/overlay.nix)
     ];
     config = { };
   };

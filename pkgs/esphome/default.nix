@@ -3,7 +3,7 @@
 let
   pkgs = import nixpkgs {
     overlays = [
-      (import ./overlay.nix { inherit nixpkgs; })
+      (import ./overlay.nix)
     ];
   };
 in
