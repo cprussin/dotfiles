@@ -33,7 +33,7 @@ in
 
       services.route53-dynamic-dns-update = {
         description = "Update Route53 with current public IP.";
-        serviceConfig.type = "oneshot";
+        serviceConfig.Type = "oneshot";
         script = ''
           set -e
 
