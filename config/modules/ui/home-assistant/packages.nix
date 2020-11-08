@@ -26,5 +26,6 @@
   ps.rachiopy
   ps.ring_doorbell
   ps.semantic-version
+  ps.spotipy
   ps.zeroconf
 ]
