@@ -34,6 +34,34 @@ let
             sha256 = "1y537i6zxkjkmi80w5rvd18npz1jm5246i2x8p3q7ycx94i8ixs0";
           };
         });
+
+      pytz =
+        let
+          version = "2020.4";
+        in
+        super.pytz.overrideAttrs (_: {
+          inherit version;
+
+          src = python3.pkgs.fetchPypi {
+            inherit version;
+            pname = "pytz";
+            sha256 = "0s72lz9q7rm2xgl2in0nvhn5cp0cyrxa257fpj2919g0s797ssry";
+          };
+        });
+
+      voluptuous =
+        let
+          version = "0.12.0";
+        in
+        super.voluptuous.overrideAttrs (_: {
+          inherit version;
+
+          src = python3.pkgs.fetchPypi {
+            inherit version;
+            pname = "voluptuous";
+            sha256 = "1p5j3fgbpqj31fajkaisdrz10ah9667sijz4kp3m0sbgw6ag4kis";
+          };
+        });
     };
   };
 
@@ -45,10 +73,10 @@ python.pkgs.buildPythonApplication {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "cprussin";
+    owner = "esphome";
     repo = "esphome";
-    rev = "set-tuya-mcu-minimum-brightness";
-    sha256 = "0a6yy6w9gpw0hr89rjdn1bik10yf05s4lhqn9mbz3mjfh0x53by2";
+    rev = "dev";
+    sha256 = "10b768lnak7qqy10z8aihfxncwhmjf6lq2zyd9hbyij0zmpxdbbi";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
