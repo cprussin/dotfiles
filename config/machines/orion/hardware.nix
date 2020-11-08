@@ -61,7 +61,7 @@ in
       "tank-fast/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
       "tank-fast/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
       "tank-fast/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
-      "tank-fast/persisted-state/mu".mountpoint = "/home/cprussin/.mu";
+      "tank-fast/persisted-state/mu".mountpoint = "/home/cprussin/.cache/mu";
       "tank-fast/persisted-state/nixops".mountpoint = "/home/cprussin/.nixops";
       "tank-fast/persisted-state/secrets" = {
         mountpoint = "/secrets";
