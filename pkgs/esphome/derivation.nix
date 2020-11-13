@@ -8,7 +8,7 @@ let
 
       colorlog =
         let
-          version = "4.4.0";
+          version = "4.6.2";
         in
         super.colorlog.overrideAttrs (_: {
           inherit version;
@@ -16,8 +16,10 @@ let
           src = python3.pkgs.fetchPypi {
             inherit version;
             pname = "colorlog";
-            sha256 = "1lg3gkwyyahsi72b0p9jr5iijrsvs5s5hlqmk4xydccs8qvwawh2";
+            sha256 = "191f98indvnmax30y6i2hfykv6mi3lhc8c61hg1ay8lw859z3ral";
           };
+
+          doInstallCheck = false;
         });
 
       paho-mqtt =
@@ -75,8 +77,8 @@ python.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
-    rev = "dev";
-    sha256 = "10b768lnak7qqy10z8aihfxncwhmjf6lq2zyd9hbyij0zmpxdbbi";
+    rev = "b493d5bba5d41d1c22b54efd4174bea6140fc177";
+    sha256 = "0p9c9nn3afnnkxhywq6b43kjfl258smfsprdva4zkbpyqhqlla7c";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
