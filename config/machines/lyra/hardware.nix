@@ -52,6 +52,7 @@ in
       "tank/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
       "tank/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
       "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
+      "tank/persisted-state/chromium".mountpoint = "/home/cprussin/.config/chromium";
       "tank/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
       "tank/persisted-state/mu".mountpoint = "/home/cprussin/.cache/mu";
       "tank/persisted-state/nixops".mountpoint = "/home/cprussin/.nixops";
