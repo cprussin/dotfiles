@@ -53,6 +53,7 @@ let
   plugs = mkDevices (pkgs.callPackage ./plug.nix { }) [
     { name = "Left Turtle Tank Lamp"; }
     { name = "Right Turtle Tank Lamp"; }
+    { name = "Christmas Tree"; }
   ];
 
   switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
