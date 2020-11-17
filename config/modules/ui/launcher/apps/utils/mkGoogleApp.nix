@@ -13,8 +13,8 @@ writeShellScript name ''
 
   if $test "$1" == "netflix"
   then
-    exec ${webappForUser "1"}
+    exec ${webappForUser "cprussin@netflix.com"}
   else
-    exec ${webappForUser "0"}
+    exec ${webappForUser "cprussin@gmail.com"}
   fi
 ''

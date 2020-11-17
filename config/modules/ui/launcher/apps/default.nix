@@ -30,7 +30,7 @@ in
   bitwig = "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   brave = writeShellScript "brave" "${launcher}/bin/browse --browser brave $*";
-  calendar = mkGoogleApp "calendar" "https://www.google.com/calendar/b/@user@/render#main_7";
+  calendar = mkGoogleApp "calendar" "https://calendar.google.com?authuser=@user@";
   chrome = writeShellScript "chrome" "${launcher}/bin/browse --browser chrome $*";
   chromium = writeShellScript "chromium" "${launcher}/bin/browse --browser chromium $*";
   crux = mkTerminalApp "crux" "${openssh}/bin/ssh -t crux load-session";
@@ -38,10 +38,10 @@ in
   emacs = writeShellScript "emacs" "${launcher}/bin/open \${1-*scratch*}";
   email = callPackage ./email.nix { };
   firefox = writeShellScript "firefox" "${launcher}/bin/browse --browser firefox $*";
-  gdrive = mkGoogleApp "gdrive" "https://drive.google.com/drive/u/@user@/my-drive";
+  gdrive = mkGoogleApp "gdrive" "https://drive.google.com?authuser=@user@";
   gimp = "${gimp}/bin/gimp";
   github = mkWebApp "github" "https://github.com/";
-  gmail = mkGoogleApp "gmail" "https://mail.google.com/mail/u/@user@";
+  gmail = mkGoogleApp "gmail" "https://mail.google.com?authuser=@user@";
   home = mkWebApp "home" "https://720-natoma-drive.prussin.net";
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
   insecure = writeShellScript "secure" "sudo ${config.security.wrapperDir}/umount /secure";
