@@ -54,6 +54,8 @@ let
     { name = "Left Turtle Tank Lamp"; }
     { name = "Right Turtle Tank Lamp"; }
     { name = "Christmas Tree"; }
+    { name = "Christmas Hole Border Lights"; }
+    { name = "Christmas Porch Railing Lights"; }
   ];
 
   switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
