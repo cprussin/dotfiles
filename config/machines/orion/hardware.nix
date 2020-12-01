@@ -51,6 +51,7 @@ in
     };
   } // (
     zfs.mkZfsFileSystems {
+      "tank-big/Temp".mountpoint = "/home/cprussin/Temp";
       "tank-fast/nix".mountpoint = "/nix";
       "tank-fast/data/Camera".mountpoint = "/home/cprussin/Camera";
       "tank-fast/data/Mail".mountpoint = "/home/cprussin/Mail";
