@@ -49,6 +49,10 @@ in
           currentPublicIp=$($dig +short myip.opendns.com @resolver1.opendns.com)
 
           if [[ ! $currentPublicIp =~ $VALID_IP_REGEX ]]; then
+            currentPublicIp=$($dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed 's/"//g')
+          fi
+
+          if [[ ! $currentPublicIp =~ $VALID_IP_REGEX ]]; then
             echo "Could not obtain current public IP address.  Attempt yielded:"
             echo $currentPublicIp
             exit 1
