@@ -12,6 +12,7 @@
   wifi = {
     ssid = "Centar";
     password = secrets.wifi;
+    domain = ".lan";
     ap = {
       ssid = name;
       password = secrets.ap;

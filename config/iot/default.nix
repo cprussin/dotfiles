@@ -58,6 +58,12 @@ let
     { name = "Christmas Porch Railing Lights"; }
   ];
 
+  dual_plugs = mkDevices (pkgs.callPackage ./dual_plug.nix { }) [
+    { name = "Dual Plug 1"; plug1.name = "Tree Farm"; plug2.name = "Candy Cane Bannister"; }
+    { name = "Dual Plug 2"; plug1.name = "Hole Border Lights"; plug2.name = "Penguin Projectors"; }
+    { name = "Dual Plug 3"; plug1.name = "Gutter Lights"; plug2.name = "Moravian Stars"; }
+  ];
+
   switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
     { name = "Entry Light"; }
     { name = "Front Porch Light"; }
@@ -65,12 +71,13 @@ let
     #{ name = "Trash Light"; }
   ];
 
-  devices = fans // dimmers // plugs // switches;
+  devices = fans // dimmers // plugs // dual_plugs // switches;
 in
 devices // {
   fans = builtins.attrValues fans;
   dimmers = builtins.attrValues dimmers;
   plugs = builtins.attrValues plugs;
+  dual_plugs = builtins.attrValues plugs;
   switches = builtins.attrValues switches;
   all = builtins.attrValues devices;
 }
