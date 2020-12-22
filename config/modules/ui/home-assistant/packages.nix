@@ -10,6 +10,7 @@
   ps.defusedxml
   ps.distro
   ps.emoji
+  ps.gtts
   ps.gtts-token
   ps.ha-ffmpeg
   ps.hacs-frontend

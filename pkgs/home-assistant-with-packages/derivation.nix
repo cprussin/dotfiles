@@ -1,6 +1,6 @@
 { home-assistant, callPackage, ... }@args:
 
-home-assistant.override (
+(home-assistant.override (
   (builtins.removeAttrs args [ "home-assistant" "callPackage" ]) // {
     packageOverrides = pyself: _: {
       aiogithubapi = pyself.callPackage ../python-modules/aiogithubapi/derivation.nix { };
@@ -18,4 +18,6 @@ home-assistant.override (
         inherit ps;
       };
   }
-)
+)).overrideAttrs (_: {
+  doInstallCheck = false;
+})
