@@ -10,6 +10,7 @@
   ps.defusedxml
   ps.distro
   ps.emoji
+  ps.fnvhash
   ps.gtts
   ps.gtts-token
   ps.ha-ffmpeg

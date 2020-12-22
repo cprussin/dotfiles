@@ -5,6 +5,7 @@
     packageOverrides = pyself: _: {
       aiogithubapi = pyself.callPackage ../python-modules/aiogithubapi/derivation.nix { };
       aiohomekit = pyself.callPackage ../python-modules/aiohomekit/derivation.nix { };
+      fnvhash = pyself.callPackage ../python-modules/fnvhash/derivation.nix { };
       gtts-token = pyself.callPackage ../python-modules/gtts-token/derivation.nix { };
       hacs-frontend = pyself.callPackage ../python-modules/hacs-frontend/derivation.nix { };
       pysmartapp = pyself.callPackage ../python-modules/pysmartapp/derivation.nix { };
