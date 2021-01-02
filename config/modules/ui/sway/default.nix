@@ -318,9 +318,6 @@ in
     sessionScript = pkgs.writeShellScript "sway-session-script" ''
       . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 
-      export QT_QPA_PLATFORM=wayland
-      export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-      export QT_WAYLAND_FORCE_DPI=physical
       export MOZ_ENABLE_WAYLAND=1
 
       exec ${pkgs.sway}/bin/sway
