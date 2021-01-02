@@ -1,19 +1,20 @@
 { callPackage
 , writeShellScript
+, config
+, bitwig-studio
 , bluez
+, emacs
+, fzf-pass
 , gimp
 , htop
-, pavucontrol
+, launcher
+, makemkv
 , openssh
+, pavucontrol
 , slack
 , steam
 , sway
 , systemd
-, bitwig-studio
-, emacs
-, launcher
-, fzf-pass
-, config
 }:
 let
   mkWebApp = callPackage ./utils/mkWebApp.nix { };
@@ -46,6 +47,7 @@ in
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
   insecure = writeShellScript "secure" "sudo ${config.security.wrapperDir}/umount /secure";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
+  makemkv = "${makemkv}/bin/makemkv";
   mixer = writeShellScript "mixer" "exec ${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
   netflix-api = callPackage ./netflix-api.nix { };

@@ -6,5 +6,5 @@ let
   };
 in
 _: _: {
-  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar;
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar makemkv;
 }
