@@ -46,8 +46,8 @@ let
     { name = "Living Room Lights"; }
     { name = "Master Bedroom Lights"; }
     { name = "Office Lights"; }
-    #{ name = "Family Room Lights"; }
-    #{ name = "Fireplace Lights"; }
+    { name = "Family Room Lights"; }
+    { name = "Fireplace Lights"; }
   ];
 
   plugs = mkDevices (pkgs.callPackage ./plug.nix { }) [
@@ -67,7 +67,7 @@ let
   switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
     { name = "Entry Light"; }
     { name = "Front Porch Light"; }
-    #{ name = "Back Porch Light"; }
+    { name = "Back Porch Light"; }
     #{ name = "Trash Light"; }
   ];
 
