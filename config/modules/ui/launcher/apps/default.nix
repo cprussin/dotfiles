@@ -6,6 +6,7 @@
 , emacs
 , fzf-pass
 , gimp
+, hplip
 , htop
 , launcher
 , makemkv
@@ -15,6 +16,7 @@
 , steam
 , sway
 , systemd
+, xsane
 }:
 let
   mkWebApp = callPackage ./utils/mkWebApp.nix { };
@@ -57,6 +59,7 @@ in
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix { };
+  scan = writeShellScript "scan" "${xsane}/bin/xsane \"$(${hplip}/bin/hp-makeuri -s circinus)\"";
   screenshot = callPackage ./screenshot.nix { };
   secure = writeShellScript "secure" "sudo ${config.security.wrapperDir}/mount /secure";
   shakti = callPackage ./shakti.nix { inherit config; };

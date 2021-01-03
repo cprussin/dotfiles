@@ -24,6 +24,7 @@
     ../../modules/system/devices/android
     ../../modules/system/devices/dialout
     ../../modules/system/devices/printers
+    ../../modules/system/devices/scanners
     ../../modules/system/docker
 
     ../../modules/ui/audio
