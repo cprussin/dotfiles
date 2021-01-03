@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  primary-user.extraGroups = [ "cdrom" ];
+}
