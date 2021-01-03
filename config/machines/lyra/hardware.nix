@@ -14,7 +14,7 @@ in
   };
 
   boot = {
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [ "kvm-intel" "sg" ];
     extraModulePackages = [ ];
     preLVMTempMount."/key" = {
       inherit (config.primary-user.secure) device fsType;

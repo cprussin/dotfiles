@@ -11,7 +11,7 @@ in
   interfaces.eth = "enp3s0";
 
   boot = {
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [ "kvm-amd" "sg" ];
     extraModulePackages = [ ];
     preLVMTempMount."/key" = {
       inherit (config.primary-user.secure) device fsType;
