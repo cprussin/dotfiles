@@ -12,6 +12,4 @@ in
   get-full-password = passEntry;
   get-base64-encoded-password = builtins.extraBuiltins.base64Password pkgs;
   get-hashed-user-password = builtins.extraBuiltins.hashedPassword pkgs "Infrastructure/login" "sha-512";
-  get-hashed-mosquitto-password = name:
-    "${builtins.extraBuiltins.hashedPassword pkgs "Infrastructure/IoT/mqtt" "sha-512" name}==";
 }
