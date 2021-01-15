@@ -48,6 +48,7 @@ in
       "tank/data/Notes".mountpoint = "/home/cprussin/Notes";
       "tank/data/Projects".mountpoint = "/home/cprussin/Projects";
       "tank/data/Scratch".mountpoint = "/home/cprussin/Scratch";
+      "tank/data/Temp".mountpoint = "/home/cprussin/Temp";
       "tank/persisted-state/BitwigStudio".mountpoint = "/home/cprussin/.BitwigStudio";
       "tank/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
       "tank/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
