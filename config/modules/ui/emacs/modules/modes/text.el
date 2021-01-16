@@ -16,7 +16,8 @@
 
 ;; Turn on spell checking
 (use-package flyspell
-  :init (setq flyspell-issue-message-flag nil)
+  :init (setq flyspell-issue-message-flag nil
+              ispell-program-name (gethash "ispell" (gethash "paths" nix-config)))
   :hook ((prog-mode . flyspell-prog-mode)
          (text-mode . flyspell-mode)))
 

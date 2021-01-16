@@ -22,6 +22,7 @@ in
                                                    "git" "${pkgs.git}/bin/git"
                                                    "msmtp" "${pkgs.msmtp}/bin/msmtp"
                                                    "shell" "${pkgs.stdenv.shell}"
+                                                   "ispell" "${pkgs.ispell}/bin/ispell"
                                              ))
                                   "font" #s(hash-table
                                             test equal
