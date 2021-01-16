@@ -9,7 +9,8 @@
 ;; Set up evil
 (use-package evil
   :init (setq evil-want-C-u-scroll t
-              evil-want-integration nil)
+              evil-want-integration t
+              evil-want-keybinding nil)
   :config (evil-mode))
 (use-package evil-collection
   :after evil
