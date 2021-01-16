@@ -29,11 +29,6 @@
 (use-package hl-line
   :config (global-hl-line-mode))
 
-;; Show a line at the max column
-(use-package fill-column-indicator
-  :init (setq fci-rule-width 4))
-  ;;:hook ((prog-mode text-mode) . turn-on-fci-mode))
-
 ;; Show git status in the gutter
 (use-package git-gutter
   :delight

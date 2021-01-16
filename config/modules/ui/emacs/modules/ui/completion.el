@@ -14,13 +14,6 @@
   :config
   (global-company-mode)
 
-  (defun toggle-fci-mode (command)
-    (when (string= "show" command)
-      (turn-off-fci-mode))
-    (when (string= "hide" command)
-      (turn-on-fci-mode))
-    )
-
   (defun unset-company-maps (&rest unused)
     "Set default mappings (outside of company)."
     (general-def '(insert) 'override
@@ -43,7 +36,6 @@
       "C-l" #'company-complete-selection
       "RET" #'company-complete-selection))
 
-  ;; (advice-add 'company-call-frontends :before #'toggle-fci-mode)
   (add-hook 'company-completion-started-hook #'set-company-maps)
   (add-hook 'company-completion-finished-hook #'unset-company-maps)
   (add-hook 'company-completion-cancelled-hook #'unset-company-maps))

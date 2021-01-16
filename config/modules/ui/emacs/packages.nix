@@ -24,7 +24,6 @@
   epkgs.evil-org
   epkgs.evil-magit
   epkgs.evil-smartparens
-  epkgs.fill-column-indicator
   epkgs.flow-minor-mode
   epkgs.flx
   epkgs.flycheck
