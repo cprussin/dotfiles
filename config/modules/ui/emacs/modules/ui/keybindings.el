@@ -19,7 +19,9 @@
 (use-package evil-goggles
   :after evil
   :delight
-  :config (evil-goggles-mode))
+  :config
+  (evil-goggles-mode)
+  (evil-goggles-use-diff-faces))
 
 ;; Now, set up all custom keybindings
 (use-package general
