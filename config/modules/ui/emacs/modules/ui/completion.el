@@ -11,6 +11,9 @@
   :demand
   :delight
   :general ("C-SPC" #'company-complete)
+  :hook ((company-completion-started . set-company-maps)
+         (company-completion-finished . unset-company-maps)
+         (company-completion-cancelled . unset-company-maps))
   :config
   (global-company-mode)
 
@@ -34,11 +37,7 @@
       "C-p" #'company-select-previous
       "C-k" #'company-select-previous
       "C-l" #'company-complete-selection
-      "RET" #'company-complete-selection))
-
-  (add-hook 'company-completion-started-hook #'set-company-maps)
-  (add-hook 'company-completion-finished-hook #'unset-company-maps)
-  (add-hook 'company-completion-cancelled-hook #'unset-company-maps))
+      "RET" #'company-complete-selection)))
 
 ;; Turn on a help screen for the highlighted completion element
 (use-package company-quickhelp

@@ -61,7 +61,7 @@
   :ensure t
   :init
   (setq flycheck-pos-tip-timeout 0)
-  (eval-after-load 'flycheck (flycheck-pos-tip-mode)))
+  (flycheck-pos-tip-mode))
 
 ;; Enable smarter surrounding pairs
 (use-package smartparens
