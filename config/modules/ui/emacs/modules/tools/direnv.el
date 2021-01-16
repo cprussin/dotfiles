@@ -6,10 +6,12 @@
 ;;;
 ;;; Code:
 
+(use-package diff-mode)
+
 ;; Enable direnv
 (use-package direnv
-  :config
-  (direnv-mode))
+  :after diff-mode
+  :config (direnv-mode))
 
 (provide 'direnv)
 ;;; direnv.el ends here
