@@ -8,6 +8,8 @@ let
 in
 {
   primary-user.home-manager = {
+    programs.emacs.enable = true;
+    services.emacs.enable = true;
     home.file = {
       ".emacs.d/modules" = {
         source = ./modules;
@@ -39,25 +41,6 @@ in
 
         (load (concat user-emacs-directory "modules/init"))
       '';
-    };
-
-    systemd.user.services.emacs-daemon = {
-      Unit = {
-        Description = "Emacs text editor";
-        Documentation = "info:emacs man:emacs(1) https://gnu.org/software/emacs/";
-      };
-
-      Install = {
-        WantedBy = [ "default.target" ];
-      };
-
-      Service = {
-        Type = "forking";
-        ExecStart = "${pkgs.stdenv.shell} -l -c 'exec ${pkgs.emacs}/bin/emacs --daemon'";
-        ExecStop = "${pkgs.emacs}/bin/emacsclient --eval '(kill-emacs)'";
-        Restart = "on-failure";
-        SyslogIdentifier = "emacs-daemon";
-      };
     };
   };
 }
