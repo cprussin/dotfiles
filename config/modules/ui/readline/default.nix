@@ -1,5 +1,8 @@
 { ... }:
 
 {
-  primary-user.home-manager.home.file.".inputrc".text = "set editing-mode vi";
+  primary-user.home-manager.programs.readline = {
+    enable = true;
+    extraConfig = "set editing-mode vi";
+  };
 }
