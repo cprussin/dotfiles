@@ -8,4 +8,5 @@
     indicator-radius = 200;
     indicator-thickness = 50;
   };
+  security.pam.services.swaylock = { };
 }

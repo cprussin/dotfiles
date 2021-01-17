@@ -33,6 +33,7 @@ in
   bitwig = "${bitwig-studio}/bin/bitwig-studio";
   bluetooth = mkTerminalApp "bluetooth" "${bluez}/bin/bluetoothctl";
   brave = writeShellScript "brave" "${launcher}/bin/browse --browser brave $*";
+  brightness = callPackage ./brightness.nix { };
   calendar = mkGoogleApp "calendar" "https://calendar.google.com?authuser=@user@";
   chrome = writeShellScript "chrome" "${launcher}/bin/browse --browser chrome $*";
   chromium = writeShellScript "chromium" "${launcher}/bin/browse --browser chromium $*";
@@ -49,6 +50,7 @@ in
   htop = mkTerminalApp "htop" "${htop}/bin/htop";
   insecure = writeShellScript "secure" "sudo ${config.security.wrapperDir}/umount /secure";
   journal = mkTerminalApp "journal" "sudo ${systemd}/bin/journalctl -alf";
+  lock = callPackage ./lock.nix { };
   makemkv = "${makemkv}/bin/makemkv";
   mixer = writeShellScript "mixer" "exec ${pavucontrol}/bin/pavucontrol";
   netflix = mkWebApp "netflix" "http://www.netflix.com";
@@ -71,5 +73,6 @@ in
   syncmail = callPackage ./syncmail.nix { };
   syncthing = mkWebApp "syncthing" "http://localhost:8384";
   us = writeShellScript "us" "${sway}/bin/swaymsg \"input * xkb_variant ''\"";
+  volume = callPackage ./volume.nix { };
   vpn = callPackage ./vpn.nix { };
 }

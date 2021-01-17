@@ -24,6 +24,8 @@
       ./home-manager/fzf.nix
       ./home-manager/icon-theme.nix
       ./home-manager/keymap.nix
+      ./home-manager/mako.nix
+      ./home-manager/swayidle.nix
       ./home-manager/swaylock.nix
       ./home-manager/waybar.nix
     ];

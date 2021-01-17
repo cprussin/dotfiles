@@ -41,6 +41,7 @@
     ../../modules/ui/mpv
     ../../modules/ui/opengl
     ../../modules/ui/sway
+    ../../modules/ui/swayidle
     ../../modules/ui/swaylock
     ../../modules/ui/waybar
     ../../modules/ui/zathura
