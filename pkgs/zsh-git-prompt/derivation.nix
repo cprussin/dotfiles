@@ -1,8 +1,9 @@
 { stdenv, makeWrapper, python, git, src }:
-
-stdenv.mkDerivation rec {
-  inherit src;
+let
   name = "zsh-git-prompt";
+in
+stdenv.mkDerivation {
+  inherit name src;
   buildInputs = [ makeWrapper ];
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
   installPhase = ''
