@@ -36,7 +36,8 @@
 
 ;; Show emojis!
 (use-package emojify
-  :init (setq emojify-download-emojis-p t)
+  :init (setq emojify-emojis-dir (gethash "emoji-sets" (gethash "paths" nix-config))
+              emojify-emoji-set "emojione")
   :config
   (global-emojify-mode)
   (global-emojify-mode-line-mode))

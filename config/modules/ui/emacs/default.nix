@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 let
   font = config.primary-user.home-manager.font;
+  emoji-sets = pkgs.linkFarm "emoji-sets" [{
+    name = "emojione";
+    path = pkgs.emojione-png;
+  }];
 in
 {
   primary-user.home-manager = {
@@ -23,6 +27,7 @@ in
                                                    "msmtp" "${pkgs.msmtp}/bin/msmtp"
                                                    "shell" "${pkgs.stdenv.shell}"
                                                    "ispell" "${pkgs.ispell}/bin/ispell"
+                                                   "emoji-sets" "${emoji-sets}"
                                              ))
                                   "font" #s(hash-table
                                             test equal
