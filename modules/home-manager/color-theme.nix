@@ -123,6 +123,8 @@ in
         header = cfg.secondaryContent;
         gutter = cfg.highlightBackground;
       };
+
+      imv.background = removeOctothorpe cfg.background;
     };
   };
 }

@@ -23,6 +23,7 @@
       ./home-manager/font.nix
       ./home-manager/fzf.nix
       ./home-manager/icon-theme.nix
+      ./home-manager/imv.nix
       ./home-manager/keymap.nix
       ./home-manager/mako.nix
       ./home-manager/metatron.nix

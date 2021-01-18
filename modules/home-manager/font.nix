@@ -37,6 +37,7 @@ in
         font-family = cfg.face;
         font-size = "${toString cfg.size}pt";
       };
+      imv.overlayFont = { inherit (cfg) face size; };
     };
   };
 }
