@@ -12,8 +12,8 @@
   epkgs.counsel-projectile
   epkgs.csv-mode
   epkgs.delight
-  epkgs.direnv
   epkgs.dhall-mode
+  epkgs.direnv
   epkgs.dockerfile-mode
   epkgs.edit-indirect
   epkgs.editorconfig
@@ -21,8 +21,8 @@
   epkgs.evil
   epkgs.evil-collection
   epkgs.evil-goggles
-  epkgs.evil-org
   epkgs.evil-magit
+  epkgs.evil-org
   epkgs.evil-smartparens
   epkgs.flow-minor-mode
   epkgs.flx
