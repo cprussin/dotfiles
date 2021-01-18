@@ -5,6 +5,16 @@
     enable = true;
     drivers = [ pkgs.hplip ];
   };
-  # TODO add declarative printer config when 19.09 lands
-  # see https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/hardware/printers.nix
+  hardware.printers = {
+    ensureDefaultPrinter = "circinus";
+    ensurePrinters = [
+      {
+        name = "circinus";
+        location = "Office";
+        description = "HP Photosmart 7520";
+        deviceUri = "hp:/net/Photosmart_7520_series?hostname=circinus";
+        model = "drv:///hp/hpcups.drv/hp-photosmart_7520_series.ppd";
+      }
+    ];
+  };
 }

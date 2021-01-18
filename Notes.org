@@ -17,7 +17,6 @@
      - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 ** TODO Fix search for special characters
 ** TODO Replace nix-linter custom package with simple haskellPackages overlay
-** TODO Manage printers
 ** TODO Make zfs configuration more declarative somehow
 ** TODO Replace stuff with modules
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
@@ -43,6 +42,8 @@
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
 ** NEXT Prune out local temporary fixes & modules
+** DONE Manage printers
+   CLOSED: [2021-01-18 Mon 13:50]
 ** DONE Move sway things to systemd units
    CLOSED: [2021-01-17 Sun 14:06]
 ** DONE Fix plex w/tmpfs on root
