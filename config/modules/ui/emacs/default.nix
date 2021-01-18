@@ -23,6 +23,7 @@ in
                                   "paths" #s(hash-table
                                              test equal
                                              data (
+                                                   "mu" "${pkgs.mu}/bin/mu"
                                                    "rg" "${pkgs.ripgrep}/bin/rg"
                                                    "browse" "${pkgs.launcher}/bin/browse"
                                                    "git" "${pkgs.git}/bin/git"

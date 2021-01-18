@@ -47,6 +47,7 @@
         mu4e-hide-index-messages t
         mu4e-change-filenames-when-moving t
         mu4e-headers-include-related nil
+        mu4e-mu-binary (gethash "mu" (gethash "paths" nix-config))
         mu4e-maildir (expand-file-name "~/Mail")
         mu4e-user-mail-address-list '("connor@prussin.net"
                                       "cprussin@bci-incorporated.com"
