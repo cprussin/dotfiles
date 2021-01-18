@@ -13,6 +13,7 @@
     ./nixos/route53DynamicDns.nix
     ./nixos/secure.nix
     ./nixos/sudo-cmds.nix
+    ./nixos/umask.nix
   ];
 
   primary-user.home-manager = _: {
