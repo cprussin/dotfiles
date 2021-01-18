@@ -1,8 +1,8 @@
 { ... }:
 
 {
-  primary-user.home-manager.home.file.".metatron/config".text = ''
-    refresh.skipUpdateSshConfig = true
-    configbrowser.omitBrowserTrustStoreImportConfirmation = true
-  '';
+  primary-user.home-manager.programs.metatron = {
+    enable = true;
+    confirmBrowserTrustStoreImport = false;
+  };
 }
