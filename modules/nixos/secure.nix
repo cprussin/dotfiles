@@ -41,9 +41,17 @@ in
               type = lib.types.str;
               description = "The path to the password store.";
             };
+
+            gnupg = lib.mkOption {
+              type = lib.types.str;
+              description = "The path to the gnupg directory.";
+            };
           };
 
-          config.passwords = lib.mkDefault "${config.mountPoint}/passwords";
+          config = {
+            passwords = lib.mkDefault "${config.mountPoint}/passwords";
+            gnupg = lib.mkDefault "${config.mountPoint}/gnupg";
+          };
         }
       )
     );
@@ -52,8 +60,19 @@ in
   config = {
     home-manager.users = lib.mapAttrs
       (
-        _: secure: {
-          home.sessionVariables.PASSWORD_STORE_DIR = secure.passwords;
+        _: secure: { config, ... }: {
+          home = {
+            sessionVariables.PASSWORD_STORE_DIR = secure.passwords;
+            file = {
+              ".gnupg/crls.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/crls.d";
+              ".gnupg/openpgp-revocs.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/openpgp-revocs.d";
+              ".gnupg/private-keys-v1.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/private-keys-v1.d";
+              ".gnupg/pubring.kbx".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/pubring.kbx";
+              ".gnupg/random_seed".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/random_seed";
+              ".gnupg/tofu.db".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/tofu.db";
+              ".gnupg/trustdb.gpg".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/trustdb.gpg";
+            };
+          };
         }
       )
       cfg;
