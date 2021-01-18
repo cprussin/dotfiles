@@ -39,5 +39,7 @@ in
       };
       imv.overlayFont = { inherit (cfg) face size; };
     };
+
+    wayland.windowManager.sway.config.fonts = [ "${cfg.face} ${toString cfg.size}" ];
   };
 }

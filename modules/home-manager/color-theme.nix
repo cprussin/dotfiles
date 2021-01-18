@@ -126,5 +126,41 @@ in
 
       imv.background = removeOctothorpe cfg.background;
     };
+
+    wayland.windowManager.sway.config.colors = {
+      focused = {
+        border = cfg.selection;
+        background = cfg.selection;
+        text = cfg.background;
+        indicator = cfg.bright;
+        childBorder = cfg.selection;
+      };
+
+      focusedInactive = {
+        border = cfg.highlightForeground;
+        background = cfg.highlightForeground;
+        text = cfg.highlightBackground;
+        indicator = cfg.highlightForeground;
+        childBorder = cfg.highlightForeground;
+      };
+
+      unfocused = {
+        border = cfg.highlightForeground;
+        background = cfg.highlightBackground;
+        text = cfg.highlightForeground;
+        indicator = cfg.highlightBackground;
+        childBorder = cfg.highlightBackground;
+      };
+
+      urgent = {
+        border = cfg.urgent;
+        background = cfg.urgent;
+        text = cfg.background;
+        indicator = cfg.urgent;
+        childBorder = cfg.urgent;
+      };
+
+      background = cfg.background;
+    };
   };
 }

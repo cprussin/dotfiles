@@ -2,14 +2,13 @@
 let
   launcher-apps = pkgs.callPackage ../launcher/apps { inherit config; };
 
-  font = config.primary-user.home-manager.font;
-  keymap = config.primary-user.home-manager.keymap;
-  colors = config.primary-user.home-manager.colorTheme;
   terminal = config.primary-user.home-manager.default-terminal.bin;
+
   modifier = "Mod4";
 
   expandSet = { criteria, commands }:
     map (command: { inherit criteria command; }) commands;
+
   mkCommands = lib.foldl (commands: set: commands ++ (expandSet set)) [ ];
 in
 {
@@ -24,19 +23,13 @@ in
         inherit modifier terminal;
 
         menu = "${terminal} --title launcher --name launcher -e '${pkgs.launcher}/bin/launch ${pkgs.sway}/bin/swaymsg exec'";
-        fonts = [ "${font.face} ${toString font.size}" ];
+
         workspaceAutoBackAndForth = true;
         bars = [ ];
 
         output = {
           eDP-1.pos = "0,0 scale 1";
           "*".bg = "${./background.png} fill";
-        };
-
-        input."*" = {
-          xkb_layout = keymap.layout;
-          xkb_variant = keymap.variant;
-          xkb_options = keymap.options;
         };
 
         focus = {
@@ -47,42 +40,6 @@ in
         gaps = {
           inner = 20;
           smartGaps = true;
-        };
-
-        colors = {
-          focused = {
-            border = colors.selection;
-            background = colors.selection;
-            text = colors.background;
-            indicator = colors.bright;
-            childBorder = colors.selection;
-          };
-
-          focusedInactive = {
-            border = colors.highlightForeground;
-            background = colors.highlightForeground;
-            text = colors.highlightBackground;
-            indicator = colors.highlightForeground;
-            childBorder = colors.highlightForeground;
-          };
-
-          unfocused = {
-            border = colors.highlightForeground;
-            background = colors.highlightBackground;
-            text = colors.highlightForeground;
-            indicator = colors.highlightBackground;
-            childBorder = colors.highlightBackground;
-          };
-
-          urgent = {
-            border = colors.urgent;
-            background = colors.urgent;
-            text = colors.background;
-            indicator = colors.urgent;
-            childBorder = colors.urgent;
-          };
-
-          background = colors.background;
         };
 
         window = {
