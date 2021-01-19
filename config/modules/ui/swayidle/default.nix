@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  launcher-apps = pkgs.callPackage ../launcher/apps { inherit config; };
+  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
 in
 {
   primary-user.home-manager.services.swayidle = {

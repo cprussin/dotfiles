@@ -1,7 +1,7 @@
 { callPackage, colors, config }:
 let
   mkEmailModule = callPackage ./mkEmailModule.nix { inherit colors; };
-  launcher-apps = callPackage ../../../launcher/apps { inherit config; };
+  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
 in
 mkEmailModule {
   folder = "GMail";

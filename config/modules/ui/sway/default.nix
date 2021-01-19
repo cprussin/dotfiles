@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 let
-  launcher-apps = pkgs.callPackage ../launcher/apps { inherit config; };
+  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
 
   terminal = config.primary-user.home-manager.default-terminal.bin;
 

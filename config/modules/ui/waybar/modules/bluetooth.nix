@@ -29,7 +29,7 @@ let
     fi
   '';
 
-  launcher-apps = pkgs.callPackage ../../launcher/apps { inherit config; };
+  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
 in
 {
   name = "custom/bluetooth";
