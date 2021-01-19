@@ -58,6 +58,7 @@ in
   nix-shell = writeShellScript "nix-shell" "exec nix-shell -p $1 --run \"$*\"";
   passwords = mkModal "passwords" "${fzf-pass}/bin/fzf-pass";
   plex = mkWebApp "plex" "https://app.plex.tv/desktop";
+  presentation = callPackage ./presentation.nix { };
   "prussin.net" = mkTerminalApp "prussin.net" "${openssh}/bin/ssh prussin.net";
   reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${systemd}/bin/systemctl reboot";
   remacs = callPackage ./remacs.nix { };
