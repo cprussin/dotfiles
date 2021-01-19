@@ -7,6 +7,7 @@
   ps.aiogithubapi
   ps.aiohomekit
   ps.aiohttp-cors
+  ps.awesomeversion
   ps.defusedxml
   ps.distro
   ps.emoji
