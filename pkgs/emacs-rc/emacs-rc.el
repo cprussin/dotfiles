@@ -1,10 +1,12 @@
-;;; init.el --- Emacs configuration
+;;; emacs-rc.el --- Emacs configuration
 ;;;
 ;;; Commentary:
 ;;;
-;;; Emacs configuration entrypoint.
+;;; Emacs configuration
 ;;;
 ;;; Code:
+
+(eval-when-compile (require 'use-package))
 
 (defvar git-path "/usr/bin/git"
   "Path to git executable.")
@@ -24,8 +26,8 @@
 (defvar ispell-path "/usr/bin/ispell"
   "Path to the Ispell executable.")
 
-;;(defvar editorconfig-path "/usr/bin/editorconfig"
-;;  "Path to the editorconfig executable.")
+(defvar editorconfig-path "/usr/bin/editorconfig"
+  "Path to the editorconfig executable.")
 
 (defvar mu-path "/usr/bin/mu"
   "Path to the mu executable.")
@@ -39,12 +41,62 @@
 (defvar font-size 12
   "Primary font size.")
 
-(require 'package)
-(setq package-archives nil
-      package-enable-at-startup nil)
-(package-initialize)
+(use-package emacs
+  :init
+  (define-fringe-bitmap 'tilde [#b00000000
+                                #b00000000
+                                #b00000000
+                                #b01110001
+                                #b11011011
+                                #b10001110
+                                #b00000000
+                                #b00000000])
+  (setq shell-file-name shell-path
+        create-lockfiles nil
+        scroll-step 1
+        x-gtk-use-system-tooltips nil
+        inhibit-startup-screen t
+        inhibit-startup-message t)
+  (setq-default indicate-empty-lines t
+                fringe-indicator-alist '((empty-line . tilde))
+                indent-tabs-mode nil
+                fill-column 80))
 
-(eval-when-compile (require 'use-package))
+(use-package frame
+  :init (add-to-list 'default-frame-alist
+                     `(font . ,(concat font-face "-"
+                                       (number-to-string font-size)))))
+
+(use-package menu-bar
+  :config (menu-bar-mode -1))
+
+(use-package tool-bar
+  :config (tool-bar-mode -1))
+
+(use-package scroll-bar
+  :config (scroll-bar-mode -1))
+
+(use-package paren
+  :init (setq show-paren-when-point-inside-paren t
+              show-paren-when-point-in-periphery t)
+  :config (show-paren-mode))
+
+(use-package browse-url
+  :init (setq browse-url-generic-program browse-path
+              browse-url-browser-function 'browse-url-generic))
+
+(use-package display-line-numbers
+  :config (global-display-line-numbers-mode))
+
+(use-package hl-line
+  :config (global-hl-line-mode))
+
+(use-package image
+  :config (imagemagick-register-types))
+
+(use-package files
+  :init (setq make-backup-files nil
+              auto-save-default nil))
 
 (use-package evil
   :init (setq evil-want-C-u-scroll t
@@ -58,22 +110,16 @@
   :config (evil-collection-init))
 
 (use-package evil-goggles
-  :after evil
+  :after (evil delight)
   :delight
+  :demand
+  :commands evil-goggles-use-diff-faces
   :config
   (evil-goggles-mode)
   (evil-goggles-use-diff-faces))
 
-;; Now, set up all custom keybindings
 (use-package general
-  :after evil
   :config
-
-  ;; Make esc abort
-  ;;(general-def
-  ;;  "<escape>" #'keyboard-escape-quit)
-
-  ;; Set up SPC-leader keys
   (general-def '(normal motion emacs)
     :prefix "SPC"
     "" nil
@@ -91,37 +137,11 @@
     "s" '(:ignore t :which-key "Search")
     "w" '(evil-window-map :which-key "Window")))
 
-;; Stop making lockfiles
-(setq create-lockfiles nil)
+(use-package delight)
 
-;; Disable backup and autosave files
-(use-package files
-  :config (setq make-backup-files nil
-                auto-save-default nil))
-
-(setq
- safe-local-variable-values
- '((psc-ide-output-directory . "out/build/")
-   (psc-ide-source-globs "src/**/*.purs"
-                         "out/components/purescript-*/src/**/*.purs")))
-
-;; Hide startup screen and messages
-(setq inhibit-startup-screen t
-      inhibit-startup-message t)
-
-(setq shell-file-name shell-path)
-
-(use-package diff-mode)
-
-;; Enable direnv
-(use-package direnv
-  :after diff-mode
-  :config (direnv-mode))
-
-;; Magit!
 (use-package magit
-  :init
-  (setq magit-git-executable git-path)
+  :after general
+  :init (setq magit-git-executable git-path)
   :general
   (magit-mode-map
    "SPC" nil
@@ -132,14 +152,146 @@
    "b" '(magit-blame :which-key "git blame")
    "l" '(magit-log :which-key "git log")
    "s" '(magit-status :which-key "git status")))
+
 (use-package evil-magit
   :after (magit evil)
   :config (evil-magit-init))
+
+(use-package diff-mode)
+
+(use-package direnv
+  :after diff-mode
+  :init (setq direnv-always-show-summary nil)
+  :config (direnv-mode))
+
+(use-package undo-tree
+  :delight
+  :after general
+  :init (setq undo-tree-visualizer-timestamps t)
+  :config (global-undo-tree-mode)
+  :general ('(normal motion emacs)
+            "SPC et" '(undo-tree-visualize
+                       :which-key "undo/redo tree")))
+
+(use-package powerline
+  :init (setq powerline-height 25))
+
+(use-package powerline-evil
+  :after (powerline evil)
+  :init (setq powerline-evil-tag-style 'verbose)
+  :config (powerline-evil-center-color-theme))
+
+(use-package mode-icons
+  :after undo-tree
+  :config (mode-icons-mode))
+
+(use-package solarized-theme
+  :init (setq x-underline-at-descent-line t)
+  :config
+  (deftheme solarized-dark-with-fixes)
+  (eval-when-compile (require 'solarized-palettes))
+  (solarized-with-color-variables
+    'dark
+    'solarized-dark-with-fixes
+    solarized-dark-color-palette-alist
+    '(
+
+      (custom-theme-set-faces
+       theme-name
+
+       ;; Make popups more visible
+       `(popup-tip-face ((t (:background ,base3 :foreground ,base01))))
+       `(tooltip ((t (:background ,base3 :foreground ,base01))))
+       `(company-tooltip ((t (:background ,base3 :foreground ,base01))))
+       `(company-tooltip-selection ((t (:background ,base01 :foreground ,base3))))
+       `(company-scrollbar-bg ((,class (:background ,base2))))
+       `(company-scrollbar-fg ((,class (:foreground ,base3 :background ,base00))))
+       `(company-tooltip-common ((,class (:foreground ,magenta))))
+
+       ;; Make org-mode tags look like tags
+       `(org-tag ((t (:foreground ,violet :box t :height 0.8))))
+
+       ;; Fix colors on modeline
+       `(powerline-evil-normal-face ((t (:weight bold :inherit 'menu))))
+       `(powerline-evil-insert-face ((t (:weight bold :inherit 'region))))
+       `(powerline-evil-visual-face ((t (:weight bold :inherit 'lazy-highlight))))
+       `(powerline-evil-operator-face ((t (:weight bold :inherit 'menu))))
+       `(powerline-evil-replace-face ((t (:weight bold :inherit 'isearch))))
+       `(powerline-evil-motion-face ((t (:weight bold :inherit 'menu))))
+       `(powerline-evil-emacs-face ((t (:weight bold :inherit 'menu))))
+
+       ;; Don't override shell colors
+       `(comint-highlight-prompt (())))
+
+      (custom-theme-set-variables
+       theme-name
+       ;; Fix pos-tip popup colors
+       `(pos-tip-foreground-color ,base01)
+       `(pos-tip-background-color ,base3))))
+
+  (enable-theme 'solarized-dark-with-fixes))
+
+(use-package unicode-fonts
+  :config (unicode-fonts-setup))
+
+(use-package company
+  :after general
+  :delight
+  :general ("C-SPC" 'company-complete)
+  :commands company-search-mode company-select-next company-select-previous company-complete-selection
+  :hook ((company-completion-started . set-company-maps)
+         (company-completion-finished . unset-company-maps)
+         (company-completion-cancelled . unset-company-maps))
+  :init
+  (defun unset-company-maps ()
+    "Set default mappings (outside of company)."
+    (general-def '(insert) 'override
+      "C-/" nil
+      "C-n" nil
+      "C-p" nil
+      "C-j" nil
+      "C-k" nil
+      "C-l" nil
+      "RET" nil))
+
+  (defun set-company-maps ()
+    "Set maps for when you're inside company completion."
+    (general-def '(insert) 'override
+      "C-/" #'company-search-mode
+      "C-n" #'company-select-next
+      "C-j" #'company-select-next
+      "C-p" #'company-select-previous
+      "C-k" #'company-select-previous
+      "C-l" #'company-complete-selection
+      "RET" #'company-complete-selection))
+  :config
+  (global-company-mode))
+
+(use-package company-tng
+  :after company)
+
+(use-package company-quickhelp
+  :delight
+  :after company
+  :config (company-quickhelp-mode))
+
+(use-package company-emoji
+  :after company
+  :config (add-to-list 'company-backends 'company-emoji))
+
+(use-package ivy
+  :delight
+  :init (setq ivy-use-virtual-buffers t
+              ivy-format-functions-alist '((t . ivy-format-function-line))
+              ivy-initial-inputs-alist nil
+              ivy-re-builders-alist '((t . ivy--regex-plus)))
+  :config (ivy-mode))
 
 ;; Set up which-key to discover keybindings
 (use-package which-key
   :demand
   :delight
+  :after general
   :init (setq which-key-idle-delay 0.25)
   :config (which-key-mode)
   :general ('(normal motion emacs)
@@ -244,24 +396,9 @@
    "o" '(counsel-projectile-org-capture :which-key "capture note")
    "s" '(counsel-projectile-rg :which-key "search")))
 
-;; Turn on undo-tree
-(use-package undo-tree
-  :delight
-  :init (setq undo-tree-visualizer-timestamps t)
-  :config (global-undo-tree-mode)
-  :general ('(normal motion emacs)
-            "SPC et" '(undo-tree-visualize
-                       :which-key "undo/redo tree")))
-
 ;; Turn on rainbow delimiters
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-;; Highlight matching parens
-(use-package paren
-  :hook (prog-mode . show-paren-mode)
-  :init (setq show-paren-when-point-inside-paren t
-              show-paren-when-point-in-periphery t))
 
 ;; Highlight hardcoded numbers and the likes
 (use-package highlight-numbers
@@ -270,6 +407,7 @@
 ;; Set up editorconfig
 (use-package editorconfig
   :delight
+  :init (setq editorconfig-exec-path editorconfig-path)
   :config (editorconfig-mode))
 
 ;; Aggressively re-indent
@@ -322,21 +460,6 @@
 ;; Highlight TODO comments
 (use-package hl-todo
   :config (global-hl-todo-mode))
-
-;; Use ranger instead of dired
-(use-package ranger
-  :demand
-  :init (setq ranger-cleanup-on-disable nil
-              ranger-cleanup-eagerly nil)
-  :config (ranger-override-dired-mode)
-  :general
-  ('(normal motion emacs)
-   "SPC ar" '(ranger :which-key "ranger"))
-  (ranger-mode-map
-   "C-w" nil
-   "?" nil
-   "M" #'dired-do-chmod
-   "C" #'dired-do-copy))
 
 (defun load-mailbox (mbname)
   "Return a lambda to load the inbox for MBNAME."
@@ -776,25 +899,12 @@
    "q" '(comint-kill-subjob :which-key "quit")
    "w" '(comint-write-output :which-key "save")))
 
-(setq-default
-
- ;; Stop mixing tabs and spaces
- indent-tabs-mode nil
-
- ;; Fill to 80 characters instead of the default 70
- fill-column 80)
-
 ;; Turn on spell checking
 (use-package flyspell
   :init (setq flyspell-issue-message-flag nil
               ispell-program-name ispell-path)
   :hook ((prog-mode . flyspell-prog-mode)
          (text-mode . flyspell-mode)))
-
-;; Browse with my browse script
-(use-package browse-url
-  :init (setq browse-url-generic-program browse-path
-              browse-url-browser-function 'browse-url-generic))
 
 ;; Turn on URL discovery
 (use-package goto-address
@@ -806,28 +916,6 @@
   :delight
   :config (ws-butler-global-mode))
 
-;; Display a tilde after buffer end like in vim
-(define-fringe-bitmap 'tilde [#b00000000
-                              #b00000000
-                              #b00000000
-                              #b01110001
-                              #b11011011
-                              #b10001110
-                              #b00000000
-                              #b00000000])
-(setq-default indicate-empty-lines t
-              fringe-indicator-alist '((empty-line . tilde)))
-
-;; Scroll one line at a time
-(setq scroll-step 1)
-
-;; Turn on line numbers
-(use-package display-line-numbers
-  :config (global-display-line-numbers-mode))
-
-;; Highlight current line
-(use-package hl-line
-  :config (global-hl-line-mode))
 
 ;; Show git status in the gutter
 (use-package git-gutter
@@ -842,72 +930,11 @@
   (global-emojify-mode)
   (global-emojify-mode-line-mode))
 
-(use-package company
-  :demand
-  :delight
-  :general ("C-SPC" #'company-complete)
-  :hook ((company-completion-started . set-company-maps)
-         (company-completion-finished . unset-company-maps)
-         (company-completion-cancelled . unset-company-maps))
-  :config
-  (global-company-mode)
-
-  (defun unset-company-maps (&rest unused)
-    "Set default mappings (outside of company)."
-    (general-def '(insert) 'override
-      "C-/" nil
-      "C-n" nil
-      "C-p" nil
-      "C-j" nil
-      "C-k" nil
-      "C-l" nil
-      "RET" nil))
-
-  (defun set-company-maps (&rest unused)
-    "Set maps for when you're inside company completion."
-    (general-def '(insert) 'override
-      "C-/" #'company-search-mode
-      "C-n" #'company-select-next
-      "C-j" #'company-select-next
-      "C-p" #'company-select-previous
-      "C-k" #'company-select-previous
-      "C-l" #'company-complete-selection
-      "RET" #'company-complete-selection)))
-
 ;; Turn on a help screen for the highlighted completion element
-(use-package company-quickhelp
-  :delight
-  :after company
-  :config (company-quickhelp-mode))
 
 ;; Turn on emoji completion
-(use-package company-emoji
-  :after company
-  :config (add-to-list 'company-backends 'company-emoji))
 
 ;; Use Ivy for minibuffer completion
-(use-package ivy
-  :delight
-  :init (setq ivy-use-virtual-buffers t
-              ivy-format-function 'ivy-format-function-line
-              ivy-initial-inputs-alist nil
-              ivy-re-builders-alist '((t . ivy--regex-plus)))
-  :config (ivy-mode))
-
-(use-package unicode-fonts
-  :config (unicode-fonts-setup))
-
-(add-to-list 'default-frame-alist
-             `(font . ,(concat font-face "-" (number-to-string font-size))))
-
-;; Turn off GUI
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
-(setq x-gtk-use-system-tooltips nil)
-
-(use-package image
-  :config (imagemagick-register-types))
 
 (use-package imenu-list
   :init (setq imenu-list-focus-after-activation t
@@ -923,67 +950,7 @@
             "o" '(link-hint-open-link :which-key "open")
             "y" '(link-hint-copy-link :which-key "copy")))
 
-;; Turn on powerline
-(use-package powerline
-  :init (setq powerline-height 25))
-
-;; Turn on powerline-evil-center-color theme
-(use-package powerline-evil
-  :after powerline
-  :init (setq powerline-evil-tag-style 'verbose)
-  :config (powerline-evil-center-color-theme))
-
-;; Use icons for most modes
-(use-package mode-icons
-  :after undo-tree
-  :config (mode-icons-mode))
-
 ;; Use solarized
-(use-package solarized-theme
-  :init (setq x-underline-at-descent-line t)
-  :config
-  (deftheme solarized-dark-with-fixes)
-  (eval-when-compile (require 'solarized-palettes))
-  (solarized-with-color-variables
-    'dark
-    'solarized-dark-with-fixes
-    solarized-dark-color-palette-alist
-    '(
-
-      (custom-theme-set-faces
-       theme-name
-
-       ;; Make popups more visible
-       `(popup-tip-face ((t (:background ,base3 :foreground ,base01))))
-       `(tooltip ((t (:background ,base3 :foreground ,base01))))
-       `(company-tooltip ((t (:background ,base3 :foreground ,base01))))
-       `(company-tooltip-selection ((t (:background ,base01 :foreground ,base3))))
-       `(company-scrollbar-bg ((,class (:background ,base2))))
-       `(company-scrollbar-fg ((,class (:foreground ,base3 :background ,base00))))
-       `(company-tooltip-common ((,class (:foreground ,magenta))))
-
-       ;; Make org-mode tags look like tags
-       `(org-tag ((t (:foreground ,violet :box t :height 0.8))))
-
-       ;; Fix colors on modeline
-       `(powerline-evil-normal-face ((t (:weight bold :inherit 'menu))))
-       `(powerline-evil-insert-face ((t (:weight bold :inherit 'region))))
-       `(powerline-evil-visual-face ((t (:weight bold :inherit 'lazy-highlight))))
-       `(powerline-evil-operator-face ((t (:weight bold :inherit 'menu))))
-       `(powerline-evil-replace-face ((t (:weight bold :inherit 'isearch))))
-       `(powerline-evil-motion-face ((t (:weight bold :inherit 'menu))))
-       `(powerline-evil-emacs-face ((t (:weight bold :inherit 'menu))))
-
-       ;; Don't override shell colors
-       `(comint-highlight-prompt (())))
-
-      (custom-theme-set-variables
-       theme-name
-       ;; Fix pos-tip popup colors
-       `(pos-tip-foreground-color ,base01)
-       `(pos-tip-background-color ,base3))))
-
-  (enable-theme 'solarized-dark-with-fixes))
 
 (use-package zoom-frm
   :general ("C-+" #'zoom-frm-in

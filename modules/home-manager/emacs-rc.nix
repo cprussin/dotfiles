@@ -45,6 +45,11 @@ in
       default = "${pkgs.mu}/bin/mu";
     };
 
+    editorconfig = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.editorconfig-core-c}/bin/editorconfig";
+    };
+
     emojiSets = lib.mkOption {
       type = lib.types.path;
       default = "${emojiSets}";
@@ -75,6 +80,7 @@ in
               shell-path "${cfg.shell}"
               ispell-path "${cfg.ispell}"
               mu-path "${cfg.mu}"
+              editorconfig-path "${cfg.editorconfig}"
               emoji-sets-path "${cfg.emojiSets}"
               font-face "${cfg.font.face}"
               font-size ${toString cfg.font.size})

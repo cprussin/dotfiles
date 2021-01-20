@@ -3,10 +3,8 @@
 [
   mu
   epkgs.aggressive-indent
-  epkgs.cask-mode
   epkgs.company
   epkgs.company-emoji
-  epkgs.company-lsp
   epkgs.company-quickhelp
   epkgs.counsel
   epkgs.counsel-projectile
@@ -15,7 +13,6 @@
   epkgs.dhall-mode
   epkgs.direnv
   epkgs.dockerfile-mode
-  epkgs.edit-indirect
   epkgs.editorconfig
   epkgs.emojify
   epkgs.evil
@@ -24,8 +21,6 @@
   epkgs.evil-magit
   epkgs.evil-org
   epkgs.evil-smartparens
-  epkgs.flow-minor-mode
-  epkgs.flx
   epkgs.flycheck
   epkgs.flycheck-haskell
   epkgs.flycheck-pos-tip
@@ -42,18 +37,14 @@
   epkgs.indent-guide
   epkgs.ivy
   epkgs.link-hint
-  epkgs.load-relative
-  epkgs.lsp-mode
-  epkgs.lsp-ui
   epkgs.magit
   epkgs.markdown-mode
   epkgs.mmm-mode
   epkgs.mode-icons
-  epkgs.neotree
   epkgs.nix-mode
+  epkgs.org
   epkgs.org-bullets
   epkgs.pdf-tools
-  epkgs.pkgbuild-mode
   epkgs.powerline
   epkgs.powerline-evil
   epkgs.projectile
@@ -61,12 +52,12 @@
   epkgs.purescript-mode
   epkgs.rainbow-delimiters
   epkgs.rainbow-mode
-  epkgs.ranger
   epkgs.rust-mode
   epkgs.smartparens
   epkgs.solarized-theme
   epkgs.swiper
   epkgs.typescript-mode
+  epkgs.undo-tree
   epkgs.unicode-fonts
   epkgs.use-package
   epkgs.web-mode
