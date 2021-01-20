@@ -42,6 +42,7 @@
   epkgs.indent-guide
   epkgs.ivy
   epkgs.link-hint
+  epkgs.load-relative
   epkgs.lsp-mode
   epkgs.lsp-ui
   epkgs.magit

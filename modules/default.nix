@@ -21,6 +21,7 @@
       ./home-manager/color-theme.nix
       ./home-manager/cursor-theme.nix
       ./home-manager/default-terminal.nix
+      ./home-manager/emacs-rc.nix
       ./home-manager/font.nix
       ./home-manager/fzf.nix
       ./home-manager/icon-theme.nix
