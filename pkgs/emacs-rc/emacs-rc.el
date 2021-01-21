@@ -42,7 +42,7 @@
   "Primary font size.")
 
 (use-package emacs
-  :init
+  :config
   (define-fringe-bitmap 'tilde [#b00000000
                                 #b00000000
                                 #b00000000
@@ -63,9 +63,9 @@
                 fill-column 80))
 
 (use-package frame
-  :init (add-to-list 'default-frame-alist
-                     `(font . ,(concat font-face "-"
-                                       (number-to-string font-size)))))
+  :config (add-to-list 'default-frame-alist
+                       `(font . ,(concat font-face "-"
+                                         (number-to-string font-size)))))
 
 (use-package menu-bar
   :config (menu-bar-mode -1))
@@ -77,13 +77,14 @@
   :config (scroll-bar-mode -1))
 
 (use-package paren
-  :init (setq show-paren-when-point-inside-paren t
-              show-paren-when-point-in-periphery t)
-  :config (show-paren-mode))
+  :config
+  (setq show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t)
+  (show-paren-mode))
 
 (use-package browse-url
-  :init (setq browse-url-generic-program browse-path
-              browse-url-browser-function 'browse-url-generic))
+  :config (setq browse-url-generic-program browse-path
+                browse-url-browser-function 'browse-url-generic))
 
 (use-package display-line-numbers
   :config (global-display-line-numbers-mode))
@@ -95,30 +96,41 @@
   :config (imagemagick-register-types))
 
 (use-package files
-  :init (setq make-backup-files nil
-              auto-save-default nil))
+  :config (setq make-backup-files nil
+                auto-save-default nil))
 
+;; Silence compile-time errors about evil-want-keybinding needing to be set
+;; before loading evil or evil-collection.
+(eval-when-compile (defvar evil-want-keybinding nil))
 (use-package evil
-  :init (setq evil-want-C-u-scroll t
-              evil-want-integration t
-              evil-want-keybinding nil)
+  :demand
+  :commands evil-mode
+  :init (setq evil-want-keybinding nil
+              evil-want-C-u-scroll t
+              evil-want-C-i-jump t
+              evil-want-integration t)
   :config (evil-mode))
 
 (use-package evil-collection
-  :after evil
-  :init (setq evil-collection-key-blacklist '("SPC"))
-  :config (evil-collection-init))
+  :demand
+  :commands evil-collection-init
+  :after (evil company-tng)
+  :config
+  (setq evil-collection-key-blacklist '("SPC"))
+  (evil-collection-init))
 
 (use-package evil-goggles
+  :demand
+  :commands (evil-goggles-mode evil-goggles-use-diff-faces)
   :after (evil delight)
   :delight
-  :demand
-  :commands evil-goggles-use-diff-faces
   :config
   (evil-goggles-mode)
   (evil-goggles-use-diff-faces))
 
 (use-package general
+  :demand
+  :commands (general-define-key)
   :config
   (general-def '(normal motion emacs)
     :prefix "SPC"
@@ -141,7 +153,7 @@
 
 (use-package magit
   :after general
-  :init (setq magit-git-executable git-path)
+  :config (setq magit-git-executable git-path)
   :general
   (magit-mode-map
    "SPC" nil
@@ -154,40 +166,55 @@
    "s" '(magit-status :which-key "git status")))
 
 (use-package evil-magit
+  :demand
+  :commands evil-magit-init
   :after (magit evil)
   :config (evil-magit-init))
 
 (use-package diff-mode)
 
 (use-package direnv
+  :demand
+  :commands direnv-mode
   :after diff-mode
-  :init (setq direnv-always-show-summary nil)
-  :config (direnv-mode))
+  :config
+  (setq direnv-always-show-summary nil)
+  (direnv-mode))
 
 (use-package undo-tree
+  :demand
+  :commands global-undo-tree-mode
   :delight
   :after general
-  :init (setq undo-tree-visualizer-timestamps t)
-  :config (global-undo-tree-mode)
+  :config
+  (setq undo-tree-visualizer-timestamps t)
+  (global-undo-tree-mode)
   :general ('(normal motion emacs)
             "SPC et" '(undo-tree-visualize
                        :which-key "undo/redo tree")))
 
 (use-package powerline
-  :init (setq powerline-height 25))
+  :config (setq powerline-height 25))
 
 (use-package powerline-evil
+  :demand
+  :commands powerline-evil-center-color-theme
   :after (powerline evil)
-  :init (setq powerline-evil-tag-style 'verbose)
-  :config (powerline-evil-center-color-theme))
+  :config
+  (setq powerline-evil-tag-style 'verbose)
+  (powerline-evil-center-color-theme))
 
 (use-package mode-icons
+  :demand
+  :commands mode-icons-mode
   :after undo-tree
   :config (mode-icons-mode))
 
 (use-package solarized-theme
-  :init (setq x-underline-at-descent-line t)
+  :demand
+  :commands solarized-color-blend
   :config
+  (setq x-underline-at-descent-line t)
   (deftheme solarized-dark-with-fixes)
   (eval-when-compile (require 'solarized-palettes))
   (solarized-with-color-variables
@@ -232,45 +259,29 @@
   (enable-theme 'solarized-dark-with-fixes))
 
 (use-package unicode-fonts
+  :demand
+  :commands unicode-fonts-setup
   :config (unicode-fonts-setup))
 
 (use-package company
+  :demand
+  :commands global-company-mode
   :after general
   :delight
   :general ("C-SPC" 'company-complete)
-  :commands company-search-mode company-select-next company-select-previous company-complete-selection
-  :hook ((company-completion-started . set-company-maps)
-         (company-completion-finished . unset-company-maps)
-         (company-completion-cancelled . unset-company-maps))
-  :init
-  (defun unset-company-maps ()
-    "Set default mappings (outside of company)."
-    (general-def '(insert) 'override
-      "C-/" nil
-      "C-n" nil
-      "C-p" nil
-      "C-j" nil
-      "C-k" nil
-      "C-l" nil
-      "RET" nil))
-
-  (defun set-company-maps ()
-    "Set maps for when you're inside company completion."
-    (general-def '(insert) 'override
-      "C-/" #'company-search-mode
-      "C-n" #'company-select-next
-      "C-j" #'company-select-next
-      "C-p" #'company-select-previous
-      "C-k" #'company-select-previous
-      "C-l" #'company-complete-selection
-      "RET" #'company-complete-selection))
-  :config
-  (global-company-mode))
+  :config (global-company-mode))
 
 (use-package company-tng
-  :after company)
+  :after company
+  :demand
+  :commands company-tng-configure-default
+  :config
+  (company-tng-configure-default)
+  (setq company-frontends '(company-tng-frontend)))
 
 (use-package company-quickhelp
+  :demand
+  :commands company-quickhelp-mode
   :delight
   :after company
   :config (company-quickhelp-mode))
@@ -280,20 +291,25 @@
   :config (add-to-list 'company-backends 'company-emoji))
 
 (use-package ivy
+  :demand
+  :commands (ivy-mode ivy-configure)
   :delight
-  :init (setq ivy-use-virtual-buffers t
-              ivy-format-functions-alist '((t . ivy-format-function-line))
-              ivy-initial-inputs-alist nil
-              ivy-re-builders-alist '((t . ivy--regex-plus)))
-  :config (ivy-mode))
+  :config
+  (setq ivy-use-virtual-buffers t
+        ivy-format-functions-alist '((t . ivy-format-function-line))
+        ivy-initial-inputs-alist nil
+        ivy-re-builders-alist '((t . ivy--regex-plus)))
+  (ivy-mode))
 
 ;; Set up which-key to discover keybindings
 (use-package which-key
   :demand
+  :commands which-key-mode
   :delight
   :after general
-  :init (setq which-key-idle-delay 0.25)
-  :config (which-key-mode)
+  :config
+  (setq which-key-idle-delay 0.25)
+  (which-key-mode)
   :general ('(normal motion emacs)
             "?" #'which-key-show-top-level
             "SPC ?" '(which-key-show-top-level
@@ -334,8 +350,9 @@
 ;; Turn on counsel for better ivy integration for M-x,
 ;; describe-function, and describe-variable
 (use-package counsel
-  :delight
   :demand
+  :commands counsel-mode
+  :delight
   :after ivy
   :config
   (setq counsel-rg-base-command (concat rg-path
@@ -372,16 +389,20 @@
 
 ;; Enable projectile
 (use-package projectile
+  :demand
+  :commands projectile-mode
   :delight '(:eval (concat " " (projectile-project-name) " "))
-  :init
+  :config
   (setq projectile-completion-system 'ivy
         projectile-git-command (git-cmd "ls-files -zco --exclude-standard")
         projectile-git-submodule-command (git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
         projectile-git-ignored-command (git-cmd "ls-files -zcoi --exclude-standard"))
-  :config (projectile-mode))
+  (projectile-mode))
 
 ;; And enable counsel-projectile, for better ivy integration
 (use-package counsel-projectile
+  :demand
+  :commands counsel-projectile-mode
   :after (counsel projectile)
   :config (counsel-projectile-mode)
   :general
@@ -406,12 +427,18 @@
 
 ;; Set up editorconfig
 (use-package editorconfig
+  :demand
+  :commands editorconfig-mode
   :delight
-  :init (setq editorconfig-exec-path editorconfig-path)
-  :config (editorconfig-mode))
+  :config
+  (setq editorconfig-exec-path editorconfig-path
+        editorconfig-get-properties-function 'editorconfig-get-properties-from-exec)
+  (editorconfig-mode))
 
 ;; Aggressively re-indent
 (use-package aggressive-indent
+  :demand
+  :commands global-aggressive-indent-mode
   :delight
   :config
   (global-aggressive-indent-mode)
@@ -420,11 +447,15 @@
 
 ;; Show indentation guide
 (use-package indent-guide
+  :demand
+  :commands indent-guide-global-mode
   :delight
   :config (indent-guide-global-mode))
 
 ;; Enable flycheck for source code checks
 (use-package flycheck
+  :demand
+  :commands global-flycheck-mode flycheck-add-mode
   :config
   (global-flycheck-mode)
   (flycheck-add-mode 'javascript-eslint 'web-mode)
@@ -442,13 +473,16 @@
   (add-hook 'js-jsx-mode-hook 'use-eslint-from-node-modules)
   )
 (use-package flycheck-pos-tip
-  :ensure t
-  :init
+  :demand
+  :commands flycheck-pos-tip-mode
+  :config
   (setq flycheck-pos-tip-timeout 0)
   (flycheck-pos-tip-mode))
 
 ;; Enable smarter surrounding pairs
 (use-package smartparens
+  :demand
+  :commands smartparens-global-mode
   :config
   (require 'smartparens-config)
   (smartparens-global-mode))
@@ -459,6 +493,8 @@
 
 ;; Highlight TODO comments
 (use-package hl-todo
+  :demand
+  :commands global-hl-todo-mode
   :config (global-hl-todo-mode))
 
 (defun load-mailbox (mbname)
@@ -469,7 +505,8 @@
 
 (use-package mu4e
   :demand
-  :config
+  :commands (mu4e-action-view-in-browser mu4e~start)
+  :preface
   (defun make-mail-context (ctx email &optional folder)
     (let ((maildir (concat "/" (or folder ctx))))
       (make-mu4e-context
@@ -482,7 +519,7 @@
                (mu4e-drafts-folder . ,(concat maildir "/Drafts"))
                (mu4e-trash-folder . ,(concat maildir "/Archive"))
                (mu4e-refile-folder . ,(concat maildir "/Archive"))))))
-
+  :config
   (defun view-message-in-external-browser ()
     (interactive)
     (mu4e-action-view-in-browser (mu4e-message-at-point)))
@@ -503,10 +540,6 @@
         mu4e-change-filenames-when-moving t
         mu4e-headers-include-related nil
         mu4e-mu-binary mu-path
-        mu4e-maildir (expand-file-name "~/Mail")
-        mu4e-user-mail-address-list '("connor@prussin.net"
-                                      "cprussin@bci-incorporated.com"
-                                      "cprussin@gmail.com")
         mu4e-contexts `(,(make-mail-context "PrussinNet" "connor@prussin.net")
                         ,(make-mail-context
                           "BCI Incorporated"
@@ -538,6 +571,7 @@
 
 (use-package shr
   :demand
+  :commands shr-colorize-region
   :config (advice-add #'shr-colorize-region
                       :filter-args
                       (lambda (args)
@@ -663,10 +697,13 @@
 ;;  :modes (js-mode js2-mode js3-mode react-mode))
 ;;(add-to-list 'flycheck-checkers 'javascript-flow)
 
+(use-package nix-mode)
+
 (use-package markdown-mode
-  :init (setq markdown-hide-markup t
-              markdown-asymmetric-header t
-              markdown-fontify-code-blocks-natively t)
+  :mode ("\\.md\\'" . gfm-mode)
+  :config (setq markdown-hide-markup t
+                markdown-asymmetric-header t
+                markdown-fontify-code-blocks-natively t)
   :general
   ('(normal motion emacs) markdown-mode-map
    "{" #'markdown-backward-block
@@ -756,45 +793,18 @@
 
 ;; Enable mmm for files that have embedded code in other modes
 (use-package mmm-mode
-  :init (setq mmm-parse-when-idle t
-              mmm-global-mode 'buffers-with-submode-classes)
-  :config (require 'mmm-auto))
+  :config
+  (setq mmm-parse-when-idle t
+        mmm-global-mode 'buffers-with-submode-classes)
+  (require 'mmm-auto))
 
 ;; Set up org-mode
 (use-package org
-  :demand
-  :init (setq org-tags-column 0
-              org-log-done 'time
-              org-log-repeat nil
-              org-agenda-files (list "~/Notes/Personal.org")
-              org-agenda-window-setup 'only-window
-              org-agenda-custom-commands '(("p" . "Personal searches")
-
-                                           ("pc" . "2019 Subaru Ascent")
-                                           ("pca" tags-todo  "+2019_Subaru_Ascent")
-                                           ("pcr" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
-                                           ("pcs" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
-                                           ("pcu" tags-todo  "+2019_Subaru_Ascent-SCHEDULED={.+}")
-
-                                           ("ph" . "720 Natoma Drive")
-                                           ("pha" tags-todo  "+720_Natoma_Drive")
-                                           ("phr" tags-todo  "+720_Natoma_Drive+SCHEDULED={.+\\+.+}")
-                                           ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}")
-                                           ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}")
-
-                                           ("ps" . "Shakti")
-                                           ("psa" tags-todo  "+shakti")
-                                           ("psr" tags-todo  "+shakti+SCHEDULED={.+\\+.+}")
-                                           ("pss" tags-todo  "+shakti+SCHEDULED={^[^\\+]+$}")
-                                           ("psu" tags-todo  "+shakti-SCHEDULED={.+}")
-
-                                           ("pp" . "Other")
-                                           ("ppa" tags-todo "-shakti-720_Natoma_Drive-2019_Subaru_Ascent")
-                                           ("ppr" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
-                                           ("pps" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
-                                           ("ppu" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}")
-
-                                           ))
+  :mode ("\\.org\\'" . org-mode)
+  :config (setq org-tags-column 0
+                org-log-done 'time
+                org-log-repeat nil
+                org-agenda-files (list "~/Notes/Personal.org"))
   :general
   ('(normal motion emacs)
    "SPC aa" '(org-agenda :which-key "Agenda"))
@@ -803,6 +813,35 @@
    "" '(:ignore t :which-key "Org links")
    "y" '(org-store-link :which-key "yank")
    "p" '(org-insert-link :which-key "insert")))
+
+(use-package org-agenda
+  :config (setq org-agenda-window-setup 'only-window
+                org-agenda-custom-commands '(("p" . "Personal searches")
+
+                                             ("pc" . "2019 Subaru Ascent")
+                                             ("pca" tags-todo  "+2019_Subaru_Ascent")
+                                             ("pcr" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
+                                             ("pcs" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
+                                             ("pcu" tags-todo  "+2019_Subaru_Ascent-SCHEDULED={.+}")
+
+                                             ("ph" . "720 Natoma Drive")
+                                             ("pha" tags-todo  "+720_Natoma_Drive")
+                                             ("phr" tags-todo  "+720_Natoma_Drive+SCHEDULED={.+\\+.+}")
+                                             ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}")
+                                             ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}")
+
+                                             ("ps" . "Shakti")
+                                             ("psa" tags-todo  "+shakti")
+                                             ("psr" tags-todo  "+shakti+SCHEDULED={.+\\+.+}")
+                                             ("pss" tags-todo  "+shakti+SCHEDULED={^[^\\+]+$}")
+                                             ("psu" tags-todo  "+shakti-SCHEDULED={.+}")
+
+                                             ("pp" . "Other")
+                                             ("ppa" tags-todo "-shakti-720_Natoma_Drive-2019_Subaru_Ascent")
+                                             ("ppr" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
+                                             ("pps" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
+                                             ("ppu" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}"))))
+
 (use-package evil-org
   :delight
   :after org
@@ -818,11 +857,12 @@
   :after org
   :hook (org-mode . org-bullets-mode))
 
-;; Set up org-mode
 (use-package pdf-tools
-  :demand
-  :init (setq-default pdf-view-display-size 'fit-page)
-  :config (pdf-tools-install t)
+  :commands pdf-tools-install
+  :config
+  (setq-default pdf-view-display-size 'fit-page)
+  (require 'pdf-occur)
+  (pdf-tools-install t)
   :general
   (pdf-view-mode-map
    "SPC" nil)
@@ -901,56 +941,52 @@
 
 ;; Turn on spell checking
 (use-package flyspell
-  :init (setq flyspell-issue-message-flag nil
-              ispell-program-name ispell-path)
+  :config (setq flyspell-issue-message-flag nil
+                ispell-program-name ispell-path)
   :hook ((prog-mode . flyspell-prog-mode)
          (text-mode . flyspell-mode)))
 
 ;; Turn on URL discovery
-(use-package goto-address
+(use-package goto-addr
   :hook ((prog-mode . goto-address-prog-mode)
          (text-mode . goto-address-mode)))
 
 ;; Intelligently clean up whitespace
 (use-package ws-butler
+  :demand
+  :commands ws-butler-global-mode
   :delight
   :config (ws-butler-global-mode))
 
-
 ;; Show git status in the gutter
 (use-package git-gutter
+  :demand
+  :commands global-git-gutter-mode
   :delight
   :config (global-git-gutter-mode))
 
 ;; Show emojis!
 (use-package emojify
-  :init (setq emojify-emojis-dir emoji-sets-path
-              emojify-emoji-set "emojione")
+  :demand
+  :commands (global-emojify-mode global-emojify-mode-line-mode)
   :config
+  (setq emojify-emojis-dir emoji-sets-path
+        emojify-emoji-set "emojione")
   (global-emojify-mode)
   (global-emojify-mode-line-mode))
 
-;; Turn on a help screen for the highlighted completion element
-
-;; Turn on emoji completion
-
-;; Use Ivy for minibuffer completion
-
 (use-package imenu-list
-  :init (setq imenu-list-focus-after-activation t
-              imenu-list-auto-resize t)
+  :config (setq imenu-list-focus-after-activation t
+                imenu-list-auto-resize t)
   :general ('(normal motion emacs)
             "SPC ei" '(imenu-list-smart-toggle :which-key "Imenu")))
 
 (use-package link-hint
-  :ensure t
   :general ('(normal motion emacs)
             :prefix "SPC el"
             "" '(:ignore t :which-key "Links")
             "o" '(link-hint-open-link :which-key "open")
             "y" '(link-hint-copy-link :which-key "copy")))
-
-;; Use solarized
 
 (use-package zoom-frm
   :general ("C-+" #'zoom-frm-in
