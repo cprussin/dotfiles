@@ -11,7 +11,10 @@
 
     programs.kitty = {
       enable = config.primary-user.home-manager.default-terminal.enableApplication;
-      settings.open_url_with = "${pkgs.launcher}/bin/browse";
+      settings = {
+        open_url_with = "${pkgs.launcher}/bin/browse";
+        remember_window_size = "no";
+      };
     };
   };
 }
