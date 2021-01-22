@@ -1,6 +1,7 @@
 #+TODO: TODO NEXT | DONE
 
 * Tasks
+** TODO Remove secrets from nixops state file
 ** TODO Nixify/containerize/etc prussin.net [3/9]
    - [X] Web
    - [X] Identity (openldap)
