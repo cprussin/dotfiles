@@ -697,7 +697,8 @@
 ;;  :modes (js-mode js2-mode js3-mode react-mode))
 ;;(add-to-list 'flycheck-checkers 'javascript-flow)
 
-(use-package nix-mode)
+(use-package nix-mode
+  :mode ("\\.nix\\'" . nix-mode))
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode)
