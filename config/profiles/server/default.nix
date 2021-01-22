@@ -7,6 +7,6 @@
   ];
 
   promptColor = "red";
-  enableTermiteApplicationConfig = false;
+  primary-user.home-manager.default-terminal.enableApplication = false;
   enableSshdAtBoot = true;
 }

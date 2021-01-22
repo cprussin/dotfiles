@@ -42,6 +42,29 @@ in
           color15 = ${cfg.white}
         '';
       };
+      kitty.settings = {
+        inherit (cfg) foreground background;
+
+        cursor = cfg.foreground;
+        cursor_text_color = cfg.background;
+        url_color = cfg.selection;
+        color0 = cfg.black;
+        color1 = cfg.red;
+        color2 = cfg.green;
+        color3 = cfg.yellow;
+        color4 = cfg.blue;
+        color5 = cfg.purple;
+        color6 = cfg.cyan;
+        color7 = cfg.lightGrey;
+        color8 = cfg.grey;
+        color9 = cfg.lightRed;
+        color10 = cfg.lightGreen;
+        color11 = cfg.lightYellow;
+        color12 = cfg.lightBlue;
+        color13 = cfg.lightPurple;
+        color14 = cfg.lightCyan;
+        color15 = cfg.white;
+      };
 
       zathura.options = {
         default-bg = cfg.highlightBackground;

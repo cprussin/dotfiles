@@ -30,6 +30,10 @@ in
         font = pangoFont;
         hintsFont = pangoFont;
       };
+      kitty.font = {
+        inherit (cfg) package;
+        name = pangoFont;
+      };
       swaylock.font = pangoFont;
       mako.font = pangoFont;
       zathura.options.font = pangoFont;

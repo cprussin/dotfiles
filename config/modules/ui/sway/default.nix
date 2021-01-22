@@ -20,9 +20,9 @@ in
       systemdIntegration = true;
 
       config = {
-        inherit modifier terminal;
+        inherit modifier;
 
-        menu = "${terminal} --title launcher --name launcher -e '${pkgs.launcher}/bin/launch ${pkgs.sway}/bin/swaymsg exec'";
+        menu = "${terminal} --class launcher --title launcher --name launcher ${pkgs.launcher}/bin/launch ${pkgs.sway}/bin/swaymsg exec";
 
         workspaceAutoBackAndForth = true;
         bars = [ ];

@@ -9,7 +9,8 @@ name: terminalname: bin: writeShellScript name ''
   else
     exec ${config.primary-user.home-manager.default-terminal.bin} \
       --title ${name} \
+      --class ${terminalname} \
       --name ${terminalname} \
-      -e "${bin}"
+      ${bin}
   fi
 ''

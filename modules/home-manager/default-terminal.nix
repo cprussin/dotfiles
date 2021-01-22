@@ -6,6 +6,15 @@ in
   options.default-terminal = {
     enable = lib.mkEnableOption "Default terminal";
 
+    enableApplication = lib.mkOption {
+      type = lib.types.bool;
+      description = ''
+        Install the application as well as the terminfo file (set to false to
+        only install the terminfo file).
+      '';
+      default = true;
+    };
+
     bin = lib.mkOption {
       type = lib.types.path;
       description = ''
@@ -19,13 +28,21 @@ in
       description = "The package containing the default terminal";
     };
 
-    terminfo = lib.mkOption {
-      type = lib.types.package;
-      description = "The package containing the default terminal's terminfo";
+    termname = lib.mkOption {
+      type = lib.types.str;
+      description = "The name of the terminal";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.pkg cfg.terminfo ];
+    home.packages = [ cfg.pkg.terminfo ] ++ (if cfg.enableApplication then [ cfg.pkg ] else [ ]);
+
+    programs.zsh.initExtra = ''
+      if [[ $TERM = ${cfg.termname} ]]; then
+        precmd_functions+=(__vte_prompt_command)
+      fi
+    '';
+
+    wayland.windowManager.sway.config.terminal = cfg.bin;
   };
 }

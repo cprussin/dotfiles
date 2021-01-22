@@ -48,6 +48,5 @@
   ];
 
   promptColor = "cyan";
-  enableTermiteApplicationConfig = true;
   enableSshdAtBoot = false;
 }

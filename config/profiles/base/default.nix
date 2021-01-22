@@ -24,9 +24,9 @@ in
     ../../modules/ui/fzf
     ../../modules/ui/greeting
     ../../modules/ui/htop
+    ../../modules/ui/kitty
     ../../modules/ui/less
     ../../modules/ui/readline
-    ../../modules/ui/termite
     ../../modules/ui/terminfo
     ../../modules/ui/theme
     ../../modules/ui/zsh
