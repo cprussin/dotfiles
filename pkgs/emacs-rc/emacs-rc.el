@@ -276,15 +276,17 @@
   :demand
   :commands company-tng-configure-default
   :config
-  (company-tng-configure-default)
-  (setq company-frontends '(company-tng-frontend)))
+  (company-tng-configure-default))
 
 (use-package company-quickhelp
   :demand
   :commands company-quickhelp-mode
   :delight
   :after company
-  :config (company-quickhelp-mode))
+  :config
+  (setq company-quickhelp-use-propertized-text t
+        company-quickhelp-delay 0.2)
+  (company-quickhelp-mode))
 
 (use-package company-emoji
   :after company
