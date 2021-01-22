@@ -14,11 +14,13 @@ writeShellScriptBin "search" ''
   google="https://google.com/search?q=%QUERY%"
   googleMaps="https://www.google.com/maps/search/%QUERY%"
   googleImages="https://www.google.com/search?q=%QUERY%&tbm=isch"
+  github="https://github.com/%QUERY_NOESCAPE%"
   wikipedia="https://en.wikipedia.org/wiki/Special:Search?search=%QUERY%"
   youtube="https://www.youtube.com/results?search_query=%QUERY%"
 
   declare -A engines=(
       ["!g"]=$google
+      ["!gh"]=$github
       ["!a"]=$amazon
       ["!amazon"]=$amazon
       ["!maps"]=$googleMaps
@@ -48,12 +50,13 @@ writeShellScriptBin "search" ''
   for matcher in "''${!engines[@]}"; do
     if $echo "$query" | $grep -qE '(^|\s)'"$matcher"'($|\s)'
     then
-      query=$($echo "$query" | $sed "s/$matcher//")
+      query="''${query/$matcher/}"
       engine="''${engines[$matcher]}"
     fi
   done
 
-  query=$(urlencode "$($echo "$query" | $sed 's/^[[:space:]]*//;s/[[:space:]]*$//')")
+  query="$($echo "$query" | $sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+  url="''${engine/\%QUERY_NOESCAPE\%/$query}"
 
-  exec $browse "''${engine/\%QUERY\%/$query}"
+  exec $browse "''${url/\%QUERY\%/$(urlencode "$query")}"
 ''
