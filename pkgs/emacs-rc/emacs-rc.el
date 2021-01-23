@@ -237,6 +237,8 @@
 
        ;; Make org-mode tags look like tags
        `(org-tag ((t (:foreground ,violet :box t :height 0.8))))
+       `(org-headline-done ((t (:strike-through t :foreground ,base01))))
+       `(org-checkbox ((t (:box nil :foreground ,blue))))
 
        ;; Fix colors on modeline
        `(powerline-evil-normal-face ((t (:weight bold :inherit 'menu))))
@@ -804,10 +806,26 @@
 ;; Set up org-mode
 (use-package org
   :mode ("\\.org\\'" . org-mode)
-  :config (setq org-tags-column 0
-                org-log-done 'time
-                org-log-repeat nil
-                org-agenda-files (list "~/Notes/Personal.org"))
+  :hook (org-mode . prettify-org)
+  :config
+  (defun prettify-org ()
+    (push '("[ ]" . "☐") prettify-symbols-alist)
+    (push '("[X]" . "☑") prettify-symbols-alist)
+    (push '("[-]" . "❍") prettify-symbols-alist)
+    (prettify-symbols-mode))
+  ;; Make checked checklist entries use the `org-headline-done' face
+  (font-lock-add-keywords
+   'org-mode
+   `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
+   'append)
+  (setq org-tags-column 0
+        org-log-done 'time
+        org-log-repeat nil
+        org-agenda-files (list "~/Notes/Personal.org")
+        org-fontify-done-headline t)
+  ;; Disable emoji in org-mode since they mess with my prettier checklists and I
+  ;; hardly ever use emoji in org docs anyways
+  (push 'org-mode emojify-inhibit-major-modes)
   :general
   ('(normal motion emacs)
    "SPC aa" '(org-agenda :which-key "Agenda"))
