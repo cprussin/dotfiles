@@ -1,6 +1,6 @@
-#+TODO: TODO NEXT | DONE
-
 * Tasks
+** TODO Modularize emacs-rc.el
+** TODO Fix crypto & mount systemd units
 ** TODO Remove secrets from nixops state file
 ** TODO Nixify/containerize/etc prussin.net [3/9]
    - [X] Web
