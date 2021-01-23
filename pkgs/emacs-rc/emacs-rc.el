@@ -700,11 +700,8 @@
 ;;  :modes (js-mode js2-mode js3-mode react-mode))
 ;;(add-to-list 'flycheck-checkers 'javascript-flow)
 
-(use-package nix-mode
-  :mode ("\\.nix\\'" . nix-mode))
-
 (use-package markdown-mode
-  :mode ("\\.md\\'" . gfm-mode)
+  :demand
   :config (setq markdown-hide-markup t
                 markdown-asymmetric-header t
                 markdown-fontify-code-blocks-natively t)
@@ -804,7 +801,7 @@
 
 ;; Set up org-mode
 (use-package org
-  :mode ("\\.org\\'" . org-mode)
+  :demand
   :hook (org-mode . prettify-org)
   :config
   (defun prettify-org ()
@@ -919,6 +916,7 @@
    "SPC mm" '(pdf-misc-display-metadata :which-key "show metadata")))
 
 (use-package purescript-mode
+  :demand
   :hook (purescript-mode . turn-on-purescript-indentation)
   :general ('(normal motion emacs) purescript-mode-map
             :prefix "SPC m"
@@ -1027,6 +1025,7 @@
 (use-package graphql-mode)
 (use-package groovy-mode)
 (use-package haskell-mode)
+(use-package nix-mode)
 (use-package org-mu4e)
 (use-package pkg-info)
 (use-package rust-mode)
