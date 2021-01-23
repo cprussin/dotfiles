@@ -1024,6 +1024,7 @@
 (use-package graphql-mode)
 (use-package groovy-mode)
 (use-package haskell-mode)
+(use-package pkg-info)
 (use-package rust-mode)
 (use-package yaml-mode)
 

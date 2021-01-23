@@ -44,6 +44,7 @@
   epkgs.org
   epkgs.org-bullets
   epkgs.pdf-tools
+  epkgs.pkg-info
   epkgs.powerline
   epkgs.powerline-evil
   epkgs.projectile
