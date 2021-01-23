@@ -114,7 +114,7 @@
 (use-package evil-collection
   :demand
   :commands evil-collection-init
-  :after (evil company-tng)
+  :after evil company-tng
   :config
   (setq evil-collection-key-blacklist '("SPC"))
   (evil-collection-init))
@@ -122,7 +122,7 @@
 (use-package evil-goggles
   :demand
   :commands evil-goggles-mode evil-goggles-use-diff-faces
-  :after (evil delight)
+  :after evil delight
   :delight
   :config
   (evil-goggles-mode)
@@ -166,7 +166,7 @@
 (use-package evil-magit
   :demand
   :commands evil-magit-init
-  :after (magit evil)
+  :after magit evil
   :config (evil-magit-init))
 
 (use-package direnv
@@ -195,7 +195,7 @@
 (use-package powerline-evil
   :demand
   :commands powerline-evil-center-color-theme
-  :after (powerline evil)
+  :after powerline evil
   :config
   (setq powerline-evil-tag-style 'verbose)
   (powerline-evil-center-color-theme))
@@ -405,7 +405,7 @@
 (use-package counsel-projectile
   :demand
   :commands counsel-projectile-mode
-  :after (counsel projectile)
+  :after counsel projectile
   :config (counsel-projectile-mode)
   :general
   ('(normal motion emacs)
@@ -510,7 +510,7 @@
 
 (use-package mu4e
   :demand
-  :commands (mu4e-action-view-in-browser mu4e~start)
+  :commands mu4e-action-view-in-browser mu4e~start
   :preface
   (defun make-mail-context (ctx email &optional folder)
     (let ((maildir (concat "/" (or folder ctx))))
