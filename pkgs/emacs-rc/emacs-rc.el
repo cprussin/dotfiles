@@ -1016,6 +1016,11 @@
 (use-package rainbow-mode
   :hook (prog-mode . rainbow-mode))
 
+(use-package zone
+  :demand
+  :commands zone-when-idle
+  :config (zone-when-idle 120))
+
 (use-package csv-mode)
 (use-package delight)
 (use-package dhall-mode)
