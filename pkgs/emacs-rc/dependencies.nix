@@ -22,7 +22,6 @@
   epkgs.evil-org
   epkgs.evil-smartparens
   epkgs.flycheck
-  epkgs.flycheck-haskell
   epkgs.flycheck-pos-tip
   epkgs.general
   epkgs.git-gutter
