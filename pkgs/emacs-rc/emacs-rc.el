@@ -121,7 +121,7 @@
 
 (use-package evil-goggles
   :demand
-  :commands (evil-goggles-mode evil-goggles-use-diff-faces)
+  :commands evil-goggles-mode evil-goggles-use-diff-faces
   :after (evil delight)
   :delight
   :config
@@ -130,7 +130,7 @@
 
 (use-package general
   :demand
-  :commands (general-define-key)
+  :commands general-define-key
   :config
   (general-def '(normal motion emacs)
     :prefix "SPC"
@@ -294,7 +294,7 @@
 
 (use-package ivy
   :demand
-  :commands (ivy-mode ivy-configure)
+  :commands ivy-mode ivy-configure
   :delight
   :config
   (setq ivy-use-virtual-buffers t
@@ -971,7 +971,7 @@
 ;; Show emojis!
 (use-package emojify
   :demand
-  :commands (global-emojify-mode global-emojify-mode-line-mode)
+  :commands global-emojify-mode global-emojify-mode-line-mode
   :config
   (setq emojify-emojis-dir emoji-sets-path
         emojify-emoji-set "emojione")
