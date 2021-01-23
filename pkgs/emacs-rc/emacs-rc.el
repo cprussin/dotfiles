@@ -460,23 +460,8 @@
 ;; Enable flycheck for source code checks
 (use-package flycheck
   :demand
-  :commands global-flycheck-mode flycheck-add-mode
-  :config
-  (global-flycheck-mode)
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (defun use-eslint-from-node-modules ()
-    (let* ((root (locate-dominating-file
-                  (or (buffer-file-name) default-directory)
-                  "node_modules"))
-           (global-eslint (executable-find "eslint"))
-           (local-eslint (expand-file-name "node_modules/.bin/eslint" root))
-           (eslint (if (file-executable-p local-eslint)
-                       local-eslint
-                     global-eslint)))
-      (setq-local flycheck-javascript-eslint-executable eslint)))
-  (add-hook 'web-mode-hook 'use-eslint-from-node-modules)
-  (add-hook 'js-jsx-mode-hook 'use-eslint-from-node-modules)
-  )
+  :commands global-flycheck-mode flycheck-add-mode flycheck-add-next-checker
+  :config (global-flycheck-mode))
 (use-package flycheck-pos-tip
   :demand
   :commands flycheck-pos-tip-mode
@@ -592,113 +577,85 @@
             "z" nil
             "C-c C-o" #'shr-browse-url))
 
-(use-package web-mode
+(defun find-in-node-modules (program)
+  "Find PROGRAM either in node_modules or as a global."
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (global (executable-find program))
+         (local (expand-file-name (concat "node_modules/.bin/" program)
+                                  root)))
+    (if (file-executable-p local) local global)))
+
+(defun setup-js-files ()
+  "Prettify js code, and set relevant bin paths for flycheck."
+  (push '("function" . ?λ) prettify-symbols-alist)
+  (push '("require" . ?℞) prettify-symbols-alist)
+  (push '("return" . ?←) prettify-symbols-alist)
+  (push '("null" . ?∅) prettify-symbols-alist)
+  (push '("undefined" . ?�) prettify-symbols-alist)
+  (push '("=>" . ?→) prettify-symbols-alist)
+  (prettify-symbols-mode)
+
+  (setq-local flycheck-javascript-eslint-executable (find-in-node-modules "eslint")
+              flycheck-css-stylelint-executable (find-in-node-modules "stylelint")))
+
+(use-package js
+  :demand
+  :after flycheck
+  :hook ((js-mode . setup-js-files)
+         (js-mode . set-checker-eslint))
+  :general
+  ('(normal motion emacs) js-mode-map
+   :prefix "SPC m"
+   "" '(:ignore t :which-key "Major Mode (JS)"))
   :config
-  (defun prettify-js ()
-    (push '("function" . ?λ) prettify-symbols-alist)
-    (push '("require" . ?℞) prettify-symbols-alist)
-    (push '("return" . ?←) prettify-symbols-alist)
-    (push '("null" . ?∅) prettify-symbols-alist)
-    (push '("undefined" . ?�) prettify-symbols-alist)
-    (push '("=>" . ?→) prettify-symbols-alist)
-    (prettify-symbols-mode))
-
-  ;; Make js2 syntax highlighting better
-  (setq-default js2-highlight-level 3
-                js2-include-browser-externs t
-                js2-include-node-externs t)
-
-  ;;;; Prettify js and jsx files
-  (add-hook 'web-mode-hook 'prettify-js)
-  (add-hook 'web-mode-hook 'turn-off-fci-mode)
-
-  ;; Use rjsx-mode on .js files since it handles flow syntax better and to
-  ;; keep consistency
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-  )
+  (defun set-checker-eslint ()
+    (setq-local flycheck-checker 'javascript-eslint))
+  (flycheck-add-mode 'css-stylelint 'js-mode)
+  (flycheck-add-next-checker 'javascript-eslint '(t . css-stylelint)))
 
 (use-package typescript-mode
-  :config (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode)))
+  :demand
+  :mode "\\.tsx\\'"
+  :hook (typescript-mode . setup-js-files)
+  :general
+  ('(normal motion emacs) typescript-mode-map
+   :prefix "SPC m"
+   "" '(:ignore t :which-key "Major Mode (Typescript)"))
+  :config
+  (flycheck-add-mode 'css-stylelint 'typescript-mode))
 
-;;(defun use-flow-from-node-modules ()
-;;  (let* ((root (locate-dominating-file
-;;                (or (buffer-file-name) default-directory)
-;;                "node_modules"))
-;;         (global-flow (executable-find "flow"))
-;;         (local-flow (expand-file-name "node_modules/.bin/flow" root))
-;;         (flow (if (file-executable-p local-flow)
-;;                   local-flow
-;;                 global-flow)))
-;;    (setq-local flycheck-javascript-flow-executable flow)))
-;;
-;;(defun use-stylelint-from-node-modules ()
-;;  (let* ((root (locate-dominating-file
-;;                (or (buffer-file-name) default-directory)
-;;                "node_modules"))
-;;         (global-stylelint (executable-find "stylelint"))
-;;         (local-stylelint (expand-file-name "node_modules/.bin/stylelint"
-;;                                            root))
-;;         (stylelint (if (file-executable-p local-stylelint)
-;;                        local-stylelint
-;;                      global-stylelint)))
-;;    (setq-local flycheck-css-stylelint-executable stylelint)))
-;;   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(defun setup-flow-file()
-;;  (flycheck-select-checker 'javascript-flow))
-;;
-;;(defun check-for-buffer-text(buffer-text pattern)
-;;  (string-match pattern buffer-text))
-;;
-;;(defun check-for-buffer-text-with-callback(buffer-text pattern callback)
-;;  (if
-;;      (check-for-buffer-text pattern buffer-text)
-;;      (funcall callback)))
-;;
-;;(defun setup-flow-files(callback)
-;;  (check-for-buffer-text
-;;   (buffer-substring-no-properties (point-min) (point-max)) "@flow" callback))
-;;
-;;(defun javascript-flow-predicate()
-;;  (and
-;;   buffer-file-name
-;;   (file-exists-p buffer-file-name)
-;;   (check-for-buffer-text
-;;    (buffer-substring-no-properties (point-min) (point-max))
-;;    "@flow")
-;;   (locate-dominating-file buffer-file-name ".flowconfig")))
-;;
-;;
-;;
-;;                                        ; Use eslint, stylelint, and flow from node_modules if it exists
-;;(add-hook 'js2-mode-hook #'spacemacs//react-use-eslint-from-node-modules)
-;;(add-hook 'js2-mode-hook #'use-flow-from-node-modules)
-;;(add-hook 'react-mode-hook #'use-flow-from-node-modules)
-;;
-;;                                        ; Make flow work properly
-;;(flycheck-def-args-var flycheck-javascript-flow-args javascript-flow)
-;;(customize-set-variable 'flycheck-javascript-flow-args '())
-;;(flycheck-define-checker javascript-flow
-;;  "A JavaScript syntax and style checker using Flow. See URL `http://flowtype.org/'."
-;;  :command (
-;;            "flow"
-;;            "check-contents"
-;;            (eval flycheck-javascript-flow-args)
-;;            "--from" "emacs"
-;;            "--color=never"
-;;            source-original)
-;;  :standard-input t
-;;  :predicate javascript-flow-predicate
-;;  :next-checkers (javascript-eslint)
-;;  :error-patterns
-;;  ((error line-start
-;;          (file-name)
-;;          ":"
-;;          line
-;;          "\n"
-;;          (message (minimal-match (and (one-or-more anything) "\n")))
-;;          line-end))
-;;  :modes (js-mode js2-mode js3-mode react-mode))
-;;(add-to-list 'flycheck-checkers 'javascript-flow)
+(use-package prettier
+  :demand
+  :commands global-prettier-mode
+  :config (global-prettier-mode))
+
+(use-package tide
+  :after typescript-mode company flycheck
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (tide-mode . set-checker-tide))
+  :config
+  (defun set-checker-tide ()
+    (setq-local flycheck-checker (if (string-equal "tsx" (file-name-extension buffer-file-name))
+                                     'tsx-tide
+                                   'typescript-tide)))
+  (flycheck-add-mode 'tsx-tide 'typescript-mode)
+  (flycheck-add-next-checker 'typescript-tide '(t . javascript-eslint))
+  (flycheck-add-next-checker 'tsx-tide '(t . javascript-eslint)))
+
+(use-package jest
+  :after (:or js typescript-mode)
+  :hook ((js-mode typescript-mode) . use-jest-from-node-modules)
+  :commands jest-popup
+  :config
+  (setq jest-arguments '("--colors"))
+  (defun use-jest-from-node-modules ()
+    (setq-local jest-executable (find-in-node-modules "jest")))
+  :general
+  ('(normal motion emacs) (js-mode-map typescript-mode-map)
+   "SPC m j" '(jest-popup :which-key "Jest")))
 
 (use-package markdown-mode
   :demand
@@ -1030,6 +987,7 @@
 (use-package graphql-mode)
 (use-package groovy-mode)
 (use-package haskell-mode)
+(use-package json-mode)
 (use-package nix-mode)
 (use-package org-mu4e)
 (use-package pkg-info)

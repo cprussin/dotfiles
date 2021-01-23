@@ -35,6 +35,8 @@
   epkgs.imenu-list
   epkgs.indent-guide
   epkgs.ivy
+  epkgs.jest
+  epkgs.json-mode
   epkgs.link-hint
   epkgs.magit
   epkgs.markdown-mode
@@ -47,6 +49,7 @@
   epkgs.pkg-info
   epkgs.powerline
   epkgs.powerline-evil
+  epkgs.prettier
   epkgs.projectile
   epkgs.psc-ide
   epkgs.purescript-mode
@@ -56,11 +59,11 @@
   epkgs.smartparens
   epkgs.solarized-theme
   epkgs.swiper
+  epkgs.tide
   epkgs.typescript-mode
   epkgs.undo-tree
   epkgs.unicode-fonts
   epkgs.use-package
-  epkgs.web-mode
   epkgs.which-key
   epkgs.ws-butler
   epkgs.yaml-mode
