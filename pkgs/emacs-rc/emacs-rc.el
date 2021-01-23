@@ -149,8 +149,6 @@
     "s" '(:ignore t :which-key "Search")
     "w" '(evil-window-map :which-key "Window")))
 
-(use-package delight)
-
 (use-package magit
   :after general
   :config (setq magit-git-executable git-path)
@@ -171,8 +169,6 @@
   :after (magit evil)
   :config (evil-magit-init))
 
-(use-package diff-mode)
-
 (use-package direnv
   :demand
   :commands direnv-mode
@@ -185,7 +181,7 @@
   :demand
   :commands global-undo-tree-mode
   :delight
-  :after general
+  :after delight general
   :config
   (setq undo-tree-visualizer-timestamps t)
   (global-undo-tree-mode)
@@ -268,7 +264,7 @@
 (use-package company
   :demand
   :commands global-company-mode
-  :after general
+  :after general delight
   :delight
   :general ("C-SPC" 'company-complete)
   :config (global-company-mode))
@@ -284,7 +280,7 @@
   :demand
   :commands company-quickhelp-mode
   :delight
-  :after company
+  :after company delight
   :config
   (setq company-quickhelp-use-propertized-text t
         company-quickhelp-delay 0.2)
@@ -298,6 +294,7 @@
   :demand
   :commands ivy-mode ivy-configure
   :delight
+  :after delight
   :config
   (setq ivy-use-virtual-buffers t
         ivy-format-functions-alist '((t . ivy-format-function-line))
@@ -310,7 +307,7 @@
   :demand
   :commands which-key-mode
   :delight
-  :after general
+  :after general delight
   :config
   (setq which-key-idle-delay 0.25)
   (which-key-mode)
@@ -357,7 +354,7 @@
   :demand
   :commands counsel-mode
   :delight
-  :after ivy
+  :after ivy delight
   :config
   (setq counsel-rg-base-command (concat rg-path
                                         " -M 240 --with-filename --no-heading --line-number --color never %s"))
@@ -396,6 +393,7 @@
   :demand
   :commands projectile-mode
   :delight '(:eval (concat " " (projectile-project-name) " "))
+  :after delight
   :config
   (setq projectile-completion-system 'ivy
         projectile-git-command (git-cmd "ls-files -zco --exclude-standard")
@@ -433,6 +431,7 @@
 (use-package editorconfig
   :demand
   :commands editorconfig-mode
+  :after delight
   :delight
   :config
   (setq editorconfig-exec-path editorconfig-path
@@ -444,6 +443,7 @@
   :demand
   :commands global-aggressive-indent-mode
   :delight
+  :after delight
   :config
   (global-aggressive-indent-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'purescript-mode)
@@ -454,6 +454,7 @@
   :demand
   :commands indent-guide-global-mode
   :delight
+  :after delight
   :config (indent-guide-global-mode))
 
 ;; Enable flycheck for source code checks
@@ -491,7 +492,7 @@
   (require 'smartparens-config)
   (smartparens-global-mode))
 (use-package evil-smartparens
-  :after smartparens
+  :after smartparens delight
   :delight
   :hook (smartparens-enabled . evil-smartparens-mode))
 
@@ -590,8 +591,6 @@
             "w" nil
             "z" nil
             "C-c C-o" #'shr-browse-url))
-
-(use-package org-mu4e)
 
 (use-package web-mode
   :config
@@ -865,7 +864,7 @@
 
 (use-package evil-org
   :delight
-  :after org
+  :after org delight
   :functions evil-org-agenda-set-keys
   :hook ((org-mode . evil-org-mode)
          (evil-org-mode . evil-org-set-key-theme))
@@ -977,6 +976,7 @@
   :demand
   :commands ws-butler-global-mode
   :delight
+  :after delight
   :config (ws-butler-global-mode))
 
 ;; Show git status in the gutter
@@ -984,6 +984,7 @@
   :demand
   :commands global-git-gutter-mode
   :delight
+  :after delight
   :config (global-git-gutter-mode))
 
 ;; Show emojis!
@@ -1018,12 +1019,15 @@
   :hook (prog-mode . rainbow-mode))
 
 (use-package csv-mode)
+(use-package delight)
 (use-package dhall-mode)
+(use-package diff-mode)
 (use-package dockerfile-mode)
 (use-package go-mode)
 (use-package graphql-mode)
 (use-package groovy-mode)
 (use-package haskell-mode)
+(use-package org-mu4e)
 (use-package pkg-info)
 (use-package rust-mode)
 (use-package yaml-mode)
