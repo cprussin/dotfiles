@@ -1014,5 +1014,18 @@
             "C--" #'zoom-frm-out
             "C-*" #'zoom-frm-unzoom))
 
+(use-package rainbow-mode
+  :hook (prog-mode . rainbow-mode))
+
+(use-package csv-mode)
+(use-package dhall-mode)
+(use-package dockerfile-mode)
+(use-package go-mode)
+(use-package graphql-mode)
+(use-package groovy-mode)
+(use-package haskell-mode)
+(use-package rust-mode)
+(use-package yaml-mode)
+
 (provide 'emacs-rc)
 ;;; emacs-rc.el ends here
