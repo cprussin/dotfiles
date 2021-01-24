@@ -11,7 +11,7 @@
   "Face used by ivy for the thing being matched."
   :group 'ivy-faces)
 
-(defun transform-func (cmd)
+(defun emacs-rc--transform-func (cmd)
   "Add keybinding and doc string to CMD."
   (with-temp-buffer
     (let* ((cmdsym (intern cmd))
@@ -24,7 +24,7 @@
       (put-text-property 15 55 'face 'ivy-thing)
       (buffer-string))))
 
-(defun transform-var (variable)
+(defun emacs-rc--transform-var (variable)
   "Add doc string to VARIABLE."
   (with-temp-buffer
     (let ((doc (or (elisp--docstring-first-line

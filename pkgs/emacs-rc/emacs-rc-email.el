@@ -14,13 +14,17 @@
   :demand
   :commands mu4e-action-view-in-browser mu4e~start
   :preface
-  (defun load-mailbox (mbname)
+  (defun emacs-rc--load-mailbox (mbname)
     "Return a lambda to load the inbox for MBNAME."
     `(lambda ()
        (interactive)
        (mu4e~headers-jump-to-maildir (concat "/" ,mbname "/Inbox"))))
 
-  (defun make-mail-context (ctx email &optional folder)
+  (defun emacs-rc--make-mail-context (ctx email &optional folder)
+    "Create a mail context named CTX for address EMAIL.
+
+If optional FOLDER is passed in then use that folder, otherwise use CTX as the
+folder name too."
     (let ((maildir (concat "/" (or folder ctx))))
       (make-mu4e-context
        :name ctx
@@ -33,7 +37,8 @@
                (mu4e-trash-folder . ,(concat maildir "/Archive"))
                (mu4e-refile-folder . ,(concat maildir "/Archive"))))))
   :config
-  (defun view-message-in-external-browser ()
+  (defun emacs-rc--view-message-in-external-browser ()
+    "Open current message in external browser."
     (interactive)
     (mu4e-action-view-in-browser (mu4e-message-at-point)))
 
@@ -53,30 +58,30 @@
         mu4e-change-filenames-when-moving t
         mu4e-headers-include-related nil
         mu4e-mu-binary emacs-rc-mu-path
-        mu4e-contexts `(,(make-mail-context "PrussinNet" "connor@prussin.net")
-                        ,(make-mail-context
+        mu4e-contexts `(,(emacs-rc--make-mail-context "PrussinNet" "connor@prussin.net")
+                        ,(emacs-rc--make-mail-context
                           "BCI Incorporated"
                           "cprussin@bci-incorporated.com"
                           "PrussinNet")
-                        ,(make-mail-context "GMail" "cprussin@gmail.com"))
+                        ,(emacs-rc--make-mail-context "GMail" "cprussin@gmail.com"))
         mu4e-context-policy 'pick-first)
   (mu4e~start)
   :general
   ('(normal) mu4e-headers-mode-map
    "?" nil
-   "O" '(view-message-in-external-browser :which-key "View in browser")
+   "O" '(emacs-rc--view-message-in-external-browser :which-key "View in browser")
    "d" #'mu4e-headers-mark-for-refile)
   ('(normal) mu4e-view-mode-map
    "?" nil
    "C-c C-o" #'mu4e~view-open-attach-from-binding
-   "O" '(view-message-in-external-browser :which-key "View in browser")
+   "O" '(emacs-rc--view-message-in-external-browser :which-key "View in browser")
    "d" #'mu4e-view-mark-for-refile
    "v" nil)
   ('(normal motion emacs)
    :prefix "SPC am"
    "" '(:ignore t :which-key "email")
-   "g" `(,(load-mailbox "GMail") :which-key "GMail")
-   "p" `(,(load-mailbox "PrussinNet") :which-key "PrussinNet"))
+   "g" `(,(emacs-rc--load-mailbox "GMail") :which-key "GMail")
+   "p" `(,(emacs-rc--load-mailbox "PrussinNet") :which-key "PrussinNet"))
   (mu4e-headers-mode-map
    :prefix "SPC m"
    "" '(:ignore t :which-key "Major Mode (Email)")

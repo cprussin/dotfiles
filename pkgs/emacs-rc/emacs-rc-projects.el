@@ -10,7 +10,7 @@
 
 (require 'emacs-rc-keybindings)
 
-(defun git-cmd (args)
+(defun emacs-rc--git-cmd (args)
   "Return a string representing the git command ARGS."
   (concat emacs-rc-git-path " " args))
 
@@ -41,9 +41,9 @@
   :after delight
   :config
   (setq projectile-completion-system 'ivy
-        projectile-git-command (git-cmd "ls-files -zco --exclude-standard")
-        projectile-git-submodule-command (git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
-        projectile-git-ignored-command (git-cmd "ls-files -zcoi --exclude-standard"))
+        projectile-git-command (emacs-rc--git-cmd "ls-files -zco --exclude-standard")
+        projectile-git-submodule-command (emacs-rc--git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
+        projectile-git-ignored-command (emacs-rc--git-cmd "ls-files -zcoi --exclude-standard"))
   (projectile-mode))
 
 ;; And enable counsel-projectile, for better ivy integration

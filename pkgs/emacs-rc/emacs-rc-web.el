@@ -12,7 +12,7 @@
 (require 'emacs-rc-check)
 (require 'emacs-rc-keybindings)
 
-(defun find-in-node-modules (program)
+(defun emacs-rc--find-in-node-modules (program)
   "Find PROGRAM either in node_modules or as a global."
   (let* ((root (locate-dominating-file
                 (or (buffer-file-name) default-directory)
@@ -22,7 +22,7 @@
                                   root)))
     (if (file-executable-p local) local global)))
 
-(defun setup-js-files ()
+(defun emacs-rc--setup-js-files ()
   "Prettify js code, and set relevant bin paths for flycheck."
   (push '("function" . ?λ) prettify-symbols-alist)
   (push '("require" . ?℞) prettify-symbols-alist)
@@ -32,20 +32,21 @@
   (push '("=>" . ?→) prettify-symbols-alist)
   (prettify-symbols-mode)
 
-  (setq-local flycheck-javascript-eslint-executable (find-in-node-modules "eslint")
-              flycheck-css-stylelint-executable (find-in-node-modules "stylelint")))
+  (setq-local flycheck-javascript-eslint-executable (emacs-rc--find-in-node-modules "eslint")
+              flycheck-css-stylelint-executable (emacs-rc--find-in-node-modules "stylelint")))
 
 (use-package js
   :demand
   :after flycheck general
-  :hook ((js-mode . setup-js-files)
-         (js-mode . set-checker-eslint))
+  :hook ((js-mode . emacs-rc--setup-js-files)
+         (js-mode . emacs-rc--set-checker-eslint))
   :general
   ('(normal motion emacs) js-mode-map
    :prefix "SPC m"
    "" '(:ignore t :which-key "Major Mode (JS)"))
   :config
-  (defun set-checker-eslint ()
+  (defun emacs-rc--set-checker-eslint ()
+    "Set `javascript-eslint' as the current flycheck checker."
     (setq-local flycheck-checker 'javascript-eslint))
   (flycheck-add-mode 'css-stylelint 'js-mode)
   (flycheck-add-next-checker 'javascript-eslint '(t . css-stylelint)))
@@ -53,7 +54,7 @@
 (use-package typescript-mode
   :demand
   :mode "\\.tsx\\'"
-  :hook (typescript-mode . setup-js-files)
+  :hook (typescript-mode . emacs-rc--setup-js-files)
   :after general
   :general
   ('(normal motion emacs) typescript-mode-map
@@ -71,9 +72,10 @@
   :after typescript-mode company flycheck
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
-         (tide-mode . set-checker-tide))
+         (tide-mode . emacs-rc--set-checker-tide))
   :config
-  (defun set-checker-tide ()
+  (defun emacs-rc--set-checker-tide ()
+    "Set `typescript-tide' or `tsx-tide' as the current flycheck checker."
     (setq-local flycheck-checker (if (string-equal "tsx" (file-name-extension buffer-file-name))
                                      'tsx-tide
                                    'typescript-tide)))
@@ -83,12 +85,13 @@
 
 (use-package jest
   :after general (:or js typescript-mode)
-  :hook ((js-mode typescript-mode) . use-jest-from-node-modules)
+  :hook ((js-mode typescript-mode) . emacs-rc--use-jest-from-node-modules)
   :commands jest-popup
   :config
+  (defun emacs-rc--use-jest-from-node-modules ()
+    "Set the jest to use ./.node_modules/.bin/jest if such a path exists."
+    (setq-local jest-executable (emacs-rc--find-in-node-modules "jest")))
   (setq jest-arguments '("--colors"))
-  (defun use-jest-from-node-modules ()
-    (setq-local jest-executable (find-in-node-modules "jest")))
   :general
   ('(normal motion emacs) (js-mode-map typescript-mode-map)
    "SPC m j" '(jest-popup :which-key "Jest")))

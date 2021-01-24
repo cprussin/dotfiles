@@ -14,9 +14,10 @@
 (use-package org
   :demand
   :after emojify
-  :hook (org-mode . prettify-org)
+  :hook (org-mode . emacs-rc--prettify-org)
   :config
-  (defun prettify-org ()
+  (defun emacs-rc--prettify-org ()
+    "Make `org-mode' prettier."
     (push '("[ ]" . "☐") prettify-symbols-alist)
     (push '("[X]" . "☑") prettify-symbols-alist)
     (push '("[-]" . "❍") prettify-symbols-alist)

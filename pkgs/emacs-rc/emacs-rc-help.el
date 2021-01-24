@@ -27,8 +27,8 @@
 ;; Turn on helpful for more helpful description buffers
 (use-package helpful
   :config
-  (ivy-configure 'helpful-callable :display-transformer-fn #'transform-func)
-  (ivy-configure 'helpful-variable :display-transformer-fn #'transform-var)
+  (ivy-configure 'helpful-callable :display-transformer-fn #'emacs-rc--transform-func)
+  (ivy-configure 'helpful-variable :display-transformer-fn #'emacs-rc--transform-var)
   :general ('(normal motion emacs)
             :prefix "SPC h"
             "p" '(helpful-at-point
