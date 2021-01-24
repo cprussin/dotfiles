@@ -12,7 +12,7 @@
 
 (use-package magit
   :after general
-  :config (setq magit-git-executable git-path)
+  :config (setq magit-git-executable emacs-rc-git-path)
   :general
   (magit-mode-map
    "SPC" nil

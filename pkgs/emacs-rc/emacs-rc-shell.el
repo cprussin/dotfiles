@@ -10,7 +10,7 @@
 
 (require 'emacs-rc-custom)
 
-(setq shell-file-name shell-path)
+(setq shell-file-name emacs-rc-shell-path)
 
 (use-package shell
   :hook (shell-mode . ansi-color-for-comint-mode-on)

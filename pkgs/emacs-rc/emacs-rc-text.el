@@ -20,7 +20,7 @@
   (show-paren-mode))
 
 (use-package browse-url
-  :config (setq browse-url-generic-program browse-path
+  :config (setq browse-url-generic-program emacs-rc-browse-path
                 browse-url-browser-function 'browse-url-generic))
 
 (use-package hl-line
@@ -96,7 +96,7 @@
   :demand
   :commands global-emojify-mode global-emojify-mode-line-mode
   :config
-  (setq emojify-emojis-dir emoji-sets-path
+  (setq emojify-emojis-dir emacs-rc-emoji-sets-path
         emojify-emoji-set "emojione")
   (global-emojify-mode)
   (global-emojify-mode-line-mode))

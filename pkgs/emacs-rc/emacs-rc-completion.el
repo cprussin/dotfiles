@@ -61,7 +61,7 @@
   :delight
   :after ivy delight
   :config
-  (setq counsel-rg-base-command (concat rg-path
+  (setq counsel-rg-base-command (concat emacs-rc-rg-path
                                         " -M 240 --with-filename --no-heading --line-number --color never %s"))
   (ivy-configure 'counsel-M-x :display-transformer-fn #'transform-func)
   (counsel-mode)

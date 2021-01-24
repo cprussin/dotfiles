@@ -29,8 +29,8 @@
 
 (use-package frame
   :config (add-to-list 'default-frame-alist
-                       `(font . ,(concat font-face "-"
-                                         (number-to-string font-size)))))
+                       `(font . ,(concat emacs-rc-font-face "-"
+                                         (number-to-string emacs-rc-font-size)))))
 
 (use-package menu-bar
   :config (menu-bar-mode -1))

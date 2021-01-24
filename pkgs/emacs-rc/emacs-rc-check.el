@@ -26,7 +26,7 @@
 ;; Turn on spell checking
 (use-package flyspell
   :config (setq flyspell-issue-message-flag nil
-                ispell-program-name ispell-path)
+                ispell-program-name emacs-rc-ispell-path)
   :hook ((prog-mode . flyspell-prog-mode)
          (text-mode . flyspell-mode)))
 

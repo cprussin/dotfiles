@@ -12,7 +12,7 @@
 
 (defun git-cmd (args)
   "Return a string representing the git command ARGS."
-  (concat git-path " " args))
+  (concat emacs-rc-git-path " " args))
 
 (use-package direnv
   :demand
@@ -29,7 +29,7 @@
   :after delight
   :delight
   :config
-  (setq editorconfig-exec-path editorconfig-path
+  (setq editorconfig-exec-path emacs-rc-editorconfig-path
         editorconfig-get-properties-function 'editorconfig-get-properties-from-exec)
   (editorconfig-mode))
 

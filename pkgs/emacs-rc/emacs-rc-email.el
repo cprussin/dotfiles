@@ -41,7 +41,7 @@
         user-full-name "Connor Prussin"
         message-sendmail-f-is-evil 't
         message-send-mail-function 'message-send-mail-with-sendmail
-        sendmail-program msmtp-path
+        sendmail-program emacs-rc-msmtp-path
         mu4e-completing-read-function 'completing-read
         mu4e-compose-format-flowed t
         visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)
@@ -52,7 +52,7 @@
         mu4e-hide-index-messages t
         mu4e-change-filenames-when-moving t
         mu4e-headers-include-related nil
-        mu4e-mu-binary mu-path
+        mu4e-mu-binary emacs-rc-mu-path
         mu4e-contexts `(,(make-mail-context "PrussinNet" "connor@prussin.net")
                         ,(make-mail-context
                           "BCI Incorporated"

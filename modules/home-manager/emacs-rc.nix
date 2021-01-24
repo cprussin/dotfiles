@@ -73,17 +73,17 @@ in
   config = lib.mkIf cfg.enable {
     home.file = {
       ".emacs.d/init.el".text = ''
-        (setq git-path "${cfg.git}"
-              rg-path "${cfg.rg}"
-              browse-path "${cfg.browse}"
-              msmtp-path "${cfg.msmtp}"
-              shell-path "${cfg.shell}"
-              ispell-path "${cfg.ispell}"
-              mu-path "${cfg.mu}"
-              editorconfig-path "${cfg.editorconfig}"
-              emoji-sets-path "${cfg.emojiSets}"
-              font-face "${cfg.font.face}"
-              font-size ${toString cfg.font.size})
+        (setq emacs-rc-git-path "${cfg.git}"
+              emacs-rc-rg-path "${cfg.rg}"
+              emacs-rc-browse-path "${cfg.browse}"
+              emacs-rc-msmtp-path "${cfg.msmtp}"
+              emacs-rc-shell-path "${cfg.shell}"
+              emacs-rc-ispell-path "${cfg.ispell}"
+              emacs-rc-mu-path "${cfg.mu}"
+              emacs-rc-editorconfig-path "${cfg.editorconfig}"
+              emacs-rc-emoji-sets-path "${cfg.emojiSets}"
+              emacs-rc-font-face "${cfg.font.face}"
+              emacs-rc-font-size ${toString cfg.font.size})
 
         (require 'emacs-rc)
       '';

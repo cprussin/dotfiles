@@ -12,15 +12,15 @@ let
   entry-point = self: self.writeText "init.el" ''
     ${self.lib.optionalString (!prod) "(add-to-list 'load-path \"${toString ./.}\")"}
 
-    (setq git-path "${self.git}/bin/git"
-          rg-path "${self.ripgrep}/bin/rg"
-          browse-path "${self.chromium}/bin/chromium"
-          msmtp-path "${self.msmtp}/bin/msmtp"
-          shell-path "${self.stdenv.shell}"
-          ispell-path "${self.ispell}/bin/ispell"
-          mu-path "${self.mu}/bin/mu"
-          editorconfig-path "${self.editorconfig-core-c}/bin/editorconfig"
-          emoji-sets-path "${emoji-sets self}")
+    (setq emacs-rc-git-path "${self.git}/bin/git"
+          emacs-rc-rg-path "${self.ripgrep}/bin/rg"
+          emacs-rc-browse-path "${self.chromium}/bin/chromium"
+          emacs-rc-msmtp-path "${self.msmtp}/bin/msmtp"
+          emacs-rc-shell-path "${self.stdenv.shell}"
+          emacs-rc-ispell-path "${self.ispell}/bin/ispell"
+          emacs-rc-mu-path "${self.mu}/bin/mu"
+          emacs-rc-editorconfig-path "${self.editorconfig-core-c}/bin/editorconfig"
+          emacs-rc-emoji-sets-path "${emoji-sets self}")
 
     (require 'emacs-rc)
   '';
