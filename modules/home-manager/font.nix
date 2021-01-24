@@ -42,6 +42,7 @@ in
         font-size = "${toString cfg.size}pt";
       };
       imv.overlayFont = { inherit (cfg) face size; };
+      emacs.emacs-rc.font = { inherit (cfg) face size; };
     };
 
     wayland.windowManager.sway.config.fonts = [ "${cfg.face} ${toString cfg.size}" ];
