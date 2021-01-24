@@ -1,5 +1,4 @@
 * Tasks
-** TODO Modularize emacs-rc.el
 ** TODO Fix crypto & mount systemd units
 ** TODO Remove secrets from nixops state file
 ** TODO Nixify/containerize/etc prussin.net [3/9]
@@ -40,6 +39,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Modularize emacs-rc.el
+   CLOSED: [2021-01-24 Sun 14:24]
 ** DONE Manage printers
    CLOSED: [2021-01-18 Mon 13:50]
 ** DONE Fix TODO items :user:
