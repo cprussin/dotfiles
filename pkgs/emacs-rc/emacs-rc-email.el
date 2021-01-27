@@ -9,6 +9,7 @@
 (eval-when-compile (require 'use-package))
 
 (require 'emacs-rc-custom)
+(require 'emacs-rc-keybindings)
 
 (use-package mu4e
   :demand
@@ -67,25 +68,33 @@ folder name too."
         mu4e-context-policy 'pick-first)
   (mu4e~start)
   :general
-  ('(normal) mu4e-headers-mode-map
+  ('(normal motion) mu4e-headers-mode-map
    "?" nil
    "O" '(emacs-rc--view-message-in-external-browser :which-key "View in browser")
    "d" #'mu4e-headers-mark-for-refile)
-  ('(normal) mu4e-view-mode-map
+  ('(normal motion) mu4e-headers-mode-map
+   :prefix "SPC m"
+   "" '(:ignore t :which-key "Major Mode (EMail)")
+   "O" '(emacs-rc--view-message-in-external-browser :which-key "View in browser")
+   "d" '(mu4e-headers-mark-for-refile :which-key "Archive message")
+   "s" '(mu4e-mark-execute-all :which-key "Save changes"))
+  ('(normal motion) mu4e-view-mode-map
    "?" nil
    "C-c C-o" #'mu4e~view-open-attach-from-binding
    "O" '(emacs-rc--view-message-in-external-browser :which-key "View in browser")
    "d" #'mu4e-view-mark-for-refile
    "v" nil)
+  ('(normal motion) mu4e-view-mode-map
+   :prefix "SPC m"
+   "" '(:ignore t :which-key "Major Mode (EMail)")
+   "o" '(mu4e~view-open-attach-from-binding :which-key "Open attachment")
+   "O" '(emacs-rc--view-message-in-external-browser :which-key "View in browser")
+   "d" '(mu4e-view-mark-for-refile :which-key "Archive Message"))
   ('(normal motion emacs)
-   :prefix "SPC am"
+   :prefix "SPC a m"
    "" '(:ignore t :which-key "email")
    "g" `(,(emacs-rc--load-mailbox "GMail") :which-key "GMail")
-   "p" `(,(emacs-rc--load-mailbox "PrussinNet") :which-key "PrussinNet"))
-  (mu4e-headers-mode-map
-   :prefix "SPC m"
-   "" '(:ignore t :which-key "Major Mode (Email)")
-   "s" '(mu4e-mark-execute-all :which-key "Save changes")))
+   "p" `(,(emacs-rc--load-mailbox "PrussinNet") :which-key "PrussinNet")))
 
 (use-package shr
   :demand
