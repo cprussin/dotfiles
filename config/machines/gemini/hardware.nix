@@ -24,8 +24,8 @@ in
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
       luks.devices.crypt-nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987 = {
         device = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987";
-        keyFile = "/key/crypt/lyra/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987/key";
-        header = "/key/crypt/lyra/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987/header";
+        keyFile = "/key/crypt/gemini/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987/key";
+        header = "/key/crypt/gemini/nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987/header";
       };
     };
   };
