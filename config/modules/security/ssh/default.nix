@@ -9,7 +9,7 @@
         checkHostIP = false;
         hostname = "crux.prussin.net";
       };
-      "gemini orion" = {
+      "lyra gemini orion" = {
         checkHostIP = false;
       };
       "prussin.net *.bci-incorporated.com" = {
