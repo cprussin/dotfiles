@@ -39,6 +39,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Redshift
+   CLOSED: [2021-01-31 Sun 15:08]
 ** DONE Modularize emacs-rc.el
    CLOSED: [2021-01-24 Sun 14:24]
 ** DONE Manage printers
