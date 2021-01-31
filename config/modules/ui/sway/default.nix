@@ -28,7 +28,7 @@ in
         bars = [ ];
 
         output = {
-          eDP-1.pos = "0,0 scale 1";
+          eDP-1.pos = lib.mkIf (!config.hardware.video.hidpi.enable) "0,0 scale 1";
           "*".bg = "${./background.png} fill";
         };
 
