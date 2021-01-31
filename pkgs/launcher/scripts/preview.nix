@@ -8,7 +8,6 @@
 , python3Packages
 , poppler_utils
 , kitty
-, imagemagick
 , ghostscript
 , ffmpeg
 }:
@@ -24,7 +23,7 @@ writeShellScriptBin "preview" ''
   eyeD3=${python3Packages.eyeD3}/bin/eyeD3
   pdftotext=${poppler_utils}/bin/pdftotext
   kitty=${kitty}/bin/kitty
-  convert=${imagemagick}/bin/convert
+  gs=${ghostscript}/bin/gs
   ffmpeg=${ffmpeg}/bin/ffmpeg
 
   lineLimit=100
@@ -44,7 +43,7 @@ writeShellScriptBin "preview" ''
   then
     case $($file --mime-type "$1" | $sed 's/.*: //') in
       application/gzip) $tar ztvf "$1" | limit ;;
-      application/pdf) PATH=$PATH:${ghostscript}/bin $convert -quiet -density 100 "$1"[0] jpeg:- | $showimg ;;
+      application/pdf) $gs -q -sOutputFile=- -sDEVICE=jpeg -dNOPAUSE -dBATCH -dFirstPage=1 -dLastPage=1 -dJPEG=90 -r300 "$1" | $showimg ;;
       audio/*) $eyeD3 "$1" ;;
       image/*) $showimg "$1" ;;
       video/*) $ffmpeg -v 0 -ss 00:00:15 -i "$1" -vframes 1 -q:v 2 -f singlejpeg - | $showimg ;;
