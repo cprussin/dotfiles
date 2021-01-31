@@ -1,11 +1,23 @@
 { pkgs, lib, config, ... }:
 let
   public-key = builtins.extraBuiltins.publicSshKey pkgs "connor@prussin.net";
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
 in
 {
   options.enableSshdAtBoot = lib.mkEnableOption "SSH daemon auto-start at boot";
 
   config = {
+    deployment.keys = {
+      sshHostED25519Key = {
+        text = passwords.get-full-password "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}";
+        destDir = "/secrets";
+      };
+      sshHostRSAKey = {
+        text = passwords.get-full-password "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}";
+        destDir = "/secrets";
+      };
+    };
+
     services.openssh = {
       enable = true;
       passwordAuthentication = false;
@@ -14,11 +26,11 @@ in
 
       hostKeys = [
         {
-          path = "/secrets/ssh_host_ed25519_key";
+          path = config.deployment.keys.sshHostED25519Key.path;
           type = "ed25519";
         }
         {
-          path = "/secrets/ssh_host_rsa_key";
+          path = config.deployment.keys.sshHostRSAKey.path;
           type = "rsa";
           bits = 4096;
         }
