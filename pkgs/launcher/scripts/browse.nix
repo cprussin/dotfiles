@@ -10,6 +10,8 @@ writeShellScriptBin "browse" ''
   browser="brave"
   target=""
 
+  chromeflags="--enable-features=UseOzonePlatform --ozone-platform=wayland"
+
   while $test $# -gt 0
   do
     case "$1" in
@@ -33,9 +35,9 @@ writeShellScriptBin "browse" ''
   done
 
   case $browser in
-    brave) exec $brave --app=$target >/dev/null 2>&1 ;;
-    chromium) exec $chromium --app=$target >/dev/null 2>&1 ;;
-    chrome) exec $chrome --app=$target >/dev/null 2>&1 ;;
-    firefox) exec $firefox $target >/dev/null 2>&1 ;;
+    brave) exec $brave $chromeflags --app=$target >/dev/null 2>&1 ;;
+    chromium) exec $chromium $chromeflags --app=$target >/dev/null 2>&1 ;;
+    chrome) exec $chrome $chromeflags --app=$target >/dev/null 2>&1 ;;
+    firefox) MOZ_ENABLE_WAYLAND=1 exec $firefox $target >/dev/null 2>&1 ;;
   esac
 ''
