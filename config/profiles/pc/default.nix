@@ -25,6 +25,7 @@
     ../../modules/system/devices/cdrom
     ../../modules/system/devices/dialout
     ../../modules/system/devices/printers
+    ../../modules/system/devices/redshift
     ../../modules/system/devices/scanners
     ../../modules/system/docker
 
