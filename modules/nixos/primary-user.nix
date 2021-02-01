@@ -26,7 +26,7 @@ in
 
   config = lib.mkIf (cfg.name != null) {
     deployment.keys.primary-user-password = {
-      text = passwords.get-hashed-user-password "${config.primary-user.name}@${config.networking.hostName}";
+      keyCommand = passwords.getHashedUserPassword "Infrastructure/login/${config.primary-user.name}@${config.networking.hostName}";
       destDir = "/secrets";
     };
     primary-user = {

@@ -2,15 +2,13 @@
 let
   pkgs = import nixpkgs { };
 
-  passwords = pkgs.callPackage ../../lib/passwords.nix { };
-
   templateOptions = config: config // {
     id = builtins.replaceStrings [ " " "'" ] [ "_" "" ] (pkgs.lib.toLower config.name);
     secrets = {
-      wifi = passwords.get-password "Wifi/Centar";
-      ap = passwords.get-password-field "Infrastructure/IoT/${config.name}" "AP";
-      api = passwords.get-password-field "Infrastructure/IoT/${config.name}" "API";
-      ota = passwords.get-password-field "Infrastructure/IoT/${config.name}" "OTA";
+      wifi = builtins.extraBuiltins.getPasswordValue pkgs "Wifi/Centar";
+      ap = builtins.extraBuiltins.getPasswordFieldValue pkgs "Infrastructure/IoT/${config.name}" "AP";
+      api = builtins.extraBuiltins.getPasswordFieldValue pkgs "Infrastructure/IoT/${config.name}" "API";
+      ota = builtins.extraBuiltins.getPasswordFieldValue pkgs "Infrastructure/IoT/${config.name}" "OTA";
     };
   };
 

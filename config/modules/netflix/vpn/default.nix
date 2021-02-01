@@ -5,30 +5,27 @@ in
 {
   deployment.keys = {
     netflix-vpn-user-pass = {
-      text = builtins.concatStringsSep "\n" [
-        (passwords.get-password-field "Netflix/Domain" "Username")
-        (passwords.get-password "Netflix/Domain")
-      ];
+      keyCommand = passwords.getUsernamePasswordFile "Netflix/Domain";
       destDir = "/secrets";
     };
 
     netflix-vpn-ca = {
-      text = passwords.get-full-password "Netflix/VPN/ca";
+      keyCommand = passwords.getFullPassword "Netflix/VPN/ca";
       destDir = "/secrets";
     };
 
     netflix-vpn-tls-auth = {
-      text = passwords.get-full-password "Netflix/VPN/tls-auth";
+      keyCommand = passwords.getFullPassword "Netflix/VPN/tls-auth";
       destDir = "/secrets";
     };
 
     netflix-vpn-cert = {
-      text = passwords.get-full-password "Netflix/VPN/cert";
+      keyCommand = passwords.getFullPassword "Netflix/VPN/cert";
       destDir = "/secrets";
     };
 
     netflix-vpn-key = {
-      text = passwords.get-full-password "Netflix/VPN/key";
+      keyCommand = passwords.getFullPassword "Netflix/VPN/key";
       destDir = "/secrets";
     };
   };

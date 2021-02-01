@@ -26,7 +26,7 @@ let
 
   extraBuiltinsOptions = pkgs: mkExtraBuiltinsCli pkgs {
     plugin-files = "${pkgs.nix-plugins}/lib/nix/plugins/libnix-extra-builtins.so";
-    extra-builtins-file = ./extra-builtins.nix;
+    extra-builtins-file = "$(nix-build --no-out-link)/extra-builtins.nix";
   };
 
   nixops-wrapped = pkgs: pkgs.writeShellScriptBin "nixops" ''
@@ -48,10 +48,15 @@ let
     };
   };
 
+  password-utils-overlay = self: _: {
+    passwordUtils = (self.callPackage ./lib/passwords.nix { }).passwordUtils;
+  };
+
   pkgs = import nixpkgs {
     overlays = [
       niv-overlay
       nixops-overlay
+      password-utils-overlay
       (import ./overlays/nix-linter)
       (import ./pkgs/esphome/overlay.nix)
     ];
@@ -89,6 +94,7 @@ pkgs.mkShell {
     pkgs.git
     pkgs.niv
     pkgs.nixops
+    pkgs.passwordUtils
     lint
     format
     deploy

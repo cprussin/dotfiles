@@ -6,12 +6,12 @@ let
 
   keys =
     lib.mapAttrs'
-      (_: v: lib.nameValuePair "${v.filenameBase}-key" { text = v.key; })
+      (_: v: lib.nameValuePair "${v.filenameBase}-key" { keyCommand = v.key; })
       cfg;
 
   headers =
     lib.mapAttrs'
-      (_: v: lib.nameValuePair "${v.filenameBase}-header" { text = v.header; })
+      (_: v: lib.nameValuePair "${v.filenameBase}-header" { keyCommand = v.header; })
       cfg;
 
   mkUnlockScript = drive: filenameBase: ''
@@ -43,13 +43,13 @@ in
           { name, ... }: {
             options = {
               key = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.listOf lib.types.str;
                 description = ''
                   The base64-encoded contents of the luks key for this drive
                 '';
               };
               header = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.listOf lib.types.str;
                 description = ''
                   The base64-encoded contents of the luks header for this drive
                 '';

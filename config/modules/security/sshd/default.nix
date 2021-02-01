@@ -9,11 +9,11 @@ in
   config = {
     deployment.keys = {
       sshHostED25519Key = {
-        text = passwords.get-full-password "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}";
+        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}";
         destDir = "/secrets";
       };
       sshHostRSAKey = {
-        text = passwords.get-full-password "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}";
+        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}";
         destDir = "/secrets";
       };
     };
