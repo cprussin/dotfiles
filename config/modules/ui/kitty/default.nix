@@ -15,6 +15,11 @@
         open_url_with = "${pkgs.launcher}/bin/browse";
         remember_window_size = "no";
       };
+      keybindings = {
+        "ctrl+plus" = "change_font_size all +1.0";
+        "ctrl+minus" = "change_font_size all -1.0";
+        "ctrl+equal" = "change_font_size all 0";
+      };
     };
   };
 }
