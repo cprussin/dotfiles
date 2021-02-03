@@ -61,6 +61,7 @@ in
       "tank-fast/persisted-state/BitwigStudio".mountpoint = "/home/cprussin/.BitwigStudio";
       "tank-fast/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
       "tank-fast/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
+      "tank-fast/persisted-state/alsa".mountpoint = "/var/lib/alsa";
       "tank-fast/persisted-state/chromium".mountpoint = "/home/cprussin/.config/chromium";
       "tank-fast/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
       "tank-fast/persisted-state/mu".mountpoint = "/home/cprussin/.cache/mu";

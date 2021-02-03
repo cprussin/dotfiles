@@ -22,6 +22,7 @@
 
     ../../modules/system/dbus
     ../../modules/system/devices/android
+    ../../modules/system/devices/audio
     ../../modules/system/devices/cdrom
     ../../modules/system/devices/dialout
     ../../modules/system/devices/printers

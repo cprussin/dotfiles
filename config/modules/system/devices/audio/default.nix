@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  sound.enable = true;
+}
