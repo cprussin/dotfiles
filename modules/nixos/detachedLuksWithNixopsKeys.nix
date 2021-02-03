@@ -79,7 +79,6 @@ in
         drive: opts:
           lib.nameValuePair "unlock-${opts.filenameBase}" {
             description = "Unlock encrypted device ${drive}.";
-            wantedBy = [ "zfs.target" ];
             after = [
               "${opts.filenameBase}-key-key.service"
               "${opts.filenameBase}-header-key.service"
@@ -90,6 +89,7 @@ in
             ];
             script = mkUnlockScript drive opts.filenameBase;
             serviceConfig = {
+              ExecStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
               RemainAfterExit = true;
               Type = "oneshot";
             };

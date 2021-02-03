@@ -1,5 +1,4 @@
 * Tasks
-** TODO Fix crypto & mount systemd units
 ** TODO Nixify/containerize/etc prussin.net [3/9]
    - [X] Web
    - [X] Identity (openldap)
@@ -38,6 +37,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Fix crypto & mount systemd units
+   CLOSED: [2021-02-03 Wed 23:02]
 ** DONE Remove secrets from nixops state file
    CLOSED: [2021-02-01 Mon 13:36]
 ** DONE Redshift
