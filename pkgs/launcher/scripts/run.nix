@@ -16,11 +16,11 @@ writeShellScriptBin "run" ''
   browsePrefixes='http://|go/|localhost|chrome://'
   browseRegex='([0-9]{1,3}\.){3}[0-9]{1,3}'
 
-  resolvedPath="$(eval $echo "$@" 2>/dev/null)"
+  resolvedPath="$(eval $echo \"$@\" 2>/dev/null)"
 
-  if $test -x "$HOME/.launcher-apps/$1"
+  if $test -x "$HOME/.launcher-apps/''${1/ */}"
   then
-    exec "$HOME/.launcher-apps/$@"
+    exec $HOME/.launcher-apps/$@
   elif $test "$resolvedPath" -a -e "$resolvedPath"
   then
     exec $open "$resolvedPath"

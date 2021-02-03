@@ -53,10 +53,10 @@ writeShellScriptBin "launch" ''
 
   if $test "$selection"
   then
-    exec $* $run "$selection"
+    exec $* $run \"$selection\"
   elif $test "$query"
   then
-    exec $* $run "$query"
+    exec $* $run \"$query\"
   else
     echo "No selection!"
     exit 1

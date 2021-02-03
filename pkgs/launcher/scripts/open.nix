@@ -22,7 +22,7 @@ writeShellScriptBin "open" ''
   mpv=${mpv}/bin/mpv
   emacsclient=${emacs}/bin/emacsclient
 
-  if $test ! -e "$(eval echo $1)" -a "$1" != "*scratch*"
+  if $test ! -e "$(eval echo \"$1\")" -a "$1" != "*scratch*"
   then
     $echo "$1 is not a file"
     exit 1
