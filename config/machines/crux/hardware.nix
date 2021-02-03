@@ -61,9 +61,6 @@ in
         header = "/key/crypt/nvme-WDS500G3X0C-00SJG0_2017A3806951/header";
       };
     };
-    postBootCommands = ''
-      install -m 0700 -g users -o cprussin -d /home/cprussin/.config
-    '';
   };
 
   fileSystems = {
