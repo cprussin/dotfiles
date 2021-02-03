@@ -33,7 +33,7 @@ let
     cmd=$1
     shift
 
-    export NIX_PATH="nixpkgs=${nixpkgs}:nixpkgs-overlays=$(nix-build --no-out-link)/overlays"
+    export NIX_PATH="nixpkgs=${nixpkgs}"
 
     exec ${nixops-built}/bin/nixops $cmd ${extraBuiltinsOptions pkgs} "$@"
   '';
