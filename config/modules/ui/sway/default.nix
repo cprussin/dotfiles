@@ -91,6 +91,7 @@ in
           "${modifier}+Page_Down" = "exec ${launcher-apps.volume} down";
           "XF86AudioMute" = "exec ${launcher-apps.volume} toggle";
           "${modifier}+End" = "exec ${launcher-apps.volume} toggle";
+          "XF86AudioMicMute" = "exec ${launcher-apps.mic-volume} toggle";
 
           "XF86MonBrightnessUp" = "exec ${launcher-apps.brightness} up";
           "XF86Launch6" = "exec ${launcher-apps.brightness} up";

@@ -39,6 +39,7 @@ in
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
         lock = pkgs.callPackage ./apps/lock.nix { };
         makemkv = "${pkgs.makemkv}/bin/makemkv";
+        mic-volume = pkgs.callPackage ./apps/mic-volume.nix { };
         mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
         netflix = mkWebApp "netflix" "http://www.netflix.com";
         netflix-api = pkgs.callPackage ./apps/netflix-api.nix { };
