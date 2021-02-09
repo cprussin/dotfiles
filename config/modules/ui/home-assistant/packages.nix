@@ -20,15 +20,19 @@
   ps.mutagen
   ps.netdisco
   ps.paho-mqtt
+  ps.pillow
   ps.pyipp
   ps.pymetno
   ps.pynacl
+  ps.pyotp
   ps.pysmartapp
   ps.python-ecobee-api
   ps.queueman
   ps.rachiopy
   ps.ring_doorbell
+  ps.scapy
   ps.semantic-version
   ps.spotipy
+  ps.sqlalchemy
   ps.zeroconf
 ]
