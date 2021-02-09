@@ -10,7 +10,7 @@ writeShellScriptBin "browse" ''
   browser="brave"
   target=""
 
-  chromeflags="--enable-features=UseOzonePlatform --ozone-platform=wayland"
+  chromeflags=
 
   while $test $# -gt 0
   do
