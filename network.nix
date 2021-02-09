@@ -6,6 +6,7 @@ let
       inherit targetHost;
       targetUser = config.primary-user.name;
       sshOptions = [ "-A" ];
+      provisionSSHKey = false;
     };
     imports = [ "${toString machineDir}/${targetHost}" ];
   };
