@@ -14,6 +14,7 @@
       Centar = {
         pskRaw = builtins.extraBuiltins.wpaPassphrase pkgs "Centar";
         priority = 1;
+        extraConfig = "bgscan=\"simple:30:-70:3600\"";
       };
       CentarPhone = {
         pskRaw = builtins.extraBuiltins.wpaPassphrase pkgs "CentarPhone";
