@@ -15,6 +15,6 @@ writeShellScript name ''
   then
     exec ${webappForUser "cprussin@netflix.com"}
   else
-    exec ${webappForUser "cprussin@gmail.com"}
+    exec ${webappForUser "connor@prussin.net"}
   fi
 ''
