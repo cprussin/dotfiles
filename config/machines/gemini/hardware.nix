@@ -44,7 +44,6 @@ in
     zfs.mkZfsFileSystems {
       "tank/nix".mountpoint = "/nix";
       "tank/data/Camera".mountpoint = "/home/cprussin/Camera";
-      "tank/data/Mail".mountpoint = "/home/cprussin/Mail";
       "tank/data/Notes".mountpoint = "/home/cprussin/Notes";
       "tank/data/Projects".mountpoint = "/home/cprussin/Projects";
       "tank/data/Scratch".mountpoint = "/home/cprussin/Scratch";

@@ -54,7 +54,6 @@ in
       "tank-big/Temp".mountpoint = "/home/cprussin/Temp";
       "tank-fast/nix".mountpoint = "/nix";
       "tank-fast/data/Camera".mountpoint = "/home/cprussin/Camera";
-      "tank-fast/data/Mail".mountpoint = "/home/cprussin/Mail";
       "tank-fast/data/Notes".mountpoint = "/home/cprussin/Notes";
       "tank-fast/data/Projects".mountpoint = "/home/cprussin/Projects";
       "tank-fast/data/Scratch".mountpoint = "/home/cprussin/Scratch";

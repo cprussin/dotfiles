@@ -12,7 +12,6 @@
   (require 'emacs-rc-check)
   (require 'emacs-rc-completion)
   (require 'emacs-rc-custom)
-  (require 'emacs-rc-email)
   (require 'emacs-rc-files)
   (require 'emacs-rc-git)
   (require 'emacs-rc-help)

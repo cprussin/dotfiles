@@ -4,7 +4,6 @@
   imports = [
     ../physical-machine
 
-    ../../modules/data/email
     ../../modules/data/git
     ../../modules/data/syncthing
 

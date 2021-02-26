@@ -1,18 +1,4 @@
 * Tasks
-** TODO Nixify/containerize/etc prussin.net [3/9]
-   - [X] Web
-   - [X] Identity (openldap)
-   - [X] SSL (certbot/acme)
-   - [ ] Authentication (dovecot sasl)
-   - [ ] Calendar / Contacts
-   - [ ] DNS caching (named)
-   - [ ] Email (postfix/dovecot/spamassassin/opendkim)
-   - [ ] Chat / SIP?
-   - [ ] Backup system
-     - [ ] Local backup
-     - [ ] Local filing folder scans
-     - [ ] Offsite (AWS glacier?) data backup
-     - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 ** TODO Fix search for special characters
 ** TODO Replace nix-linter custom package with simple haskellPackages overlay
 ** TODO Make zfs configuration more declarative somehow
@@ -37,6 +23,21 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Nixify/containerize/etc prussin.net [3/9]
+   CLOSED: [2021-02-25 Thu 21:35]
+   - [X] Web
+   - [X] Identity (openldap)
+   - [X] SSL (certbot/acme)
+   - [ ] Authentication (dovecot sasl)
+   - [ ] Calendar / Contacts
+   - [ ] DNS caching (named)
+   - [ ] Email (postfix/dovecot/spamassassin/opendkim)
+   - [ ] Chat / SIP?
+   - [ ] Backup system
+     - [ ] Local backup
+     - [ ] Local filing folder scans
+     - [ ] Offsite (AWS glacier?) data backup
+     - [ ] Offsite (Bank?) document/pw safe/gpg key storage
 ** DONE Fix crypto & mount systemd units
    CLOSED: [2021-02-03 Wed 23:02]
 ** DONE Remove secrets from nixops state file

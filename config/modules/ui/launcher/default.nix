@@ -6,6 +6,8 @@ let
   mkTerminalApp = name: mkTerminalApp' name name;
   mkModal = pkgs.callPackage ./utils/mkModal.nix { inherit config; };
   mkConfirmationDialog = pkgs.callPackage ./utils/mkConfirmationDialog.nix { inherit config; };
+
+  email = mkGoogleApp "gmail" "https://mail.google.com?authuser=@user@";
 in
 {
   primary-user.home-manager = {
@@ -14,6 +16,8 @@ in
     programs.launcher = {
       enable = true;
       apps = {
+        inherit email;
+
         agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
         amazon = mkWebApp "amazon" "https://www.amazon.com/";
         aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
@@ -27,12 +31,11 @@ in
         crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
         dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
         emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
-        email = pkgs.callPackage ./apps/email.nix { };
         firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
         gdrive = mkGoogleApp "gdrive" "https://drive.google.com?authuser=@user@";
         gimp = "${pkgs.gimp}/bin/gimp";
         github = mkWebApp "github" "https://github.com/";
-        gmail = mkGoogleApp "gmail" "https://mail.google.com?authuser=@user@";
+        gmail = email;
         home = mkWebApp "home" "https://720-natoma-drive.prussin.net";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
         insecure = pkgs.writeShellScript "secure" "sudo ${config.security.wrapperDir}/umount /secure";
@@ -60,7 +63,6 @@ in
         sms = mkWebApp "sms" "https://messages.google.com/web/conversations";
         sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/11yYp4Ma5t7wJxSBZQYyVcO7FlWuG6cEOJrPXcQCv3AI";
         steam = "${pkgs.steam}/bin/steam";
-        syncmail = pkgs.callPackage ./apps/syncmail.nix { };
         syncthing = mkWebApp "syncthing" "http://localhost:8384";
         us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
         volume = pkgs.callPackage ./apps/volume.nix { };
