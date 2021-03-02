@@ -7,6 +7,7 @@
     ./plex.nix
     ./dynamic-dns.nix
     ./acme.nix
+    ./library.nix
     ../../profiles/physical-machine
     ../../profiles/server
     ../../modules/data/syncthing
