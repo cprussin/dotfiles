@@ -12,11 +12,15 @@ in
 
   services.nginx = {
     enable = true;
+    package = pkgs.nginxStable.override { modules = [ pkgs.nginxModules.fancyindex ]; };
     virtualHosts."library.prussin.net" = {
       forceSSL = true;
       enableACME = true;
       root = "/srv/Library";
-      extraConfig = "autoindex on;";
+      extraConfig = ''
+        fancyindex on;
+        fancyindex_exact_size off;
+      '';
       basicAuthFile = config.deployment.keys.library-basic-auth-file.path;
     };
   };
