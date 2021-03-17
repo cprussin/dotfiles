@@ -8,7 +8,10 @@ in
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
-  interfaces.eth = "enp3s0";
+  interfaces = {
+    eth = "enp3s0";
+    wifi = "wlp12s0";
+  };
 
   primary-user.secure.luksDrives = [
     "ata-SanDisk_SDSSDHII240G_154435401807"
