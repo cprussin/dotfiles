@@ -1,6 +1,8 @@
-{ writeShellScript, swaylock }:
-
+{ writeShellScript, swaylock, config }:
+let
+  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
+in
 writeShellScript "lock" ''
-  sudo umount /secure
+  ${launcher-apps.insecure}
   exec ${swaylock}/bin/swaylock "$@"
 ''

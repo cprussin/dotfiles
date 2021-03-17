@@ -1,10 +1,5 @@
 { ... }:
 
 {
-  primary-user.secure = {
-    mountPoint = "/secure";
-    device = "/dev/disk/by-label/secure";
-    fsType = "ext4";
-    options = [ "nofail" "ro" ];
-  };
+  primary-user.secure.pool = "secure";
 }

@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   sources = import ../../../sources.nix;
   zfs = pkgs.callPackage ../../../lib/zfs.nix { };
@@ -13,20 +13,16 @@ in
     eth = "enp0s31f6";
   };
 
+  primary-user.secure.luksDrives = [
+    "nvme-WDC_PC_SN730_SDBQNTY-1T00-1001_2053JY446002"
+  ];
+
   boot = {
     kernelModules = [ "kvm-intel" "sg" ];
     extraModulePackages = [ ];
-    preLVMTempMount."/key" = {
-      inherit (config.primary-user.secure) device fsType;
-    };
     initrd = {
       availableKernelModules = [ "xhci_pci" "nvme" "sd_mod" "sr_mod" ];
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
-      luks.devices.crypt-nvme-WDC_PC_SN730_SDBQNTY-1T00-1001_2053JY446002 = {
-        device = "/dev/disk/by-id/nvme-WDC_PC_SN730_SDBQNTY-1T00-1001_2053JY446002";
-        keyFile = "/key/crypt/lyra/nvme-WDC_PC_SN730_SDBQNTY-1T00-1001_2053JY446002/key";
-        header = "/key/crypt/lyra/nvme-WDC_PC_SN730_SDBQNTY-1T00-1001_2053JY446002/header";
-      };
     };
   };
 

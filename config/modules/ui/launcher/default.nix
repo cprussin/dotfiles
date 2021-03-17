@@ -38,9 +38,9 @@ in
         gmail = email;
         home = mkWebApp "home" "https://720-natoma-drive.prussin.net";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
-        insecure = pkgs.writeShellScript "secure" "sudo ${config.security.wrapperDir}/umount /secure";
+        insecure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.exportCmd}";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
-        lock = pkgs.callPackage ./apps/lock.nix { };
+        lock = pkgs.callPackage ./apps/lock.nix { inherit config; };
         makemkv = "${pkgs.makemkv}/bin/makemkv";
         mic-volume = pkgs.callPackage ./apps/mic-volume.nix { };
         mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
@@ -54,7 +54,7 @@ in
         remacs = pkgs.callPackage ./apps/remacs.nix { };
         scan = pkgs.writeShellScript "scan" "${pkgs.xsane}/bin/xsane \"$(${pkgs.hplip}/bin/hp-makeuri -s circinus)\"";
         screenshot = pkgs.callPackage ./apps/screenshot.nix { };
-        secure = pkgs.writeShellScript "secure" "sudo ${config.security.wrapperDir}/mount /secure";
+        secure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.importCmd}";
         shakti = pkgs.callPackage ./apps/shakti.nix { inherit config; };
         shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
         slack = "${pkgs.slack}/bin/slack";

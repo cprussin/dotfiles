@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   sources = import ../../../sources.nix;
   zfs = pkgs.callPackage ../../../lib/zfs.nix { };
@@ -10,32 +10,18 @@ in
 
   interfaces.eth = "enp3s0";
 
+  primary-user.secure.luksDrives = [
+    "ata-SanDisk_SDSSDHII240G_154435401807"
+    "ata-TOSHIBA_DT01ACA200_459YR4PTS"
+    "ata-TOSHIBA_DT01ACA200_459YR4STS"
+  ];
+
   boot = {
     kernelModules = [ "kvm-amd" "sg" ];
     extraModulePackages = [ ];
-    preLVMTempMount."/key" = {
-      inherit (config.primary-user.secure) device fsType;
-    };
     initrd = {
       availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "xhci_pci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
-      luks.devices = {
-        crypt-ata-SanDisk_SDSSDHII240G_154435401807 = {
-          device = "/dev/disk/by-id/ata-SanDisk_SDSSDHII240G_154435401807";
-          keyFile = "/key/crypt/orion/ata-SanDisk_SDSSDHII240G_154435401807/key";
-          header = "/key/crypt/orion/ata-SanDisk_SDSSDHII240G_154435401807/header";
-        };
-        crypt-ata-TOSHIBA_DT01ACA200_459YR4PTS = {
-          device = "/dev/disk/by-id/ata-TOSHIBA_DT01ACA200_459YR4PTS";
-          keyFile = "/key/crypt/orion/ata-TOSHIBA_DT01ACA200_459YR4PTS/key";
-          header = "/key/crypt/orion/ata-TOSHIBA_DT01ACA200_459YR4PTS/header";
-        };
-        crypt-ata-TOSHIBA_DT01ACA200_459YR4STS = {
-          device = "/dev/disk/by-id/ata-TOSHIBA_DT01ACA200_459YR4STS";
-          keyFile = "/key/crypt/orion/ata-TOSHIBA_DT01ACA200_459YR4STS/key";
-          header = "/key/crypt/orion/ata-TOSHIBA_DT01ACA200_459YR4STS/header";
-        };
-      };
     };
   };
 

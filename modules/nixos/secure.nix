@@ -1,6 +1,45 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.secure;
+
+  secures = builtins.attrValues cfg;
+
+  pools = map (opts: opts.pool) secures;
+
+  mapConcatPools = cmd: sep: lib.concatStringsSep sep (map cmd pools);
+
+  plural = thing:
+    if builtins.length thing == 1
+    then ""
+    else "s";
+
+  awaitingMsg = "Waiting for secure filesystem${plural pools} to appear..";
+
+  closingMsg = "Closing secure filesystem${plural pools}...";
+
+  zpool = "${pkgs.zfs}/bin/zpool";
+
+  isPoolAvailable = pool:
+    "(${zpool} import 2>/dev/null | grep 'pool: ${pool}' 2>&1 >/dev/null)";
+
+  importPool = pool: "${zpool} import -o readonly=on '${pool}'";
+
+  exportPool = pool: "${zpool} export '${pool}'";
+
+  somePoolsUnavailable =
+    "(! (${mapConcatPools isPoolAvailable " && "}))";
+
+  mkLuksDevice = luksBase: drive: {
+    name = "crypt-${drive}";
+    value = {
+      device = "/dev/disk/by-id/${drive}";
+      keyFile = "${luksBase}/${config.networking.hostName}/${drive}/key";
+      header = "${luksBase}/${config.networking.hostName}/${drive}/header";
+    };
+  };
+
+  luksDevicesFor = secure:
+    builtins.listToAttrs (map (mkLuksDevice secure.luks) secure.luksDrives);
 in
 {
   options.secure = lib.mkOption {
@@ -9,32 +48,14 @@ in
       Secure storage configurations consist of a root path, along with paths in
       the root pointing to password and gpg storage.
     '';
-    default = { };
-    type = lib.types.attrsOf (
+    default = null;
+    type = lib.types.nullOr (lib.types.attrsOf (
       lib.types.submodule (
         { config, ... }: {
           options = {
-            mountPoint = lib.mkOption {
+            pool = lib.mkOption {
               type = lib.types.str;
-              description = "Location of the mounted the file system.";
-            };
-
-            device = lib.mkOption {
-              default = null;
-              type = lib.types.nullOr lib.types.str;
-              description = "Location of the device.";
-            };
-
-            fsType = lib.mkOption {
-              default = "auto";
-              type = lib.types.str;
-              description = "Type of the file system.";
-            };
-
-            options = lib.mkOption {
-              default = [ "defaults" ];
-              description = "Options used to mount the file system.";
-              type = lib.types.listOf lib.types.str;
+              description = "ZFS pool for secure storage.";
             };
 
             passwords = lib.mkOption {
@@ -46,18 +67,54 @@ in
               type = lib.types.str;
               description = "The path to the gnupg directory.";
             };
+
+            luks = lib.mkOption {
+              type = lib.types.str;
+              description = "The path to the luks header & key directory.";
+            };
+
+            luksDrives = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = ''
+                The list of drive IDs whose luks keys & headers are stored in
+                this volume.
+              '';
+            };
+
+            importCmd = lib.mkOption {
+              type = lib.types.path;
+              description = ''
+                The passwordless-sudo-enabled command to import the dataset
+                read-only.
+              '';
+            };
+
+            exportCmd = lib.mkOption {
+              type = lib.types.path;
+              description = ''
+                The passwordless-sudo-enabled command to export the dataset.
+              '';
+            };
           };
 
-          config = {
-            passwords = lib.mkDefault "${config.mountPoint}/passwords";
-            gnupg = lib.mkDefault "${config.mountPoint}/gnupg";
-          };
+          config =
+            let
+              pool = config.pool;
+            in
+            {
+              passwords = lib.mkDefault "/${pool}/passwords";
+              gnupg = lib.mkDefault "/${pool}/gnupg";
+              luks = lib.mkDefault "/${pool}/crypt";
+              importCmd = pkgs.writeShellScript "import-${pool}" (importPool pool);
+              exportCmd = pkgs.writeShellScript "export-${pool}" (exportPool pool);
+            };
         }
       )
-    );
+    ));
   };
 
-  config = {
+  config = lib.mkIf (cfg != null) {
     home-manager.users = lib.mapAttrs
       (
         _: secure: { config, ... }: {
@@ -77,24 +134,38 @@ in
       )
       cfg;
 
-    sudo-cmds = lib.mapAttrs
-      (
-        _: secure: [
-          "${config.security.wrapperDir}/mount ${secure.mountPoint}"
-          "${config.security.wrapperDir}/umount ${secure.mountPoint}"
-        ]
-      )
-      cfg;
+    sudo-cmds = lib.mapAttrs (_: opts: map toString [ opts.importCmd opts.exportCmd ]) cfg;
 
-    fileSystems = lib.mapAttrs'
-      (
-        _: secure:
-          lib.nameValuePair secure.mountPoint {
-            device = secure.device;
-            fsType = secure.fsType;
-            options = secure.options;
-          }
-      )
-      cfg;
+    boot.initrd = lib.mkIf (lib.any (secure: (builtins.length secure.luksDrives > 0)) secures) {
+      kernelModules = [ "usb_storage" "loop" ];
+
+      preLVMCommands = (
+        lib.mkMerge [
+          (
+            lib.mkBefore ''
+              echo -n "${awaitingMsg}"
+              while ${somePoolsUnavailable}
+              do
+                echo -n "."
+                sleep 0.25
+              done
+              echo -n " done!"
+              echo
+              ${mapConcatPools importPool "\n"}
+            ''
+          )
+
+          (
+            lib.mkAfter ''
+              echo "${closingMsg}"
+              ${mapConcatPools exportPool "\n"}
+            ''
+          )
+        ]
+      );
+
+      luks.devices =
+        lib.foldl (acc: secure: acc // (luksDevicesFor secure)) { } secures;
+    };
   };
 }

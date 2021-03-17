@@ -1,11 +1,11 @@
-{ writeShellScript }:
+{ writeShellScript, config }:
 
 {
   name = "custom/secure";
 
   config = {
-    exec = writeShellScript "mount" ''
-      if mount | grep /secure >/dev/null
+    exec = writeShellScript "secure" ''
+      if zpool list ${config.primary-user.secure.pool} >/dev/null 2>&1
       then
         echo 
       fi
