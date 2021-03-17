@@ -4,6 +4,7 @@ let
   runCmd = pkgs: cmd: exec [ "sh" "-c" "${cmd} | ${stringify pkgs}" ];
   passwords = pkgs: pkgs.callPackage ./lib/passwords.nix { };
   getPassword = pkgs: "${(passwords pkgs).passwordUtils}/bin/getPassword";
+  getFullPassword = pkgs: "${(passwords pkgs).passwordUtils}/bin/getFullPassword";
   getPasswordField = pkgs: "${(passwords pkgs).passwordUtils}/bin/getPasswordField";
 in
 {
@@ -12,6 +13,9 @@ in
 
   getPasswordValue = pkgs: name:
     runCmd pkgs "${getPassword pkgs} '${name}'";
+
+  getFullPasswordValue = pkgs: name:
+    runCmd pkgs "${getFullPassword pkgs} '${name}'";
 
   getPasswordFieldValue = pkgs: name: field:
     runCmd pkgs "${getPasswordField pkgs} '${name}' '${field}'";

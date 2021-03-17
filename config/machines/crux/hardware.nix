@@ -53,7 +53,7 @@ in
       inherit (config.fileSystems."/boot") device fsType;
     };
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
+      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "e1000e" "igb" ];
       kernelModules = [ "dm-snapshot" "nls_cp437" "nls_iso8859_1" ];
       luks.devices.crypt-nvme-WDS500G3X0C-00SJG0_2017A3806951 = {
         device = "/dev/disk/by-id/nvme-WDS500G3X0C-00SJG0_2017A3806951";
