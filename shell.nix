@@ -4,6 +4,7 @@ in
 { nixpkgs ? sources.nixpkgs
 , niv ? sources.niv
 , nixops ? sources.nixops
+, nixpkgs-unstable ? sources.nixpkgs-unstable
 }:
 let
   niv-overlay = self: _: {
@@ -52,13 +53,17 @@ let
     passwordUtils = (self.callPackage ./lib/passwords.nix { }).passwordUtils;
   };
 
+  pkgs-unstable = import nixpkgs-unstable { };
+
+  esphome-overlay = _: _: { inherit (pkgs-unstable) esphome; };
+
   pkgs = import nixpkgs {
     overlays = [
       niv-overlay
       nixops-overlay
       password-utils-overlay
+      esphome-overlay
       (import ./overlays/nix-linter)
-      (import ./pkgs/esphome/overlay.nix)
     ];
     config = { };
   };
