@@ -57,8 +57,8 @@ in
         secure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.importCmd}";
         shakti = pkgs.callPackage ./apps/shakti.nix { inherit config; };
         shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
-        slack = "${pkgs.slack}/bin/slack";
-        slackagain = pkgs.writeShellScript "slackagain" "pkill -x slack; exec ${pkgs.slack}/bin/slack";
+        slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack -g warn";
+        slackagain = pkgs.writeShellScript "slackagain" "pkill -x slack; exec ${config.primary-user.home-manager.programs.launcher.apps.slack}";
         sms = mkWebApp "sms" "https://messages.google.com/web/conversations";
         sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/11yYp4Ma5t7wJxSBZQYyVcO7FlWuG6cEOJrPXcQCv3AI";
         steam = "${pkgs.steam}/bin/steam";
