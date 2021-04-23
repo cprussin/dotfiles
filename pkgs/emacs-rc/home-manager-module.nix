@@ -40,11 +40,6 @@ in
       default = "${pkgs.ispell}/bin/ispell";
     };
 
-    mu = lib.mkOption {
-      type = lib.types.path;
-      default = "${pkgs.mu}/bin/mu";
-    };
-
     editorconfig = lib.mkOption {
       type = lib.types.path;
       default = "${pkgs.editorconfig-core-c}/bin/editorconfig";
@@ -79,7 +74,6 @@ in
               emacs-rc-msmtp-path "${cfg.msmtp}"
               emacs-rc-shell-path "${cfg.shell}"
               emacs-rc-ispell-path "${cfg.ispell}"
-              emacs-rc-mu-path "${cfg.mu}"
               emacs-rc-editorconfig-path "${cfg.editorconfig}"
               emacs-rc-emoji-sets-path "${cfg.emojiSets}"
               emacs-rc-font-face "${cfg.font.face}"

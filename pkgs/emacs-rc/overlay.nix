@@ -1,6 +1,4 @@
 self: super: {
-  mu = super.mu.override { emacs = super.emacs; };
-
   emacs = self.emacsWithPackages (epkgs: [ epkgs.emacs-rc ]);
 
   emacsPackagesFor = emacs: (

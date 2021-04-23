@@ -18,7 +18,6 @@ let
           emacs-rc-msmtp-path "${self.msmtp}/bin/msmtp"
           emacs-rc-shell-path "${self.stdenv.shell}"
           emacs-rc-ispell-path "${self.ispell}/bin/ispell"
-          emacs-rc-mu-path "${self.mu}/bin/mu"
           emacs-rc-editorconfig-path "${self.editorconfig-core-c}/bin/editorconfig"
           emacs-rc-emoji-sets-path "${emoji-sets self}")
 
@@ -38,9 +37,7 @@ let
           --add-flags '--no-init-file --load ${entry-point self}'
       '';
     };
-  } // (if prod then { } else {
-    mu = super.mu.override { emacs = super.emacs; };
-  });
+  };
 
   pkgs = import nixpkgs {
     overlays = (if prod then [ (import ./overlay.nix) ] else [ ]) ++ [

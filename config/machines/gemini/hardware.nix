@@ -51,7 +51,6 @@ in
       "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
       "tank/persisted-state/chromium".mountpoint = "/home/cprussin/.config/chromium";
       "tank/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
-      "tank/persisted-state/mu".mountpoint = "/home/cprussin/.cache/mu";
       "tank/persisted-state/nixops".mountpoint = "/home/cprussin/.nixops";
       "tank/persisted-state/secrets" = {
         mountpoint = "/secrets";

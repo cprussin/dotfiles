@@ -47,11 +47,6 @@
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-mu-path "/usr/bin/mu"
-  "Path to the mu executable."
-  :type 'string
-  :group 'emacs-rc)
-
 (defcustom emacs-rc-emoji-sets-path "~/.emacs.d/emoji"
   "Path to the emoji sets."
   :type 'string
