@@ -74,17 +74,11 @@
                                              ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}")
                                              ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}")
 
-                                             ("ps" . "Shakti")
-                                             ("psa" tags-todo  "+shakti")
-                                             ("psr" tags-todo  "+shakti+SCHEDULED={.+\\+.+}")
-                                             ("pss" tags-todo  "+shakti+SCHEDULED={^[^\\+]+$}")
-                                             ("psu" tags-todo  "+shakti-SCHEDULED={.+}")
-
                                              ("pp" . "Other")
-                                             ("ppa" tags-todo "-shakti-720_Natoma_Drive-2019_Subaru_Ascent")
-                                             ("ppr" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
-                                             ("pps" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
-                                             ("ppu" tags-todo  "-shakti-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}"))))
+                                             ("ppa" tags-todo "-720_Natoma_Drive-2019_Subaru_Ascent")
+                                             ("ppr" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
+                                             ("pps" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
+                                             ("ppu" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}"))))
 
 (use-package evil-org
   :delight

@@ -44,8 +44,6 @@ in
         makemkv = "${pkgs.makemkv}/bin/makemkv";
         mic-volume = pkgs.callPackage ./apps/mic-volume.nix { };
         mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
-        netflix = mkWebApp "netflix" "http://www.netflix.com";
-        netflix-api = pkgs.callPackage ./apps/netflix-api.nix { };
         nix-shell = pkgs.writeShellScript "nix-shell" "exec nix-shell -p $1 --run \"$*\"";
         passwords = mkModal "passwords" "${pkgs.fzf-pass}/bin/fzf-pass";
         plex = mkWebApp "plex" "https://app.plex.tv/desktop";
@@ -55,7 +53,6 @@ in
         scan = pkgs.writeShellScript "scan" "${pkgs.xsane}/bin/xsane \"$(${pkgs.hplip}/bin/hp-makeuri -s circinus)\"";
         screenshot = pkgs.callPackage ./apps/screenshot.nix { };
         secure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.importCmd}";
-        shakti = pkgs.callPackage ./apps/shakti.nix { inherit config; };
         shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
         signal = "${pkgs.signal-desktop}/bin/signal-desktop";
         slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack -g warn";
@@ -67,7 +64,6 @@ in
         telegram = "${pkgs.tdesktop}/bin/telegram-desktop";
         us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
         volume = pkgs.callPackage ./apps/volume.nix { };
-        vpn = pkgs.callPackage ./apps/vpn.nix { };
       };
     };
   };

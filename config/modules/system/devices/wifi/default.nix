@@ -18,9 +18,6 @@
       };
       CentarCar.pskRaw = builtins.extraBuiltins.wpaPassphrase pkgs "CentarCar";
 
-      # Netflix networks
-      Netflix = { };
-
       # Friends' networks
       "PC House2".pskRaw = builtins.extraBuiltins.wpaPassphrase pkgs "PC House2";
 

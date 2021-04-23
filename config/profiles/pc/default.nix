@@ -7,12 +7,6 @@
     ../../modules/data/git
     ../../modules/data/syncthing
 
-    ../../modules/netflix/ca
-    ../../modules/netflix/hostname
-    ../../modules/netflix/metatron
-    ../../modules/netflix/newt
-    ../../modules/netflix/vpn
-
     ../../modules/security/gpg
     ../../modules/security/pass
     ../../modules/security/secure

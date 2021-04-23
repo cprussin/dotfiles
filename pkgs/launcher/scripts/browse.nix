@@ -23,9 +23,6 @@ writeShellScriptBin "browse" ''
         elif [[ $1 =~ ^/ ]]
         then
             target="file://$1"
-        elif [[ $1 =~ ^go/ ]]
-        then
-            target="https://go.netflix.com/''${1##go/}"
         else
             target="http://$1"
         fi

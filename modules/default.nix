@@ -29,8 +29,6 @@
       ./home-manager/keymap.nix
       ./home-manager/launcher.nix
       ./home-manager/mako.nix
-      ./home-manager/metatron.nix
-      ./home-manager/newt.nix
       ./home-manager/swayidle.nix
       ./home-manager/swaylock.nix
       ./home-manager/waybar.nix
