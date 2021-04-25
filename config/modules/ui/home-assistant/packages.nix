@@ -4,9 +4,11 @@
   ffmpeg-full
   ps.aioesphomeapi
   ps.aiofiles
+  ps.aiodiscover
   ps.aiogithubapi
   ps.aiohomekit
   ps.aiohttp-cors
+  ps.async-upnp-client
   ps.awesomeversion
   ps.defusedxml
   ps.distro

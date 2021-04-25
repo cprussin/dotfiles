@@ -5,6 +5,14 @@ let
     config = import ../../config/modules/system/nixpkgs/nixpkgs-config.nix;
   };
 in
-_: _: {
-  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar makemkv;
+_: super: {
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar makemkv sway;
+
+  emacsPackagesFor = emacs: (
+    (super.emacsPackagesFor emacs).overrideScope' (
+      _: _: {
+        inherit (pkgs-unstable.emacsPackagesFor emacs) tide csv-mode;
+      }
+    )
+  );
 }

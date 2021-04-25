@@ -1,13 +1,13 @@
 { buildPythonPackage, fetchPypi }:
 let
   pname = "hacs-frontend";
-  version = "20210103144316";
+  version = "20210214181913";
 in
 buildPythonPackage {
   inherit pname version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ni4s5ig7k4h9309fjz5lk898fhg4g9zpz0qfivxzhkfyqrd9h4s";
+    sha256 = "0kn4dnbcyd33drqb361jmf9855xnmic7fnsxxd5z2yznvs0kv2ry";
   };
 }
