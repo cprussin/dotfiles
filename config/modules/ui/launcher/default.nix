@@ -40,6 +40,7 @@ in
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
         insecure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.exportCmd}";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
+        library = mkWebApp "library" "https://library.prussin.net";
         lock = pkgs.callPackage ./apps/lock.nix { inherit config; };
         makemkv = "${pkgs.makemkv}/bin/makemkv";
         mic-volume = pkgs.callPackage ./apps/mic-volume.nix { };
