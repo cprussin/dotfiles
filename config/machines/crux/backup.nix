@@ -17,6 +17,7 @@ in
       "/home/cprussin/Camera"
       "/home/cprussin/Notes"
       "/home/cprussin/Projects"
+      "/var/lib/hass"
     ];
     repo = "${userAtHost}:crux-bak";
     encryption = {
@@ -66,11 +67,13 @@ in
         "borgbackup-job-rsync.net-import-keyfile.service"
         "borgbackup-key.service"
         "rsync.net-ssh-key.service"
+        "import-tank.service"
       ];
       wants = [
         "borgbackup-job-rsync.net-import-keyfile.service"
         "borgbackup-key.service"
         "rsync.net-ssh-key.service"
+        "import-tank.service"
       ];
     };
   };

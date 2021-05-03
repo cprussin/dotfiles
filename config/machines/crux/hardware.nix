@@ -76,15 +76,10 @@ in
   } // (
     zfs.mkZfsFileSystems {
       "tank-fast/nix".mountpoint = "/nix";
-      "tank-fast/persisted-state/acme".mountpoint = "/var/lib/acme";
-      "tank-fast/persisted-state/borg-cache".mountpoint = "/root/.cache/borg";
-      "tank-fast/persisted-state/hass".mountpoint = "/var/lib/hass";
-      "tank-fast/persisted-state/plex".mountpoint = "/var/lib/plex";
-      "tank-fast/persisted-state/secrets" = {
+      "tank-fast/secrets" = {
         mountpoint = "/secrets";
         neededForBoot = true;
       };
-      "tank-fast/persisted-state/syncthing".mountpoint = "/home/cprussin/.config/syncthing";
     }
   );
 
