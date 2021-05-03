@@ -10,7 +10,6 @@
     ./library.nix
     ../../profiles/physical-machine
     ../../profiles/server
-    ../../modules/data/syncthing
     ../../modules/ui/home-assistant
   ];
 
@@ -25,13 +24,23 @@
     home-assistant.virtualHost = "720-natoma-drive.prussin.net";
   };
 
-  systemd.services.home-assistant = {
-    wants = [
-      "import-tank.service"
-    ];
-    after = [
-      "import-tank.service"
-    ];
+  systemd.services = {
+    home-assistant = {
+      wants = [
+        "import-tank.service"
+      ];
+      after = [
+        "import-tank.service"
+      ];
+    };
+    syncthing = {
+      wants = [
+        "import-tank.service"
+      ];
+      after = [
+        "import-tank.service"
+      ];
+    };
   };
 
   programs.powerpanel.enable = true;

@@ -57,7 +57,6 @@ in
         mountpoint = "/secrets";
         neededForBoot = true;
       };
-      "tank/persisted-state/syncthing".mountpoint = "/home/cprussin/.config/syncthing";
     }
   );
 

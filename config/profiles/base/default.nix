@@ -8,6 +8,7 @@ in
     ../../../modules
 
     ../../modules/data/session-vars
+    ../../modules/data/syncthing
     ../../modules/data/xdg-user-dirs
 
     ../../modules/security/process-information-hiding

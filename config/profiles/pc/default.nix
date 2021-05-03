@@ -5,7 +5,6 @@
     ../physical-machine
 
     ../../modules/data/git
-    ../../modules/data/syncthing
 
     ../../modules/security/gpg
     ../../modules/security/pass
@@ -43,4 +42,5 @@
 
   promptColor = "cyan";
   enableSshdAtBoot = false;
+  persistSyncthingKeys = true;
 }
