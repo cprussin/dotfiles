@@ -52,7 +52,7 @@ in
           };
           Scratch = {
             path = "${config.primary-user.home}/Scratch";
-            devices = lib.remove config.networking.hostName [ "crux" "gemini" "orion" ];
+            devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
           };
         };
       };

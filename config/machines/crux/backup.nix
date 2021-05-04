@@ -16,6 +16,7 @@ in
       "/home/cprussin/Backups"
       "/home/cprussin/Camera"
       "/home/cprussin/Notes"
+      "/home/cprussin/Phone"
       "/home/cprussin/Projects"
       "/var/lib/hass"
     ];

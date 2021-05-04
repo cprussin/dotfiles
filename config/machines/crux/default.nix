@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   imports = [
@@ -22,6 +22,33 @@
   services = {
     mingetty.greetingLine = builtins.readFile ./greeting;
     home-assistant.virtualHost = "720-natoma-drive.prussin.net";
+
+    syncthing.declarative.folders = {
+      DCIM = {
+        path = "${config.primary-user.home}/Phone/DCIM";
+        devices = [ "pegasus" ];
+      };
+      Pictures = {
+        path = "${config.primary-user.home}/Phone/Pictures";
+        devices = [ "pegasus" ];
+      };
+      Snapchat = {
+        path = "${config.primary-user.home}/Phone/Snapchat";
+        devices = [ "pegasus" ];
+      };
+      Telegram = {
+        path = "${config.primary-user.home}/Phone/Telegram";
+        devices = [ "pegasus" ];
+      };
+      Total_Launcher_Backups = {
+        path = "${config.primary-user.home}/Phone/Total Launcher Backups";
+        devices = [ "pegasus" ];
+      };
+      WhatsApp_Media = {
+        path = "${config.primary-user.home}/Phone/WhatsApp Media";
+        devices = [ "pegasus" ];
+      };
+    };
   };
 
   systemd.services = {
