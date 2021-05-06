@@ -39,7 +39,7 @@ in
         cert = config.deployment.keys.syncthing-cert.path;
         key = config.deployment.keys.syncthing-key.path;
         devices = allDevices // {
-          pegasus.id = "65FQB7W-YNCG6BF-QJIVRNS-NXPMK2F-Z6Q6LN6-KK25P6O-XOG7NNU-FVSQGQ5";
+          pegasus.id = "YDEJP2I-6H55ESK-NGMZ6OV-TWRVUCZ-WHQL2XA-SEDSDOY-Z7UWSJA-ZCVF3AH";
         };
         folders = {
           Notes = {
