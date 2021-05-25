@@ -15,13 +15,13 @@ in
     runCmd pkgs "${pkgs.syncthing-id}/bin/syncthing-id <(${getFullPassword pkgs} 'Infrastructure/syncthing/${hostName}/cert')";
 
   getPasswordValue = pkgs: name:
-    runCmd pkgs "${getPassword pkgs} '${name}'";
+    runCmd pkgs "${getPassword pkgs} \"${name}\"";
 
   getFullPasswordValue = pkgs: name:
-    runCmd pkgs "${getFullPassword pkgs} '${name}'";
+    runCmd pkgs "${getFullPassword pkgs} \"${name}\"";
 
   getPasswordFieldValue = pkgs: name: field:
-    runCmd pkgs "${getPasswordField pkgs} '${name}' '${field}'";
+    runCmd pkgs "${getPasswordField pkgs} \"${name}\" \"${field}\"";
 
   wpaPassphrase = pkgs:
     let
