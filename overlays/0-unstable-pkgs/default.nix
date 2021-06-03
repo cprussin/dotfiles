@@ -6,7 +6,7 @@ let
   };
 in
 _: super: {
-  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar makemkv sway;
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant waybar makemkv;
 
   emacsPackagesFor = emacs: (
     (super.emacsPackagesFor emacs).overrideScope' (
