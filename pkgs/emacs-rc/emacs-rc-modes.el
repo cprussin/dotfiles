@@ -21,6 +21,7 @@
 (use-package nix-mode)
 (use-package rust-mode)
 (use-package yaml-mode)
+(use-package scad-mode)
 
 (provide 'emacs-rc-modes)
 ;;; emacs-rc-modes.el ends here

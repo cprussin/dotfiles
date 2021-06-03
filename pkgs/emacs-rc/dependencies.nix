@@ -55,6 +55,7 @@
   epkgs.rainbow-delimiters
   epkgs.rainbow-mode
   epkgs.rust-mode
+  epkgs.scad-mode
   epkgs.smartparens
   epkgs.solarized-theme
   epkgs.swiper
