@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    "${sources.nixos-hardware}/lenovo/thinkpad/t480s"
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
