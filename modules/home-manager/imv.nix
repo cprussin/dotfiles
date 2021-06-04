@@ -8,7 +8,7 @@ let
         type = lib.types.str;
       };
       size = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.float;
       };
     };
   };

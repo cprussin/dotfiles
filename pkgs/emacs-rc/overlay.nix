@@ -1,5 +1,5 @@
-self: super: {
-  emacs = self.emacsWithPackages (epkgs: [ epkgs.emacs-rc ]);
+_: super: {
+  emacs = super.emacs.pkgs.withPackages (epkgs: [ epkgs.emacs-rc ]);
 
   emacsPackagesFor = emacs: (
     (super.emacsPackagesFor emacs).overrideScope' (

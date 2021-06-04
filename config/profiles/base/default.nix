@@ -11,7 +11,6 @@ in
     ../../modules/data/syncthing
     ../../modules/data/xdg-user-dirs
 
-    ../../modules/security/process-information-hiding
     ../../modules/security/sshd
     ../../modules/security/sudo
     ../../modules/security/umask

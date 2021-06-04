@@ -2,9 +2,9 @@
 
 [
   ffmpeg-full
+  ps.aiodiscover
   ps.aioesphomeapi
   ps.aiofiles
-  ps.aiodiscover
   ps.aiogithubapi
   ps.aiohomekit
   ps.aiohttp-cors
@@ -23,6 +23,9 @@
   ps.netdisco
   ps.paho-mqtt
   ps.pillow
+  ps.plexapi
+  ps.plexwebsocket
+  ps.pychromecast
   ps.pyipp
   ps.pymetno
   ps.pynacl

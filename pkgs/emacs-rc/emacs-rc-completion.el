@@ -23,9 +23,8 @@
 (use-package company-tng
   :after company
   :demand
-  :commands company-tng-configure-default
-  :config
-  (company-tng-configure-default))
+  :commands company-tng-mode
+  :config (company-tng-mode))
 
 (use-package company-quickhelp
   :demand

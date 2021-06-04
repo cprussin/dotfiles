@@ -25,7 +25,7 @@
     font = {
       package = pkgs.dejavu_fonts;
       face = "DejaVu Sans Mono";
-      size = 11;
+      size = 11.0;
     };
   };
 }

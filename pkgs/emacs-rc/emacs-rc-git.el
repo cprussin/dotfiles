@@ -24,12 +24,6 @@
    "l" '(magit-log :which-key "git log")
    "s" '(magit-status :which-key "git status")))
 
-(use-package evil-magit
-  :demand
-  :commands evil-magit-init
-  :after magit evil
-  :config (evil-magit-init))
-
 ;; Show git status in the gutter
 (use-package git-gutter
   :demand

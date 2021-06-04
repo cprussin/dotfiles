@@ -10,26 +10,25 @@
 
 (require 'emacs-rc-text) ;; for emojify
 
-;;; ORG-MODE:  * My Task
-;;;              SCHEDULED: <%%(diary-last-day-of-month date)>
-;;; DIARY:  %%(diary-last-day-of-month date) Last Day of the Month
-;;; See also:  (setq org-agenda-include-diary t)
-;;; (diary-last-day-of-month '(2 28 2017))
-(defun diary-last-day-of-month (date)
-  "Return `t` if DATE is the last day of the month."
-  (let* ((day (calendar-extract-day date))
-         (month (calendar-extract-month date))
-         (year (calendar-extract-year date))
-         (last-day-of-month
-          (calendar-last-day-of-month month year)))
-    (= day last-day-of-month)))
-
 ;; Set up org-mode
 (use-package org
   :demand
   :after emojify
   :hook (org-mode . emacs-rc--prettify-org)
   :config
+  ;;; ORG-MODE:  * My Task
+  ;;;              SCHEDULED: <%%(diary-last-day-of-month date)>
+  ;;; DIARY:  %%(diary-last-day-of-month date) Last Day of the Month
+  ;;; See also:  (setq org-agenda-include-diary t)
+  ;;; (diary-last-day-of-month '(2 28 2017))
+  (defun diary-last-day-of-month (date)
+    "Return `t` if DATE is the last day of the month."
+    (let* ((day (calendar-extract-day date))
+           (month (calendar-extract-month date))
+           (year (calendar-extract-year date))
+           (last-day-of-month
+            (calendar-last-day-of-month month year)))
+      (= day last-day-of-month)))
   (defun emacs-rc--prettify-org ()
     "Make `org-mode' prettier."
     (push '("[ ]" . "☐") prettify-symbols-alist)

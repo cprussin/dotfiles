@@ -27,10 +27,15 @@ let
   emacs-packages = self: epkgs:
     self.callPackage ./dependencies.nix { inherit epkgs; };
 
+  emacs = self: super:
+    if prod
+    then super.emacs
+    else super.emacs.pkgs.withPackages (emacs-packages self);
+
   emacs-overlay = self: super: {
     emacs = self.symlinkJoin {
       name = "emacs";
-      paths = if prod then [ super.emacs ] else [ (super.emacsWithPackages (emacs-packages self)) ];
+      paths = [ (emacs self super) ];
       buildInputs = [ self.makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/emacs \

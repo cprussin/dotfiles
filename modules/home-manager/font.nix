@@ -17,7 +17,7 @@ in
     };
 
     size = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.float;
       description = "The font size.";
     };
   };
@@ -45,6 +45,10 @@ in
       emacs.emacs-rc.font = { inherit (cfg) face size; };
     };
 
-    wayland.windowManager.sway.config.fonts = [ "${cfg.face} ${toString cfg.size}" ];
+    wayland.windowManager.sway.config.fonts = {
+      inherit (cfg) size;
+      style = "Book";
+      names = [ cfg.face ];
+    };
   };
 }

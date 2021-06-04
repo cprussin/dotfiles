@@ -1,5 +1,5 @@
 { lib, ... }:
 
 {
-  services.mingetty.helpLine = lib.mkForce "";
+  services.getty.helpLine = lib.mkForce "";
 }

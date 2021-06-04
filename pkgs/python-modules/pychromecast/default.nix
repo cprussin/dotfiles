@@ -7,4 +7,4 @@ let
     ];
   };
 in
-pkgs.python3Packages.gtts-token
+pkgs.python3Packages.pychromecast

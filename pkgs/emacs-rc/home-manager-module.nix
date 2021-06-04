@@ -58,7 +58,7 @@ in
           };
 
           size = lib.mkOption {
-            type = lib.types.int;
+            type = lib.types.float;
           };
         };
       };

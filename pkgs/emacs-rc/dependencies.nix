@@ -17,7 +17,6 @@
   epkgs.evil
   epkgs.evil-collection
   epkgs.evil-goggles
-  epkgs.evil-magit
   epkgs.evil-org
   epkgs.evil-smartparens
   epkgs.flycheck
