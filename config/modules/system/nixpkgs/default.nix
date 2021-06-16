@@ -16,7 +16,6 @@ in
       (import ../../../../overlays/launcher)
       (import ../../../../overlays/makemkv)
       (import ../../../../overlays/mako)
-      (import ../../../../overlays/nix-linter)
       (import ../../../../overlays/notify-send)
       (import ../../../../overlays/pass-with-otp)
       (import ../../../../overlays/powerpanel)

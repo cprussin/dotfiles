@@ -35,18 +35,6 @@
         "url": "https://github.com/nix-community/home-manager/archive/148d85ee8303444fb0116943787aa0b1b25f94df.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nix-linter": {
-        "branch": "master",
-        "description": "Linter for the Nix expression language",
-        "homepage": "",
-        "owner": "cprussin",
-        "repo": "nix-linter",
-        "rev": "b6798bf36b6b7326759f7e3c6ee8b8c1cafc86b0",
-        "sha256": "0sydbggn0hznphdi8xvwhblnxhvpz5w03vxi7wr2b1cnfb866fz4",
-        "type": "tarball",
-        "url": "https://github.com/cprussin/nix-linter/archive/b6798bf36b6b7326759f7e3c6ee8b8c1cafc86b0.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "nixops": {
         "branch": "master",
         "description": "NixOps is a tool for deploying to NixOS machines in a network or cloud.",

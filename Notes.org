@@ -1,6 +1,5 @@
 * Tasks
 ** TODO Fix search for special characters
-** TODO Replace nix-linter custom package with simple haskellPackages overlay
 ** TODO Make zfs configuration more declarative somehow
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
    - [X] dunst
@@ -23,6 +22,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Replace nix-linter custom package with simple haskellPackages overlay
+   CLOSED: [2021-06-16 Wed 12:16]
 ** DONE Nixify/containerize/etc prussin.net [3/9]
    CLOSED: [2021-02-25 Thu 21:35]
    - [X] Web

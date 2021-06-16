@@ -63,7 +63,6 @@ let
       nixops-overlay
       password-utils-overlay
       esphome-overlay
-      (import ./overlays/nix-linter)
     ];
     config = { };
   };
