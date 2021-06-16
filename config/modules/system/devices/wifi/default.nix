@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   networking.wireless = {
     enable = true;
     userControlled.enable = true;
+    interfaces = [ config.interfaces.wifi ];
 
     networks = {
       # Home networks
