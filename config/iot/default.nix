@@ -19,32 +19,32 @@ let
     {
       inherit (config) name;
       value = pkgs.writeText "${options.id}.yaml" (
-        builtins.toJSON (template options)
+        builtins.toJSON (pkgs.lib.recursiveUpdate (template options) (config.overrides or { }))
       );
     };
 
-  mkDevices = template: deviceNames:
-    builtins.listToAttrs (map (mkDevice template) deviceNames);
+  mkDevices = template: config:
+    builtins.listToAttrs (map (mkDevice template) config);
 
   fans = mkDevices (pkgs.callPackage ./fan.nix { }) [
     { name = "Aiden's Room Fan"; }
+    { name = "Bodhi's Room Fan"; }
     { name = "Guest Room Fan"; }
     { name = "Master Bedroom Fan"; }
-    { name = "Office Fan"; }
   ];
 
   dimmers = mkDevices (pkgs.callPackage ./dimmer.nix { }) [
     { name = "Aiden's Room Lights"; }
     { name = "Bar Lights"; }
+    { name = "Bodhi's Room Lights"; }
     { name = "Dining Room Lights"; }
     { name = "Entertainment Center Lights"; }
+    { name = "Family Room Lights"; }
     { name = "Guest Room Lights"; }
     { name = "Hall Lights"; }
     { name = "Kitchen Lights"; }
     { name = "Living Room Lights"; }
     { name = "Master Bedroom Lights"; }
-    { name = "Office Lights"; }
-    { name = "Family Room Lights"; }
   ];
 
   plugs = mkDevices (pkgs.callPackage ./plug.nix { }) [
