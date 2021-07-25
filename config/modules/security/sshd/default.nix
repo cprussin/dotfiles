@@ -1,6 +1,7 @@
 { pkgs, lib, config, ... }:
 let
   public-key = builtins.extraBuiltins.publicSshKey pkgs "connor@prussin.net";
+  jump-public-key = builtins.readFile ./jump-public-key;
   passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
 in
 {
@@ -47,7 +48,7 @@ in
 
     systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce [ ]);
 
-    primary-user.openssh.authorizedKeys.keys = [ public-key ];
+    primary-user.openssh.authorizedKeys.keys = [ public-key jump-public-key ];
 
     boot.initrd.network = lib.mkIf config.enableSshdAtInitrd {
       enable = true;
