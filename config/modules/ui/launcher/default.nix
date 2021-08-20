@@ -51,7 +51,7 @@ in
         presentation = pkgs.callPackage ./apps/presentation.nix { };
         reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot";
         remacs = pkgs.callPackage ./apps/remacs.nix { };
-        scan = pkgs.writeShellScript "scan" "${pkgs.xsane}/bin/xsane \"$(${pkgs.hplip}/bin/hp-makeuri -s circinus)\"";
+        scan = "${pkgs.xsane}/bin/xsane";
         screenshot = pkgs.callPackage ./apps/screenshot.nix { };
         secure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.importCmd}";
         shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";

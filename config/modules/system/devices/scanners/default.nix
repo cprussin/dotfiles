@@ -3,6 +3,6 @@
 {
   hardware.sane = {
     enable = true;
-    extraBackends = [ pkgs.hplip ];
+    extraBackends = [ pkgs.sane-airscan ];
   };
 }

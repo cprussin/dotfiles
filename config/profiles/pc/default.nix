@@ -11,6 +11,7 @@
     ../../modules/security/secure
     ../../modules/security/ssh
 
+    ../../modules/system/avahi
     ../../modules/system/dbus
     ../../modules/system/devices/android
     ../../modules/system/devices/audio

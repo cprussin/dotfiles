@@ -3,7 +3,7 @@
 {
   services.printing = {
     enable = true;
-    drivers = [ pkgs.hplip ];
+    drivers = [ pkgs.epson-escpr2 ];
   };
   hardware.printers = {
     ensureDefaultPrinter = "circinus";
@@ -11,9 +11,9 @@
       {
         name = "circinus";
         location = "Office";
-        description = "HP Photosmart 7520";
-        deviceUri = "hp:/net/Photosmart_7520_series?hostname=circinus";
-        model = "drv:///hp/hpcups.drv/hp-photosmart_7520_series.ppd";
+        description = "Epson ET-3760";
+        deviceUri = "https://circinus:631/ipp/print";
+        model = "epson-inkjet-printer-escpr2/Epson-ET-3760_Series-epson-escpr2-en.ppd";
       }
     ];
   };
