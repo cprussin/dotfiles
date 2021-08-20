@@ -8,16 +8,17 @@ in
 {
   services.borgbackup.jobs."rsync.net" = {
     paths = map (folder: "${folder}/.zfs/snapshot/borgsnap") [
-      "/srv/Library/Movies"
-      "/srv/Library/Music"
-      "/srv/Library/Photos"
-      "/srv/Library/Software"
-      "/srv/Library/TV Shows"
       "/home/cprussin/Backups"
       "/home/cprussin/Camera"
       "/home/cprussin/Notes"
       "/home/cprussin/Phone"
       "/home/cprussin/Projects"
+      "/srv/Library/Family Photos"
+      "/srv/Library/Media Library/Movies"
+      "/srv/Library/Media Library/Music"
+      "/srv/Library/Media Library/TV Shows"
+      "/srv/Library/ROMs"
+      "/srv/Library/Software Library"
       "/var/lib/hass"
     ];
     repo = "${userAtHost}:crux-bak";
