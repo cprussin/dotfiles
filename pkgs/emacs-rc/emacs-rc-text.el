@@ -96,8 +96,7 @@
   :demand
   :commands global-emojify-mode global-emojify-mode-line-mode
   :config
-  (setq emojify-emojis-dir emacs-rc-emoji-sets-path
-        emojify-emoji-set "emojione")
+  (setq emojify-emojis-dir emacs-rc-emoji-sets-path)
   (global-emojify-mode)
   (global-emojify-mode-line-mode))
 

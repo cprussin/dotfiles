@@ -1,6 +1,6 @@
 { stdenv }:
 let
-  pname = "emojione-png";
+  pname = "emojione";
   version = "2.2.6-22";
 in
 stdenv.mkDerivation {

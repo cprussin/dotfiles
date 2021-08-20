@@ -2,12 +2,12 @@
 , nixpkgs ? (import ../../sources.nix).nixpkgs
 }:
 let
-  emoji-sets = self: self.linkFarm "emoji-sets" [
-    {
-      name = "emojione";
-      path = pkgs.emojione-png;
-    }
-  ];
+  mkEmojiSets = self: emoji-pkgs: self.linkFarm "emjoji-sets" (map
+    (path: {
+      inherit path;
+      name = "${path.pname}-v${path.version}";
+    })
+    emoji-pkgs);
 
   entry-point = self: self.writeText "init.el" ''
     ${self.lib.optionalString (!prod) "(add-to-list 'load-path \"${toString ./.}\")"}
@@ -18,7 +18,7 @@ let
           emacs-rc-shell-path "${self.stdenv.shell}"
           emacs-rc-ispell-path "${self.ispell}/bin/ispell"
           emacs-rc-editorconfig-path "${self.editorconfig-core-c}/bin/editorconfig"
-          emacs-rc-emoji-sets-path "${emoji-sets self}")
+          emacs-rc-emoji-sets-path "${mkEmojiSets self [ self.emojione-png ]}")
 
     (require 'emacs-rc)
   '';
