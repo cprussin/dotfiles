@@ -12,17 +12,17 @@
   :group 'environment
   :prefix "emacs-rc-")
 
-(defcustom emacs-rc-rg-path "/usr/bin/rg"
+(defcustom emacs-rc-rg-path "rg"
   "Path to the ripgrep executable."
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-git-path "/usr/bin/git"
+(defcustom emacs-rc-git-path "git"
   "Path to git executable."
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-browse-path "/usr/bin/chromium"
+(defcustom emacs-rc-browse-path "chromium"
   "Path to the web browser executable."
   :type 'string
   :group 'emacs-rc)
@@ -32,12 +32,12 @@
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-ispell-path "/usr/bin/ispell"
+(defcustom emacs-rc-ispell-path "ispell"
   "Path to the Ispell executable."
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-editorconfig-path "/usr/bin/editorconfig"
+(defcustom emacs-rc-editorconfig-path "editorconfig"
   "Path to the editorconfig executable."
   :type 'string
   :group 'emacs-rc)
