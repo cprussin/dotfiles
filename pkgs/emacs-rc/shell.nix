@@ -15,7 +15,6 @@ let
     (setq emacs-rc-git-path "${self.git}/bin/git"
           emacs-rc-rg-path "${self.ripgrep}/bin/rg"
           emacs-rc-browse-path "${self.chromium}/bin/chromium"
-          emacs-rc-msmtp-path "${self.msmtp}/bin/msmtp"
           emacs-rc-shell-path "${self.stdenv.shell}"
           emacs-rc-ispell-path "${self.ispell}/bin/ispell"
           emacs-rc-editorconfig-path "${self.editorconfig-core-c}/bin/editorconfig"

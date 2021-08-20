@@ -25,11 +25,6 @@ in
       type = lib.types.path;
     };
 
-    msmtp = lib.mkOption {
-      type = lib.types.path;
-      default = "${pkgs.msmtp}/bin/msmtp";
-    };
-
     shell = lib.mkOption {
       type = lib.types.path;
       default = "${pkgs.stdenv.shell}";
@@ -71,7 +66,6 @@ in
         (setq emacs-rc-git-path "${cfg.git}"
               emacs-rc-rg-path "${cfg.rg}"
               emacs-rc-browse-path "${cfg.browse}"
-              emacs-rc-msmtp-path "${cfg.msmtp}"
               emacs-rc-shell-path "${cfg.shell}"
               emacs-rc-ispell-path "${cfg.ispell}"
               emacs-rc-editorconfig-path "${cfg.editorconfig}"

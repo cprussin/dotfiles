@@ -27,11 +27,6 @@
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-msmtp-path "/usr/bin/msmtp"
-  "Path to the msmtp executable."
-  :type 'string
-  :group 'emacs-rc)
-
 (defcustom emacs-rc-shell-path (getenv "SHELL")
   "Path to the shell executable."
   :type 'string
