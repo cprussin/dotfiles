@@ -48,6 +48,7 @@
         path = "${config.primary-user.home}/Phone/WhatsApp Media";
         devices = [ "pegasus" ];
       };
+      # TODO emulator saves?
     };
   };
 

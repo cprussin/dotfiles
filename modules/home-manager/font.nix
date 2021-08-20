@@ -48,7 +48,7 @@ in
     wayland.windowManager.sway.config.fonts = {
       inherit (cfg) size;
       style = "Book";
-      names = [ cfg.face ];
+      names = [ cfg.face ]; # TODO add fontawesome?
     };
   };
 }

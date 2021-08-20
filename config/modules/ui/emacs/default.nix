@@ -9,6 +9,6 @@
         browse = "${pkgs.launcher}/bin/browse";
       };
     };
-    services.emacs.enable = true;
+    services.emacs.enable = true; # TODO wtf why is this not working? also lorri?
   };
 }
