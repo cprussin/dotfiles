@@ -6,6 +6,7 @@
 , zathura
 , imv
 , mpv
+, prusa-slicer
 , emacs
 }:
 let
@@ -20,6 +21,7 @@ writeShellScriptBin "open" ''
   browse=${browse}/bin/browse
   imv=${imv}/bin/imv
   mpv=${mpv}/bin/mpv
+  prusaSlicer=${prusa-slicer}/bin/prusa-slicer
   emacsclient=${emacs}/bin/emacsclient
 
   if $test ! -e "$(eval echo \"$1\")" -a "$1" != "*scratch*"
@@ -28,12 +30,24 @@ writeShellScriptBin "open" ''
     exit 1
   fi
 
-  case $($file --mime-type "$1" | $sed 's/.*: //') in
+  case $($file --brief --mime-type "$1") in
     application/pdf) exec $zathura "$1" ;;
     text/html) exec $browse "$1" ;;
     image/*) exec $imv "$1" ;;
     video/*) exec $mpv "$1" ;;
     audio/*) exec $mpv --force-window=yes "$1" ;;
+    application/zip)
+      case "$1" in
+        *.3mf) exec $prusaSlicer "$1" ;;
+        *) exec $emacsclient -c "$1" ;;
+      esac
+      ;;
+    application/octet-stream)
+      case "$1" in
+        *.stl) exec $prusaSlicer "$1" ;;
+        *) exec $emacsclient -c "$1" ;;
+      esac
+      ;;
     *) exec $emacsclient -c "$1" ;;
   esac
 ''
