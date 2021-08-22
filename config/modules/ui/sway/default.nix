@@ -135,9 +135,6 @@ in
   autologin-graphical-session = {
     enable = true;
     user = config.primary-user.name;
-    sessionScript = pkgs.writeShellScript "sway-session-script" ''
-      . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-      exec ${pkgs.sway}/bin/sway
-    '';
+    sessionScript = "${pkgs.sway}/bin/sway";
   };
 }

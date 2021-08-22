@@ -37,6 +37,7 @@ in
 
         script = ''
           . /etc/set-environment
+          . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
           ${cfg.sessionScript}
         '';
 
