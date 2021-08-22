@@ -28,7 +28,6 @@
       ./home-manager/imv.nix
       ./home-manager/keymap.nix
       ./home-manager/launcher.nix
-      ./home-manager/mako.nix
       ./home-manager/swayidle.nix
       ./home-manager/swaylock.nix
       ./home-manager/waybar.nix
