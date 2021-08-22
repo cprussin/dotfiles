@@ -48,6 +48,12 @@ writeShellScriptBin "open" ''
         *) exec $emacsclient -c "$1" ;;
       esac
       ;;
+    text/plain)
+      case "$1" in
+        *.stl) exec $prusaSlicer "$1" ;;
+        *) exec $emacsclient -c "$1" ;;
+      esac
+      ;;
     *) exec $emacsclient -c "$1" ;;
   esac
 ''
