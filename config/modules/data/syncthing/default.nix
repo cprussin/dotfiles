@@ -67,6 +67,13 @@ in
         "syncthing-cert-key.service"
         "syncthing-key-key.service"
       ];
+
+      serviceConfig.ExecStartPost = pkgs.writeShellScript "rm-sync-dir" ''
+        if [ -d "$HOME/Sync" ]
+        then
+          rmdir "$HOME/Sync"
+        fi
+      '';
     };
 
     users.users."${config.services.syncthing.user}".extraGroups = [ "keys" ];
