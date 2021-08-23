@@ -30,30 +30,17 @@ writeShellScriptBin "open" ''
     exit 1
   fi
 
-  case $($file --brief --mime-type "$1") in
-    application/pdf) exec $zathura "$1" ;;
-    text/html) exec $browse "$1" ;;
-    image/*) exec $imv "$1" ;;
-    video/*) exec $mpv "$1" ;;
-    audio/*) exec $mpv --force-window=yes "$1" ;;
-    application/zip)
-      case "$1" in
-        *.3mf) exec $prusaSlicer "$1" ;;
+  case "$1" in
+    *.stl) exec $prusaSlicer "$1" ;;
+    *.3mf) exec $prusaSlicer "$1" ;;
+    *)
+      case $($file --brief --mime-type "$1") in
+        application/pdf) exec $zathura "$1" ;;
+        text/html) exec $browse "$1" ;;
+        image/*) exec $imv "$1" ;;
+        video/*) exec $mpv "$1" ;;
+        audio/*) exec $mpv --force-window=yes "$1" ;;
         *) exec $emacsclient -c "$1" ;;
       esac
-      ;;
-    application/octet-stream)
-      case "$1" in
-        *.stl) exec $prusaSlicer "$1" ;;
-        *) exec $emacsclient -c "$1" ;;
-      esac
-      ;;
-    text/plain)
-      case "$1" in
-        *.stl) exec $prusaSlicer "$1" ;;
-        *) exec $emacsclient -c "$1" ;;
-      esac
-      ;;
-    *) exec $emacsclient -c "$1" ;;
   esac
 ''
