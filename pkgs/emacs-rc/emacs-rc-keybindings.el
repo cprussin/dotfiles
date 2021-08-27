@@ -42,7 +42,8 @@
   :init (setq evil-want-keybinding nil
               evil-want-C-u-scroll t
               evil-want-C-i-jump t
-              evil-want-integration t)
+              evil-want-integration t
+              evil-undo-system 'undo-tree)
   :config (evil-mode))
 
 (use-package evil-collection
