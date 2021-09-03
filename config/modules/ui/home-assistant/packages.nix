@@ -2,6 +2,7 @@
 
 [
   ffmpeg-full
+  ps.PyChromecast
   ps.aiodiscover
   ps.aioesphomeapi
   ps.aiofiles
@@ -14,18 +15,19 @@
   ps.distro
   ps.emoji
   ps.fnvhash
+  ps.getmac
   ps.gtts
   ps.gtts-token
   ps.ha-ffmpeg
   ps.hacs-frontend
   ps.hass-nabucasa
+  ps.home-assistant-frontend
   ps.mutagen
   ps.netdisco
   ps.paho-mqtt
   ps.pillow
   ps.plexapi
   ps.plexwebsocket
-  ps.pychromecast
   ps.pyipp
   ps.pymetno
   ps.pynacl
@@ -34,10 +36,13 @@
   ps.python-ecobee-api
   ps.queueman
   ps.rachiopy
-  ps.ring_doorbell
+  ps.ring-doorbell
+  ps.samsungctl
+  ps.samsungtvws
   ps.scapy
   ps.semantic-version
   ps.spotipy
   ps.sqlalchemy
+  ps.wakeonlan
   ps.zeroconf
 ]
