@@ -7,6 +7,7 @@
 , imv
 , mpv
 , prusa-slicer
+, freecad
 , emacs
 }:
 let
@@ -22,6 +23,7 @@ writeShellScriptBin "open" ''
   imv=${imv}/bin/imv
   mpv=${mpv}/bin/mpv
   prusaSlicer=${prusa-slicer}/bin/prusa-slicer
+  freecad=${freecad}/bin/freecad
   emacsclient=${emacs}/bin/emacsclient
 
   if $test ! -e "$(eval echo \"$1\")" -a "$1" != "*scratch*"
@@ -33,6 +35,7 @@ writeShellScriptBin "open" ''
   case "$1" in
     *.stl) exec $prusaSlicer "$1" ;;
     *.3mf) exec $prusaSlicer "$1" ;;
+    *.stp) exec $freecad "$1" ;;
     *)
       case $($file --brief --mime-type "$1") in
         application/pdf) exec $zathura "$1" ;;
