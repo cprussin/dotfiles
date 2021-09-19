@@ -27,11 +27,11 @@ in
             umaskCmd = "umask ${umask}";
           in
           {
-            home.file = {
-              ".profile".text = umaskCmd;
-              ".bashrc".text = umaskCmd;
+            programs = {
+              bash.profileExtra = umaskCmd;
+              bash.bashrcExtra = umaskCmd;
+              zsh.initExtra = umaskCmd;
             };
-            programs.zsh.initExtra = umaskCmd;
           }
       )
       cfg;
