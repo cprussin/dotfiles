@@ -66,6 +66,7 @@ in
         telegram = "${pkgs.tdesktop}/bin/telegram-desktop";
         us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
         volume = pkgs.callPackage ./apps/volume.nix { };
+        zulip = "${pkgs.zulip}/bin/zulip";
       };
     };
   };
