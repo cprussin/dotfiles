@@ -110,11 +110,6 @@
             "C--" #'zoom-frm-out
             "C-*" #'zoom-frm-unzoom))
 
-(use-package zone
-  :demand
-  :commands zone-when-idle
-  :config (zone-when-idle 120))
-
 (use-package mode-icons
   :demand
   :commands mode-icons-mode
