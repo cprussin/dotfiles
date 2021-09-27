@@ -24,6 +24,7 @@
   epkgs.general
   epkgs.git-gutter
   epkgs.go-mode
+  epkgs.good-scroll
   epkgs.graphql-mode
   epkgs.groovy-mode
   epkgs.haskell-mode

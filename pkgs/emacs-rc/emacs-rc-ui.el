@@ -133,6 +133,9 @@
             "SPC et" '(undo-tree-visualize
                        :which-key "undo/redo tree")))
 
+(use-package good-scroll
+  :config (good-scroll-mode))
+
 (use-package delight)
 
 (provide 'emacs-rc-ui)
