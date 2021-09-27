@@ -8,6 +8,7 @@
     ./dynamic-dns.nix
     ./acme.nix
     ./library.nix
+    ./matrix.nix
     ../../profiles/physical-machine
     ../../profiles/server
     ../../modules/ui/home-assistant
@@ -61,6 +62,14 @@
       ];
     };
     syncthing = {
+      wants = [
+        "import-tank.service"
+      ];
+      after = [
+        "import-tank.service"
+      ];
+    };
+    postgresql = {
       wants = [
         "import-tank.service"
       ];
