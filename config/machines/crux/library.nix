@@ -12,6 +12,9 @@ in
 
   services.nginx = {
     enable = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
     package = pkgs.nginxStable.override { modules = [ pkgs.nginxModules.fancyindex ]; };
     virtualHosts."library.prussin.net" = {
       forceSSL = true;
