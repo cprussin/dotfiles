@@ -32,8 +32,10 @@
   ps.pymetno
   ps.pynacl
   ps.pyotp
+  ps.pyserial
   ps.pysmartapp
   ps.python-ecobee-api
+  ps.pyudev
   ps.queueman
   ps.rachiopy
   ps.ring-doorbell
