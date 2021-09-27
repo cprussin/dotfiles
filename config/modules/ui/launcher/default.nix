@@ -7,6 +7,24 @@ let
   mkConfirmationDialog = pkgs.callPackage ./utils/mkConfirmationDialog.nix { inherit config; };
 
   email = mkWebApp "gmail" "https://mail.google.com?authuser=connor@prussin.net";
+  sms = mkWebApp "sms" "https://messages.google.com/web/conversations";
+  matrix = "${pkgs.element-desktop}/bin/element-desktop";
+  slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack -g warn";
+  discord = "${pkgs.discord}/bin/discord";
+  zulip = "${pkgs.zulip}/bin/zulip";
+  telegram = "${pkgs.tdesktop}/bin/telegram-desktop";
+  signal = "${pkgs.signal-desktop}/bin/signal-desktop";
+
+  comms = pkgs.writeShellScript "" ''
+    ${email} &
+    ${sms} &
+    ${matrix} &
+    ${slack} &
+    ${discord} &
+    ${zulip} &
+    ${telegram} &
+    ${signal} &
+  '';
 in
 {
   primary-user.home-manager = {
@@ -15,7 +33,7 @@ in
     programs.launcher = {
       enable = true;
       apps = {
-        inherit email;
+        inherit email sms matrix slack discord zulip telegram signal comms;
 
         agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
         amazon = mkWebApp "amazon" "https://www.amazon.com/";
@@ -28,7 +46,6 @@ in
         chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
         chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
         crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
-        discord = "${pkgs.discord}/bin/discord";
         dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
         emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
         firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
@@ -55,17 +72,11 @@ in
         screenshot = pkgs.callPackage ./apps/screenshot.nix { };
         secure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.importCmd}";
         shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
-        signal = "${pkgs.signal-desktop}/bin/signal-desktop";
-        slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack -g warn";
-        slackagain = pkgs.writeShellScript "slackagain" "pkill -x slack; exec ${config.primary-user.home-manager.programs.launcher.apps.slack}";
-        sms = mkWebApp "sms" "https://messages.google.com/web/conversations";
         sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/11yYp4Ma5t7wJxSBZQYyVcO7FlWuG6cEOJrPXcQCv3AI";
         steam = "${pkgs.steam}/bin/steam";
         syncthing = mkWebApp "syncthing" "http://localhost:8384";
-        telegram = "${pkgs.tdesktop}/bin/telegram-desktop";
         us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
         volume = pkgs.callPackage ./apps/volume.nix { };
-        zulip = "${pkgs.zulip}/bin/zulip";
       };
     };
   };
