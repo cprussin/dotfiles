@@ -1,13 +1,12 @@
 { pkgs, lib, config, ... }:
 let
   mkWebApp = pkgs.callPackage ./utils/mkWebApp.nix { };
-  mkGoogleApp = pkgs.callPackage ./utils/mkGoogleApp.nix { };
   mkTerminalApp' = pkgs.callPackage ./utils/mkTerminalApp.nix { inherit config; };
   mkTerminalApp = name: mkTerminalApp' name name;
   mkModal = pkgs.callPackage ./utils/mkModal.nix { inherit config; };
   mkConfirmationDialog = pkgs.callPackage ./utils/mkConfirmationDialog.nix { inherit config; };
 
-  email = mkGoogleApp "gmail" "https://mail.google.com?authuser=@user@";
+  email = mkWebApp "gmail" "https://mail.google.com?authuser=connor@prussin.net";
 in
 {
   primary-user.home-manager = {
@@ -25,7 +24,7 @@ in
         bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluez}/bin/bluetoothctl";
         brave = pkgs.writeShellScript "brave" "${pkgs.launcher}/bin/browse --browser brave $*";
         brightness = pkgs.callPackage ./apps/brightness.nix { };
-        calendar = mkGoogleApp "calendar" "https://calendar.google.com?authuser=@user@";
+        calendar = mkWebApp "calendar" "https://calendar.google.com?authuser=connor@prussin.net";
         chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
         chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
         crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
@@ -33,7 +32,7 @@ in
         dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
         emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
         firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
-        gdrive = mkGoogleApp "gdrive" "https://drive.google.com?authuser=@user@";
+        gdrive = mkWebApp "gdrive" "https://drive.google.com?authuser=connor@prussin.net";
         gimp = "${pkgs.gimp}/bin/gimp";
         github = mkWebApp "github" "https://github.com/";
         gmail = email;
