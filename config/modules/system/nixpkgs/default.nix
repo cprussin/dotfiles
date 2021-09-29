@@ -19,7 +19,6 @@ in
       (import ../../../../overlays/notify-send)
       (import ../../../../overlays/pass-with-otp)
       (import ../../../../overlays/powerpanel)
-      (import ../../../../overlays/slack)
       (import ../../../../overlays/sudo-with-insults)
       (import ../../../../overlays/syncthing-id)
       (import ../../../../overlays/zoom-frm)
