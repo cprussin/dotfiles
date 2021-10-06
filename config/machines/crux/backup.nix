@@ -20,6 +20,7 @@ in
       "/srv/Library/ROMs"
       "/srv/Library/Software Library"
       "/var/lib/hass"
+      "/var/lib/postgresql"
     ];
     repo = "${userAtHost}:crux-bak";
     encryption = {
