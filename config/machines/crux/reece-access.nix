@@ -16,6 +16,4 @@ in
     passwordFile = config.deployment.keys.reece-password.path;
     openssh.authorizedKeys.keys = [ reece-public-key ];
   };
-
-  networking.firewall.allowedTCPPorts = [ 8555 ];
 }
