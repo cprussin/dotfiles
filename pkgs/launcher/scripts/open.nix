@@ -36,6 +36,7 @@ writeShellScriptBin "open" ''
     *.stl) exec $prusaSlicer "$1" ;;
     *.3mf) exec $prusaSlicer "$1" ;;
     *.stp) exec $freecad "$1" ;;
+    *.step) exec $freecad "$1" ;;
     *)
       case $($file --brief --mime-type "$1") in
         application/pdf) exec $zathura "$1" ;;
