@@ -9,6 +9,7 @@
     ./acme.nix
     ./library.nix
     ./matrix.nix
+    ./reece-access.nix
     ../../profiles/physical-machine
     ../../profiles/server
     ../../modules/ui/home-assistant
