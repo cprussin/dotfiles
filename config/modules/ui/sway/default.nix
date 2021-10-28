@@ -10,6 +10,8 @@ let
     map (command: { inherit criteria command; }) commands;
 
   mkCommands = lib.foldl (commands: set: commands ++ (expandSet set)) [ ];
+
+  laptopOutput = "eDP-1";
 in
 {
   primary-user.home-manager = {
@@ -28,7 +30,7 @@ in
         bars = [ ];
 
         output = {
-          eDP-1.pos = lib.mkIf (!config.hardware.video.hidpi.enable) "0,0 scale 1";
+          "${laptopOutput}".pos = lib.mkIf (!config.hardware.video.hidpi.enable) "0,0 scale 1";
           "*".bg = "${./background.png} fill";
         };
 
@@ -124,6 +126,9 @@ in
       };
 
       extraConfig = ''
+        bindswitch --locked lid:off output ${laptopOutput} enable
+        bindswitch --locked lid:on output ${laptopOutput} disable
+
         bar {
           swaybar_command ${pkgs.waybar}/bin/waybar
         }
