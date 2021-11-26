@@ -41,7 +41,6 @@
     ../../modules/ui/zathura
   ];
 
-  promptColor = "cyan";
   enableSshdAtBoot = false;
   persistSyncthingKeys = true;
 }

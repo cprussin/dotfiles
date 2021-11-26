@@ -22,7 +22,6 @@ in
       (import ../../../../overlays/sudo-with-insults)
       (import ../../../../overlays/syncthing-id)
       (import ../../../../overlays/zoom-frm)
-      (import ../../../../overlays/zsh-git-prompt)
       (import ../../../../pkgs/connect-to-network/overlay.nix)
     ];
   };

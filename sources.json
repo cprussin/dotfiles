@@ -106,17 +106,5 @@
         "type": "tarball",
         "url": "https://github.com/cprussin/zoom-frm/archive/08dd33d2518f4f9a90c804e09baac1db74ffa58f.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "zsh-git-prompt": {
-        "branch": "master",
-        "description": "[Active Fork] Informative git prompt for zsh",
-        "homepage": "",
-        "owner": "starcraftman",
-        "repo": "zsh-git-prompt",
-        "rev": "11b83ba3b85d14c66cf2ab79faefab6d838da28e",
-        "sha256": "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb",
-        "type": "tarball",
-        "url": "https://github.com/starcraftman/zsh-git-prompt/archive/11b83ba3b85d14c66cf2ab79faefab6d838da28e.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

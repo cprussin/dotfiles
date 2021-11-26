@@ -26,6 +26,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE [[https://starship.rs/][starship]]
+   CLOSED: [2021-11-25 Thu 21:04]
 ** DONE Replace nix-linter custom package with simple haskellPackages overlay
    CLOSED: [2021-06-16 Wed 12:16]
 ** DONE Nixify/containerize/etc prussin.net [3/9]
