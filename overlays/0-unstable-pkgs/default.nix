@@ -4,9 +4,14 @@ let
     overlays = [ ];
     config = import ../../config/modules/system/nixpkgs/nixpkgs-config.nix;
   };
+  pkgs-master = import sources.nixpkgs-master {
+    overlays = [ ];
+    config = import ../../config/modules/system/nixpkgs/nixpkgs-config.nix;
+  };
 in
 _: super: {
-  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant makemkv;
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant;
+  inherit (pkgs-master) makemkv;
 
   emacsPackagesFor = emacs: (
     (super.emacsPackagesFor emacs).overrideScope' (
