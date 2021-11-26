@@ -2,6 +2,8 @@
 let
   common = callPackage ./common.nix { };
   base = common args;
+  plug1Name = args.plug1.name or "Plug 1";
+  plug2Name = args.plug2.name or "Plug 2";
 in
 lib.recursiveUpdate base {
   binary_sensor = [
@@ -12,7 +14,7 @@ lib.recursiveUpdate base {
         mode = "INPUT_PULLUP";
         inverted = true;
       };
-      name = "${args.plug1.name} Button";
+      name = "${plug1Name} Button";
       on_press = [{ "switch.toggle" = "relay1"; }];
     }
     {
@@ -22,14 +24,14 @@ lib.recursiveUpdate base {
         mode = "INPUT_PULLUP";
         inverted = true;
       };
-      name = "${args.plug2.name} Button";
+      name = "${plug2Name} Button";
       on_press = [{ "switch.toggle" = "relay2"; }];
     }
   ];
 
   switch = [
     {
-      inherit (args.plug1) name;
+      name = plug1Name;
       platform = "gpio";
       pin = "GPIO14";
       id = "relay1";
@@ -43,7 +45,7 @@ lib.recursiveUpdate base {
       inverted = true;
     }
     {
-      inherit (args.plug2) name;
+      name = plug2Name;
       platform = "gpio";
       pin = "GPIO12";
       id = "relay2";

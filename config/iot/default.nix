@@ -45,23 +45,28 @@ let
     { name = "Kitchen Lights"; }
     { name = "Living Room Lights"; }
     { name = "Master Bedroom Lights"; }
+    { name = "Spare Dimmer 1"; }
   ];
 
   plugs = mkDevices (pkgs.callPackage ./plug.nix { }) [
     { name = "Left Turtle Tank Lamp"; }
     { name = "Right Turtle Tank Lamp"; }
-    { name = "Christmas Tree"; }
+    { name = "Plug 1"; }
+    { name = "Plug 2"; }
+    { name = "Plug 3"; }
   ];
 
   dual_plugs = mkDevices (pkgs.callPackage ./dual_plug.nix { }) [
-    { name = "Dual Plug 1"; plug1.name = "Tree Farm"; plug2.name = "Candy Cane Bannister"; }
-    { name = "Dual Plug 2"; plug1.name = "Hole Border Lights"; plug2.name = "Penguin Projectors"; }
-    { name = "Dual Plug 3"; plug1.name = "Gutter Lights"; plug2.name = "Moravian Stars"; }
+    { name = "Dual Plug 1"; }
+    { name = "Dual Plug 2"; }
+    { name = "Dual Plug 3"; }
+    { name = "Dual Plug 4"; }
   ];
 
   switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
     { name = "Entry Light"; }
     { name = "Front Porch Light"; }
+    { name = "Spare Switch 1"; }
   ];
 
   devices = fans // dimmers // plugs // dual_plugs // switches;
