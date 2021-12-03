@@ -3,6 +3,8 @@
 {
   colorTheme.name = "solarized/dark";
 
+  home-manager.users.root.colorTheme.name = config.colorTheme.name;
+
   primary-user.home-manager = {
     home.packages = lib.mkForce [
       config.primary-user.home-manager.cursorTheme.package

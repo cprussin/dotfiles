@@ -1,12 +1,6 @@
-{ pkgs, lib, ... }:
+{ ... }:
 
 {
-  primary-user.home-manager = {
-    home.packages = lib.mkForce [ pkgs.fzf ];
-
-    programs.fzf = {
-      enable = true;
-      inline-info = true;
-    };
-  };
+  home-manager.users.root.imports = [ ./home.nix ];
+  primary-user.home-manager.imports = [ ./home.nix ];
 }
