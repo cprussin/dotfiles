@@ -2,74 +2,59 @@
 let
   pkgs = import nixpkgs { };
 
-  templateOptions = config: config // {
-    id = builtins.replaceStrings [ " " "'" ] [ "_" "" ] (pkgs.lib.toLower config.name);
-  };
-
-  mkDevice = template: config:
+  mkDevice = templateFile: name: config:
     let
-      options = templateOptions config;
+      id = builtins.replaceStrings [ " " "'" ] [ "_" "" ] (
+        pkgs.lib.toLower name
+      );
+      template = pkgs.callPackage templateFile { };
+      options = config // { inherit name id; };
     in
     {
-      inherit (config) name;
-      value = pkgs.writeText "${options.id}.yaml" (
-        builtins.toJSON (pkgs.lib.recursiveUpdate (template options) (config.overrides or { }))
+      inherit name;
+      value = pkgs.writeText "${id}.yaml" (
+        builtins.toJSON (
+          pkgs.lib.recursiveUpdate (template options) (config.overrides or { })
+        )
       );
     };
 
-  mkDevices = template: config:
-    builtins.listToAttrs (map (mkDevice template) config);
+  fan = mkDevice ./fan.nix;
+  dimmer = mkDevice ./dimmer.nix;
+  dual_plug = mkDevice ./dual_plug.nix;
+  switch = mkDevice ./switch.nix;
+  plug = mkDevice ./plug.nix;
 
-  fans = mkDevices (pkgs.callPackage ./fan.nix { }) [
-    { name = "Aiden's Room Fan"; }
-    { name = "Bodhi's Room Fan"; }
-    { name = "Guest Room Fan"; }
-    { name = "Master Bedroom Fan"; }
-  ];
-
-  dimmers = mkDevices (pkgs.callPackage ./dimmer.nix { }) [
-    { name = "Aiden's Room Lights"; }
-    { name = "Bar Lights"; }
-    { name = "Bodhi's Room Lights"; }
-    { name = "Dining Room Lights"; }
-    { name = "Entertainment Center Lights"; }
-    { name = "Family Room Lights"; }
-    { name = "Guest Room Lights"; }
-    { name = "Hall Lights"; }
-    { name = "Kitchen Lights"; }
-    { name = "Living Room Lights"; }
-    { name = "Master Bedroom Lights"; }
-    { name = "Spare Dimmer 1"; }
-  ];
-
-  plugs = mkDevices (pkgs.callPackage ./plug.nix { }) [
-    { name = "Left Turtle Tank Lamp"; }
-    { name = "Right Turtle Tank Lamp"; }
-    { name = "Plug 1"; }
-    { name = "Plug 2"; }
-    { name = "Plug 3"; }
-  ];
-
-  dual_plugs = mkDevices (pkgs.callPackage ./dual_plug.nix { }) [
-    { name = "Dual Plug 1"; }
-    { name = "Dual Plug 2"; }
-    { name = "Dual Plug 3"; }
-    { name = "Dual Plug 4"; }
-  ];
-
-  switches = mkDevices (pkgs.callPackage ./switch.nix { }) [
-    { name = "Entry Light"; }
-    { name = "Front Porch Light"; }
-    { name = "Spare Switch 1"; }
-  ];
-
-  devices = fans // dimmers // plugs // dual_plugs // switches;
+  devices = builtins.listToAttrs;
 in
-devices // {
-  fans = builtins.attrValues fans;
-  dimmers = builtins.attrValues dimmers;
-  plugs = builtins.attrValues plugs;
-  dual_plugs = builtins.attrValues plugs;
-  switches = builtins.attrValues switches;
-  all = builtins.attrValues devices;
-}
+
+devices [
+  (dimmer "Aiden's Room Lights" { })
+  (dimmer "Bar Lights" { })
+  (dimmer "Bodhi's Room Lights" { })
+  (dimmer "Dining Room Lights" { })
+  (dimmer "Entertainment Center Lights" { })
+  (dimmer "Family Room Lights" { })
+  (dimmer "Guest Room Lights" { })
+  (dimmer "Hall Lights" { })
+  (dimmer "Kitchen Lights" { })
+  (dimmer "Living Room Lights" { })
+  (dimmer "Master Bedroom Lights" { })
+  (dimmer "Spare Dimmer 1" { })
+  (dual_plug "Dual Plug 1" { })
+  (dual_plug "Dual Plug 2" { })
+  (dual_plug "Dual Plug 3" { })
+  (dual_plug "Dual Plug 4" { })
+  (fan "Aiden's Room Fan" { })
+  (fan "Bodhi's Room Fan" { })
+  (fan "Guest Room Fan" { })
+  (fan "Master Bedroom Fan" { })
+  (plug "Left Turtle Tank Lamp" { })
+  (plug "Plug 1" { })
+  (plug "Plug 2" { })
+  (plug "Plug 3" { })
+  (plug "Right Turtle Tank Lamp" { })
+  (switch "Entry Light" { })
+  (switch "Front Porch Light" { })
+  (switch "Spare Switch 1" { })
+]
