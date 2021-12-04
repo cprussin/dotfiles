@@ -1,6 +1,10 @@
-{}:
+{ callPackage }:
 
-{ id, name, secrets, ... }:
+let
+  passwords = callPackage ../../lib/passwords.nix { };
+in
+
+{ id, name, ... }:
 
 {
   esphome = {
@@ -11,18 +15,18 @@
 
   wifi = {
     ssid = "Centar";
-    password = secrets.wifi;
+    passwordCommand = passwords.getPassword "Wifi/Centar";
     domain = ".lan";
     ap = {
       ssid = name;
-      password = secrets.ap;
+      passwordCommand = passwords.getPasswordField "Infrastructure/IoT/${name}" "AP";
     };
   };
 
   logger.baud_rate = 0;
   captive_portal = { };
-  api.password = secrets.api;
-  ota.password = secrets.ota;
+  api.passwordCommand = passwords.getPasswordField "Infrastructure/IoT/${name}" "API";
+  ota.passwordCommand = passwords.getPasswordField "Infrastructure/IoT/${name}" "OTA";
 
   sensor = [
     {

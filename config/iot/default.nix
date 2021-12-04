@@ -4,12 +4,6 @@ let
 
   templateOptions = config: config // {
     id = builtins.replaceStrings [ " " "'" ] [ "_" "" ] (pkgs.lib.toLower config.name);
-    secrets = {
-      wifi = builtins.extraBuiltins.getPasswordValue pkgs "Wifi/Centar";
-      ap = builtins.extraBuiltins.getPasswordFieldValue pkgs "Infrastructure/IoT/${config.name}" "AP";
-      api = builtins.extraBuiltins.getPasswordFieldValue pkgs "Infrastructure/IoT/${config.name}" "API";
-      ota = builtins.extraBuiltins.getPasswordFieldValue pkgs "Infrastructure/IoT/${config.name}" "OTA";
-    };
   };
 
   mkDevice = template: config:
