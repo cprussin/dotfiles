@@ -16,6 +16,12 @@
   :after general emojify evil evil-collection
   :hook (org-mode . emacs-rc--prettify-org)
   :config
+  (defun emacs-rc--prettify-org ()
+    "Make `org-mode' prettier."
+    (push '("[ ]" . "☐") prettify-symbols-alist)
+    (push '("[X]" . "☑") prettify-symbols-alist)
+    (push '("[-]" . "❍") prettify-symbols-alist)
+    (prettify-symbols-mode))
   ;; Make checked checklist entries use the `org-headline-done' face
   (font-lock-add-keywords
    'org-mode
@@ -51,12 +57,6 @@
            (last-day-of-month
             (calendar-last-day-of-month month year)))
       (= day last-day-of-month)))
-  (defun emacs-rc--prettify-org ()
-    "Make `org-mode' prettier."
-    (push '("[ ]" . "☐") prettify-symbols-alist)
-    (push '("[X]" . "☑") prettify-symbols-alist)
-    (push '("[-]" . "❍") prettify-symbols-alist)
-    (prettify-symbols-mode))
 
   (setq org-agenda-window-setup 'only-window
         org-agenda-files (list "~/Notes/Personal.org")
