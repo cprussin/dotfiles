@@ -2,7 +2,6 @@
 
 (home-assistant.override {
   packageOverrides = pyself: _: {
-    aiogithubapi = pyself.callPackage ../python-modules/aiogithubapi/derivation.nix { };
     hacs-frontend = pyself.callPackage ../python-modules/hacs-frontend/derivation.nix { };
     queueman = pyself.callPackage ../python-modules/queueman/derivation.nix { };
   };

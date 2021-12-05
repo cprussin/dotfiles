@@ -29,8 +29,7 @@
   :after delight
   :delight
   :config
-  (setq editorconfig-exec-path emacs-rc-editorconfig-path
-        editorconfig-get-properties-function 'editorconfig-get-properties)
+  (setq editorconfig-exec-path emacs-rc-editorconfig-path)
   (editorconfig-mode))
 
 ;; Enable projectile

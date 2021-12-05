@@ -1,8 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   ls = pkgs.callPackage ./ls.nix { };
   clear = pkgs.callPackage ./clear.nix { inherit ls; };
   home-manager = {
+    home.packages = lib.mkForce [ pkgs.starship ];
+
     programs = {
       zsh = {
         enable = true;
@@ -37,7 +39,6 @@ let
       };
       starship = {
         enable = true;
-        enableZshIntegration = true;
         settings.directory.truncate_to_repo = false;
       };
     };

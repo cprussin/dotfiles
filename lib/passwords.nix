@@ -6,6 +6,7 @@ let
   sed = "${pkgs.gnused}/bin/sed";
   base64 = "${pkgs.coreutils}/bin/base64";
   mkpasswd = "${pkgs.mkpasswd}/bin/mkpasswd";
+  wpa_passphrase = "${pkgs.wpa_supplicant}/bin/wpa_passphrase";
 
   getFullPassword = pkgs.writeShellScriptBin "getFullPassword" ''
     set -euo pipefail
@@ -37,6 +38,30 @@ let
     ${getPasswordField}/bin/getPasswordField "$1" "Username"
     ${getPassword}/bin/getPassword "$1"
   '';
+
+  getMatrixSynapseDatabasePasswordFile = pkgs.writeShellScriptBin "getMatrixSynapseDatabasePasswordFile" ''
+    set -euo pipefail
+    echo "database:"
+    echo "  name: \"psycopg2\""
+    echo "  args:"
+    echo "    password: \"$(${getPassword}/bin/getPassword "$1")\""
+    echo "    database: \"matrix-synapse\""
+    echo "    user: \"matrix-synapse\""
+  '';
+
+  getWpaPassphraseFile = pkgs.writeShellScriptBin "getWpaPassphraseFile" ''
+    set -euo pipefail
+    while [[ $# -gt 0 ]]
+    do
+      network="$1"
+      shift
+      psk_name="$1"
+      shift
+      password="$(${getPassword}/bin/getPassword "Wifi/$network")"
+      psk="$(${wpa_passphrase} "$network" "$password" | ${grep} -P '^\tpsk=' | ${sed} 's/^\tpsk=//')"
+      echo "$psk_name=\"$psk\""
+    done
+  '';
 in
 {
   passwordUtils = pkgs.symlinkJoin {
@@ -48,6 +73,8 @@ in
       getBase64EncodedPassword
       getHashedUserPassword
       getUsernamePasswordFile
+      getMatrixSynapseDatabasePasswordFile
+      getWpaPassphraseFile
     ];
   };
   getPassword = name: [ "getPassword" name ];
@@ -56,4 +83,6 @@ in
   getBase64EncodedPassword = name: [ "getBase64EncodedPassword" name ];
   getHashedUserPassword = name: [ "getHashedUserPassword" name ];
   getUsernamePasswordFile = name: [ "getUsernamePasswordFile" name ];
+  getMatrixSynapseDatabasePasswordFile = name: [ "getMatrixSynapseDatabasePasswordFile" name ];
+  getWpaPassphraseFile = networks: [ "getWpaPassphraseFile" ] ++ networks;
 }

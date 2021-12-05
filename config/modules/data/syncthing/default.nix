@@ -2,14 +2,19 @@
 let
   passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
 
-  allDevices = lib.genAttrs otherMachineNames (machine: {
-    id = builtins.extraBuiltins.syncthingMachineId pkgs machine;
-  });
-
   otherMachineNames =
     lib.remove config.networking.hostName (
       builtins.attrNames (builtins.readDir ../../../machines)
     );
+
+  # TODO this should really be driven from the cert files in the password store
+  # automatically rather than manually copied here
+  syncthingMachineIds = {
+    gemini = "SNVES23-LNUWRQA-EYZW3SB-NGPXW5F-5OYCJ2N-J43WSKW-PXX2KAI-ZJ3ZUQ7";
+    orion = "YCU5GWY-Y6IAQM6-VU6JDKI-IQJX66P-REDNV4Z-JOQTMUD-DITN3XQ-MWV62A2";
+    crux = "I4ZIHKH-5UQLYN3-I6TGPKJ-IXVKJYK-NTO6RQG-QPIFI4Y-NMC3IHO-4OPHDAM";
+    pegasus = "YDEJP2I-6H55ESK-NGMZ6OV-TWRVUCZ-WHQL2XA-SEDSDOY-Z7UWSJA-ZCVF3AH";
+  };
 in
 {
   options.persistSyncthingKeys = lib.mkEnableOption "Persist syncthing keys across reboots";
@@ -35,40 +40,40 @@ in
       enable = true;
       openDefaultPorts = true;
       user = config.primary-user.name;
-      declarative = {
-        cert = config.deployment.keys.syncthing-cert.path;
-        key = config.deployment.keys.syncthing-key.path;
-        devices = allDevices // {
-          pegasus.id = "YDEJP2I-6H55ESK-NGMZ6OV-TWRVUCZ-WHQL2XA-SEDSDOY-Z7UWSJA-ZCVF3AH";
+      cert = config.deployment.keys.syncthing-cert.path;
+      key = config.deployment.keys.syncthing-key.path;
+      devices = lib.genAttrs (otherMachineNames ++ [ "pegasus" ]) (machine: {
+        id = syncthingMachineIds."${machine}";
+      });
+      folders = {
+        Notes = {
+          path = "${config.primary-user.home}/Notes";
+          devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
         };
-        folders = {
-          Notes = {
-            path = "${config.primary-user.home}/Notes";
-            devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
-          };
-          Projects = {
-            path = "${config.primary-user.home}/Projects";
-            devices = lib.remove config.networking.hostName [ "crux" "gemini" "orion" ];
-          };
-          Scratch = {
-            path = "${config.primary-user.home}/Scratch";
-            devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
-          };
+        Projects = {
+          path = "${config.primary-user.home}/Projects";
+          devices = lib.remove config.networking.hostName [ "crux" "gemini" "orion" ];
+        };
+        Scratch = {
+          path = "${config.primary-user.home}/Scratch";
+          devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
         };
       };
     };
 
-    systemd.services.syncthing = {
-      wants = [
-        "syncthing-cert-key.service"
-        "syncthing-key-key.service"
-      ];
-      after = [
-        "syncthing-cert-key.service"
-        "syncthing-key-key.service"
-      ];
+    systemd.services = {
+      syncthing = {
+        wants = [
+          "syncthing-cert-key.service"
+          "syncthing-key-key.service"
+        ];
+        after = [
+          "syncthing-cert-key.service"
+          "syncthing-key-key.service"
+        ];
+      };
 
-      serviceConfig.ExecStartPost = pkgs.writeShellScript "rm-sync-dir" ''
+      syncthing-init.serviceConfig.ExecStartPost = pkgs.writeShellScript "rm-sync-dir" ''
         if [ -d "$HOME/Sync" ]
         then
           rmdir "$HOME/Sync"

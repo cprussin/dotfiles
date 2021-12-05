@@ -23,7 +23,9 @@ let
       if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi
       export __HM_SESS_VARS_SOURCED=1
       ${config.lib.shell.exportAll config.home.sessionVariables}
-    '';
+    '' + lib.optionalString (config.home.sessionPath != [ ]) ''
+      export PATH="$PATH''${PATH:+:}${lib.concatStringsSep ":" config.home.sessionPath}"
+    '' + config.home.sessionVariablesExtra;
   };
 in
 {

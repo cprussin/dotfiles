@@ -1,12 +1,21 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
+  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
   max_upload_size = "200M";
   synapse_port = 8008;
   federation_port = 8448;
 in
 
 {
+  users.users.matrix-synapse.extraGroups = [ "keys" ];
+
+  deployment.keys.matrix-synapse-database-password = {
+    user = "matrix-synapse";
+    group = "matrix-synapse";
+    keyCommand = passwords.getMatrixSynapseDatabasePasswordFile "Infrastructure/postgresql/prussin.net/matrix-synapse";
+  };
+
   services = {
     nginx = {
       enable = true;
@@ -36,7 +45,9 @@ in
 
       server_name = "prussin.net";
       enable = true;
-      database_args.password = builtins.extraBuiltins.getPasswordValue pkgs "Infrastructure/postgresql/prussin.net/matrix-synapse";
+      extraConfigFiles = [
+        config.deployment.keys.matrix-synapse-database-password.path
+      ];
       listeners = [{
         port = synapse_port;
         bind_address = "127.0.0.1";

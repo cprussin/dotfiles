@@ -20,7 +20,6 @@ in
       (import ../../../../overlays/pass-with-otp)
       (import ../../../../overlays/powerpanel)
       (import ../../../../overlays/sudo-with-insults)
-      (import ../../../../overlays/syncthing-id)
       (import ../../../../overlays/zoom-frm)
       (import ../../../../pkgs/connect-to-network/overlay.nix)
     ];

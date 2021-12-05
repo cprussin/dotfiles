@@ -35,6 +35,7 @@
   ps.pyserial
   ps.pysmartapp
   ps.python-ecobee-api
+  ps.pyturbojpeg
   ps.pyudev
   ps.queueman
   ps.rachiopy

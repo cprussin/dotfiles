@@ -25,7 +25,7 @@
     getty.greetingLine = builtins.readFile ./greeting;
     home-assistant.virtualHost = "720-natoma-drive.prussin.net";
 
-    syncthing.declarative.folders = {
+    syncthing.folders = {
       DCIM = {
         path = "${config.primary-user.home}/Phone/DCIM";
         devices = [ "pegasus" ];

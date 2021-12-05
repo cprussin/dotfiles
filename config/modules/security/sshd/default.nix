@@ -1,6 +1,7 @@
 { pkgs, lib, config, ... }:
 let
-  public-key = builtins.extraBuiltins.publicSshKey pkgs "connor@prussin.net";
+  # TODO this should really be driven from gpg automatically rather than manually synced to a file...
+  public-key = builtins.readFile ./public-key;
   jump-public-key = builtins.readFile ./jump-public-key;
   passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
 in
@@ -18,6 +19,14 @@ in
       };
       sshHostRSAKey = {
         keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}";
+        destDir = "/secrets";
+      };
+      bootSshHostED25519Key = lib.mkIf config.enableSshdAtInitrd {
+        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}-initrd";
+        destDir = "/secrets";
+      };
+      bootSshHostRSAKey = lib.mkIf config.enableSshdAtInitrd {
+        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}-initrd";
         destDir = "/secrets";
       };
     };
@@ -55,20 +64,8 @@ in
       ssh = {
         enable = true;
         hostKeys = [
-          (
-            pkgs.writeText "ssh-host-key-ed25519" (
-              builtins.extraBuiltins.getFullPasswordValue
-                pkgs
-                "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}-initrd"
-            )
-          )
-          (
-            pkgs.writeText "ssh-host-key-rsa" (
-              builtins.extraBuiltins.getFullPasswordValue
-                pkgs
-                "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}-initrd"
-            )
-          )
+          config.deployment.keys.bootSshHostED25519Key.path
+          config.deployment.keys.bootSshHostRSAKey.path
         ];
         authorizedKeys = [ public-key ];
       };
