@@ -89,8 +89,6 @@ let
   '';
 in
 pkgs.mkShell {
-  NIX_PATH = "nixpkgs=${nixpkgs}";
-
   buildInputs = [
     pkgs.git
     pkgs.niv
@@ -102,4 +100,6 @@ pkgs.mkShell {
     collect-garbage
     iot
   ];
+
+  shellHook = "export NIX_PATH=\"nixpkgs=${nixpkgs}\"";
 }
