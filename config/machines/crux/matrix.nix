@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 let
   passwords = pkgs.callPackage ../../../lib/passwords.nix { };
@@ -10,10 +10,17 @@ in
 {
   users.users.matrix-synapse.extraGroups = [ "keys" ];
 
-  deployment.keys.matrix-synapse-database-password = {
-    user = "matrix-synapse";
-    group = "matrix-synapse";
-    keyCommand = passwords.getMatrixSynapseDatabasePasswordFile "Infrastructure/postgresql/prussin.net/matrix-synapse";
+  deployment.keys = {
+    matrix-synapse-database-password = {
+      user = "matrix-synapse";
+      group = "matrix-synapse";
+      keyCommand = passwords.getMatrixSynapseDatabasePasswordFile "Infrastructure/postgresql/prussin.net/matrix-synapse";
+    };
+    matrix-synapse-signing-key = {
+      user = "matrix-synapse";
+      group = "matrix-synapse";
+      keyCommand = passwords.getFullPassword "Infrastructure/matrix-signing-keys/prussin.net";
+    };
   };
 
   services = {
@@ -48,6 +55,11 @@ in
       extraConfigFiles = [
         config.deployment.keys.matrix-synapse-database-password.path
       ];
+      extraConfig = ''
+        signing_key_path: "${config.deployment.keys.matrix-synapse-signing-key.path}"
+        old_signing_keys:
+          "ed25519:a_OaaR": { key: "ksE3M3GNPshFcrKYZXUWaMsTR9rtBgthcibsDpVGDK0", expired_ts: 1639995345267 }
+      '';
       listeners = [{
         port = synapse_port;
         bind_address = "127.0.0.1";
@@ -61,6 +73,12 @@ in
     };
 
     postgresql.enable = true;
+  };
+
+  systemd.services.matrix-synapse = {
+    after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-password-key.service" ];
+    wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-password-key.service" ];
+    serviceConfig.ExecStartPre = lib.mkForce [ ];
   };
 
   networking.firewall.allowedTCPPorts = [ 443 federation_port ];
