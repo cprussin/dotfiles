@@ -1,5 +1,4 @@
 * Tasks
-** TODO Fix wpa_supplicant stability on Centar
 ** TODO Upgrade nixops
 ** TODO Back up emulator saves (and anything else from phone?)
 ** TODO Fix waybar stability for network module
@@ -26,6 +25,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Fix wpa_supplicant stability on Centar
+   CLOSED: [2021-12-05 Sun 15:29]
 ** DONE [[https://starship.rs/][starship]]
    CLOSED: [2021-11-25 Thu 21:04]
 ** DONE Replace nix-linter custom package with simple haskellPackages overlay
