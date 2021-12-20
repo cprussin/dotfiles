@@ -17,5 +17,8 @@ let
       (builtins.readDir machineDir);
 in
 all-machines // {
-  network.description = "PrussinNet";
+  network = {
+    description = "PrussinNet";
+    storage.memory = { };
+  };
 }
