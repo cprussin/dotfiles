@@ -1,7 +1,6 @@
 * Tasks
 ** TODO Upgrade nixops
 ** TODO Back up emulator saves (and anything else from phone?)
-** TODO Fix waybar stability for network module
 ** TODO Fix search for special characters
 ** TODO Make zfs configuration more declarative somehow
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
@@ -25,6 +24,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Fix waybar stability for network module
+   CLOSED: [2021-12-19 Sun 21:22]
 ** DONE Fix wpa_supplicant stability on Centar
    CLOSED: [2021-12-05 Sun 15:29]
 ** DONE [[https://starship.rs/][starship]]
