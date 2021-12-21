@@ -68,7 +68,7 @@ To initialize a new machine into the network, follow these steps:
          enableSSHAgentAuth = true;
          services.sudo.sshAgentAuth = true;
        };
-       user.users.cprussin = {
+       users.users.cprussin = {
          isNormalUser = true;
          extraGroups = [ "wheel" ];
          openssh.authorizedKeys.keys = [ "..." ];
