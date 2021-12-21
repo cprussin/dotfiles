@@ -20,7 +20,6 @@
     ../../modules/system/devices/printers
     ../../modules/system/devices/redshift
     ../../modules/system/devices/scanners
-    ../../modules/system/docker
 
     ../../modules/ui/audio
     ../../modules/ui/direnv
