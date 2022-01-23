@@ -11,15 +11,15 @@ in
   users.users.matrix-synapse.extraGroups = [ "keys" ];
 
   deployment.keys = {
-    matrix-synapse-database-password = {
+    matrix-synapse-database-config = {
       user = "matrix-synapse";
       group = "matrix-synapse";
-      keyCommand = passwords.getMatrixSynapseDatabasePasswordFile "Infrastructure/postgresql/prussin.net/matrix-synapse";
+      keyCommand = passwords.getMatrixSynapseDatabaseConfigFile "Infrastructure/postgresql/prussin.net/matrix-synapse";
     };
     matrix-synapse-signing-key = {
       user = "matrix-synapse";
       group = "matrix-synapse";
-      keyCommand = passwords.getFullPassword "Infrastructure/matrix-signing-keys/prussin.net";
+      keyCommand = passwords.getFullPassword "Infrastructure/matrix/signing-keys/prussin.net";
     };
   };
 
@@ -53,7 +53,7 @@ in
       server_name = "prussin.net";
       enable = true;
       extraConfigFiles = [
-        config.deployment.keys.matrix-synapse-database-password.path
+        config.deployment.keys.matrix-synapse-database-config.path
       ];
       extraConfig = ''
         signing_key_path: "${config.deployment.keys.matrix-synapse-signing-key.path}"
@@ -76,8 +76,8 @@ in
   };
 
   systemd.services.matrix-synapse = {
-    after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-password-key.service" ];
-    wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-password-key.service" ];
+    after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
+    wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
     serviceConfig.ExecStartPre = lib.mkForce [ ];
   };
 

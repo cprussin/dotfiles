@@ -39,7 +39,7 @@ let
     ${getPassword}/bin/getPassword "$1"
   '';
 
-  getMatrixSynapseDatabasePasswordFile = pkgs.writeShellScriptBin "getMatrixSynapseDatabasePasswordFile" ''
+  getMatrixSynapseDatabaseConfigFile = pkgs.writeShellScriptBin "getMatrixSynapseDatabaseConfigFile" ''
     set -euo pipefail
     echo "database:"
     echo "  name: \"psycopg2\""
@@ -73,7 +73,7 @@ in
       getBase64EncodedPassword
       getHashedUserPassword
       getUsernamePasswordFile
-      getMatrixSynapseDatabasePasswordFile
+      getMatrixSynapseDatabaseConfigFile
       getWpaPassphraseFile
     ];
   };
@@ -83,6 +83,6 @@ in
   getBase64EncodedPassword = name: [ "getBase64EncodedPassword" name ];
   getHashedUserPassword = name: [ "getHashedUserPassword" name ];
   getUsernamePasswordFile = name: [ "getUsernamePasswordFile" name ];
-  getMatrixSynapseDatabasePasswordFile = name: [ "getMatrixSynapseDatabasePasswordFile" name ];
+  getMatrixSynapseDatabaseConfigFile = name: [ "getMatrixSynapseDatabaseConfigFile" name ];
   getWpaPassphraseFile = networks: [ "getWpaPassphraseFile" ] ++ networks;
 }
