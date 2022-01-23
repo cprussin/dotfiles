@@ -17,6 +17,7 @@ let
 
     # Friends' networks
     "PC House2" = { };
+    DeathStar5 = { };
   };
 
   insecureNetworks = { };
