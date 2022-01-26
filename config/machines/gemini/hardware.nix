@@ -49,7 +49,6 @@ in
       "tank/persisted-state/Signal".mountpoint = "/home/cprussin/.config/Signal";
       "tank/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
       "tank/persisted-state/Steam".mountpoint = "/home/cprussin/.local/share/Steam";
-      "tank/persisted-state/TelegramDesktop".mountpoint = "/home/cprussin/.local/share/TelegramDesktop";
       "tank/persisted-state/Zulip".mountpoint = "/home/cprussin/.config/Zulip";
       "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
       "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";

@@ -49,6 +49,15 @@ let
     echo "    user: \"matrix-synapse\""
   '';
 
+  getMautrixTelegramEnvironmentFile = pkgs.writeShellScriptBin "getMautrixTelegramEnvironmentFile" ''
+    set -euo pipefail
+    echo "MAUTRIX_TELEGRAM_TELEGRAM_API_ID=\"$(${getPasswordField}/bin/getPasswordField "$1" "Api Id")\""
+    echo "MAUTRIX_TELEGRAM_TELEGRAM_API_HASH=\"$(${getPasswordField}/bin/getPasswordField "$1" "Api Hash")\""
+    echo "MAUTRIX_TELEGRAM_APPSERVICE_DATABASE=\"postgres://matrix-synapse:$(${getPassword}/bin/getPassword "$2")@localhost/matrix-synapse\""
+    echo "MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN=\"$(${getPasswordField}/bin/getPasswordField "$1" "AS Token")\""
+    echo "MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN=\"$(${getPasswordField}/bin/getPasswordField "$1" "HS Token")\""
+  '';
+
   getWpaPassphraseFile = pkgs.writeShellScriptBin "getWpaPassphraseFile" ''
     set -euo pipefail
     while [[ $# -gt 0 ]]
@@ -74,6 +83,7 @@ in
       getHashedUserPassword
       getUsernamePasswordFile
       getMatrixSynapseDatabaseConfigFile
+      getMautrixTelegramEnvironmentFile
       getWpaPassphraseFile
     ];
   };
@@ -84,5 +94,10 @@ in
   getHashedUserPassword = name: [ "getHashedUserPassword" name ];
   getUsernamePasswordFile = name: [ "getUsernamePasswordFile" name ];
   getMatrixSynapseDatabaseConfigFile = name: [ "getMatrixSynapseDatabaseConfigFile" name ];
+  getMautrixTelegramEnvironmentFile = telegramAppPasswordName: dbPasswordName: [
+    "getMautrixTelegramEnvironmentFile"
+    telegramAppPasswordName
+    dbPasswordName
+  ];
   getWpaPassphraseFile = networks: [ "getWpaPassphraseFile" ] ++ networks;
 }

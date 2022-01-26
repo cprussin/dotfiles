@@ -38,10 +38,6 @@
         path = "${config.primary-user.home}/Phone/Snapchat";
         devices = [ "pegasus" ];
       };
-      Telegram = {
-        path = "${config.primary-user.home}/Phone/Telegram";
-        devices = [ "pegasus" ];
-      };
       Total_Launcher_Backups = {
         path = "${config.primary-user.home}/Phone/Total Launcher Backups";
         devices = [ "pegasus" ];

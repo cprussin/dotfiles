@@ -8,8 +8,6 @@ let
 in
 
 {
-  users.users.matrix-synapse.extraGroups = [ "keys" ];
-
   deployment.keys = {
     matrix-synapse-database-config = {
       user = "matrix-synapse";
@@ -20,6 +18,11 @@ in
       user = "matrix-synapse";
       group = "matrix-synapse";
       keyCommand = passwords.getFullPassword "Infrastructure/matrix/signing-keys/prussin.net";
+    };
+    mautrix-telegram-environment-file = {
+      user = "mautrix-telegram";
+      group = "matrix-synapse";
+      keyCommand = passwords.getMautrixTelegramEnvironmentFile "Infrastructure/matrix/bridges/Telegram" "Infrastructure/postgresql/prussin.net/matrix-synapse";
     };
   };
 
@@ -70,15 +73,61 @@ in
           { names = [ "federation" ]; compress = false; }
         ];
       }];
+      app_service_config_files = [
+        "/var/lib/mautrix-telegram/telegram-registration.yaml"
+      ];
+    };
+
+    mautrix-telegram = {
+      enable = true;
+      environmentFile = config.deployment.keys.mautrix-telegram-environment-file.path;
+      settings = {
+        homeserver = {
+          address = "http://localhost:${toString synapse_port}";
+          domain = "prussin.net";
+        };
+        bridge.permissions = {
+          "prussin.net" = "full";
+          "@connor:prussin.net" = "admin";
+        };
+      };
     };
 
     postgresql.enable = true;
   };
 
-  systemd.services.matrix-synapse = {
-    after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
-    wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
-    serviceConfig.ExecStartPre = lib.mkForce [ ];
+  systemd.services = {
+    matrix-synapse = {
+      after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
+      wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
+      serviceConfig.ExecStartPre = lib.mkForce [ ];
+    };
+    mautrix-telegram = {
+      after = [ "mautrix-telegram-environment-file.service" ];
+      wants = [ "mautrix-telegram-environment-file.service" ];
+      serviceConfig = {
+        DynamicUser = lib.mkForce false;
+        User = "mautrix-telegram";
+        Group = "matrix-synapse";
+      };
+    };
+  };
+
+  # see https://github.com/NixOS/nixpkgs/blob/nixos-21.11/nixos/modules/misc/ids.nix
+  ids = {
+    uids.mautrix-telegram = 350;
+  };
+
+  users.users = {
+    matrix-synapse.extraGroups = [ "keys" ];
+    mautrix-telegram = {
+      group = "matrix-synapse";
+      home = "/var/lib/mautrix-telegram";
+      createHome = true;
+      shell = "${pkgs.bash}/bin/bash";
+      uid = config.ids.uids.mautrix-telegram;
+      extraGroups = [ "keys" ];
+    };
   };
 
   networking.firewall.allowedTCPPorts = [ 443 federation_port ];
