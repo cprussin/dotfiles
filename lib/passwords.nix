@@ -51,11 +51,20 @@ let
 
   getMautrixTelegramEnvironmentFile = pkgs.writeShellScriptBin "getMautrixTelegramEnvironmentFile" ''
     set -euo pipefail
-    echo "MAUTRIX_TELEGRAM_TELEGRAM_API_ID=\"$(${getPasswordField}/bin/getPasswordField "$1" "Api Id")\""
-    echo "MAUTRIX_TELEGRAM_TELEGRAM_API_HASH=\"$(${getPasswordField}/bin/getPasswordField "$1" "Api Hash")\""
-    echo "MAUTRIX_TELEGRAM_APPSERVICE_DATABASE=\"postgres://matrix-synapse:$(${getPassword}/bin/getPassword "$2")@localhost/matrix-synapse\""
-    echo "MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN=\"$(${getPasswordField}/bin/getPasswordField "$1" "AS Token")\""
-    echo "MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN=\"$(${getPasswordField}/bin/getPasswordField "$1" "HS Token")\""
+    getPasswordField=${getPasswordField}/bin/getPasswordField
+    echo "MAUTRIX_TELEGRAM_TELEGRAM_API_ID=\"$($getPasswordField "$1" "Api Id")\""
+    echo "MAUTRIX_TELEGRAM_TELEGRAM_API_HASH=\"$($getPasswordField "$1" "Api Hash")\""
+    echo "MAUTRIX_TELEGRAM_APPSERVICE_DATABASE=\"postgres://mautrix-telegram:$($getPasswordField "$1" "Database")@localhost/mautrix-telegram\""
+    echo "MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN=\"$($getPasswordField "$1" "AS Token")\""
+    echo "MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN=\"$($getPasswordField "$1" "HS Token")\""
+  '';
+
+  getMautrixSignalEnvironmentFile = pkgs.writeShellScriptBin "getMautrixSignalEnvironmentFile" ''
+    set -euo pipefail
+    getPasswordField=${getPasswordField}/bin/getPasswordField
+    echo "MAUTRIX_SIGNAL_APPSERVICE_DATABASE=\"postgres://mautrix-signal:$($getPasswordField "$1" "Database")@localhost/mautrix-signal\""
+    echo "MAUTRIX_SIGNAL_APPSERVICE_AS_TOKEN=\"$($getPasswordField "$1" "AS Token")\""
+    echo "MAUTRIX_SIGNAL_APPSERVICE_HS_TOKEN=\"$($getPasswordField "$1" "HS Token")\""
   '';
 
   getWpaPassphraseFile = pkgs.writeShellScriptBin "getWpaPassphraseFile" ''
@@ -84,6 +93,7 @@ in
       getUsernamePasswordFile
       getMatrixSynapseDatabaseConfigFile
       getMautrixTelegramEnvironmentFile
+      getMautrixSignalEnvironmentFile
       getWpaPassphraseFile
     ];
   };
@@ -94,10 +104,7 @@ in
   getHashedUserPassword = name: [ "getHashedUserPassword" name ];
   getUsernamePasswordFile = name: [ "getUsernamePasswordFile" name ];
   getMatrixSynapseDatabaseConfigFile = name: [ "getMatrixSynapseDatabaseConfigFile" name ];
-  getMautrixTelegramEnvironmentFile = telegramAppPasswordName: dbPasswordName: [
-    "getMautrixTelegramEnvironmentFile"
-    telegramAppPasswordName
-    dbPasswordName
-  ];
+  getMautrixTelegramEnvironmentFile = name: [ "getMautrixTelegramEnvironmentFile" name ];
+  getMautrixSignalEnvironmentFile = name: [ "getMautrixSignalEnvironmentFile" name ];
   getWpaPassphraseFile = networks: [ "getWpaPassphraseFile" ] ++ networks;
 }

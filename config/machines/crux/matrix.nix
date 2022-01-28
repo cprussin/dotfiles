@@ -5,6 +5,21 @@ let
   max_upload_size = "200M";
   synapse_port = 8008;
   federation_port = 8448;
+
+  mautrix_settings = port: {
+    appservice = {
+      inherit port;
+      address = "http://localhost:${toString port}";
+    };
+    homeserver = {
+      address = "http://localhost:${toString synapse_port}";
+      domain = "prussin.net";
+    };
+    bridge.permissions = {
+      "prussin.net" = "full";
+      "@connor:prussin.net" = "admin";
+    };
+  };
 in
 
 {
@@ -12,7 +27,7 @@ in
     matrix-synapse-database-config = {
       user = "matrix-synapse";
       group = "matrix-synapse";
-      keyCommand = passwords.getMatrixSynapseDatabaseConfigFile "Infrastructure/postgresql/prussin.net/matrix-synapse";
+      keyCommand = passwords.getMatrixSynapseDatabaseConfigFile "Infrastructure/matrix/matrix-synapse-database";
     };
     matrix-synapse-signing-key = {
       user = "matrix-synapse";
@@ -22,7 +37,12 @@ in
     mautrix-telegram-environment-file = {
       user = "mautrix-telegram";
       group = "matrix-synapse";
-      keyCommand = passwords.getMautrixTelegramEnvironmentFile "Infrastructure/matrix/bridges/Telegram" "Infrastructure/postgresql/prussin.net/matrix-synapse";
+      keyCommand = passwords.getMautrixTelegramEnvironmentFile "Infrastructure/matrix/bridges/Telegram";
+    };
+    mautrix-signal-environment-file = {
+      user = "mautrix-signal";
+      group = "matrix-synapse";
+      keyCommand = passwords.getMautrixSignalEnvironmentFile "Infrastructure/matrix/bridges/Signal";
     };
   };
 
@@ -75,22 +95,22 @@ in
       }];
       app_service_config_files = [
         "/var/lib/mautrix-telegram/telegram-registration.yaml"
+        config.services.mautrix-signal.registrationFile
       ];
     };
 
     mautrix-telegram = {
       enable = true;
       environmentFile = config.deployment.keys.mautrix-telegram-environment-file.path;
-      settings = {
-        homeserver = {
-          address = "http://localhost:${toString synapse_port}";
-          domain = "prussin.net";
-        };
-        bridge.permissions = {
-          "prussin.net" = "full";
-          "@connor:prussin.net" = "admin";
-        };
-      };
+      settings = mautrix_settings 29317;
+      serviceDependencies = [ "postgresql.service" "mautrix-telegram-environment-file-key.service" ];
+    };
+
+    mautrix-signal = {
+      enable = true;
+      environmentFile = config.deployment.keys.mautrix-signal-environment-file.path;
+      settings = mautrix_settings 29328;
+      serviceDependencies = [ "postgresql.service" "mautrix-signal-environment-file-key.service" ];
     };
 
     postgresql.enable = true;
@@ -102,20 +122,22 @@ in
       wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
       serviceConfig.ExecStartPre = lib.mkForce [ ];
     };
-    mautrix-telegram = {
-      after = [ "mautrix-telegram-environment-file.service" ];
-      wants = [ "mautrix-telegram-environment-file.service" ];
-      serviceConfig = {
-        DynamicUser = lib.mkForce false;
-        User = "mautrix-telegram";
-        Group = "matrix-synapse";
-      };
+    mautrix-telegram.serviceConfig = {
+      DynamicUser = lib.mkForce false;
+      User = "mautrix-telegram";
+      Group = "matrix-synapse";
+    };
+    mautrix-signal.serviceConfig = {
+      DynamicUser = lib.mkForce false;
+      User = "mautrix-signal";
+      Group = "matrix-synapse";
     };
   };
 
   # see https://github.com/NixOS/nixpkgs/blob/nixos-21.11/nixos/modules/misc/ids.nix
   ids = {
     uids.mautrix-telegram = 350;
+    uids.mautrix-signal = 351;
   };
 
   users.users = {
@@ -127,6 +149,14 @@ in
       shell = "${pkgs.bash}/bin/bash";
       uid = config.ids.uids.mautrix-telegram;
       extraGroups = [ "keys" ];
+    };
+    mautrix-signal = {
+      group = "matrix-synapse";
+      home = "/var/lib/mautrix-signal";
+      createHome = true;
+      shell = "${pkgs.bash}/bin/bash";
+      uid = config.ids.uids.mautrix-signal;
+      extraGroups = [ "keys" "signald" ];
     };
   };
 

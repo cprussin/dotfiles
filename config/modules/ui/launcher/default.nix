@@ -12,7 +12,6 @@ let
   slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack -g warn";
   discord = "${pkgs.discord}/bin/discord";
   zulip = "${pkgs.zulip}/bin/zulip";
-  signal = "${pkgs.signal-desktop}/bin/signal-desktop";
 
   comms = pkgs.writeShellScript "" ''
     ${email} &
@@ -21,7 +20,6 @@ let
     ${slack} &
     ${discord} &
     ${zulip} &
-    ${signal} &
   '';
 in
 {
@@ -31,7 +29,7 @@ in
     programs.launcher = {
       enable = true;
       apps = {
-        inherit email sms matrix slack discord zulip signal comms;
+        inherit email sms matrix slack discord zulip comms;
 
         agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
         amazon = mkWebApp "amazon" "https://www.amazon.com/";

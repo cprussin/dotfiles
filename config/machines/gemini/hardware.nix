@@ -46,7 +46,6 @@ in
       "tank/persisted-state/BitwigStudio".mountpoint = "/home/cprussin/.BitwigStudio";
       "tank/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
       "tank/persisted-state/Element".mountpoint = "/home/cprussin/.config/Element";
-      "tank/persisted-state/Signal".mountpoint = "/home/cprussin/.config/Signal";
       "tank/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
       "tank/persisted-state/Steam".mountpoint = "/home/cprussin/.local/share/Steam";
       "tank/persisted-state/Zulip".mountpoint = "/home/cprussin/.config/Zulip";
