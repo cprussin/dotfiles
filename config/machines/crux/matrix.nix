@@ -5,6 +5,7 @@ let
   max_upload_size = "200M";
   synapse_port = 8008;
   federation_port = 8448;
+  homeserverUrl = "http://localhost:${toString synapse_port}";
 
   mautrix_settings = port: {
     appservice = {
@@ -12,7 +13,7 @@ let
       address = "http://localhost:${toString port}";
     };
     homeserver = {
-      address = "http://localhost:${toString synapse_port}";
+      address = homeserverUrl;
       domain = "prussin.net";
     };
     bridge.permissions = {
@@ -43,6 +44,21 @@ in
       user = "mautrix-signal";
       group = "matrix-synapse";
       keyCommand = passwords.getMautrixSignalEnvironmentFile "Infrastructure/matrix/bridges/Signal";
+    };
+    mautrix-syncproxy-environment-file = {
+      user = "mautrix-syncproxy";
+      group = "mautrix-syncproxy";
+      keyCommand = passwords.getMautrixSyncproxyEnvironmentFile "Infrastructure/matrix/bridges/syncproxy";
+    };
+    mautrix-wsproxy-environment-file = {
+      user = "mautrix-wsproxy";
+      group = "mautrix-wsproxy";
+      keyCommand = passwords.getMautrixWsproxyEnvironmentFile "Infrastructure/matrix/bridges/wsproxy" "Infrastructure/matrix/bridges/syncproxy";
+    };
+    mautrix-wsproxy-registration-file = {
+      user = "matrix-synapse";
+      group = "matrix-synapse";
+      keyCommand = passwords.getMautrixWsproxyRegistrationFile "Infrastructure/matrix/bridges/wsproxy";
     };
   };
 
@@ -96,6 +112,7 @@ in
       app_service_config_files = [
         "/var/lib/mautrix-telegram/telegram-registration.yaml"
         config.services.mautrix-signal.registrationFile
+        config.deployment.keys.mautrix-wsproxy-registration-file.path
       ];
     };
 
@@ -113,13 +130,24 @@ in
       serviceDependencies = [ "postgresql.service" "mautrix-signal-environment-file-key.service" ];
     };
 
+    mautrix-wsproxy = {
+      enable = true;
+      secretsFile = config.deployment.keys.mautrix-wsproxy-environment-file.path;
+    };
+
+    mautrix-syncproxy = {
+      inherit homeserverUrl;
+      enable = true;
+      secretsFile = config.deployment.keys.mautrix-syncproxy-environment-file.path;
+    };
+
     postgresql.enable = true;
   };
 
   systemd.services = {
     matrix-synapse = {
-      after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
-      wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" ];
+      after = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" "mautrix-wsproxy-registration-file-key.service" ];
+      wants = [ "matrix-synapse-signing-key-key.service" "matrix-synapse-database-config-key.service" "mautrix-wsproxy-registration-file-key.service" ];
       serviceConfig.ExecStartPre = lib.mkForce [ ];
     };
     mautrix-telegram.serviceConfig = {
@@ -132,31 +160,73 @@ in
       User = "mautrix-signal";
       Group = "matrix-synapse";
     };
+    mautrix-wsproxy = {
+      after = [ "mautrix-wsproxy-environment-file-key.service" ];
+      wants = [ "mautrix-wsproxy-environment-file-key.service" ];
+      serviceConfig = {
+        DynamicUser = lib.mkForce false;
+        User = "mautrix-wsproxy";
+        Group = "mautrix-wsproxy";
+      };
+    };
+    mautrix-syncproxy = {
+      after = [ "mautrix-syncproxy-environment-file-key.service" ];
+      wants = [ "mautrix-syncproxy-environment-file-key.service" ];
+      serviceConfig = {
+        DynamicUser = lib.mkForce false;
+        User = "mautrix-syncproxy";
+        Group = "mautrix-syncproxy";
+      };
+    };
   };
 
   # see https://github.com/NixOS/nixpkgs/blob/nixos-21.11/nixos/modules/misc/ids.nix
   ids = {
-    uids.mautrix-telegram = 350;
-    uids.mautrix-signal = 351;
+    uids = {
+      mautrix-telegram = 350;
+      mautrix-signal = 351;
+      mautrix-wsproxy = 352;
+      mautrix-syncproxy = 353;
+    };
+    gids = {
+      mautrix-wsproxy = 352;
+      mautrix-syncproxy = 353;
+    };
   };
 
-  users.users = {
-    matrix-synapse.extraGroups = [ "keys" ];
-    mautrix-telegram = {
-      group = "matrix-synapse";
-      home = "/var/lib/mautrix-telegram";
-      createHome = true;
-      shell = "${pkgs.bash}/bin/bash";
-      uid = config.ids.uids.mautrix-telegram;
-      extraGroups = [ "keys" ];
+  users = {
+    groups = {
+      mautrix-wsproxy.gid = config.ids.gids.mautrix-wsproxy;
+      mautrix-syncproxy.gid = config.ids.gids.mautrix-syncproxy;
     };
-    mautrix-signal = {
-      group = "matrix-synapse";
-      home = "/var/lib/mautrix-signal";
-      createHome = true;
-      shell = "${pkgs.bash}/bin/bash";
-      uid = config.ids.uids.mautrix-signal;
-      extraGroups = [ "keys" "signald" ];
+    users = {
+      matrix-synapse.extraGroups = [ "keys" ];
+      mautrix-telegram = {
+        group = "matrix-synapse";
+        home = "/var/lib/mautrix-telegram";
+        createHome = true;
+        shell = "${pkgs.bash}/bin/bash";
+        uid = config.ids.uids.mautrix-telegram;
+        extraGroups = [ "keys" ];
+      };
+      mautrix-signal = {
+        group = "matrix-synapse";
+        home = "/var/lib/mautrix-signal";
+        createHome = true;
+        shell = "${pkgs.bash}/bin/bash";
+        uid = config.ids.uids.mautrix-signal;
+        extraGroups = [ "keys" "signald" ];
+      };
+      mautrix-wsproxy = {
+        group = "mautrix-wsproxy";
+        uid = config.ids.uids.mautrix-wsproxy;
+        extraGroups = [ "keys" ];
+      };
+      mautrix-syncproxy = {
+        group = "mautrix-syncproxy";
+        uid = config.ids.uids.mautrix-syncproxy;
+        extraGroups = [ "keys" ];
+      };
     };
   };
 

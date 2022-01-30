@@ -35,6 +35,30 @@
         "url": "https://github.com/nix-community/home-manager/archive/28b9ae40c45c5e7711c353fee1b7af734e293979.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "mautrix-syncproxy": {
+        "branch": "master",
+        "description": "A /sync proxy for encrypted Matrix appservices",
+        "homepage": null,
+        "owner": "mautrix",
+        "repo": "syncproxy",
+        "rev": "808118c0daa684f3d82f28efc6b6d8ef70e1a4af",
+        "sha256": "1iibcbb1fk373qbj1vkgk4nzd1094zxh43q78g5llk11dlkdwg08",
+        "type": "tarball",
+        "url": "https://github.com/mautrix/syncproxy/archive/808118c0daa684f3d82f28efc6b6d8ef70e1a4af.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "mautrix-wsproxy": {
+        "branch": "master",
+        "description": "A simple HTTP push -> websocket proxy for Matrix appservices",
+        "homepage": null,
+        "owner": "mautrix",
+        "repo": "wsproxy",
+        "rev": "v1.0.0",
+        "sha256": "0a0g3wsshxlbj22b3bi6a4zwl7rf08f35v47ll9c30hdj5285490",
+        "type": "tarball",
+        "url": "https://github.com/mautrix/wsproxy/archive/v1.0.0.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixops": {
         "branch": "master",
         "description": "NixOps is a tool for deploying to NixOS machines in a network or cloud.",
