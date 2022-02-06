@@ -49,6 +49,15 @@ let
     echo "    user: \"matrix-synapse\""
   '';
 
+  getMatrixSynapseSharedSecretConfigFile = pkgs.writeShellScriptBin "getMatrixSynapseSharedSecretConfigFile" ''
+    set -euo pipefail
+    echo "modules:"
+    echo "  - module: shared_secret_authenticator.SharedSecretAuthProvider"
+    echo "    config:"
+    echo "      shared_secret: \"$(${getPassword}/bin/getPassword "$1")\""
+    echo "      m_login_password_support_enabled: true"
+  '';
+
   getMautrixTelegramEnvironmentFile = pkgs.writeShellScriptBin "getMautrixTelegramEnvironmentFile" ''
     set -euo pipefail
     getPasswordField=${getPasswordField}/bin/getPasswordField
@@ -57,6 +66,7 @@ let
     echo "MAUTRIX_TELEGRAM_APPSERVICE_DATABASE=\"postgres://mautrix-telegram:$($getPasswordField "$1" "Database")@localhost/mautrix-telegram\""
     echo "MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN=\"$($getPasswordField "$1" "AS Token")\""
     echo "MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN=\"$($getPasswordField "$1" "HS Token")\""
+    echo "SHARED_SECRET=\"$(${getPassword}/bin/getPassword "$2")\""
   '';
 
   getMautrixSignalEnvironmentFile = pkgs.writeShellScriptBin "getMautrixSignalEnvironmentFile" ''
@@ -65,6 +75,7 @@ let
     echo "MAUTRIX_SIGNAL_APPSERVICE_DATABASE=\"postgres://mautrix-signal:$($getPasswordField "$1" "Database")@localhost/mautrix-signal\""
     echo "MAUTRIX_SIGNAL_APPSERVICE_AS_TOKEN=\"$($getPasswordField "$1" "AS Token")\""
     echo "MAUTRIX_SIGNAL_APPSERVICE_HS_TOKEN=\"$($getPasswordField "$1" "HS Token")\""
+    echo "SHARED_SECRET=\"$(${getPassword}/bin/getPassword "$2")\""
   '';
 
   getMautrixSyncproxyEnvironmentFile = pkgs.writeShellScriptBin "getMautrixSyncproxyEnvironmentFile" ''
@@ -81,20 +92,21 @@ let
     echo "SYNC_PROXY_SHARED_SECRET=\"$(${getPassword}/bin/getPassword "$2")\""
   '';
 
-  getMautrixWsproxyRegistrationFile = pkgs.writeShellScriptBin "getMautrixWsproxyRegistrationFile" ''
+  getMautrixRegistrationFile = pkgs.writeShellScriptBin "getMautrixRegistrationFile" ''
     set -euo pipefail
     getPasswordField=${getPasswordField}/bin/getPasswordField
-    echo "id: sms"
-    echo "as_token: $($getPasswordField "$1" "AS Token")"
-    echo "hs_token: $($getPasswordField "$1" "HS Token")"
+    password="Infrastructure/matrix/bridges/$1"
+    echo "id: $1"
+    echo "as_token: $($getPasswordField "$password" "AS Token")"
+    echo "hs_token: $($getPasswordField "$password" "HS Token")"
     echo "namespaces:"
     echo "  users:"
-    echo "    - regex: '@sms_.+:prussin\.net'"
+    echo "    - regex: '@''${1}_.+:prussin\.net'"
     echo "      exclusive: true"
-    echo "    - regex: '@smsbot:prussin\.net'"
+    echo "    - regex: '@''${1}bot:prussin\.net'"
     echo "      exclusive: true"
-    echo "url: http://localhost:29331"
-    echo "sender_localpart: sms_sender_localpart"
+    echo "url: http://localhost:$2"
+    echo "sender_localpart: ''${1}_sender_localpart"
     echo "rate_limited: false"
   '';
 
@@ -123,11 +135,12 @@ in
       getHashedUserPassword
       getUsernamePasswordFile
       getMatrixSynapseDatabaseConfigFile
+      getMatrixSynapseSharedSecretConfigFile
       getMautrixTelegramEnvironmentFile
       getMautrixSignalEnvironmentFile
       getMautrixSyncproxyEnvironmentFile
       getMautrixWsproxyEnvironmentFile
-      getMautrixWsproxyRegistrationFile
+      getMautrixRegistrationFile
       getWpaPassphraseFile
     ];
   };
@@ -138,11 +151,12 @@ in
   getHashedUserPassword = name: [ "getHashedUserPassword" name ];
   getUsernamePasswordFile = name: [ "getUsernamePasswordFile" name ];
   getMatrixSynapseDatabaseConfigFile = name: [ "getMatrixSynapseDatabaseConfigFile" name ];
-  getMautrixTelegramEnvironmentFile = name: [ "getMautrixTelegramEnvironmentFile" name ];
-  getMautrixSignalEnvironmentFile = name: [ "getMautrixSignalEnvironmentFile" name ];
+  getMatrixSynapseSharedSecretConfigFile = name: [ "getMatrixSynapseSharedSecretConfigFile" name ];
+  getMautrixTelegramEnvironmentFile = name: sharedSecret: [ "getMautrixTelegramEnvironmentFile" name sharedSecret ];
+  getMautrixSignalEnvironmentFile = name: sharedSecret: [ "getMautrixSignalEnvironmentFile" name sharedSecret ];
   getMautrixSyncproxyEnvironmentFile = name: [ "getMautrixSyncproxyEnvironmentFile" name ];
   getMautrixWsproxyEnvironmentFile = name: syncproxyName:
     [ "getMautrixWsproxyEnvironmentFile" name syncproxyName ];
-  getMautrixWsproxyRegistrationFile = name: [ "getMautrixWsproxyRegistrationFile" name ];
+  getMautrixRegistrationFile = name: port: [ "getMautrixRegistrationFile" name (toString port) ];
   getWpaPassphraseFile = networks: [ "getWpaPassphraseFile" ] ++ networks;
 }

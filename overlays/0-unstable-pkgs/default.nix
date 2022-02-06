@@ -10,7 +10,7 @@ let
   };
 in
 _: super: {
-  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant;
+  inherit (pkgs-unstable) syncthing bitwig-studio home-assistant signald;
   inherit (pkgs-master) makemkv;
 
   emacsPackagesFor = emacs: (

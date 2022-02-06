@@ -95,6 +95,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (_: super: {
+        mautrix-signal = super.mautrix-signal.overrideAttrs (attrs: {
+          propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+            pkgs.python3.pkgs.asyncpg
+            pkgs.python3.pkgs.python-olm
+            pkgs.python3.pkgs.pycryptodome
+            pkgs.python3.pkgs.unpaddedbase64
+          ];
+        });
+      })
+    ];
+
     services.signald.enable = true;
 
     systemd.services.mautrix-signal = {

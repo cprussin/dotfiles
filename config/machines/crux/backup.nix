@@ -22,6 +22,7 @@ in
       "/var/lib/hass"
       "/var/lib/matrix-synapse"
       "/var/lib/postgresql"
+      "/var/lib/signald"
     ];
     repo = "${userAtHost}:crux-bak";
     encryption = {
