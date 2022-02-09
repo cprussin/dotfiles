@@ -18,10 +18,11 @@
 (use-package groovy-mode)
 (use-package haskell-mode)
 (use-package json-mode)
+(use-package kotlin-mode)
 (use-package nix-mode)
 (use-package rust-mode)
-(use-package yaml-mode)
 (use-package scad-mode)
+(use-package yaml-mode)
 
 (provide 'emacs-rc-modes)
 ;;; emacs-rc-modes.el ends here

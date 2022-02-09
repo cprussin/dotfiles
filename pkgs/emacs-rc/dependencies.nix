@@ -36,6 +36,7 @@
   epkgs.ivy
   epkgs.jest
   epkgs.json-mode
+  epkgs.kotlin-mode
   epkgs.link-hint
   epkgs.magit
   epkgs.markdown-mode
