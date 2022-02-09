@@ -3,13 +3,31 @@
 let
   passwords = pkgs.callPackage ../../../../../lib/passwords.nix { };
 
-  pskEnvVarName = builtins.replaceStrings [ " " ] [ "_" ];
+  sanitizedEnvVar = builtins.replaceStrings [ " " ] [ "_" ];
 
-  mkSecureNetworks = lib.mapAttrs (networkName: config:
-    config // { pskRaw = "@${pskEnvVarName networkName}@"; }
+  peapMschapIdentityEnvVar = networkName: "${sanitizedEnvVar networkName}_USERNAME";
+  peapMschapPasswordEnvVar = networkName: "${sanitizedEnvVar networkName}_PASSWORD";
+
+  mkWpaNetworks = lib.mapAttrs (networkName: config:
+    config // { pskRaw = "@${sanitizedEnvVar networkName}@"; }
   );
 
-  secureNetworks = mkSecureNetworks {
+  mkPeapMschapNetworks = lib.mapAttrs (networkName: config:
+    config // {
+      auth = ''
+        proto=RSN
+        key_mgmt=WPA-EAP
+        pairwise=CCMP
+        eap=PEAP
+        identity="@${peapMschapIdentityEnvVar networkName}@"
+        password=@${peapMschapPasswordEnvVar networkName}@
+        phase1="peaplabel=0"
+        phase2="auth=MSCHAPV2"
+      '';
+    }
+  );
+
+  wpaNetworks = mkWpaNetworks {
     # Home networks
     Centar = { priority = 1; };
     CentarPhone = { priority = 2; };
@@ -20,6 +38,10 @@ let
     DeathStar5 = { };
   };
 
+  peapMschapNetworks = mkPeapMschapNetworks {
+    WeWorkWiFi = { };
+  };
+
   insecureNetworks = { };
 in
 
@@ -27,8 +49,20 @@ in
   deployment.keys.wpa-passphrase-file = {
     keyCommand = passwords.getWpaPassphraseFile (
       lib.flatten (
-        map (network: [ network (pskEnvVarName network) ]) (
-          builtins.attrNames secureNetworks
+        (
+          map
+            (network: [ "--wpa" network (sanitizedEnvVar network) ])
+            (builtins.attrNames wpaNetworks)
+        ) ++
+        (
+          map
+            (network: [
+              "--peap-mschap"
+              network
+              (peapMschapIdentityEnvVar network)
+              (peapMschapPasswordEnvVar network)
+            ])
+            (builtins.attrNames peapMschapNetworks)
         )
       )
     );
@@ -40,6 +74,6 @@ in
     userControlled.enable = true;
     interfaces = [ config.interfaces.wifi ];
     environmentFile = config.deployment.keys.wpa-passphrase-file.path;
-    networks = secureNetworks // insecureNetworks;
+    networks = wpaNetworks // peapMschapNetworks // insecureNetworks;
   };
 }

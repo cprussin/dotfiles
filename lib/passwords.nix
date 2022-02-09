@@ -2,11 +2,15 @@
 let
   pass = "${pkgs.pass}/bin/pass";
   head = "${pkgs.coreutils}/bin/head";
+  cut = "${pkgs.coreutils}/bin/cut";
+  tr = "${pkgs.coreutils}/bin/tr";
+  base64 = "${pkgs.coreutils}/bin/base64";
   grep = "${pkgs.gnugrep}/bin/grep";
   sed = "${pkgs.gnused}/bin/sed";
-  base64 = "${pkgs.coreutils}/bin/base64";
   mkpasswd = "${pkgs.mkpasswd}/bin/mkpasswd";
   wpa_passphrase = "${pkgs.wpa_supplicant}/bin/wpa_passphrase";
+  iconv = "${pkgs.glibc.bin}/bin/iconv";
+  openssl = "${pkgs.openssl}/bin/openssl";
 
   getFullPassword = pkgs.writeShellScriptBin "getFullPassword" ''
     set -euo pipefail
@@ -114,13 +118,34 @@ let
     set -euo pipefail
     while [[ $# -gt 0 ]]
     do
-      network="$1"
+      network_type="$1"
       shift
-      psk_name="$1"
-      shift
-      password="$(${getPassword}/bin/getPassword "Wifi/$network")"
-      psk="$(${wpa_passphrase} "$network" "$password" | ${grep} -P '^\tpsk=' | ${sed} 's/^\tpsk=//')"
-      echo "$psk_name=\"$psk\""
+      case $network_type in
+        --wpa)
+          network="$1"
+          shift
+          psk_var_name="$1"
+          shift
+          password="$(${getPassword}/bin/getPassword "Wifi/$network")"
+          psk="$(${wpa_passphrase} "$network" "$password" | ${grep} -P '^\tpsk=' | ${sed} 's/^\tpsk=//')"
+          echo "$psk_var_name=\"$psk\""
+          ;;
+        --peap-mschap)
+          network="$1"
+          shift
+          identity_var_name="$1"
+          shift
+          password_var_name="$1"
+          shift
+          identity="$(${getPasswordField}/bin/getPasswordField "Wifi/$network" "Identity")"
+          echo "$identity_var_name=\"$identity\""
+          hashedPassword="$(${getPassword}/bin/getPassword "Wifi/$network" | ${tr} -d '\n' | ${iconv} -t utf16le | ${openssl} md4 | ${cut} -d ' ' -f 2)"
+          echo "$password_var_name=hash:$hashedPassword"
+          ;;
+        *)
+          echo "ERROR: Unknown network type: $network_type" >&2
+          exit 1
+       esac
     done
   '';
 in
