@@ -1,4 +1,16 @@
 {
+    "alejandra": {
+        "branch": "0.6.0",
+        "description": "The Uncompromising Nix Code Formatter",
+        "homepage": "https://kamadorueda.github.io/alejandra/",
+        "owner": "kamadorueda",
+        "repo": "alejandra",
+        "rev": "26aa434e096710d0de590af576109983eda2656e",
+        "sha256": "158xqn0cdnrlg61ki963whsrb4rqjs1v2pfc40a9plx8x0il81as",
+        "type": "tarball",
+        "url": "https://github.com/kamadorueda/alejandra/archive/26aa434e096710d0de590af576109983eda2656e.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "dircolors-solarized": {
         "branch": "master",
         "description": "This is a repository of themes for GNU ls (configured via GNU dircolors) that support Ethan Schoonover’s Solarized color scheme.",

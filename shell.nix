@@ -4,6 +4,7 @@ in
 { nixpkgs ? sources.nixpkgs
 , niv ? sources.niv
 , nixops ? sources.nixops
+, alejandra ? sources.alejandra
 }:
 let
   niv-overlay = self: _: {
@@ -22,6 +23,10 @@ let
     nixops = (import nixops).default;
   };
 
+  alejandra-overlay = self: _: {
+    alejandra = (import alejandra)."${self.system}";
+  };
+
   password-utils-overlay = self: _: {
     passwordUtils = (self.callPackage ./lib/passwords.nix { }).passwordUtils;
   };
@@ -30,6 +35,7 @@ let
     overlays = [
       niv-overlay
       nixops-overlay
+      alejandra-overlay
       password-utils-overlay
     ];
     config = { };
@@ -42,7 +48,7 @@ let
   '';
 
   format = pkgs.writeShellScriptBin "format" ''
-    ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt ${files} "$@"
+    ${pkgs.alejandra}/bin/alejandra ${files} "$@"
   '';
 
   deploy = pkgs.writeShellScriptBin "deploy" ''
