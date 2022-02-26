@@ -1,8 +1,10 @@
-{ lib, config, ... }:
-let
-  cfg = config.cursorTheme;
-in
 {
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.cursorTheme;
+in {
   options.cursorTheme = {
     package = lib.mkOption {
       description = "The package that provides the cursors";
@@ -16,7 +18,7 @@ in
   };
 
   config = lib.mkIf (cfg.package != null) {
-    home.packages = [ cfg.package ];
+    home.packages = [cfg.package];
     xsession.pointerCursor = cfg;
   };
 }

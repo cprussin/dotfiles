@@ -1,9 +1,7 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   services.printing = {
     enable = true;
-    drivers = [ pkgs.epson-escpr2 ];
+    drivers = [pkgs.epson-escpr2];
   };
   hardware.printers = {
     ensureDefaultPrinter = "circinus";

@@ -1,3 +1,3 @@
 self: _: {
-  emojione-png = self.callPackage ./derivation.nix { };
+  emojione-png = self.callPackage ./derivation.nix {};
 }

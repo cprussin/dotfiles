@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   primary-user.home-manager.programs.ssh = {
     enable = true;
     userKnownHostsFile = "${./known_hosts}";

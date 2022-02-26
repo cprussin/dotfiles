@@ -1,5 +1,11 @@
-{ writeShellScript, fortune, cowsay, lolcat, ncurses, ls }:
-
+{
+  writeShellScript,
+  fortune,
+  cowsay,
+  lolcat,
+  ncurses,
+  ls,
+}:
 writeShellScript "clear" ''
   fortune=${fortune}/bin/fortune
   cowthink=${cowsay}/bin/cowthink

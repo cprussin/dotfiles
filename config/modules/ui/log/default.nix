@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
-{
-  primary-user.sudo-cmds = [ "${pkgs.systemd}/bin/journalctl -alf" ];
+{pkgs, ...}: {
+  primary-user.sudo-cmds = ["${pkgs.systemd}/bin/journalctl -alf"];
 }

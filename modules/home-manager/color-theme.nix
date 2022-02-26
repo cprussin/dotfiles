@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.colorTheme;
-  colorThemeType = pkgs.callPackage ../../lib/type/colorTheme.nix { };
-  removeOctothorpe = builtins.replaceStrings [ "#" ] [ "" ];
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.colorTheme;
+  colorThemeType = pkgs.callPackage ../../lib/type/colorTheme.nix {};
+  removeOctothorpe = builtins.replaceStrings ["#"] [""];
+in {
   options.colorTheme = lib.mkOption {
     type = lib.types.nullOr colorThemeType;
     default = null;

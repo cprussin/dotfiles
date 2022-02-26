@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   primary-user.home-manager = {
     programs.emacs = {
       enable = true;

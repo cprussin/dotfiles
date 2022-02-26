@@ -1,6 +1,4 @@
-_:
-
-{
+_: {
   name = "tray";
   config.spacing = 10;
 }

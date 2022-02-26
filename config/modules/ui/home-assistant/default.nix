@@ -1,6 +1,8 @@
-{ config, lib, ... }:
-
 {
+  config,
+  lib,
+  ...
+}: {
   options.services.home-assistant.virtualHost = lib.mkOption {
     type = lib.types.str;
   };
@@ -28,6 +30,6 @@
       home-assistant.enable = true;
     };
 
-    networking.firewall.allowedTCPPorts = [ 80 443 ];
+    networking.firewall.allowedTCPPorts = [80 443];
   };
 }

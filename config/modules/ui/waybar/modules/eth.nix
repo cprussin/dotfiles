@@ -1,6 +1,7 @@
-{ config, colors }:
-
 {
+  config,
+  colors,
+}: {
   name = "network#eth";
 
   config = {

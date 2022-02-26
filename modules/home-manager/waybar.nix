@@ -1,5 +1,9 @@
-{ pkgs, lib, config, ... }:
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   cfg = config.programs.waybar-custom;
 
   styleBlockType = lib.types.attrsOf (
@@ -26,7 +30,7 @@ let
 
       config = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
+        default = {};
         description = "The module config";
       };
 
@@ -41,7 +45,7 @@ let
   allModules = cfg.modules.left ++ cfg.modules.center ++ cfg.modules.right;
 
   getModuleConfigs =
-    lib.foldl (acc: module: acc // { ${module.name} = module.config; }) { };
+    lib.foldl (acc: module: acc // {${module.name} = module.config;}) {};
   getName = map (builtins.getAttr "name");
 
   printCssBlockContents = lib.mapAttrsToList (
@@ -51,21 +55,20 @@ let
       else printCssBlock attr value
   );
 
-  printCssBlock = selector: block:
-    "${selector}{${lib.concatStrings (printCssBlockContents block)}}";
+  printCssBlock = selector: block: "${selector}{${lib.concatStrings (printCssBlockContents block)}}";
 
   printCssBlockSet = selectorPrefix: blockSet:
     builtins.concatStringsSep "\n" (
       lib.mapAttrsToList
-        (
-          selector: block:
-            "${selectorPrefix}${printCssBlock selector block}"
-        )
-        blockSet
+      (
+        selector: block: "${selectorPrefix}${printCssBlock selector block}"
+      )
+      blockSet
     );
 
   defaultStyleSelector = module:
-    "#" + builtins.replaceStrings [ "/" "#" ] [ "-" "." ] (
+    "#"
+    + builtins.replaceStrings ["/" "#"] ["-" "."] (
       lib.removePrefix "sway/" module.name
     );
 
@@ -77,13 +80,12 @@ let
   commonStyleSelector = builtins.concatStringsSep "," (
     map styleSelector allModules
   );
-in
-{
+in {
   options.programs.waybar-custom = {
     enable = lib.mkEnableOption "Waybar";
 
     layer = lib.mkOption {
-      type = lib.types.enum [ "top" " bottom" ];
+      type = lib.types.enum ["top" " bottom"];
       default = "bottom";
       description = ''
         Decide if the bar is displayed in front of the windows or behind them.
@@ -102,7 +104,7 @@ in
     };
 
     position = lib.mkOption {
-      type = lib.types.enum [ "top" "bottom" "left" "right" ];
+      type = lib.types.enum ["top" "bottom" "left" "right"];
       default = "top";
       description = "Bar position, can be top, bottom, left, right.";
     };
@@ -168,19 +170,19 @@ in
         options = {
           left = lib.mkOption {
             type = lib.types.listOf moduleModule;
-            default = [ ];
+            default = [];
             description = "Modules that will be displayed on the left.";
           };
 
           center = lib.mkOption {
             type = lib.types.listOf moduleModule;
-            default = [ ];
+            default = [];
             description = "Modules that will be displayed in the center.";
           };
 
           right = lib.mkOption {
             type = lib.types.listOf moduleModule;
-            default = [ ];
+            default = [];
             description = "Modules that will be displayed on the right.";
           };
         };
@@ -188,7 +190,7 @@ in
     };
 
     styles = lib.mkOption {
-      default = { };
+      default = {};
       type = lib.types.submodule {
         options = {
           pre = lib.mkOption {
@@ -222,11 +224,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ pkgs.waybar ];
+    home.packages = [pkgs.waybar];
     xdg.configFile = {
       "waybar/config".text = builtins.toJSON (
         lib.filterAttrs (_: v: v != null) (
-          getModuleConfigs allModules // {
+          getModuleConfigs allModules
+          // {
             layer = cfg.layer;
             output = cfg.output;
             position = cfg.position;

@@ -1,3 +1,1 @@
-_:
-
-attrset: builtins.removeAttrs attrset [ "override" "overrideDerivation" ]
+_: attrset: builtins.removeAttrs attrset ["override" "overrideDerivation"]

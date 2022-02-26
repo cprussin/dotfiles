@@ -1,5 +1,4 @@
-{ lib }:
-
+{lib}:
 lib.types.submodule {
   options = {
     layout = lib.mkOption {

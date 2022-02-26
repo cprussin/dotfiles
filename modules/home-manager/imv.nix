@@ -1,5 +1,8 @@
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   cfg = config.programs.imv;
 
   fontModule = lib.types.submodule {
@@ -12,8 +15,7 @@ let
       };
     };
   };
-in
-{
+in {
   options.programs.imv = {
     enable = lib.mkEnableOption "imv";
 
@@ -114,7 +116,7 @@ in
     };
 
     scalingMode = lib.mkOption {
-      type = lib.types.enum [ "none" "shrink" "full" "crop" ];
+      type = lib.types.enum ["none" "shrink" "full" "crop"];
       description = ''
         Set scaling mode to use.  'none' will show each image at its actual
         size.  'shrink' will scale down the image to fit inside the window.
@@ -154,7 +156,7 @@ in
     };
 
     upscalingMethod = lib.mkOption {
-      type = lib.types.enum [ "linear" "nearest_neighbor" ];
+      type = lib.types.enum ["linear" "nearest_neighbor"];
       description = "Use the specified method to upscale images.";
       default = "linear";
     };
@@ -167,7 +169,7 @@ in
         command. Any arguments provided to an alias are appended to the command
         configured by the alias.
       '';
-      default = { };
+      default = {};
     };
 
     binds = lib.mkOption {
@@ -203,7 +205,7 @@ in
         A complete list of keysyms can also be found on most systems with the
         `dumpkeys -l` command.
       '';
-      default = { };
+      default = {};
     };
   };
 
@@ -228,10 +230,10 @@ in
       upscaling_method = ${cfg.upscalingMethod}
 
       [aliases]
-      ${lib.generators.toKeyValue { } cfg.aliases}
+      ${lib.generators.toKeyValue {} cfg.aliases}
 
       [binds]
-      ${lib.generators.toKeyValue { } cfg.binds}
+      ${lib.generators.toKeyValue {} cfg.binds}
     '';
   };
 }

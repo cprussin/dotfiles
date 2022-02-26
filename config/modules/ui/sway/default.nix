@@ -1,21 +1,27 @@
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
 
   terminal = config.primary-user.home-manager.default-terminal.bin;
 
   modifier = "Mod4";
 
-  expandSet = { criteria, commands }:
-    map (command: { inherit criteria command; }) commands;
+  expandSet = {
+    criteria,
+    commands,
+  }:
+    map (command: {inherit criteria command;}) commands;
 
-  mkCommands = lib.foldl (commands: set: commands ++ (expandSet set)) [ ];
+  mkCommands = lib.foldl (commands: set: commands ++ (expandSet set)) [];
 
   laptopOutput = "eDP-1";
-in
-{
+in {
   primary-user.home-manager = {
-    home.packages = lib.mkForce [ pkgs.xwayland ];
+    home.packages = lib.mkForce [pkgs.xwayland];
 
     wayland.windowManager.sway = {
       enable = true;
@@ -27,7 +33,7 @@ in
         menu = "${terminal} --class launcher --title launcher --name launcher ${pkgs.launcher}/bin/launch ${pkgs.sway}/bin/swaymsg exec";
 
         workspaceAutoBackAndForth = true;
-        bars = [ ];
+        bars = [];
 
         output = {
           "${laptopOutput}".pos = lib.mkIf (!config.hardware.video.hidpi.enable) "0,0 scale 1";
@@ -65,11 +71,11 @@ in
             }
             {
               criteria.app_id = "pavucontrol";
-              commands = [ "floating enable" ];
+              commands = ["floating enable"];
             }
             {
               criteria.app_id = "bluetooth";
-              commands = [ "floating enable" ];
+              commands = ["floating enable"];
             }
             {
               criteria.class = "Pinentry";
@@ -134,7 +140,6 @@ in
         }
       '';
     };
-
   };
 
   autologin-graphical-session = {

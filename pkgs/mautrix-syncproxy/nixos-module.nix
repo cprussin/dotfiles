@@ -1,10 +1,11 @@
-{ src }: { lib, config, pkgs, ... }:
-
-let
+{src}: {
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
   cfg = config.services.mautrix-syncproxy;
-in
-
-{
+in {
   options.services.mautrix-syncproxy = {
     enable = lib.mkEnableOption "Mautrix Syncproxy";
 
@@ -35,14 +36,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [ (import ./overlay.nix { inherit src; }) ];
+    nixpkgs.overlays = [(import ./overlay.nix {inherit src;})];
 
     systemd.services.mautrix-syncproxy = {
       description = "Mautrix Syncproxy";
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" "matrix-synapse.service" ];
-      after = [ "network-online.target" "matrix-synapse.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target" "matrix-synapse.service"];
+      after = ["network-online.target" "matrix-synapse.service"];
 
       environment = {
         LISTEN_ADDRESS = cfg.listenAddress;

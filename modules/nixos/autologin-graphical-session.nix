@@ -1,8 +1,11 @@
-{ pkgs, lib, config, ... }:
-let
-  cfg = config.autologin-graphical-session;
-in
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.autologin-graphical-session;
+in {
   options.autologin-graphical-session = {
     enable = lib.mkEnableOption "Autologin graphical session";
 
@@ -21,8 +24,8 @@ in
 
       services.autologin-graphical-session = {
         description = "Autologin graphical session";
-        wantedBy = [ "graphical.target" ];
-        aliases = [ "display-manager.service" ];
+        wantedBy = ["graphical.target"];
+        aliases = ["display-manager.service"];
         after = [
           "systemd-user-sessions.service"
           "getty@tty7.service"

@@ -1,6 +1,8 @@
-{ pavucontrol, colors, pamixer }:
-
 {
+  pavucontrol,
+  colors,
+  pamixer,
+}: {
   name = "pulseaudio#source";
 
   config = {

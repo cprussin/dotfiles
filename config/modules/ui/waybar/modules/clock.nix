@@ -1,6 +1,4 @@
-_:
-
-{
+_: {
   name = "clock";
 
   config = {

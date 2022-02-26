@@ -1,17 +1,17 @@
-{ writeShellScriptBin
-, bat
-, coreutils
-, figlet
-, file
-, gnused
-, gnutar
-, python3Packages
-, poppler_utils
-, kitty
-, ghostscript
-, ffmpeg
+{
+  writeShellScriptBin,
+  bat,
+  coreutils,
+  figlet,
+  file,
+  gnused,
+  gnutar,
+  python3Packages,
+  poppler_utils,
+  kitty,
+  ghostscript,
+  ffmpeg,
 }:
-
 writeShellScriptBin "preview" ''
   bat=${bat}/bin/bat
   head=${coreutils}/bin/head

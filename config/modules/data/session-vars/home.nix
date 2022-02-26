@@ -13,21 +13,27 @@
 # or change to sourcing this directly out of the nix store instead of out of the
 # profile -- but they likely won't do that since this is pretty nonstandard
 # stuff.
-{ pkgs, lib, config, ... }:
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   hm-session-vars = pkgs.writeTextFile {
     name = "hm-session-vars.sh";
     destination = "/etc/profile.d/hm-session-vars.sh";
-    text = ''
-      # Only source this once.
-      if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi
-      export __HM_SESS_VARS_SOURCED=1
-      ${config.lib.shell.exportAll config.home.sessionVariables}
-    '' + lib.optionalString (config.home.sessionPath != [ ]) ''
-      export PATH="$PATH''${PATH:+:}${lib.concatStringsSep ":" config.home.sessionPath}"
-    '' + config.home.sessionVariablesExtra;
+    text =
+      ''
+        # Only source this once.
+        if [ -n "$__HM_SESS_VARS_SOURCED" ]; then return; fi
+        export __HM_SESS_VARS_SOURCED=1
+        ${config.lib.shell.exportAll config.home.sessionVariables}
+      ''
+      + lib.optionalString (config.home.sessionPath != []) ''
+        export PATH="$PATH''${PATH:+:}${lib.concatStringsSep ":" config.home.sessionPath}"
+      ''
+      + config.home.sessionVariablesExtra;
   };
-in
-{
-  home.packages = lib.mkForce [ hm-session-vars ];
+in {
+  home.packages = lib.mkForce [hm-session-vars];
 }

@@ -1,6 +1,7 @@
-{ writeShellScript, config }:
-
 {
+  writeShellScript,
+  config,
+}: {
   name = "custom/secure";
 
   config = {

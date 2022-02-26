@@ -1,5 +1,3 @@
-{ ... }:
-
-{
+{...}: {
   boot.tmpOnTmpfs = true;
 }

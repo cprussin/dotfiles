@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   primary-user.home-manager.programs.imv = {
     enable = true;
 

@@ -1,9 +1,12 @@
-{ pkgs, lib, config, ... }:
-let
-  keymapType = pkgs.callPackage ../../lib/type/keymap.nix { };
-  cfg = config.keymap;
-in
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
+  keymapType = pkgs.callPackage ../../lib/type/keymap.nix {};
+  cfg = config.keymap;
+in {
   options.keymap = lib.mkOption {
     type = lib.types.nullOr keymapType;
     default = null;

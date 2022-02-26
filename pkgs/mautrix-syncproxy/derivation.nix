@@ -1,5 +1,7 @@
-{ src, buildGoModule }:
-
+{
+  src,
+  buildGoModule,
+}:
 buildGoModule {
   inherit src;
   pname = "mautrix-syncproxy";

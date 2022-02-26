@@ -1,5 +1,11 @@
-{ writeShellScriptBin, coreutils, chromium, google-chrome, firefox, brave }:
-
+{
+  writeShellScriptBin,
+  coreutils,
+  chromium,
+  google-chrome,
+  firefox,
+  brave,
+}:
 writeShellScriptBin "browse" ''
   chromium=${chromium}/bin/chromium
   chrome=${google-chrome}/bin/google-chrome-stable

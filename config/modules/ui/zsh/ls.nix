@@ -1,5 +1,7 @@
-{ writeShellScript, coreutils }:
-
+{
+  writeShellScript,
+  coreutils,
+}:
 writeShellScript "ls" ''
   echo=${coreutils}/bin/echo
   realpath=${coreutils}/bin/realpath

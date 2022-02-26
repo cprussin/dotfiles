@@ -1,11 +1,12 @@
-{ src }: { lib, config, pkgs, ... }:
-
-let
+{src}: {
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
   cfg = config.services.mautrix-wsproxy;
   port = 29331;
-in
-
-{
+in {
   options.services.mautrix-wsproxy = {
     enable = lib.mkEnableOption "Mautrix Wsproxy";
 
@@ -40,14 +41,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [ (import ./overlay.nix { inherit src; }) ];
+    nixpkgs.overlays = [(import ./overlay.nix {inherit src;})];
 
     systemd.services.mautrix-wsproxy = {
       description = "Mautrix Wsproxy";
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" "matrix-synapse.service" ];
-      after = [ "network-online.target" "matrix-synapse.service" ];
+      wantedBy = ["multi-user.target"];
+      wants = ["network-online.target" "matrix-synapse.service"];
+      after = ["network-online.target" "matrix-synapse.service"];
 
       environment = {
         LISTEN_ADDRESS = cfg.listenAddress;
@@ -74,6 +75,6 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ port ];
+    networking.firewall.allowedTCPPorts = [port];
   };
 }

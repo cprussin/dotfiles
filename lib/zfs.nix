@@ -1,6 +1,4 @@
-{ lib }:
-
-{
+{lib}: {
   mkZfsFileSystems = lib.mapAttrs' (
     device: options:
       lib.nameValuePair options.mountpoint {

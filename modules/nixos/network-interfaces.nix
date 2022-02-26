@@ -1,6 +1,4 @@
-{ lib, ... }:
-
-{
+{lib, ...}: {
   options.interfaces = lib.mkOption {
     description = "The list of networking interface names.";
 

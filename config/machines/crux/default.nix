@@ -1,6 +1,4 @@
-{ config, ... }:
-
-{
+{config, ...}: {
   imports = [
     ./hardware.nix
     ./backup.nix
@@ -28,23 +26,23 @@
     syncthing.folders = {
       DCIM = {
         path = "${config.primary-user.home}/Phone/DCIM";
-        devices = [ "pegasus" ];
+        devices = ["pegasus"];
       };
       Pictures = {
         path = "${config.primary-user.home}/Phone/Pictures";
-        devices = [ "pegasus" ];
+        devices = ["pegasus"];
       };
       Snapchat = {
         path = "${config.primary-user.home}/Phone/Snapchat";
-        devices = [ "pegasus" ];
+        devices = ["pegasus"];
       };
       Total_Launcher_Backups = {
         path = "${config.primary-user.home}/Phone/Total Launcher Backups";
-        devices = [ "pegasus" ];
+        devices = ["pegasus"];
       };
       WhatsApp_Media = {
         path = "${config.primary-user.home}/Phone/WhatsApp Media";
-        devices = [ "pegasus" ];
+        devices = ["pegasus"];
       };
     };
   };

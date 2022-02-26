@@ -1,11 +1,13 @@
-{ config, pkgs, ... }:
-let
-  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
+{
+  config,
+  pkgs,
+  ...
+}: let
+  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
   rsyncUser = "11795";
   rsyncHost = "ch-s011.rsync.net";
   userAtHost = "${rsyncUser}@${rsyncHost}";
-in
-{
+in {
   services.borgbackup.jobs."rsync.net" = {
     paths = map (folder: "${folder}/.zfs/snapshot/borgsnap") [
       "/home/cprussin/Backups"
@@ -52,8 +54,8 @@ in
   systemd.services = {
     "borgbackup-job-rsync.net-import-keyfile" = {
       description = "Import the borgbackup keyfile for rsync.net.";
-      after = [ "borgbackup-keyfile-key.service" ];
-      wants = [ "borgbackup-keyfile-key.service" ];
+      after = ["borgbackup-keyfile-key.service"];
+      wants = ["borgbackup-keyfile-key.service"];
       environment = config.services.borgbackup.jobs."rsync.net".environment;
       serviceConfig = {
         Type = "oneshot";
@@ -83,6 +85,5 @@ in
     };
   };
 
-  programs.ssh.knownHosts."ch-s011.rsync.net".publicKey =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYEyoL8HADxd4D1md7t2LGcM8nNhShc5qCjttVH1vTg";
+  programs.ssh.knownHosts."ch-s011.rsync.net".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYEyoL8HADxd4D1md7t2LGcM8nNhShc5qCjttVH1vTg";
 }

@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   primary-user.home-manager.programs.zathura = {
     enable = true;
     options = {

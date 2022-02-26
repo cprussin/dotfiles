@@ -1,6 +1,4 @@
-{ colors }:
-
-{
+{colors}: {
   name = "sway/workspaces";
 
   config = {

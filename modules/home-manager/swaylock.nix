@@ -1,5 +1,9 @@
-{ pkgs, lib, config, ... }:
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   cfg = config.programs.swaylock;
 
   printValue = value:
@@ -13,13 +17,14 @@ let
     else "${key}=${printValue value}";
 
   isValidConfigFileAttr = name: value:
-    name != "enable" && (
+    name
+    != "enable"
+    && (
       if builtins.isBool value
       then value
       else value != null
     );
-in
-{
+in {
   options.programs.swaylock = {
     enable = lib.mkEnableOption "Swaylock";
 
@@ -53,7 +58,6 @@ in
 
         Note: this is the default behavior of i3lock.
       '';
-
     };
 
     no-unlock-indicator = lib.mkOption {
@@ -63,7 +67,7 @@ in
     };
 
     image = lib.mkOption {
-      type = lib.types.nullOr (lib.types.oneOf [ lib.types.str lib.types.path ]);
+      type = lib.types.nullOr (lib.types.oneOf [lib.types.str lib.types.path]);
       default = null;
       description = ''
         Display the given image, optionally only on the given output. Use -c to
@@ -396,7 +400,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ pkgs.swaylock ];
+    home.packages = [pkgs.swaylock];
     xdg.configFile."swaylock/config".text =
       builtins.concatStringsSep "\n" (
         lib.mapAttrsToList printConfigSetting (

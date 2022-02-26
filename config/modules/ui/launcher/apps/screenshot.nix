@@ -1,5 +1,11 @@
-{ writeShellScript, coreutils, grim, slurp, sway, jq }:
-
+{
+  writeShellScript,
+  coreutils,
+  grim,
+  slurp,
+  sway,
+  jq,
+}:
 writeShellScript "screenshot" ''
   ls=${coreutils}/bin/ls
   wc=${coreutils}/bin/wc

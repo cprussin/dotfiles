@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.colorTheme;
-  colorThemeType = pkgs.callPackage ../../lib/type/colorTheme.nix { };
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.colorTheme;
+  colorThemeType = pkgs.callPackage ../../lib/type/colorTheme.nix {};
+in {
   options.colorTheme = lib.mkOption {
     type = lib.types.nullOr colorThemeType;
     default = null;
   };
 
   config = lib.mkIf (cfg != null) {
-    console.colors = map (builtins.replaceStrings [ "#" ] [ "" ]) [
+    console.colors = map (builtins.replaceStrings ["#"] [""]) [
       cfg.background
       cfg.red
       cfg.green

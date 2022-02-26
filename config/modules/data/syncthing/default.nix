@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
-let
-  passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
 
   otherMachineNames =
     lib.remove config.networking.hostName (
@@ -15,8 +19,7 @@ let
     crux = "I4ZIHKH-5UQLYN3-I6TGPKJ-IXVKJYK-NTO6RQG-QPIFI4Y-NMC3IHO-4OPHDAM";
     pegasus = "YDEJP2I-6H55ESK-NGMZ6OV-TWRVUCZ-WHQL2XA-SEDSDOY-Z7UWSJA-ZCVF3AH";
   };
-in
-{
+in {
   options.persistSyncthingKeys = lib.mkEnableOption "Persist syncthing keys across reboots";
 
   config = {
@@ -42,21 +45,21 @@ in
       user = config.primary-user.name;
       cert = config.deployment.keys.syncthing-cert.path;
       key = config.deployment.keys.syncthing-key.path;
-      devices = lib.genAttrs (otherMachineNames ++ [ "pegasus" ]) (machine: {
+      devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
         id = syncthingMachineIds."${machine}";
       });
       folders = {
         Notes = {
           path = "${config.primary-user.home}/Notes";
-          devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
+          devices = lib.remove config.networking.hostName ["pegasus" "crux" "gemini" "orion"];
         };
         Projects = {
           path = "${config.primary-user.home}/Projects";
-          devices = lib.remove config.networking.hostName [ "crux" "gemini" "orion" ];
+          devices = lib.remove config.networking.hostName ["crux" "gemini" "orion"];
         };
         Scratch = {
           path = "${config.primary-user.home}/Scratch";
-          devices = lib.remove config.networking.hostName [ "pegasus" "crux" "gemini" "orion" ];
+          devices = lib.remove config.networking.hostName ["pegasus" "crux" "gemini" "orion"];
         };
       };
     };
@@ -81,6 +84,6 @@ in
       '';
     };
 
-    users.users."${config.services.syncthing.user}".extraGroups = [ "keys" ];
+    users.users."${config.services.syncthing.user}".extraGroups = ["keys"];
   };
 }

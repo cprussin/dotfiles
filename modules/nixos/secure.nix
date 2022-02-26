@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.secure;
 
   secures = builtins.attrValues cfg;
@@ -19,15 +23,13 @@ let
 
   zpool = "${pkgs.zfs}/bin/zpool";
 
-  isPoolAvailable = pool:
-    "(${zpool} import 2>/dev/null | grep 'pool: ${pool}' 2>&1 >/dev/null)";
+  isPoolAvailable = pool: "(${zpool} import 2>/dev/null | grep 'pool: ${pool}' 2>&1 >/dev/null)";
 
   importPool = pool: "${zpool} import -o readonly=on '${pool}'";
 
   exportPool = pool: "${zpool} export '${pool}'";
 
-  somePoolsUnavailable =
-    "(! (${mapConcatPools isPoolAvailable " && "}))";
+  somePoolsUnavailable = "(! (${mapConcatPools isPoolAvailable " && "}))";
 
   mkLuksDevice = luksBase: drive: {
     name = "crypt-${drive}";
@@ -40,8 +42,7 @@ let
 
   luksDevicesFor = secure:
     builtins.listToAttrs (map (mkLuksDevice secure.luks) secure.luksDrives);
-in
-{
+in {
   options.secure = lib.mkOption {
     description = ''
       An attrset mapping usernames to their secure storage configurations.
@@ -51,7 +52,7 @@ in
     default = null;
     type = lib.types.nullOr (lib.types.attrsOf (
       lib.types.submodule (
-        { config, ... }: {
+        {config, ...}: {
           options = {
             pool = lib.mkOption {
               type = lib.types.str;
@@ -75,7 +76,7 @@ in
 
             luksDrives = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
+              default = [];
               description = ''
                 The list of drive IDs whose luks keys & headers are stored in
                 this volume.
@@ -98,17 +99,15 @@ in
             };
           };
 
-          config =
-            let
-              pool = config.pool;
-            in
-            {
-              passwords = lib.mkDefault "/${pool}/passwords";
-              gnupg = lib.mkDefault "/${pool}/gnupg";
-              luks = lib.mkDefault "/${pool}/crypt";
-              importCmd = pkgs.writeShellScript "import-${pool}" (importPool pool);
-              exportCmd = pkgs.writeShellScript "export-${pool}" (exportPool pool);
-            };
+          config = let
+            pool = config.pool;
+          in {
+            passwords = lib.mkDefault "/${pool}/passwords";
+            gnupg = lib.mkDefault "/${pool}/gnupg";
+            luks = lib.mkDefault "/${pool}/crypt";
+            importCmd = pkgs.writeShellScript "import-${pool}" (importPool pool);
+            exportCmd = pkgs.writeShellScript "export-${pool}" (exportPool pool);
+          };
         }
       )
     ));
@@ -116,28 +115,28 @@ in
 
   config = lib.mkIf (cfg != null) {
     home-manager.users = lib.mapAttrs
-      (
-        _: secure: { config, ... }: {
-          home = {
-            sessionVariables.PASSWORD_STORE_DIR = secure.passwords;
-            file = {
-              ".gnupg/crls.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/crls.d";
-              ".gnupg/openpgp-revocs.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/openpgp-revocs.d";
-              ".gnupg/private-keys-v1.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/private-keys-v1.d";
-              ".gnupg/pubring.kbx".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/pubring.kbx";
-              ".gnupg/random_seed".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/random_seed";
-              ".gnupg/tofu.db".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/tofu.db";
-              ".gnupg/trustdb.gpg".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/trustdb.gpg";
-            };
+    (
+      _: secure: {config, ...}: {
+        home = {
+          sessionVariables.PASSWORD_STORE_DIR = secure.passwords;
+          file = {
+            ".gnupg/crls.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/crls.d";
+            ".gnupg/openpgp-revocs.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/openpgp-revocs.d";
+            ".gnupg/private-keys-v1.d".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/private-keys-v1.d";
+            ".gnupg/pubring.kbx".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/pubring.kbx";
+            ".gnupg/random_seed".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/random_seed";
+            ".gnupg/tofu.db".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/tofu.db";
+            ".gnupg/trustdb.gpg".source = config.lib.file.mkOutOfStoreSymlink "${secure.gnupg}/trustdb.gpg";
           };
-        }
-      )
-      cfg;
+        };
+      }
+    )
+    cfg;
 
-    sudo-cmds = lib.mapAttrs (_: opts: map toString [ opts.importCmd opts.exportCmd ]) cfg;
+    sudo-cmds = lib.mapAttrs (_: opts: map toString [opts.importCmd opts.exportCmd]) cfg;
 
     boot.initrd = lib.mkIf (lib.any (secure: (builtins.length secure.luksDrives > 0)) secures) {
-      kernelModules = [ "usb_storage" "loop" ];
+      kernelModules = ["usb_storage" "loop"];
 
       preLVMCommands = (
         lib.mkMerge [
@@ -165,7 +164,7 @@ in
       );
 
       luks.devices =
-        lib.foldl (acc: secure: acc // (luksDevicesFor secure)) { } secures;
+        lib.foldl (acc: secure: acc // (luksDevicesFor secure)) {} secures;
     };
   };
 }

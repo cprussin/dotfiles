@@ -1,15 +1,19 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.programs.emacs.emacs-rc;
 
-  mkEmojiSets = emoji-pkgs: pkgs.linkFarm "emjoji-sets" (map
+  mkEmojiSets = emoji-pkgs:
+    pkgs.linkFarm "emjoji-sets" (map
     (path: {
       inherit path;
       name = "${path.pname}-v${path.version}";
     })
     emoji-pkgs);
-in
-{
+in {
   options.programs.emacs.emacs-rc = {
     enable = lib.mkEnableOption "emacs-rc";
 
@@ -44,7 +48,7 @@ in
 
     emojiSets = lib.mkOption {
       type = lib.types.path;
-      default = "${mkEmojiSets [ pkgs.emojione-png ]}";
+      default = "${mkEmojiSets [pkgs.emojione-png]}";
     };
 
     font = lib.mkOption {

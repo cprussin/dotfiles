@@ -1,8 +1,10 @@
-{ lib, config, ... }:
-let
-  cfg = config.iconTheme;
-in
 {
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.iconTheme;
+in {
   options.iconTheme = {
     package = lib.mkOption {
       description = "The package that provides the icons";
@@ -16,7 +18,7 @@ in
   };
 
   config = lib.mkIf (cfg.package != null) {
-    home.packages = [ cfg.package ];
+    home.packages = [cfg.package];
     programs.mako.iconPath = "${cfg.package}/share/icons/${cfg.name}";
   };
 }

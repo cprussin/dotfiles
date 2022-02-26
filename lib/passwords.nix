@@ -1,5 +1,4 @@
-{ pkgs }:
-let
+{pkgs}: let
   pass = "${pkgs.pass}/bin/pass";
   head = "${pkgs.coreutils}/bin/head";
   cut = "${pkgs.coreutils}/bin/cut";
@@ -148,8 +147,7 @@ let
        esac
     done
   '';
-in
-{
+in {
   passwordUtils = pkgs.symlinkJoin {
     name = "passwordUtils";
     paths = [
@@ -169,19 +167,18 @@ in
       getWpaPassphraseFile
     ];
   };
-  getPassword = name: [ "getPassword" name ];
-  getFullPassword = name: [ "getFullPassword" name ];
-  getPasswordField = name: field: [ "getPasswordField" name field ];
-  getBase64EncodedPassword = name: [ "getBase64EncodedPassword" name ];
-  getHashedUserPassword = name: [ "getHashedUserPassword" name ];
-  getUsernamePasswordFile = name: [ "getUsernamePasswordFile" name ];
-  getMatrixSynapseDatabaseConfigFile = name: [ "getMatrixSynapseDatabaseConfigFile" name ];
-  getMatrixSynapseSharedSecretConfigFile = name: [ "getMatrixSynapseSharedSecretConfigFile" name ];
-  getMautrixTelegramEnvironmentFile = name: sharedSecret: [ "getMautrixTelegramEnvironmentFile" name sharedSecret ];
-  getMautrixSignalEnvironmentFile = name: sharedSecret: [ "getMautrixSignalEnvironmentFile" name sharedSecret ];
-  getMautrixSyncproxyEnvironmentFile = name: [ "getMautrixSyncproxyEnvironmentFile" name ];
-  getMautrixWsproxyEnvironmentFile = name: syncproxyName:
-    [ "getMautrixWsproxyEnvironmentFile" name syncproxyName ];
-  getMautrixRegistrationFile = name: port: [ "getMautrixRegistrationFile" name (toString port) ];
-  getWpaPassphraseFile = networks: [ "getWpaPassphraseFile" ] ++ networks;
+  getPassword = name: ["getPassword" name];
+  getFullPassword = name: ["getFullPassword" name];
+  getPasswordField = name: field: ["getPasswordField" name field];
+  getBase64EncodedPassword = name: ["getBase64EncodedPassword" name];
+  getHashedUserPassword = name: ["getHashedUserPassword" name];
+  getUsernamePasswordFile = name: ["getUsernamePasswordFile" name];
+  getMatrixSynapseDatabaseConfigFile = name: ["getMatrixSynapseDatabaseConfigFile" name];
+  getMatrixSynapseSharedSecretConfigFile = name: ["getMatrixSynapseSharedSecretConfigFile" name];
+  getMautrixTelegramEnvironmentFile = name: sharedSecret: ["getMautrixTelegramEnvironmentFile" name sharedSecret];
+  getMautrixSignalEnvironmentFile = name: sharedSecret: ["getMautrixSignalEnvironmentFile" name sharedSecret];
+  getMautrixSyncproxyEnvironmentFile = name: ["getMautrixSyncproxyEnvironmentFile" name];
+  getMautrixWsproxyEnvironmentFile = name: syncproxyName: ["getMautrixWsproxyEnvironmentFile" name syncproxyName];
+  getMautrixRegistrationFile = name: port: ["getMautrixRegistrationFile" name (toString port)];
+  getWpaPassphraseFile = networks: ["getWpaPassphraseFile"] ++ networks;
 }

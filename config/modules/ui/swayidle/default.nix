@@ -1,8 +1,10 @@
-{ pkgs, config, ... }:
-let
-  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
-in
 {
+  pkgs,
+  config,
+  ...
+}: let
+  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
+in {
   primary-user.home-manager.services.swayidle = {
     enable = true;
     timeouts = [

@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   primary-user.home-manager.services.gammastep = {
     enable = true;
     latitude = "37.24533400829229";

@@ -1,6 +1,8 @@
-{ pkgs, config, ... }:
-
 {
+  pkgs,
+  config,
+  ...
+}: {
   primary-user.home-manager = {
     default-terminal = {
       enable = true;

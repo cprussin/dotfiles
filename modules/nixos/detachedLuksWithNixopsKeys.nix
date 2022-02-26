@@ -1,18 +1,22 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   cfg = config.detachedLuksWithNixopsKeys;
 
   base64Decode = path: "${pkgs.coreutils}/bin/base64 -d ${path}";
 
   keys =
     lib.mapAttrs'
-      (_: v: lib.nameValuePair "${v.filenameBase}-key" { keyCommand = v.key; })
-      cfg;
+    (_: v: lib.nameValuePair "${v.filenameBase}-key" {keyCommand = v.key;})
+    cfg;
 
   headers =
     lib.mapAttrs'
-      (_: v: lib.nameValuePair "${v.filenameBase}-header" { keyCommand = v.header; })
-      cfg;
+    (_: v: lib.nameValuePair "${v.filenameBase}-header" {keyCommand = v.header;})
+    cfg;
 
   mkUnlockScript = drive: filenameBase: ''
     ${pkgs.coreutils}/bin/mkdir -p /tmp/${filenameBase}
@@ -28,8 +32,7 @@ let
     ${config.security.wrapperDir}/umount /tmp/${filenameBase}
     ${pkgs.coreutils}/bin/rmdir /tmp/${filenameBase}
   '';
-in
-{
+in {
   options.detachedLuksWithNixopsKeys = lib.mkOption {
     default = null;
     description = ''
@@ -40,7 +43,7 @@ in
     type = lib.types.nullOr (
       lib.types.attrsOf (
         lib.types.submodule (
-          { name, ... }: {
+          {name, ...}: {
             options = {
               key = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
@@ -56,7 +59,7 @@ in
               };
               filenameBase = lib.mkOption {
                 type = lib.types.str;
-                default = builtins.replaceStrings [ ":" ] [ "" ] name;
+                default = builtins.replaceStrings [":"] [""] name;
                 description = ''
                   The base string used to construct the key files and systemd
                   tasks for this drive.  Usually this is the same as the drive ID,
@@ -75,26 +78,26 @@ in
     deployment.keys = keys // headers;
 
     systemd.services = lib.mapAttrs'
-      (
-        drive: opts:
-          lib.nameValuePair "unlock-${opts.filenameBase}" {
-            description = "Unlock encrypted device ${drive}.";
-            after = [
-              "${opts.filenameBase}-key-key.service"
-              "${opts.filenameBase}-header-key.service"
-            ];
-            wants = [
-              "${opts.filenameBase}-key-key.service"
-              "${opts.filenameBase}-header-key.service"
-            ];
-            script = mkUnlockScript drive opts.filenameBase;
-            serviceConfig = {
-              ExecStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
-              RemainAfterExit = true;
-              Type = "oneshot";
-            };
-          }
-      )
-      cfg;
+    (
+      drive: opts:
+        lib.nameValuePair "unlock-${opts.filenameBase}" {
+          description = "Unlock encrypted device ${drive}.";
+          after = [
+            "${opts.filenameBase}-key-key.service"
+            "${opts.filenameBase}-header-key.service"
+          ];
+          wants = [
+            "${opts.filenameBase}-key-key.service"
+            "${opts.filenameBase}-header-key.service"
+          ];
+          script = mkUnlockScript drive opts.filenameBase;
+          serviceConfig = {
+            ExecStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
+            RemainAfterExit = true;
+            Type = "oneshot";
+          };
+        }
+    )
+    cfg;
   };
 }

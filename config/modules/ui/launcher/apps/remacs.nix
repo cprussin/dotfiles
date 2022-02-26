@@ -1,5 +1,8 @@
-{ writeShellScript, notify-send, systemd }:
-
+{
+  writeShellScript,
+  notify-send,
+  systemd,
+}:
 writeShellScript "remacs" ''
   notifySend=${notify-send}/bin/notify-send
   systemctl=${systemd}/bin/systemctl

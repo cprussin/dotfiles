@@ -1,11 +1,15 @@
-{ lib, config, ... }:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   cfg = config.programs.fzf;
 
-  mkColorOption = description: lib.mkOption {
-    type = lib.types.str;
-    description = "The color for ${description}";
-  };
+  mkColorOption = description:
+    lib.mkOption {
+      type = lib.types.str;
+      description = "The color for ${description}";
+    };
 
   colors = lib.concatStringsSep "," (
     lib.mapAttrsToList (k: v: "${k}:${v}") {
@@ -24,8 +28,7 @@ let
       gutter = cfg.colors.gutter;
     }
   );
-in
-{
+in {
   options.programs.fzf = {
     inline-info = lib.mkOption {
       type = lib.types.bool;
@@ -60,8 +63,12 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.fzf.defaultOptions = lib.flatten [
-      (if cfg.colors == null then [ ] else [ "--color=${colors}" ])
-      (if cfg.inline-info then [ "--inline-info" ] else [ ])
+      (if cfg.colors == null
+      then []
+      else ["--color=${colors}"])
+      (if cfg.inline-info
+      then ["--inline-info"]
+      else [])
     ];
   };
 }

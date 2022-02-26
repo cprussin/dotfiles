@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.programs.powerpanel;
-  yesNo = bool: if bool then "yes" else "no";
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.programs.powerpanel;
+  yesNo = bool:
+    if bool
+    then "yes"
+    else "no";
+in {
   options.programs.powerpanel = {
     enable = lib.mkEnableOption "PowerPanel";
 
@@ -202,29 +208,36 @@ in
       type = lib.types.bool;
       default = false;
     };
-
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.pwrstatd = {
       description = "CyberPower UPS monitoring service.";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = ["multi-user.target"];
       serviceConfig.ExecStart = "${pkgs.powerpanel}/bin/pwrstatd";
     };
 
     environment = {
-      systemPackages = [ pkgs.powerpanel ];
+      systemPackages = [pkgs.powerpanel];
 
       etc."pwrstatd.conf".text = ''
         powerfail-delay = ${toString cfg.powerfail.delay}
         powerfail-active = ${yesNo cfg.powerfail.active}
-        powerfail-cmd-path = ${if cfg.powerfail.cmd-path == null then "" else cfg.powerfail.cmd-path}
+        powerfail-cmd-path = ${
+          if cfg.powerfail.cmd-path == null
+          then ""
+          else cfg.powerfail.cmd-path
+        }
         powerfail-duration = ${toString cfg.powerfail.duration}
         powerfail-shutdown = ${yesNo cfg.powerfail.shutdown}
         lowbatt-threshold = ${toString cfg.lowbatt.threshold}
         runtime-threshold = ${toString cfg.lowbatt.runtime-threshold}
         lowbatt-active = ${yesNo cfg.lowbatt.active}
-        lowbatt-cmd-path = ${if cfg.lowbatt.cmd-path == null then "" else cfg.lowbatt.cmd-path}
+        lowbatt-cmd-path = ${
+          if cfg.lowbatt.cmd-path == null
+          then ""
+          else cfg.lowbatt.cmd-path
+        }
         lowbatt-duration = = ${toString cfg.lowbatt.duration}
         lowbatt-shutdown =  ${yesNo cfg.lowbatt.shutdown}
         enable-alarm = ${yesNo cfg.enable-alarm}

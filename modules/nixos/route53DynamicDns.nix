@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-let
-  cfg = config.services.route53DynamicDns;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.services.route53DynamicDns;
+in {
   options.services.route53DynamicDns = {
     enable = lib.mkEnableOption "Route 53 Dynamic DNS";
 
@@ -26,8 +29,8 @@ in
   config = lib.mkIf cfg.enable {
     systemd = {
       timers.route53-dynamic-dns-update = {
-        wantedBy = [ "timers.target" ];
-        partOf = [ "route53-dynamic-dns-update.service" ];
+        wantedBy = ["timers.target"];
+        partOf = ["route53-dynamic-dns-update.service"];
         timerConfig.OnCalendar = "minutely";
       };
 

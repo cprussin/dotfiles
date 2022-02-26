@@ -1,12 +1,12 @@
-{ pkgs, lib, ... }:
-
-let
-  ls = pkgs.callPackage ./ls.nix { };
-  clear = pkgs.callPackage ./clear.nix { inherit ls; };
-in
-
 {
-  home.packages = lib.mkForce [ pkgs.starship ];
+  pkgs,
+  lib,
+  ...
+}: let
+  ls = pkgs.callPackage ./ls.nix {};
+  clear = pkgs.callPackage ./clear.nix {inherit ls;};
+in {
+  home.packages = lib.mkForce [pkgs.starship];
 
   programs = {
     zsh = {

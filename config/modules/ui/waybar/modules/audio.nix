@@ -1,6 +1,8 @@
-{ colors, pavucontrol, pamixer }:
-
 {
+  colors,
+  pavucontrol,
+  pamixer,
+}: {
   name = "pulseaudio#sink";
 
   config = {
@@ -15,7 +17,7 @@
       phone = "";
       portable = "";
       car = "";
-      default = [ "" "" "" ];
+      default = ["" "" ""];
     };
     on-click = "${pavucontrol}/bin/pavucontrol -t 3";
     on-click-middle = "${pamixer}/bin/pamixer --toggle-mute";

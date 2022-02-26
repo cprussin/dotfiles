@@ -1,6 +1,7 @@
-{ ffmpeg-full, ps }:
-
-[
+{
+  ffmpeg-full,
+  ps,
+}: [
   ffmpeg-full
   ps.PyChromecast
   ps.aiodiscover

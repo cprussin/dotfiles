@@ -1,6 +1,4 @@
-{ epkgs }:
-
-[
+{epkgs}: [
   epkgs.aggressive-indent
   epkgs.company
   epkgs.company-emoji

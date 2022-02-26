@@ -1,10 +1,8 @@
-{ nixpkgs ? (import ../../sources.nix).nixpkgs
-}:
-let
+{nixpkgs ? (import ../../sources.nix).nixpkgs}: let
   pkgs = import nixpkgs {
     overlays = [
       (import ./overlay.nix)
     ];
   };
 in
-pkgs.powerpanel
+  pkgs.powerpanel

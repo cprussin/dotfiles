@@ -1,21 +1,22 @@
 let
   machineDir = ./config/machines;
 
-  mkMachine = targetHost: { config, ... }: {
+  mkMachine = targetHost: {config, ...}: {
     deployment = {
       inherit targetHost;
       targetUser = config.primary-user.name;
-      sshOptions = [ "-A" ];
+      sshOptions = ["-A"];
       provisionSSHKey = false;
     };
-    imports = [ "${toString machineDir}/${targetHost}" ];
+    imports = ["${toString machineDir}/${targetHost}"];
   };
 
   all-machines =
     builtins.mapAttrs
-      (machine: _: mkMachine machine)
-      (builtins.readDir machineDir);
+    (machine: _: mkMachine machine)
+    (builtins.readDir machineDir);
 in
-all-machines // {
-  network.description = "PrussinNet";
-}
+  all-machines
+  // {
+    network.description = "PrussinNet";
+  }

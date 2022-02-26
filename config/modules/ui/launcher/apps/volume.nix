@@ -1,5 +1,8 @@
-{ writeShellScript, pamixer, notify-send }:
-
+{
+  writeShellScript,
+  pamixer,
+  notify-send,
+}:
 writeShellScript "volume" ''
   pamixer="${pamixer}/bin/pamixer"
   notifySend="${notify-send}/bin/notify-send"

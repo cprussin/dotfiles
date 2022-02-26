@@ -1,12 +1,15 @@
-{ pkgs, lib, config, ... }:
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   # TODO this should really be driven from gpg automatically rather than manually synced to a file...
   public-key = builtins.readFile ./public-key;
   jump-public-key = builtins.readFile ./jump-public-key;
   gaming-computer-wsl-public-key = builtins.readFile ./gaming-computer-wsl-public-key;
-  passwords = pkgs.callPackage ../../../../lib/passwords.nix { };
-in
-{
+  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+in {
   options = {
     enableSshdAtBoot = lib.mkEnableOption "SSH daemon auto-start at boot";
     enableSshdAtInitrd = lib.mkEnableOption "SSH daemon startup in initial ramdisk";
@@ -56,7 +59,7 @@ in
       services.sudo.sshAgentAuth = true;
     };
 
-    systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce [ ]);
+    systemd.services.sshd.wantedBy = lib.mkIf (!config.enableSshdAtBoot) (lib.mkForce []);
 
     primary-user.openssh.authorizedKeys.keys = [
       public-key
@@ -72,7 +75,7 @@ in
           config.deployment.keys.bootSshHostED25519Key.path
           config.deployment.keys.bootSshHostRSAKey.path
         ];
-        authorizedKeys = [ public-key ];
+        authorizedKeys = [public-key];
       };
     };
   };

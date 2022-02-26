@@ -1,11 +1,13 @@
-{ lib, config, ... }:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   cfg = config.font;
   pangoFont = "${cfg.face} ${toString cfg.size}";
-in
-{
+in {
   options.font = lib.mkOption {
-    default = { };
+    default = {};
     type = lib.types.submodule {
       options = {
         package = lib.mkOption {
@@ -28,7 +30,7 @@ in
   };
 
   config = lib.mkIf (cfg.package != null) {
-    home.packages = [ cfg.package ];
+    home.packages = [cfg.package];
 
     programs = {
       termite = {
@@ -46,14 +48,14 @@ in
         font-family = cfg.face;
         font-size = "${toString cfg.size}pt";
       };
-      imv.overlayFont = { inherit (cfg) face size; };
-      emacs.emacs-rc.font = { inherit (cfg) face size; };
+      imv.overlayFont = {inherit (cfg) face size;};
+      emacs.emacs-rc.font = {inherit (cfg) face size;};
     };
 
     wayland.windowManager.sway.config.fonts = {
       inherit (cfg) size;
       style = "Book";
-      names = [ cfg.face ];
+      names = [cfg.face];
     };
   };
 }

@@ -1,5 +1,3 @@
-{ ... }:
-
-{
-  primary-user.extraGroups = [ "dialout" ];
+{...}: {
+  primary-user.extraGroups = ["dialout"];
 }

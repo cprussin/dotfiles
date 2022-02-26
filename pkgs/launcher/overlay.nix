@@ -1,3 +1,3 @@
 self: _: {
-  launcher = self.callPackage ./derivation.nix { };
+  launcher = self.callPackage ./derivation.nix {};
 }

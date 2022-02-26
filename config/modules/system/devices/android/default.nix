@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   programs.adb.enable = true;
-  primary-user.extraGroups = [ "adbusers" ];
+  primary-user.extraGroups = ["adbusers"];
 }

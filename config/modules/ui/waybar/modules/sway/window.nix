@@ -1,5 +1,3 @@
-_:
-
-{
+_: {
   name = "sway/window";
 }

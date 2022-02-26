@@ -1,5 +1,3 @@
-{ ... }:
-
-{
-  primary-user.extraGroups = [ "video" ];
+{...}: {
+  primary-user.extraGroups = ["video"];
 }

@@ -1,5 +1,3 @@
-{ src }:
-
-self: _: {
-  mautrix-wsproxy = self.callPackage ./derivation.nix { inherit src; };
+{src}: self: _: {
+  mautrix-wsproxy = self.callPackage ./derivation.nix {inherit src;};
 }

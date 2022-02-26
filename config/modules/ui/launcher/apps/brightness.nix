@@ -1,5 +1,8 @@
-{ writeShellScript, brightnessctl, notify-send }:
-
+{
+  writeShellScript,
+  brightnessctl,
+  notify-send,
+}:
 writeShellScript "brightness" ''
   brightnessctl="${brightnessctl}/bin/brightnessctl"
   notifySend="${notify-send}/bin/notify-send"

@@ -1,13 +1,14 @@
-{ pkgs, colors }:
-let
+{
+  pkgs,
+  colors,
+}: let
   presentation = pkgs.writeShellScript "presentation" ''
     if ! systemctl --user is-active --quiet swayidle
     then
       echo PRESENTATION
     fi
   '';
-in
-{
+in {
   name = "custom/presentation";
 
   config = {

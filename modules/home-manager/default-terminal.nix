@@ -1,8 +1,10 @@
-{ lib, config, ... }:
-let
-  cfg = config.default-terminal;
-in
 {
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.default-terminal;
+in {
   options.default-terminal = {
     enable = lib.mkEnableOption "Default terminal";
 
@@ -35,7 +37,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.pkg.terminfo ] ++ (if cfg.enableApplication then [ cfg.pkg ] else [ ]);
+    home.packages =
+      [cfg.pkg.terminfo]
+      ++ (if cfg.enableApplication
+      then [cfg.pkg]
+      else []);
 
     programs.zsh.initExtra = ''
       if [[ $TERM = ${cfg.termname} ]]; then

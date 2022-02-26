@@ -1,5 +1,7 @@
-{ trivialBuild, src }:
-
+{
+  trivialBuild,
+  src,
+}:
 trivialBuild {
   inherit src;
   pname = "zoom-frm";

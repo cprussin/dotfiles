@@ -1,8 +1,10 @@
-{ lib, pkgs, ... }:
-
 {
+  lib,
+  pkgs,
+  ...
+}: {
   primary-user.home-manager = {
-    home.packages = lib.mkForce [ pkgs.git ];
+    home.packages = lib.mkForce [pkgs.git];
 
     programs.git = {
       enable = true;

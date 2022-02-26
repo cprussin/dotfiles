@@ -1,7 +1,10 @@
-{ pkgs, config, lib, ... }:
-
-let
-  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
   max_upload_size = "200M";
   synapse_port = 8008;
   federation_port = 8448;
@@ -30,9 +33,7 @@ let
       };
     };
   };
-in
-
-{
+in {
   deployment.keys = {
     "matrix-synapse-database-config.yaml" = {
       user = "matrix-synapse";
@@ -98,10 +99,26 @@ in
         enableACME = true;
         http2 = true;
         listen = [
-          { addr = "0.0.0.0"; port = 443; ssl = true; }
-          { addr = "[::]"; port = 443; ssl = true; }
-          { addr = "0.0.0.0"; port = federation_port; ssl = true; }
-          { addr = "[::]"; port = federation_port; ssl = true; }
+          {
+            addr = "0.0.0.0";
+            port = 443;
+            ssl = true;
+          }
+          {
+            addr = "[::]";
+            port = 443;
+            ssl = true;
+          }
+          {
+            addr = "0.0.0.0";
+            port = federation_port;
+            ssl = true;
+          }
+          {
+            addr = "[::]";
+            port = federation_port;
+            ssl = true;
+          }
         ];
         locations."/" = {
           proxyPass = "http://localhost:${toString synapse_port}";
@@ -124,7 +141,7 @@ in
             rev = "2.0.1";
             sha256 = "0cbpj6npbnda23qrp7z5l33c95sh5mh21m9sc32xxiqaikj29ali";
           };
-          buildInputs = [ config.services.matrix-synapse.package ];
+          buildInputs = [config.services.matrix-synapse.package];
         }))
       ];
       extraConfigFiles = [
@@ -136,16 +153,24 @@ in
         old_signing_keys:
           "ed25519:a_OaaR": { key: "ksE3M3GNPshFcrKYZXUWaMsTR9rtBgthcibsDpVGDK0", expired_ts: 1639995345267 }
       '';
-      listeners = [{
-        port = synapse_port;
-        bind_address = "127.0.0.1";
-        tls = false;
-        x_forwarded = true;
-        resources = [
-          { names = [ "client" ]; compress = true; }
-          { names = [ "federation" ]; compress = false; }
-        ];
-      }];
+      listeners = [
+        {
+          port = synapse_port;
+          bind_address = "127.0.0.1";
+          tls = false;
+          x_forwarded = true;
+          resources = [
+            {
+              names = ["client"];
+              compress = true;
+            }
+            {
+              names = ["federation"];
+              compress = false;
+            }
+          ];
+        }
+      ];
       app_service_config_files = [
         config.deployment.keys."mautrix-telegram-registration-file.yaml".path
         config.deployment.keys."mautrix-signal-registration-file.yaml".path
@@ -163,14 +188,14 @@ in
           backfill.initial_limit = -1;
         };
       };
-      serviceDependencies = [ "postgresql.service" "mautrix-telegram-environment-file-key.service" ];
+      serviceDependencies = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
     };
 
     mautrix-signal = {
       enable = true;
       environmentFile = config.deployment.keys.mautrix-signal-environment-file.path;
       settings = mautrix_settings mautrix-signal-port;
-      serviceDependencies = [ "postgresql.service" "mautrix-signal-environment-file-key.service" ];
+      serviceDependencies = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
     };
 
     mautrix-wsproxy = {
@@ -205,7 +230,7 @@ in
         "mautrix-signal-registration-file.yaml-key.service"
         "mautrix-sms-registration-file.yaml-key.service"
       ];
-      serviceConfig.ExecStartPre = lib.mkForce [ ];
+      serviceConfig.ExecStartPre = lib.mkForce [];
     };
     mautrix-telegram.serviceConfig = {
       DynamicUser = lib.mkForce false;
@@ -218,8 +243,8 @@ in
       Group = "mautrix-signal";
     };
     mautrix-wsproxy = {
-      after = [ "mautrix-wsproxy-environment-file-key.service" ];
-      wants = [ "mautrix-wsproxy-environment-file-key.service" ];
+      after = ["mautrix-wsproxy-environment-file-key.service"];
+      wants = ["mautrix-wsproxy-environment-file-key.service"];
       serviceConfig = {
         DynamicUser = lib.mkForce false;
         User = "mautrix-wsproxy";
@@ -227,8 +252,8 @@ in
       };
     };
     mautrix-syncproxy = {
-      after = [ "mautrix-syncproxy-environment-file-key.service" ];
-      wants = [ "mautrix-syncproxy-environment-file-key.service" ];
+      after = ["mautrix-syncproxy-environment-file-key.service"];
+      wants = ["mautrix-syncproxy-environment-file-key.service"];
       serviceConfig = {
         DynamicUser = lib.mkForce false;
         User = "mautrix-syncproxy";
@@ -261,14 +286,14 @@ in
       mautrix-syncproxy.gid = config.ids.gids.mautrix-syncproxy;
     };
     users = {
-      matrix-synapse.extraGroups = [ "keys" ];
+      matrix-synapse.extraGroups = ["keys"];
       mautrix-telegram = {
         group = "mautrix-telegram";
         home = "/var/lib/mautrix-telegram";
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.mautrix-telegram;
-        extraGroups = [ "keys" ];
+        extraGroups = ["keys"];
       };
       mautrix-signal = {
         group = "mautrix-signal";
@@ -276,20 +301,20 @@ in
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.mautrix-signal;
-        extraGroups = [ "keys" "signald" ];
+        extraGroups = ["keys" "signald"];
       };
       mautrix-wsproxy = {
         group = "mautrix-wsproxy";
         uid = config.ids.uids.mautrix-wsproxy;
-        extraGroups = [ "keys" ];
+        extraGroups = ["keys"];
       };
       mautrix-syncproxy = {
         group = "mautrix-syncproxy";
         uid = config.ids.uids.mautrix-syncproxy;
-        extraGroups = [ "keys" ];
+        extraGroups = ["keys"];
       };
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 443 federation_port ];
+  networking.firewall.allowedTCPPorts = [443 federation_port];
 }

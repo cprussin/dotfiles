@@ -1,6 +1,4 @@
-{ colors }:
-
-{
+{colors}: {
   name = "sway/mode";
 
   config.format = "{}";

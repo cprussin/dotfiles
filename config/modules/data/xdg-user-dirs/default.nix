@@ -1,8 +1,6 @@
-{ config, ... }:
-let
+{config, ...}: let
   home = config.primary-user.home;
-in
-{
+in {
   primary-user.home-manager.xdg.userDirs = {
     enable = true;
     desktop = "${home}/";

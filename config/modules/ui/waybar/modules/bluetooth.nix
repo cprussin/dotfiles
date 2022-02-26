@@ -1,5 +1,8 @@
-{ pkgs, config, colors }:
-let
+{
+  pkgs,
+  config,
+  colors,
+}: let
   bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
 
   bluetooth = pkgs.writeShellScript "bluetooth" ''
@@ -30,8 +33,7 @@ let
   '';
 
   launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
-in
-{
+in {
   name = "custom/bluetooth";
 
   config = {

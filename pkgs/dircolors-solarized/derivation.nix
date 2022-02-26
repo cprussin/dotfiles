@@ -1,10 +1,12 @@
-{ stdenv, src }:
-
+{
+  stdenv,
+  src,
+}:
 stdenv.mkDerivation {
   inherit src;
 
   name = "dircolors-solarized";
-  phases = [ "installPhase" "fixupPhase" ];
+  phases = ["installPhase" "fixupPhase"];
   installPhase = ''
     for file in $src/dircolors.*
     do

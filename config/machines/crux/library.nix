@@ -1,8 +1,10 @@
-{ pkgs, config, ... }:
-let
-  passwords = pkgs.callPackage ../../../lib/passwords.nix { };
-in
 {
+  pkgs,
+  config,
+  ...
+}: let
+  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
+in {
   deployment.keys = {
     library-basic-auth-file = {
       inherit (config.services.nginx) user group;
@@ -15,7 +17,7 @@ in
     recommendedTlsSettings = true;
     recommendedOptimisation = true;
     recommendedGzipSettings = true;
-    package = pkgs.nginxStable.override { modules = [ pkgs.nginxModules.fancyindex ]; };
+    package = pkgs.nginxStable.override {modules = [pkgs.nginxModules.fancyindex];};
     virtualHosts."library.prussin.net" = {
       forceSSL = true;
       enableACME = true;
@@ -28,7 +30,7 @@ in
     };
   };
 
-  users.users.nginx.extraGroups = [ "keys" ];
+  users.users.nginx.extraGroups = ["keys"];
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [80 443];
 }

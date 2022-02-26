@@ -1,5 +1,7 @@
-{ writeShellScript, systemd }:
-
+{
+  writeShellScript,
+  systemd,
+}:
 writeShellScript "presentation" ''
   systemctl=${systemd}/bin/systemctl
 

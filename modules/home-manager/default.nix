@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   imports = [
     ./color-theme.nix
     ./cursor-theme.nix

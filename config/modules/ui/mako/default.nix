@@ -1,8 +1,10 @@
-{ pkgs, lib, ... }:
-
 {
+  pkgs,
+  lib,
+  ...
+}: {
   primary-user.home-manager = {
-    home.packages = lib.mkForce [ pkgs.mako ];
+    home.packages = lib.mkForce [pkgs.mako];
 
     programs.mako = {
       enable = true;

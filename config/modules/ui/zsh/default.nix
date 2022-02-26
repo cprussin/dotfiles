@@ -1,10 +1,8 @@
-{ pkgs, ... }:
-
-{
-  home-manager.users.root.imports = [ ./home.nix ];
+{pkgs, ...}: {
+  home-manager.users.root.imports = [./home.nix];
 
   primary-user = {
-    home-manager.imports = [ ./home.nix ];
+    home-manager.imports = [./home.nix];
     shell = "${pkgs.zsh}/bin/zsh";
   };
 }

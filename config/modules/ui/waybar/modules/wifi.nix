@@ -1,6 +1,7 @@
-{ config, colors }:
-
 {
+  config,
+  colors,
+}: {
   name = "network#wireless";
 
   config = {

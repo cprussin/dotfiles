@@ -1,5 +1,3 @@
-{ ... }:
-
-{
-  primary-user.extraGroups = [ "cdrom" ];
+{...}: {
+  primary-user.extraGroups = ["cdrom"];
 }

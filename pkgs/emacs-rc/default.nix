@@ -1,5 +1,4 @@
-{ nixpkgs ? (import ../../sources.nix).nixpkgs }:
-let
+{nixpkgs ? (import ../../sources.nix).nixpkgs}: let
   pkgs = import nixpkgs {
     overlays = [
       (import ./overlay.nix)
@@ -7,4 +6,4 @@ let
     ];
   };
 in
-pkgs.emacsPackages.emacs-rc
+  pkgs.emacsPackages.emacs-rc

@@ -1,5 +1,3 @@
-{ lib, ... }:
-
-{
+{lib, ...}: {
   services.getty.helpLine = lib.mkForce "";
 }

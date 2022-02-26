@@ -1,5 +1,3 @@
-{ src }:
-
-self: _: {
-  notify-send = self.callPackage ./derivation.nix { inherit src; };
+{src}: self: _: {
+  notify-send = self.callPackage ./derivation.nix {inherit src;};
 }

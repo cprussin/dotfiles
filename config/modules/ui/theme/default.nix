@@ -1,6 +1,9 @@
-{ pkgs, lib, config, ... }:
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   colorTheme.name = "solarized/dark";
 
   home-manager.users.root.colorTheme.name = config.colorTheme.name;
