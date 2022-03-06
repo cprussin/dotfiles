@@ -31,5 +31,8 @@
     };
 
     networking.firewall.allowedTCPPorts = [80 443];
+
+    # TODO Remove this once the home-assistant module is updated in nixpkgs from master (see https://github.com/NixOS/nixpkgs/commit/6267a995ec2abd5c4a9f977851e54ffaa7080977#diff-015e049c53b6e406aea53edfa01a770d8929ac8bfeadec133e15a22ccf25676e)
+    systemd.services.home-assistant.serviceConfig.ExecStart = lib.mkForce "${config.services.home-assistant.package}/bin/hass --config '${config.services.home-assistant.configDir}'";
   };
 }
