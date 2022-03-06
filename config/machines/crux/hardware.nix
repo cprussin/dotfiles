@@ -11,7 +11,7 @@
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
 
   getLuksFile = drive: file:
-    passwords.getBase64EncodedPassword "Infrastructure/luks/crux/${drive}/${file}";
+    passwords.getBase64EncodedPassword "Connor/Infrastructure/luks/crux/${drive}/${file}";
 
   zfsDrives = [
     "ata-ST10000VN0008-2JJ101_ZHZ06Y2A"

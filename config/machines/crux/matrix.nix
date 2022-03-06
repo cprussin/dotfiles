@@ -38,22 +38,22 @@ in {
     "matrix-synapse-database-config.yaml" = {
       user = "matrix-synapse";
       group = "matrix-synapse";
-      keyCommand = passwords.getMatrixSynapseDatabaseConfigFile "Infrastructure/matrix/matrix-synapse-database";
+      keyCommand = passwords.getMatrixSynapseDatabaseConfigFile "Connor/Infrastructure/matrix/matrix-synapse-database";
     };
     "matrix-synapse-shared-secret-config.yaml" = {
       user = "matrix-synapse";
       group = "matrix-synapse";
-      keyCommand = passwords.getMatrixSynapseSharedSecretConfigFile "Infrastructure/matrix/matrix-synapse-shared-secret";
+      keyCommand = passwords.getMatrixSynapseSharedSecretConfigFile "Connor/Infrastructure/matrix/matrix-synapse-shared-secret";
     };
     matrix-synapse-signing-key = {
       user = "matrix-synapse";
       group = "matrix-synapse";
-      keyCommand = passwords.getFullPassword "Infrastructure/matrix/signing-keys/prussin.net";
+      keyCommand = passwords.getFullPassword "Connor/Infrastructure/matrix/signing-keys/prussin.net";
     };
     mautrix-telegram-environment-file = {
       user = "mautrix-telegram";
       group = "mautrix-telegram";
-      keyCommand = passwords.getMautrixTelegramEnvironmentFile "Infrastructure/matrix/bridges/telegram" "Infrastructure/matrix/matrix-synapse-shared-secret";
+      keyCommand = passwords.getMautrixTelegramEnvironmentFile "Connor/Infrastructure/matrix/bridges/telegram" "Connor/Infrastructure/matrix/matrix-synapse-shared-secret";
     };
     "mautrix-telegram-registration-file.yaml" = {
       user = "matrix-synapse";
@@ -63,7 +63,7 @@ in {
     mautrix-signal-environment-file = {
       user = "mautrix-signal";
       group = "mautrix-signal";
-      keyCommand = passwords.getMautrixSignalEnvironmentFile "Infrastructure/matrix/bridges/signal" "Infrastructure/matrix/matrix-synapse-shared-secret";
+      keyCommand = passwords.getMautrixSignalEnvironmentFile "Connor/Infrastructure/matrix/bridges/signal" "Connor/Infrastructure/matrix/matrix-synapse-shared-secret";
     };
     "mautrix-signal-registration-file.yaml" = {
       user = "matrix-synapse";
@@ -73,12 +73,12 @@ in {
     mautrix-syncproxy-environment-file = {
       user = "mautrix-syncproxy";
       group = "mautrix-syncproxy";
-      keyCommand = passwords.getMautrixSyncproxyEnvironmentFile "Infrastructure/matrix/bridges/syncproxy";
+      keyCommand = passwords.getMautrixSyncproxyEnvironmentFile "Connor/Infrastructure/matrix/bridges/syncproxy";
     };
     mautrix-wsproxy-environment-file = {
       user = "mautrix-wsproxy";
       group = "mautrix-wsproxy";
-      keyCommand = passwords.getMautrixWsproxyEnvironmentFile "Infrastructure/matrix/bridges/sms" "Infrastructure/matrix/bridges/syncproxy";
+      keyCommand = passwords.getMautrixWsproxyEnvironmentFile "Connor/Infrastructure/matrix/bridges/sms" "Connor/Infrastructure/matrix/bridges/syncproxy";
     };
     "mautrix-sms-registration-file.yaml" = {
       user = "matrix-synapse";

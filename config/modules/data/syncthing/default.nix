@@ -27,13 +27,13 @@ in {
       syncthing-cert = {
         inherit (config.services.syncthing) user group;
         destDir = lib.mkIf config.persistSyncthingKeys "/secrets";
-        keyCommand = passwords.getFullPassword "Infrastructure/syncthing/${config.networking.hostName}/cert";
+        keyCommand = passwords.getFullPassword "Connor/Infrastructure/syncthing/${config.networking.hostName}/cert";
       };
 
       syncthing-key = {
         inherit (config.services.syncthing) user group;
         destDir = lib.mkIf config.persistSyncthingKeys "/secrets";
-        keyCommand = passwords.getFullPassword "Infrastructure/syncthing/${config.networking.hostName}/key";
+        keyCommand = passwords.getFullPassword "Connor/Infrastructure/syncthing/${config.networking.hostName}/key";
       };
     };
 

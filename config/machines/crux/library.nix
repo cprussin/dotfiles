@@ -8,7 +8,7 @@ in {
   deployment.keys = {
     library-basic-auth-file = {
       inherit (config.services.nginx) user group;
-      keyCommand = passwords.getFullPassword "Infrastructure/htpasswd/library.prussin.net";
+      keyCommand = passwords.getFullPassword "Connor/Infrastructure/htpasswd/library.prussin.net";
     };
   };
 

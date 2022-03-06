@@ -18,19 +18,19 @@ in {
   config = {
     deployment.keys = {
       sshHostED25519Key = {
-        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}";
+        keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}";
         destDir = "/secrets";
       };
       sshHostRSAKey = {
-        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}";
+        keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}";
         destDir = "/secrets";
       };
       bootSshHostED25519Key = lib.mkIf config.enableSshdAtInitrd {
-        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}-initrd";
+        keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/hostKeys/ed25519/${config.networking.hostName}-initrd";
         destDir = "/secrets";
       };
       bootSshHostRSAKey = lib.mkIf config.enableSshdAtInitrd {
-        keyCommand = passwords.getFullPassword "Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}-initrd";
+        keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/hostKeys/rsa/${config.networking.hostName}-initrd";
         destDir = "/secrets";
       };
     };

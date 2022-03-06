@@ -46,9 +46,9 @@ in {
   };
 
   deployment.keys = {
-    borgbackup.keyCommand = passwords.getPassword "Infrastructure/borgbackup/crux/rsync.net";
-    borgbackup-keyfile.keyCommand = passwords.getFullPassword "Infrastructure/borgbackup/crux/rsync.net key";
-    "rsync.net-ssh".keyCommand = passwords.getFullPassword "Infrastructure/ssh/${userAtHost}";
+    borgbackup.keyCommand = passwords.getPassword "Connor/Infrastructure/borgbackup/crux/rsync.net";
+    borgbackup-keyfile.keyCommand = passwords.getFullPassword "Connor/Infrastructure/borgbackup/crux/rsync.net key";
+    "rsync.net-ssh".keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/${userAtHost}";
   };
 
   systemd.services = {

@@ -7,7 +7,7 @@
   reece-public-key = builtins.readFile ./reece-public-key;
 in {
   deployment.keys.reece-password = {
-    keyCommand = passwords.getHashedUserPassword "Infrastructure/login/reece@${config.networking.hostName}";
+    keyCommand = passwords.getHashedUserPassword "Connor/Infrastructure/login/reece@${config.networking.hostName}";
     destDir = "/secrets";
   };
 

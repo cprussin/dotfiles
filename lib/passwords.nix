@@ -98,7 +98,7 @@
   getMautrixRegistrationFile = pkgs.writeShellScriptBin "getMautrixRegistrationFile" ''
     set -euo pipefail
     getPasswordField=${getPasswordField}/bin/getPasswordField
-    password="Infrastructure/matrix/bridges/$1"
+    password="Connor/Infrastructure/matrix/bridges/$1"
     echo "id: $1"
     echo "as_token: $($getPasswordField "$password" "AS Token")"
     echo "hs_token: $($getPasswordField "$password" "HS Token")"
@@ -125,7 +125,7 @@
           shift
           psk_var_name="$1"
           shift
-          password="$(${getPassword}/bin/getPassword "Wifi/$network")"
+          password="$(${getPassword}/bin/getPassword "Connor/Wifi/$network")"
           psk="$(${wpa_passphrase} "$network" "$password" | ${grep} -P '^\tpsk=' | ${sed} 's/^\tpsk=//')"
           echo "$psk_var_name=\"$psk\""
           ;;
@@ -136,9 +136,9 @@
           shift
           password_var_name="$1"
           shift
-          identity="$(${getPasswordField}/bin/getPasswordField "Wifi/$network" "Identity")"
+          identity="$(${getPasswordField}/bin/getPasswordField "Connor/Wifi/$network" "Identity")"
           echo "$identity_var_name=\"$identity\""
-          hashedPassword="$(${getPassword}/bin/getPassword "Wifi/$network" | ${tr} -d '\n' | ${iconv} -t utf16le | ${openssl} md4 | ${cut} -d ' ' -f 2)"
+          hashedPassword="$(${getPassword}/bin/getPassword "Connor/Wifi/$network" | ${tr} -d '\n' | ${iconv} -t utf16le | ${openssl} md4 | ${cut} -d ' ' -f 2)"
           echo "$password_var_name=hash:$hashedPassword"
           ;;
         *)
