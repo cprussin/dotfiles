@@ -16,6 +16,16 @@
       config // {pskRaw = "@${sanitizedEnvVar networkName}@";}
   );
 
+  mkWpa3Networks = lib.mapAttrs (
+    networkName: config:
+      config
+      // {
+        authProtocols = lib.mkForce ["SAE" "FT-SAE"];
+        auth = "sae_password=\"@${sanitizedEnvVar networkName}@\"";
+        extraConfig = "ieee80211w=1";
+      }
+  );
+
   mkPeapMschapNetworks = lib.mapAttrs (
     networkName: config:
       config
@@ -33,9 +43,12 @@
       }
   );
 
+  wpa3Networks = mkWpa3Networks {
+    Centar = {priority = 1;};
+  };
+
   wpaNetworks = mkWpaNetworks {
     # Home networks
-    Centar = {priority = 1;};
     CentarPhone = {priority = 2;};
     CentarCar = {};
 
@@ -54,6 +67,11 @@ in {
     keyCommand = passwords.getWpaPassphraseFile (
       lib.flatten (
         (
+          map
+          (network: ["--wpa3" network (sanitizedEnvVar network)])
+          (builtins.attrNames wpa3Networks)
+        )
+        ++ (
           map
           (network: ["--wpa" network (sanitizedEnvVar network)])
           (builtins.attrNames wpaNetworks)
@@ -78,6 +96,6 @@ in {
     userControlled.enable = true;
     interfaces = [config.interfaces.wifi];
     environmentFile = config.deployment.keys.wpa-passphrase-file.path;
-    networks = wpaNetworks // peapMschapNetworks // insecureNetworks;
+    networks = wpa3Networks // wpaNetworks // peapMschapNetworks // insecureNetworks;
   };
 }

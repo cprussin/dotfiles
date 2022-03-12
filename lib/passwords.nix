@@ -120,6 +120,14 @@
       network_type="$1"
       shift
       case $network_type in
+        --wpa3)
+          network="$1"
+          shift
+          password_var_name="$1"
+          shift
+          password="$(${getPassword}/bin/getPassword "Connor/Wifi/$network")"
+          echo "$password_var_name=\"$password\""
+          ;;
         --wpa)
           network="$1"
           shift
