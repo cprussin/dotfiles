@@ -11,6 +11,7 @@
   ps.aiohomekit
   ps.aiohttp-cors
   ps.async-upnp-client
+  ps.av
   ps.awesomeversion
   ps.defusedxml
   ps.distro
@@ -29,9 +30,11 @@
   ps.pillow
   ps.plexapi
   ps.plexwebsocket
+  ps.pyatv
   ps.pyipp
   ps.pymetno
   ps.pynacl
+  ps.pyoctoprintapi
   ps.pyotp
   ps.pyserial
   ps.pysmartapp
