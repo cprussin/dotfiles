@@ -3,6 +3,7 @@ let
 in
   {
     nixpkgs ? sources.nixpkgs,
+    nixpkgs-unstable ? sources.nixpkgs-unstable,
     niv ? sources.niv,
     nixops ? sources.nixops,
     alejandra ? sources.alejandra,
@@ -31,12 +32,22 @@ in
       passwordUtils = (self.callPackage ./lib/passwords.nix {}).passwordUtils;
     };
 
+    pkgs-unstable = import nixpkgs-unstable {
+      overlays = [];
+      config = {};
+    };
+
+    unstable-esphome-overlay = _: _: {
+      inherit (pkgs-unstable) esphome;
+    };
+
     pkgs = import nixpkgs {
       overlays = [
         niv-overlay
         nixops-overlay
         alejandra-overlay
         password-utils-overlay
+        unstable-esphome-overlay
       ];
       config = {};
     };
@@ -91,7 +102,7 @@ in
       rm -f iot-build/result.yaml*
       nix-build --out-link "iot-build/result.json" --attr "$2" ./config/iot >/dev/null
       ${replace-password-commands}/bin/replace-password-commands iot-build/result.json > iot-build/result.yaml
-      ${pkgs.esphome}/bin/esphome iot-build/result.yaml** $1
+      ${pkgs.esphome}/bin/esphome $1 iot-build/result.yaml**
     '';
   in
     pkgs.mkShell {
