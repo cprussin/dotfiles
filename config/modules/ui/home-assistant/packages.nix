@@ -13,6 +13,7 @@
   ps.async-upnp-client
   ps.av
   ps.awesomeversion
+  ps.croniter
   ps.defusedxml
   ps.distro
   ps.emoji
