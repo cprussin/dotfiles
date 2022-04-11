@@ -21,7 +21,7 @@ in {
   ];
 
   boot = {
-    kernelModules = ["kvm-intel" "sg"];
+    kernelModules = ["kvm-intel"];
     extraModulePackages = [];
     initrd = {
       availableKernelModules = ["xhci_pci" "nvme" "sd_mod" "sr_mod"];

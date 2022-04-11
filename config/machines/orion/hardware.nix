@@ -22,7 +22,7 @@ in {
   ];
 
   boot = {
-    kernelModules = ["kvm-amd" "sg"];
+    kernelModules = ["kvm-amd"];
     extraModulePackages = [];
     initrd = {
       availableKernelModules = ["ahci" "ohci_pci" "ehci_pci" "xhci_pci" "usb_storage" "usbhid" "sd_mod" "sr_mod"];
