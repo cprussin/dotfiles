@@ -25,6 +25,7 @@
   ps.hacs-frontend
   ps.hass-nabucasa
   ps.home-assistant-frontend
+  ps.lru-dict
   ps.mutagen
   ps.netdisco
   ps.paho-mqtt
