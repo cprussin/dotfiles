@@ -8,6 +8,7 @@ in
   }: {
     esphome = {
       name = id;
+      comment = name;
       platform = "ESP8266";
       board = "esp01_1m";
     };
