@@ -22,8 +22,6 @@
     ${sms} &
     ${matrix} &
     ${slack} &
-    ${discord} &
-    ${zulip} &
   '';
 in {
   primary-user.home-manager = {
