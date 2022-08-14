@@ -7,8 +7,6 @@ in {
     overlays = [
       (import ../../../../overlays/0-unstable-pkgs)
       (import ../../../../overlays/dircolors-solarized)
-      (import ../../../../overlays/emacs-rc)
-      (import ../../../../overlays/emojione-png)
       (import ../../../../overlays/fzf-pass)
       (import ../../../../overlays/launcher)
       (import ../../../../overlays/makemkv)
@@ -17,7 +15,6 @@ in {
       (import ../../../../overlays/pass-with-otp)
       (import ../../../../overlays/powerpanel)
       (import ../../../../overlays/sudo-with-insults)
-      (import ../../../../overlays/zoom-frm)
       (import ../../../../pkgs/connect-to-network/overlay.nix)
     ];
   };
