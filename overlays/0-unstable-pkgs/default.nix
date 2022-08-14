@@ -9,15 +9,7 @@ let
     config = import ../../config/modules/system/nixpkgs/nixpkgs-config.nix;
   };
 in
-  _: super: {
+  _: _: {
     inherit (pkgs-unstable) syncthing bitwig-studio signald;
     inherit (pkgs-master) makemkv;
-
-    emacsPackagesFor = emacs: (
-      (super.emacsPackagesFor emacs).overrideScope' (
-        _: _: {
-          inherit (pkgs-unstable.emacsPackagesFor emacs) org org-plus-contrib;
-        }
-      )
-    );
   }
