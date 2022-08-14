@@ -127,7 +127,8 @@
   :delight
   :after delight general
   :config
-  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-timestamps t
+        undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   (global-undo-tree-mode)
   :general ('(normal motion emacs)
             "SPC et" '(undo-tree-visualize
