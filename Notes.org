@@ -7,7 +7,6 @@
   - [ ] Better wireguard dns
   - [ ] Add local network dns for crux & wireguard
 - [ ] Modularize
-** TODO Move everything to wayland
 ** TODO Fix emacs performance issues
 ** TODO Fix slow wifi reconnects
 ** TODO Ensure reboots work properly for crux
@@ -36,6 +35,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Move everything to wayland
+CLOSED: [2022-08-14 Sun 14:49]
 ** DONE Create a VPN for private services
 CLOSED: [2022-04-23 Sat 21:41]
 ** DONE Fix waybar stability for network module
