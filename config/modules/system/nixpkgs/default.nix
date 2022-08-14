@@ -8,7 +8,6 @@ in {
       (import ../../../../overlays/0-unstable-pkgs)
       (import ../../../../overlays/dircolors-solarized)
       (import ../../../../overlays/fzf-pass)
-      (import ../../../../overlays/launcher)
       (import ../../../../overlays/makemkv)
       (import ../../../../overlays/mako)
       (import ../../../../overlays/notify-send)

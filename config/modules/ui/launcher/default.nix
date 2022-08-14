@@ -24,6 +24,10 @@
     ${slack} &
   '';
 in {
+  nixpkgs.overlays = [
+    (import ../../../../pkgs/launcher/overlay.nix)
+  ];
+
   primary-user.home-manager = {
     home.packages = lib.mkForce [pkgs.launcher];
 
