@@ -2,7 +2,7 @@
   pkgs = import nixpkgs {};
 
   mkDevice = templateFile: name: config: let
-    id = builtins.replaceStrings [" " "'"] ["_" ""] (
+    id = builtins.replaceStrings [" " "'"] ["-" ""] (
       pkgs.lib.toLower name
     );
     template = pkgs.callPackage templateFile {};
