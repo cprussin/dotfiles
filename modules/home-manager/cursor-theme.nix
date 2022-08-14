@@ -17,8 +17,8 @@ in {
     };
   };
 
-  config = lib.mkIf (cfg.package != null) {
-    home.packages = [cfg.package];
-    xsession.pointerCursor = cfg;
+  config.home = lib.mkIf (cfg.package != null) {
+    packages = [cfg.package];
+    pointerCursor = cfg;
   };
 }
