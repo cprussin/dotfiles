@@ -10,7 +10,6 @@
     ./imv.nix
     ./keymap.nix
     ./launcher.nix
-    ./swayidle.nix
     ./swaylock.nix
     ./waybar.nix
   ];

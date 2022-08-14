@@ -10,15 +10,23 @@ in {
     timeouts = [
       {
         timeout = 300;
-        cmd = launcher-apps.lock;
+        command = toString launcher-apps.lock;
       }
       {
         timeout = 300;
-        cmd = "${pkgs.sway}/bin/swaymsg \"output * dpms off\"";
-        resume = "${pkgs.sway}/bin/swaymsg \"output * dpms on\"";
+        command = "${pkgs.sway}/bin/swaymsg \"output * dpms off\"";
+        resumeCommand = "${pkgs.sway}/bin/swaymsg \"output * dpms on\"";
       }
     ];
-    beforeSleep = launcher-apps.lock;
-    lock = launcher-apps.lock;
+    events = [
+      {
+        event = "before-sleep";
+        command = toString launcher-apps.lock;
+      }
+      {
+        event = "lock";
+        command = toString launcher-apps.lock;
+      }
+    ];
   };
 }

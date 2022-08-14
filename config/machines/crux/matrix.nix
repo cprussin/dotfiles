@@ -128,10 +128,46 @@ in {
     };
 
     matrix-synapse = {
-      inherit max_upload_size;
-
-      server_name = "prussin.net";
       enable = true;
+
+      settings = {
+        inherit max_upload_size;
+        server_name = "prussin.net";
+        signing_key_path = config.deployment.keys.matrix-synapse-signing-key.path;
+
+        old_signing_keys = {
+          "ed25519:a_OaaR" = {
+            key = "ksE3M3GNPshFcrKYZXUWaMsTR9rtBgthcibsDpVGDK0";
+            expired_ts = 1639995345267;
+          };
+        };
+
+        listeners = [
+          {
+            port = synapse_port;
+            bind_addresses = ["127.0.0.1"];
+            tls = false;
+            x_forwarded = true;
+            resources = [
+              {
+                names = ["client"];
+                compress = true;
+              }
+              {
+                names = ["federation"];
+                compress = false;
+              }
+            ];
+          }
+        ];
+
+        app_service_config_files = [
+          config.deployment.keys."mautrix-telegram-registration-file.yaml".path
+          config.deployment.keys."mautrix-signal-registration-file.yaml".path
+          config.deployment.keys."mautrix-sms-registration-file.yaml".path
+        ];
+      };
+
       plugins = [
         (config.services.matrix-synapse.package.plugins.matrix-synapse-shared-secret-auth.overrideAttrs (_: {
           version = "2.0.1";
@@ -144,37 +180,10 @@ in {
           buildInputs = [config.services.matrix-synapse.package];
         }))
       ];
+
       extraConfigFiles = [
         config.deployment.keys."matrix-synapse-database-config.yaml".path
         config.deployment.keys."matrix-synapse-shared-secret-config.yaml".path
-      ];
-      extraConfig = ''
-        signing_key_path: "${config.deployment.keys.matrix-synapse-signing-key.path}"
-        old_signing_keys:
-          "ed25519:a_OaaR": { key: "ksE3M3GNPshFcrKYZXUWaMsTR9rtBgthcibsDpVGDK0", expired_ts: 1639995345267 }
-      '';
-      listeners = [
-        {
-          port = synapse_port;
-          bind_address = "127.0.0.1";
-          tls = false;
-          x_forwarded = true;
-          resources = [
-            {
-              names = ["client"];
-              compress = true;
-            }
-            {
-              names = ["federation"];
-              compress = false;
-            }
-          ];
-        }
-      ];
-      app_service_config_files = [
-        config.deployment.keys."mautrix-telegram-registration-file.yaml".path
-        config.deployment.keys."mautrix-signal-registration-file.yaml".path
-        config.deployment.keys."mautrix-sms-registration-file.yaml".path
       ];
     };
 
