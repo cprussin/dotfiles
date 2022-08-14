@@ -11,6 +11,7 @@ in
     light = [
       {
         inherit (args) name;
+        id = "dimmer";
         platform = "tuya";
         dimmer_datapoint = 2;
         min_value_datapoint = 3;
