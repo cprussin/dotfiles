@@ -16,7 +16,7 @@ writeShellScriptBin "browse" ''
   browser="brave"
   target=""
 
-  chromeflags=
+  chromeflags="--ozone-platform-hint=auto"
 
   while $test $# -gt 0
   do
