@@ -99,10 +99,16 @@ in
     iot = pkgs.writeShellScriptBin "iot" ''
       set -e
 
-      rm -f iot-build/result.yaml*
-      nix-build --out-link "iot-build/result.json" --attr "$2" ./config/iot >/dev/null
-      ${replace-password-commands}/bin/replace-password-commands iot-build/result.json > iot-build/result.yaml
-      ${pkgs.esphome}/bin/esphome $1 iot-build/result.yaml**
+      cmd="$1"
+      shift
+
+      rm -f iot-build/*.{yaml,json}
+      for target in "$@"; do
+        nix-build --out-link "iot-build/''${target}.json" --attr "$target" ./config/iot >/dev/null
+        ${replace-password-commands}/bin/replace-password-commands "iot-build/''${target}.json" > "iot-build/''${target}.yaml"
+      done
+
+      ${pkgs.esphome}/bin/esphome $cmd iot-build/*.yaml
     '';
   in
     pkgs.mkShell {
