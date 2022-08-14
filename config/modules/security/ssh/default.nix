@@ -3,12 +3,10 @@
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
-      crux = {
+      crux.hostname = "crux.prussin.net";
+      "lyra gemini orion crux" = {
         checkHostIP = false;
-        hostname = "crux.prussin.net";
-      };
-      "lyra gemini orion" = {
-        checkHostIP = false;
+        forwardAgent = true;
       };
       rsync = {
         user = "11795";
