@@ -1,5 +1,14 @@
 * Tasks
+** TODO Improve wireguard
+- [ ] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
+- [ ] Lock down wireguard to it's own subnet and map in / proxy interfaces for coredns & home-assistant-proxy
+- [ ] Fix dns
+  - [ ] Better wireguard domain
+  - [ ] Better wireguard dns
+  - [ ] Add local network dns for crux & wireguard
+- [ ] Modularize
 ** TODO Ensure reboots work properly for crux
+** TODO Complete wireguard migration
 ** TODO Back up emulator saves (and anything else from phone?)
 ** TODO Fix search for special characters
 ** TODO Make zfs configuration more declarative somehow
@@ -24,6 +33,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Create a VPN for private services
+CLOSED: [2022-04-23 Sat 21:41]
 ** DONE Fix waybar stability for network module
    CLOSED: [2021-12-19 Sun 21:22]
 ** DONE Fix wpa_supplicant stability on Centar

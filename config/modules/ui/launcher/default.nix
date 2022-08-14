@@ -53,7 +53,7 @@ in {
         gimp = "${pkgs.gimp}/bin/gimp";
         github = mkWebApp "github" "https://github.com/";
         gmail = email;
-        home = mkWebApp "home" "https://720-natoma-drive.prussin.net";
+        home = mkWebApp "home" "https://home-assistant.pruss.in";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
         insecure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.exportCmd}";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";

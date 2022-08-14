@@ -10,7 +10,6 @@ in {
       (import ../../../../overlays/emacs-rc)
       (import ../../../../overlays/emojione-png)
       (import ../../../../overlays/fzf-pass)
-      (import ../../../../overlays/home-assistant-with-packages)
       (import ../../../../overlays/launcher)
       (import ../../../../overlays/makemkv)
       (import ../../../../overlays/mako)
