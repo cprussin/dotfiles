@@ -9,6 +9,8 @@
 (eval-when-compile (require 'use-package))
 
 (require 'emacs-rc-util)
+(require 'emacs-rc-keybindings)
+(require 'emacs-rc-completion)
 
 ;; Set up which-key to discover keybindings
 (use-package which-key
@@ -26,6 +28,7 @@
 
 ;; Turn on helpful for more helpful description buffers
 (use-package helpful
+  :after general ivy
   :config
   (ivy-configure 'helpful-callable :display-transformer-fn #'emacs-rc--transform-func)
   (ivy-configure 'helpful-variable :display-transformer-fn #'emacs-rc--transform-var)

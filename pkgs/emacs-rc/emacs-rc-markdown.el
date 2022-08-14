@@ -8,6 +8,8 @@
 
 (eval-when-compile (require 'use-package))
 
+(require 'emacs-rc-keybindings)
+
 (use-package markdown-mode
   :demand
   :config (setq markdown-hide-markup t

@@ -8,6 +8,7 @@
 
 (eval-when-compile (require 'use-package))
 
+(require 'emacs-rc-keybindings)
 (require 'emacs-rc-text) ;; for emojify
 
 ;; Set up org-mode

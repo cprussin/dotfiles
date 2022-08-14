@@ -8,7 +8,10 @@
 
 (eval-when-compile (require 'use-package))
 
+(require 'emacs-rc-keybindings)
+
 (use-package pdf-tools
+  :after general
   :commands pdf-tools-install
   :config
   (setq-default pdf-view-display-size 'fit-page)

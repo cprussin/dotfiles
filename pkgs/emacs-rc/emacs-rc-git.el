@@ -9,6 +9,7 @@
 (eval-when-compile (require 'use-package))
 
 (require 'emacs-rc-custom)
+(require 'emacs-rc-keybindings)
 
 (use-package magit
   :after general

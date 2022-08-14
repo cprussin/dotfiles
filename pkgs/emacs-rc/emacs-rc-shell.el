@@ -9,10 +9,12 @@
 (eval-when-compile (require 'use-package))
 
 (require 'emacs-rc-custom)
+(require 'emacs-rc-keybindings)
 
 (setq shell-file-name emacs-rc-shell-path)
 
 (use-package shell
+  :after general
   :hook (shell-mode . ansi-color-for-comint-mode-on)
   :general
   ('(normal motion emacs)

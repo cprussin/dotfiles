@@ -11,6 +11,7 @@
 (require 'emacs-rc-custom)
 (require 'emacs-rc-keybindings)
 (require 'emacs-rc-util)
+(require 'emacs-rc-ui)
 
 (use-package company
   :demand

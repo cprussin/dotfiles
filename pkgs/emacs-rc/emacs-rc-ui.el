@@ -9,6 +9,7 @@
 (eval-when-compile (require 'use-package))
 
 (require 'emacs-rc-custom)
+(require 'emacs-rc-keybindings)
 
 (define-fringe-bitmap 'tilde [#b00000000
                               #b00000000
@@ -135,6 +136,7 @@
                        :which-key "undo/redo tree")))
 
 (use-package good-scroll
+  :commands good-scroll-mode
   :config (good-scroll-mode))
 
 (use-package delight)

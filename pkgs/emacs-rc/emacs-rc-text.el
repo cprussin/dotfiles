@@ -9,6 +9,7 @@
 (eval-when-compile (require 'use-package))
 
 (require 'emacs-rc-custom)
+(require 'emacs-rc-keybindings)
 
 (setq-default indent-tabs-mode nil
               fill-column 80)
