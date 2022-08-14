@@ -45,6 +45,8 @@ in {
     return-type = "json";
   };
 
-  style.".disconnected".color = colors.foreground;
-  style.".off".color = colors.warn;
+  style = {
+    ".disconnected".color = colors.foreground;
+    ".off".color = colors.warn;
+  };
 }

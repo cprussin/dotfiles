@@ -15,16 +15,18 @@ in {
     format-icons = map icon ["" "" "" "" ""];
   };
 
-  style.".warning".color = colors.warn;
-  style.".critical" = {
-    background-color = colors.urgent;
-    color = colors.white;
-  };
-  style.".critical:not(.charging)" = {
-    animation-name = "blink";
-    animation-duration = "0.5s";
-    animation-timing-function = "linear";
-    animation-iteration-count = "infinite";
-    animation-direction = "alternate";
+  style = {
+    ".warning".color = colors.warn;
+    ".critical" = {
+      background-color = colors.urgent;
+      color = colors.white;
+    };
+    ".critical:not(.charging)" = {
+      animation-name = "blink";
+      animation-duration = "0.5s";
+      animation-timing-function = "linear";
+      animation-iteration-count = "infinite";
+      animation-direction = "alternate";
+    };
   };
 }
