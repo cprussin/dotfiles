@@ -7,25 +7,16 @@
   rsyncUser = "11795";
   rsyncHost = "ch-s011.rsync.net";
   userAtHost = "${rsyncUser}@${rsyncHost}";
+  zfs = "${pkgs.zfs}/bin/zfs";
+  awk = "${pkgs.gawk}/bin/awk";
+  sed = "${pkgs.gnused}/bin/sed";
+  grep = "${pkgs.gnugrep}/bin/grep";
+  mkdir = "${pkgs.coreutils}/bin/mkdir";
+  mount = "${config.security.wrapperDir}/mount";
+  umount = "${config.security.wrapperDir}/umount";
 in {
   services.borgbackup.jobs."rsync.net" = {
-    paths = map (folder: "${folder}/.zfs/snapshot/borgsnap") [
-      "/home/cprussin/Backups"
-      "/home/cprussin/Camera"
-      "/home/cprussin/Notes"
-      "/home/cprussin/Phone"
-      "/home/cprussin/Projects"
-      "/srv/Library/Family Photos"
-      "/srv/Library/Media Library/Movies"
-      "/srv/Library/Media Library/Music"
-      "/srv/Library/Media Library/TV Shows"
-      "/srv/Library/ROMs"
-      "/srv/Library/Software Library"
-      "/var/lib/hass"
-      "/var/lib/matrix-synapse"
-      "/var/lib/postgresql"
-      "/var/lib/signald"
-    ];
+    paths = ["/tank"];
     repo = "${userAtHost}:crux-bak";
     encryption = {
       mode = "keyfile";
@@ -40,8 +31,33 @@ in {
       weekly = 4;
       monthly = -1;
     };
-    preHook = "${pkgs.zfs}/bin/zfs snapshot -r tank@borgsnap";
-    postHook = "${pkgs.zfs}/bin/zfs destroy -r tank@borgsnap";
+    preHook = ''
+      ${zfs} snapshot -r tank@borgsnap
+      IFS="
+      "
+      getSnaps() {
+        ${zfs} list -H -s name -o name,net.prussin:backup -t snapshot |\
+        ${awk} -F '\t' '$1 ~ /@borgsnap/ && tolower($2) ~ /true/ {print $1}'
+      }
+      for snap in $(getSnaps)
+      do
+        target="/''${snap%%@*}"
+        ${mkdir} -p "$target"
+        ${mount} -t zfs "$snap" "$target"
+      done
+    '';
+    postHook = ''
+      getSnaps() {
+        ${mount} |\
+        ${grep} "on /tank/" |\
+        ${sed} 's|@borgsnap on /tank/.*|@borgsnap|'
+      }
+      for snap in $(getSnaps)
+      do
+        ${umount} "$snap"
+      done
+      ${zfs} destroy -r tank@borgsnap
+    '';
     extraArgs = "--remote-path=borg1";
   };
 
@@ -82,6 +98,7 @@ in {
         "rsync.net-ssh-key.service"
         "import-tank.service"
       ];
+      serviceConfig.TemporaryFileSystem = ["/tank"];
     };
   };
 
