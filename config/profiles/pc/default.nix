@@ -22,8 +22,8 @@
     ../../modules/ui/audio
     ../../modules/ui/direnv
     ../../modules/ui/emacs
+    ../../modules/ui/fonts
     ../../modules/ui/gtk
-    ../../modules/ui/icon-fonts
     ../../modules/ui/imv
     ../../modules/ui/launcher
     ../../modules/ui/log

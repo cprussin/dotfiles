@@ -3,6 +3,8 @@
   config,
   colors,
 }: let
+  icon = import ../icon.nix;
+
   bluetoothctl = "${pkgs.bluez}/bin/bluetoothctl";
 
   bluetooth = pkgs.writeShellScript "bluetooth" ''
@@ -23,12 +25,12 @@
       devs=$(devices)
       if [ "$devs" ]
       then
-        echo "{\"text\":\" $devs\"}"
+        echo "{\"text\":\"${icon ""} $devs\"}"
       else
-        echo "{\"text\":\" $devs\",\"class\":\"disconnected\"}"
+        echo "{\"text\":\"${icon ""} $devs\",\"class\":\"disconnected\"}"
       fi
     else
-      echo "{\"text\":\"\",\"class\":\"off\"}"
+      echo "{\"text\":\"${icon ""}\",\"class\":\"off\"}"
     fi
   '';
 

@@ -1,4 +1,6 @@
-{colors}: {
+{colors}: let
+  icon = import ../icon.nix;
+in {
   name = "battery";
 
   config = {
@@ -6,11 +8,11 @@
       warning = 15;
       critical = 5;
     };
-    format = "{icon} ▼ {capacity}%";
-    format-charging = " ▲ {capacity}%";
-    format-plugged = " {capacity}%";
+    format = "{icon} ${icon "▼"} {capacity}%";
+    format-charging = "${icon ""} ${icon "▲"} {capacity}%";
+    format-plugged = "${icon ""} {capacity}%";
     format-alt = "{icon} {time}";
-    format-icons = ["" "" "" "" ""];
+    format-icons = map icon ["" "" "" "" ""];
   };
 
   style.".warning".color = colors.warn;
