@@ -16,6 +16,7 @@
       settings = {
         open_url_with = "${pkgs.launcher}/bin/browse";
         remember_window_size = "no";
+        confirm_os_window_close = "0";
       };
       keybindings = {
         "ctrl+plus" = "change_font_size all +1.0";
