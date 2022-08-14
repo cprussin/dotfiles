@@ -55,7 +55,6 @@ in {
         "tank-fast/persisted-state/alsa".mountpoint = "/var/lib/alsa";
         "tank-fast/persisted-state/chromium".mountpoint = "/home/cprussin/.config/chromium";
         "tank-fast/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
-        "tank-fast/persisted-state/nixops".mountpoint = "/home/cprussin/.nixops";
         "tank-fast/persisted-state/secrets" = {
           mountpoint = "/secrets";
           neededForBoot = true;

@@ -35,20 +35,6 @@ The way things are structured here is:
 
 ** Usage
 
-*** Setting up a machine to be able to deploy
-
-For a machine to be able to deploy the configurations (even to itself), the
-nixops network must be created:
-
-#+BEGIN_SRC bash
-  nix-shell --run 'nixops create -d PrussinNet ./network.nix'
-#+END_SRC
-
-Note that because this setup doesn't really utilize anything important that
-relies on nixops state, it's not necessary to share the nixops state between
-machines--you can just create a new nixops network on each machine you want to
-deploy from.
-
 *** Adding a new machine
 
 To initialize a new machine into the network, follow these steps:
@@ -81,12 +67,10 @@ To initialize a new machine into the network, follow these steps:
    (make sure the folder name for the machine configuration matches the hostname
    of the new machine).
 
-3. Deploy the configuration to the new machine (this can be from any computer
-   that has the nixops network created, including the new computer if you clone
-   the repo and follow the instructions above to create the nixops network):
+3. Deploy the configuration to the new machine:
 
    #+BEGIN_SRC bash
-     nix-shell --run 'deploy --include <new machine>'
+     nix-shell --run 'deploy --on <new machine>'
    #+END_SRC
 
 *** Deploying changes

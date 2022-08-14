@@ -71,18 +71,6 @@
         "url": "https://github.com/mautrix/wsproxy/archive/f3dc3f9fa73b0867845897b517cb3d62a0f132f5.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nixops": {
-        "branch": "master",
-        "description": "NixOps is a tool for deploying to NixOS machines in a network or cloud.",
-        "homepage": "https://nixos.org/nixops",
-        "owner": "NixOS",
-        "repo": "nixops",
-        "rev": "45256745cef246dabe1ae8a7d109988f190cd7ef",
-        "sha256": "0ni1v8ppg5cf35gq7nzd50kajxzp5zkbzhf022in0fgbjcprlzr2",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixops/archive/45256745cef246dabe1ae8a7d109988f190cd7ef.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "nixos-hardware": {
         "branch": "master",
         "description": "A collection of NixOS modules covering hardware quirks.",

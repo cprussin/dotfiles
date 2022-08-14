@@ -1,12 +1,12 @@
-let
-  machineDir = ./config/machines;
-
+{
+  sources ? import ./sources.nix,
+  nixpkgs ? sources.nixpkgs,
+  machineDir ? ./config/machines,
+}: let
   mkMachine = targetHost: {config, ...}: {
     deployment = {
       inherit targetHost;
       targetUser = config.primary-user.name;
-      sshOptions = ["-A"];
-      provisionSSHKey = false;
     };
     imports = ["${toString machineDir}/${targetHost}"];
   };
@@ -16,7 +16,11 @@ let
     (machine: _: mkMachine machine)
     (builtins.readDir machineDir);
 in
-  all-machines
-  // {
-    network.description = "PrussinNet";
+  {
+    meta = {
+      nixpkgs = import nixpkgs {};
+      name = "PrussinNet";
+      description = "PrussinNet services";
+    };
   }
+  // all-machines

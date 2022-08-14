@@ -1,5 +1,5 @@
 * Tasks
-** TODO Upgrade nixops
+** TODO Ensure reboots work properly for crux
 ** TODO Back up emulator saves (and anything else from phone?)
 ** TODO Fix search for special characters
 ** TODO Make zfs configuration more declarative somehow

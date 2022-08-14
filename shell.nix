@@ -5,7 +5,6 @@ in
     nixpkgs ? sources.nixpkgs,
     nixpkgs-unstable ? sources.nixpkgs-unstable,
     niv ? sources.niv,
-    nixops ? sources.nixops,
     alejandra ? sources.alejandra,
   }: let
     niv-overlay = self: _: {
@@ -18,10 +17,6 @@ in
             --add-flags "--sources-file ${toString ./sources.json}"
         '';
       };
-    };
-
-    nixops-overlay = _: _: {
-      nixops = (import nixops).default;
     };
 
     alejandra-overlay = self: _: {
@@ -44,7 +39,6 @@ in
     pkgs = import nixpkgs {
       overlays = [
         niv-overlay
-        nixops-overlay
         alejandra-overlay
         password-utils-overlay
         unstable-esphome-overlay
@@ -63,7 +57,7 @@ in
     '';
 
     deploy = pkgs.writeShellScriptBin "deploy" ''
-      ${pkgs.nixops}/bin/nixops deploy "$@"
+      ${pkgs.colmena}/bin/colmena apply "$@"
     '';
 
     collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
@@ -115,8 +109,8 @@ in
       buildInputs = [
         pkgs.git
         pkgs.niv
-        pkgs.nixops
         pkgs.passwordUtils
+        pkgs.colmena
         lint
         format
         deploy
