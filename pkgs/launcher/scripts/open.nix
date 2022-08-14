@@ -9,7 +9,7 @@
   mpv,
   prusa-slicer,
   freecad,
-  emacsPgtkNativeComp,
+  emacs,
 }: let
   browse = callPackage ./browse.nix {};
 in
@@ -24,7 +24,7 @@ in
     mpv=${mpv}/bin/mpv
     prusaSlicer=${prusa-slicer}/bin/prusa-slicer
     freecad=${freecad}/bin/freecad
-    emacsclient=${emacsPgtkNativeComp}/bin/emacsclient
+    emacsclient=${emacs}/bin/emacsclient
 
     if $test ! -e "$(eval echo \"$1\")" -a "$1" != "*scratch*"
     then

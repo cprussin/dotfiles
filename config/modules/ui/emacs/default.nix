@@ -1,11 +1,15 @@
 {pkgs, ...}: let
   sources = import ../../../../sources.nix;
+  emacs-overlay = self: super: {
+    emacs = (self.emacsPackagesFor super.emacsPgtkNativeComp).withPackages (epkgs: [epkgs.emacs-rc]);
+  };
 in {
   nixpkgs.overlays = [
     (import sources.emacs-overlay)
     (import ../../../../pkgs/emacs-rc/overlay.nix)
     (import ../../../../pkgs/emojione-png/overlay.nix)
     (import ../../../../pkgs/zoom-frm/overlay.nix {src = sources.zoom-frm;})
+    emacs-overlay
   ];
   primary-user.home-manager = {
     programs.emacs = {
@@ -15,9 +19,6 @@ in {
         browse = "${pkgs.launcher}/bin/browse";
       };
     };
-    services.emacs = {
-      enable = true;
-      package = (pkgs.emacsPackagesFor pkgs.emacsPgtkNativeComp).withPackages (epkgs: [epkgs.emacs-rc]);
-    };
+    services.emacs.enable = true;
   };
 }

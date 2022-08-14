@@ -36,7 +36,7 @@ in {
       apps = {
         inherit email sms matrix slack discord zulip comms;
 
-        agenda = pkgs.writeShellScript "agenda" "${config.primary-user.home-manager.services.emacs.package}/bin/emacsclient -c -e '(org-agenda-list)'";
+        agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
         amazon = mkWebApp "amazon" "https://www.amazon.com/";
         aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
         bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
