@@ -37,4 +37,11 @@ in
         name = "${name} Uptime";
       }
     ];
+
+    button = [
+      {
+        platform = "restart";
+        name = "Restart ${name}";
+      }
+    ];
   }
