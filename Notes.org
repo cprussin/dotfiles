@@ -7,6 +7,9 @@
   - [ ] Better wireguard dns
   - [ ] Add local network dns for crux & wireguard
 - [ ] Modularize
+** TODO Move everything to wayland
+** TODO Fix emacs performance issues
+** TODO Fix slow wifi reconnects
 ** TODO Ensure reboots work properly for crux
 ** TODO Complete wireguard migration
 ** TODO Back up emulator saves (and anything else from phone?)
