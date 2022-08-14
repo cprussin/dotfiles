@@ -36,8 +36,6 @@
 (use-package projectile
   :demand
   :commands projectile-mode
-  :delight '(:eval (concat " " (projectile-project-name) " "))
-  :after delight
   :config
   (setq projectile-completion-system 'ivy
         projectile-git-command (emacs-rc--git-cmd "ls-files -zco --exclude-standard")
