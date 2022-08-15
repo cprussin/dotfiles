@@ -18,6 +18,7 @@ in {
   };
   environment.etc."machine-id".text = "1e07c7df74514d51872dac89ab314e7c\n";
   services.getty.greetingLine = builtins.readFile ./greeting;
+  primary-user.home-manager.wayland.windowManager.sway.config.output.eDP-1.scale = "1.25";
 
   networking.wireguard = {
     enable = true;
