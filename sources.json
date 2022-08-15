@@ -27,12 +27,12 @@
         "branch": "master",
         "description": "Bleeding edge emacs overlay [maintainer=@adisbladis] ",
         "homepage": "",
-        "owner": "cprussin",
+        "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "65255005b89ed3adb49d2f552188e34ad98d64d0",
-        "sha256": "0z5pd2cblwhw2dy8xs90wcyvymvdvkp2649i7lmcqsqzarza77an",
+        "rev": "0a2ab5565775b057487097a64b3bb115e4c82cc2",
+        "sha256": "03gd9is16bvmgm6cx74bc4dwn3rkg17zb33vgvcycggbp2dpwnyf",
         "type": "tarball",
-        "url": "https://github.com/cprussin/emacs-overlay/archive/65255005b89ed3adb49d2f552188e34ad98d64d0.tar.gz",
+        "url": "https://github.com/nix-community/emacs-overlay/archive/0a2ab5565775b057487097a64b3bb115e4c82cc2.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "fzf-pass": {
