@@ -76,7 +76,7 @@ in {
             commands = ["floating enable"];
           }
           {
-            criteria.class = "Pinentry";
+            criteria.app_id = "pinentry-qt";
             commands = [
               "floating enable"
               "sticky enable"

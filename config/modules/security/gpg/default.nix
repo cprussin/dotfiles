@@ -10,6 +10,7 @@
       enable = true;
       enableSshSupport = true;
       sshKeys = ["828682F09BD928BC5B3285F89A8B9FBFCBD05482 0"];
+      pinentryFlavor = "qt";
     };
   };
 }
