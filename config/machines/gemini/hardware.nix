@@ -16,9 +16,10 @@ in {
     eth = "enp0s31f6";
   };
 
-  primary-user.secure.luksDrives = [
-    "nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987"
-  ];
+  primary-user = {
+    secure.luksDrives = ["nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987"];
+    home-manager.wayland.windowManager.sway.config.output.eDP-1.scale = "1.15";
+  };
 
   boot = {
     kernelModules = ["kvm-intel"];
