@@ -16,7 +16,6 @@ in {
   imports = [
     ./hardware.nix
     ./backup.nix
-    ./plex.nix
     ./dynamic-dns.nix
     ./acme.nix
     ./library.nix
