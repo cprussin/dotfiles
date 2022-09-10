@@ -12,11 +12,12 @@
 
 (use-package pdf-tools
   :after general
-  :commands pdf-tools-install
+  :commands pdf-tools-install pdf-view-mode
+  :mode  ("\\.pdf\\'" . pdf-view-mode)
   :config
   (setq-default pdf-view-display-size 'fit-page)
-  (require 'pdf-occur)
   (pdf-tools-install t)
+  (require 'pdf-occur)
   :general
   (pdf-view-mode-map
    "SPC" nil)
