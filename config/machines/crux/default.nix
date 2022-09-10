@@ -189,29 +189,6 @@ in {
   environment.etc."machine-id".text = "bf6ba660172042baa958c54739b5fdb9\n";
   services = {
     getty.greetingLine = builtins.readFile ./greeting;
-
-    syncthing.folders = {
-      DCIM = {
-        path = "${config.primary-user.home}/Phone/DCIM";
-        devices = ["pegasus"];
-      };
-      Pictures = {
-        path = "${config.primary-user.home}/Phone/Pictures";
-        devices = ["pegasus"];
-      };
-      Snapchat = {
-        path = "${config.primary-user.home}/Phone/Snapchat";
-        devices = ["pegasus"];
-      };
-      Total_Launcher_Backups = {
-        path = "${config.primary-user.home}/Phone/Total Launcher Backups";
-        devices = ["pegasus"];
-      };
-      WhatsApp_Media = {
-        path = "${config.primary-user.home}/Phone/WhatsApp Media";
-        devices = ["pegasus"];
-      };
-    };
   };
 
   systemd.services = {

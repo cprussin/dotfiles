@@ -19,6 +19,20 @@
     crux = "I4ZIHKH-5UQLYN3-I6TGPKJ-IXVKJYK-NTO6RQG-QPIFI4Y-NMC3IHO-4OPHDAM";
     pegasus = "YDEJP2I-6H55ESK-NGMZ6OV-TWRVUCZ-WHQL2XA-SEDSDOY-Z7UWSJA-ZCVF3AH";
   };
+
+  includesCurrentDevice = lib.any (dev: dev == config.networking.hostName);
+  removeCurrentDeviceFromFolder = folder:
+    folder
+    // {
+      devices = lib.remove config.networking.hostName folder.devices;
+    };
+
+  foldersForCurrentDevice = folders:
+    builtins.mapAttrs (_: removeCurrentDeviceFromFolder) (
+      lib.filterAttrs
+      (_: folder: includesCurrentDevice folder.devices)
+      folders
+    );
 in {
   options.persistSyncthingKeys = lib.mkEnableOption "Persist syncthing keys across reboots";
 
@@ -48,18 +62,34 @@ in {
       devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
         id = syncthingMachineIds."${machine}";
       });
-      folders = {
+      folders = foldersForCurrentDevice {
         Notes = {
           path = "${config.primary-user.home}/Notes";
-          devices = lib.remove config.networking.hostName ["pegasus" "crux" "gemini" "orion"];
+          devices = ["crux" "gemini" "pegasus"];
         };
         Projects = {
           path = "${config.primary-user.home}/Projects";
-          devices = lib.remove config.networking.hostName ["crux" "gemini" "orion"];
+          devices = ["crux" "gemini"];
         };
         Scratch = {
           path = "${config.primary-user.home}/Scratch";
-          devices = lib.remove config.networking.hostName ["pegasus" "crux" "gemini" "orion"];
+          devices = ["crux" "gemini" "pegasus"];
+        };
+        DCIM = {
+          path = "${config.primary-user.home}/Phone/DCIM";
+          devices = ["crux" "pegasus"];
+        };
+        Pictures = {
+          path = "${config.primary-user.home}/Phone/Pictures";
+          devices = ["crux" "pegasus"];
+        };
+        Total_Launcher_Backups = {
+          path = "${config.primary-user.home}/Phone/Total Launcher Backups";
+          devices = ["crux" "pegasus"];
+        };
+        WhatsApp_Media = {
+          path = "${config.primary-user.home}/Phone/WhatsApp Media";
+          devices = ["crux" "pegasus"];
         };
       };
     };
