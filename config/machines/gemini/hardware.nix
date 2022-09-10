@@ -59,6 +59,7 @@ in {
         "tank/persisted-state/direnv-allow".mountpoint = "/home/cprussin/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/cprussin/.config/discord";
         "tank/persisted-state/factorio".mountpoint = "/home/cprussin/.factorio";
+        "tank/persisted-state/log".mountpoint = "/var/log";
         "tank/persisted-state/secrets" = {
           mountpoint = "/secrets";
           neededForBoot = true;
