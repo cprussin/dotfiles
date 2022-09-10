@@ -3,7 +3,6 @@
   pkgs,
   ...
 }: {
-  imports = [../../modules/system/devices/cdrom];
   primary-user = {
     home-manager.home.packages = lib.mkForce [
       pkgs.xpra

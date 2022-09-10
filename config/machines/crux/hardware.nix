@@ -27,6 +27,7 @@
 in {
   imports = [
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
+    ../../modules/system/devices/cdrom
   ];
 
   interfaces.eth = "enp7s0";
