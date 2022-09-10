@@ -87,6 +87,11 @@ in {
     };
   };
 
+  security.acme = {
+    defaults.email = "admin@prussin.net";
+    acceptTerms = true;
+  };
+
   services = {
     nginx = {
       enable = true;

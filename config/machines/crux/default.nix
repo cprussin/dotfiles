@@ -7,7 +7,6 @@
     ./backup.nix
     ./syncthing.nix
     ./dynamic-dns.nix
-    ./acme.nix
     ./dvd-ripping.nix
 
     ./wireguard.nix
