@@ -19,9 +19,9 @@ in
       passwordCommand = passwords.getPassword "Connor/Wifi/Centar";
       domain = ".lan";
       manual_ip = {
-        static_ip = network.iot."${id}";
-        gateway = network.net-hardware.router;
-        subnet = network.subnet;
+        inherit (network.home) subnet;
+        static_ip = network.home.iot."${id}".address;
+        gateway = network.home.net-hardware.router.address;
       };
       ap = {
         ssid = name;

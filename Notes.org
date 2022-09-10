@@ -1,16 +1,17 @@
 * Tasks
+** TODO Fix home-assistant blocking shutdown for way too long on crux
+** TODO Fix crux activation scripts unmounting tank
+** TODO Why is postgres getting corrupted?
 ** TODO Improve wireguard
-- [ ] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
 - [ ] Lock down wireguard to it's own subnet and map in / proxy interfaces for coredns & home-assistant-proxy
-- [ ] Fix dns
-  - [ ] Better wireguard domain
+- [-] Fix dns
+  - [X] Better wireguard domain
   - [ ] Better wireguard dns
   - [ ] Add local network dns for crux & wireguard
-- [ ] Modularize
+- [X] Modularize
+- [X] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
 ** TODO Fix emacs performance issues
 ** TODO Fix slow wifi reconnects
-** TODO Ensure reboots work properly for crux
-** TODO Complete wireguard migration
 ** TODO Back up emulator saves (and anything else from phone?)
 ** TODO Fix search for special characters
 ** TODO Make zfs configuration more declarative somehow
@@ -35,6 +36,10 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Complete wireguard migration
+CLOSED: [2022-08-21 Sun 12:46]
+** DONE Ensure reboots work properly for crux
+CLOSED: [2022-08-21 Sun 12:45]
 ** DONE Move everything to wayland
 CLOSED: [2022-08-14 Sun 14:49]
 ** DONE Create a VPN for private services

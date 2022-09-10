@@ -95,7 +95,7 @@ in {
 
     systemd.services = {
       syncthing = {
-        wants = [
+        requires = [
           "syncthing-cert-key.service"
           "syncthing-key-key.service"
         ];

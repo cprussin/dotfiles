@@ -55,11 +55,11 @@ in {
         gimp = "${pkgs.gimp}/bin/gimp";
         github = mkWebApp "github" "https://github.com/";
         gmail = email;
-        home = mkWebApp "home" "https://home-assistant.pruss.in";
+        home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
         insecure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.exportCmd}";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
-        library = mkWebApp "library" "https://library.prussin.net";
+        library = mkWebApp "library" "https://library.internal.prussin.net";
         lock = pkgs.callPackage ./apps/lock.nix {inherit config;};
         makemkv = "${pkgs.makemkv}/bin/makemkv";
         mic-volume = pkgs.callPackage ./apps/mic-volume.nix {};

@@ -10,6 +10,7 @@ in {
     ../../modules/data/xdg-user-dirs
 
     ../../modules/security/sshd
+    ../../modules/security/ssl
     ../../modules/security/sudo
     ../../modules/security/umask
 

@@ -23,7 +23,7 @@ in {
       "route53-dynamic-dns-aws-access-key-key.service"
       "route53-dynamic-dns-aws-secret-access-key-key.service"
     ];
-    wants = [
+    requires = [
       "route53-dynamic-dns-aws-access-key-key.service"
       "route53-dynamic-dns-aws-secret-access-key-key.service"
     ];

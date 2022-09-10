@@ -8,6 +8,7 @@
     ../../modules/security/pass
     ../../modules/security/secure
     ../../modules/security/ssh
+    ../../modules/security/wireguard
 
     ../../modules/system/avahi
     ../../modules/system/dbus

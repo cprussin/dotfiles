@@ -29,6 +29,8 @@ in {
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
 
+  interfaces.eth = "enp7s0";
+
   detachedLuksWithNixopsKeys = builtins.listToAttrs (
     map
     (
@@ -43,10 +45,18 @@ in {
 
   systemd.services.import-tank = {
     after = map (drive: "unlock-${drive}.service") zfsDrives;
-    wants = map (drive: "unlock-${drive}.service") zfsDrives;
+    bindsTo = map (drive: "unlock-${drive}.service") zfsDrives;
     wantedBy = ["zfs.target"];
+    script = ''
+      if [ "$(${pkgs.zfs}/bin/zpool get -H health tank | cut -f 3)" = "ONLINE" ]; then
+        echo "Already imported: tank"
+      else
+        ${pkgs.zfs}/bin/zpool import tank
+      fi
+      ${pkgs.zfs}/bin/zfs mount -a
+    '';
+    preStop = "${pkgs.zfs}/bin/zpool export tank";
     serviceConfig = {
-      ExecStart = "${pkgs.zfs}/bin/zpool import tank";
       RemainAfterExit = true;
       Type = "oneshot";
     };

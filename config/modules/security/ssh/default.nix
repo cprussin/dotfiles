@@ -3,7 +3,6 @@
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
-      crux.hostname = "crux.prussin.net";
       "gemini crux" = {
         checkHostIP = false;
         forwardAgent = true;

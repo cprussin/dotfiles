@@ -19,6 +19,11 @@
     cfg;
 
   mkUnlockScript = drive: filenameBase: ''
+    if [ -b "/dev/mapper/crypt-${filenameBase}" ]; then
+      echo "Already decrypted: ${drive}"
+      exit
+    fi
+
     ${pkgs.coreutils}/bin/mkdir -p /tmp/${filenameBase}
     ${config.security.wrapperDir}/mount -t tmpfs tmpfs /tmp/${filenameBase}
     ${base64Decode config.deployment.keys."${filenameBase}-header".path} > /tmp/${filenameBase}/header
@@ -86,7 +91,7 @@ in {
             "${opts.filenameBase}-key-key.service"
             "${opts.filenameBase}-header-key.service"
           ];
-          wants = [
+          requires = [
             "${opts.filenameBase}-key-key.service"
             "${opts.filenameBase}-header-key.service"
           ];

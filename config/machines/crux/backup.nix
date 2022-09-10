@@ -70,8 +70,14 @@ in {
   systemd.services = {
     "borgbackup-job-rsync.net-import-keyfile" = {
       description = "Import the borgbackup keyfile for rsync.net.";
-      after = ["borgbackup-keyfile-key.service"];
-      wants = ["borgbackup-keyfile-key.service"];
+      after = [
+        "borgbackup-keyfile-key.service"
+        "rsync.net-ssh-key.service"
+      ];
+      requires = [
+        "borgbackup-keyfile-key.service"
+        "rsync.net-ssh-key.service"
+      ];
       environment = config.services.borgbackup.jobs."rsync.net".environment;
       serviceConfig = {
         Type = "oneshot";
@@ -92,7 +98,7 @@ in {
         "rsync.net-ssh-key.service"
         "import-tank.service"
       ];
-      wants = [
+      requires = [
         "borgbackup-job-rsync.net-import-keyfile.service"
         "borgbackup-key.service"
         "rsync.net-ssh-key.service"
