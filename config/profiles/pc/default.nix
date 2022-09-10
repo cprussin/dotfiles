@@ -35,7 +35,6 @@
     ../../modules/ui/swayidle
     ../../modules/ui/swaylock
     ../../modules/ui/waybar
-    ../../modules/ui/zathura
   ];
 
   enableSshdAtBoot = false;

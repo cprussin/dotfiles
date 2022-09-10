@@ -4,7 +4,6 @@
   coreutils,
   file,
   gnused,
-  zathura,
   imv,
   mpv,
   prusa-slicer,
@@ -18,7 +17,6 @@ in
     echo=${coreutils}/bin/echo
     file=${file}/bin/file
     sed=${gnused}/bin/sed
-    zathura=${zathura}/bin/zathura
     browse=${browse}/bin/browse
     imv=${imv}/bin/imv
     mpv=${mpv}/bin/mpv
@@ -37,7 +35,6 @@ in
       *.stp | *.step | *.FCStd | *.FCStd1) exec $freecad "$1" ;;
       *)
         case $($file --brief --mime-type "$1") in
-          application/pdf) exec $zathura "$1" ;;
           text/html) exec $browse "$1" ;;
           image/*) exec $imv "$1" ;;
           video/*) exec $mpv "$1" ;;
