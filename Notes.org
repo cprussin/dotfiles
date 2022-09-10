@@ -2,6 +2,8 @@
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
 ** TODO Fix crux activation scripts unmounting tank
 ** TODO Why is postgres getting corrupted?
+** TODO Fix gemini locking up & caps lock flashing issue
+** TODO Fix font sizes too small on Chrome
 ** TODO Improve wireguard
 - [ ] Lock down wireguard to it's own subnet and map in / proxy interfaces for coredns & home-assistant-proxy
 - [-] Fix dns
