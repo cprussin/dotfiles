@@ -81,6 +81,21 @@ in {
               "sticky enable"
             ];
           }
+          # TODO remove me when chrome bug
+          # https://bugs.chromium.org/p/chromium/issues/detail?id=1338554 is
+          # fixed
+          {
+            criteria.app_id = "^chrome-.*";
+            commands = [
+              "shortcuts_inhibitor disable"
+            ];
+          }
+          {
+            criteria.app_id = "^brave-.*";
+            commands = [
+              "shortcuts_inhibitor disable"
+            ];
+          }
         ];
       };
 
