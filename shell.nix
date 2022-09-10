@@ -6,6 +6,7 @@ in
     nixpkgs-unstable ? sources.nixpkgs-unstable,
     niv ? sources.niv,
     alejandra ? sources.alejandra,
+    colmena ? sources.colmena,
   }: let
     niv-overlay = self: _: {
       niv = self.symlinkJoin {
@@ -21,6 +22,10 @@ in
 
     alejandra-overlay = self: _: {
       alejandra = (import alejandra)."${self.system}";
+    };
+
+    colmena-overlay = _: _: {
+      colmena = import colmena;
     };
 
     password-utils-overlay = self: _: {
@@ -40,6 +45,7 @@ in
       overlays = [
         niv-overlay
         alejandra-overlay
+        colmena-overlay
         password-utils-overlay
         unstable-esphome-overlay
       ];
