@@ -4,7 +4,7 @@
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
       crux.hostname = "crux.prussin.net";
-      "lyra gemini orion crux" = {
+      "gemini crux" = {
         checkHostIP = false;
         forwardAgent = true;
       };
