@@ -7,7 +7,6 @@
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
   max_upload_size = "200M";
   synapse_port = 8008;
-  federation_port = 8448;
   mautrix-telegram-port = 29317;
   mautrix-signal-port = 29328;
   homeserverUrl = "http://localhost:${toString synapse_port}";
@@ -89,6 +88,16 @@ in {
         enableACME = true;
         http2 = true;
         listen = [
+          # Acme only
+          {
+            addr = "0.0.0.0";
+            port = 80;
+          }
+          {
+            addr = "[::]";
+            port = 80;
+          }
+          ####
           {
             addr = "0.0.0.0";
             port = 443;
@@ -97,16 +106,6 @@ in {
           {
             addr = "[::]";
             port = 443;
-            ssl = true;
-          }
-          {
-            addr = "0.0.0.0";
-            port = federation_port;
-            ssl = true;
-          }
-          {
-            addr = "[::]";
-            port = federation_port;
             ssl = true;
           }
         ];
@@ -267,5 +266,6 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [443 federation_port];
+  # Port 80 is open only for ACME challenges
+  networking.firewall.allowedTCPPorts = [80 443];
 }
