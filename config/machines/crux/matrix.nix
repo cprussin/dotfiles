@@ -77,6 +77,7 @@ in {
   };
 
   services = {
+    postgresql.enable = true;
     nginx = {
       enable = true;
       recommendedTlsSettings = true;
@@ -123,13 +124,7 @@ in {
         inherit max_upload_size;
         server_name = "prussin.net";
         signing_key_path = config.deployment.keys.matrix-synapse-signing-key.path;
-
-        old_signing_keys = {
-          "ed25519:a_OaaR" = {
-            key = "ksE3M3GNPshFcrKYZXUWaMsTR9rtBgthcibsDpVGDK0";
-            expired_ts = 1639995345267;
-          };
-        };
+        suppress_key_server_warning = true;
 
         listeners = [
           {
@@ -185,7 +180,6 @@ in {
           backfill.initial_limit = -1;
         };
       };
-      serviceDependencies = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
     };
 
     mautrix-signal = {
@@ -194,11 +188,18 @@ in {
       settings = mautrix_settings mautrix-signal-port;
       serviceDependencies = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
     };
-
-    postgresql.enable = true;
   };
 
   systemd.services = {
+    # For acme to work correctly
+    nginx = {
+      requires = ["import-tank.service"];
+      after = ["import-tank.service"];
+    };
+    postgresql = {
+      requires = ["import-tank.service"];
+      after = ["import-tank.service"];
+    };
     matrix-synapse = {
       after = [
         "matrix-synapse-signing-key-key.service"
@@ -207,7 +208,7 @@ in {
         "mautrix-telegram-registration-file.yaml-key.service"
         "mautrix-signal-registration-file.yaml-key.service"
       ];
-      wants = [
+      requires = [
         "matrix-synapse-signing-key-key.service"
         "matrix-synapse-database-config.yaml-key.service"
         "matrix-synapse-shared-secret-config.yaml-key.service"
@@ -216,15 +217,18 @@ in {
       ];
       serviceConfig.ExecStartPre = lib.mkForce [];
     };
-    mautrix-telegram.serviceConfig = {
-      DynamicUser = lib.mkForce false;
-      User = "mautrix-telegram";
-      Group = "mautrix-telegram";
-    };
     mautrix-signal.serviceConfig = {
       DynamicUser = lib.mkForce false;
       User = "mautrix-signal";
       Group = "mautrix-signal";
+    mautrix-telegram = {
+      after = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
+      requires = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
+      serviceConfig = {
+        DynamicUser = lib.mkForce false;
+        User = "mautrix-telegram";
+        Group = "mautrix-telegram";
+      };
     };
   };
 
