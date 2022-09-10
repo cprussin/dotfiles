@@ -70,21 +70,6 @@ in {
       group = "matrix-synapse";
       keyCommand = passwords.getMautrixRegistrationFile "signal" mautrix-signal-port;
     };
-    mautrix-syncproxy-environment-file = {
-      user = "mautrix-syncproxy";
-      group = "mautrix-syncproxy";
-      keyCommand = passwords.getMautrixSyncproxyEnvironmentFile "Connor/Infrastructure/matrix/bridges/syncproxy";
-    };
-    mautrix-wsproxy-environment-file = {
-      user = "mautrix-wsproxy";
-      group = "mautrix-wsproxy";
-      keyCommand = passwords.getMautrixWsproxyEnvironmentFile "Connor/Infrastructure/matrix/bridges/sms" "Connor/Infrastructure/matrix/bridges/syncproxy";
-    };
-    "mautrix-sms-registration-file.yaml" = {
-      user = "matrix-synapse";
-      group = "matrix-synapse";
-      keyCommand = passwords.getMautrixRegistrationFile "sms" 29331;
-    };
   };
 
   security.acme = {
@@ -169,7 +154,6 @@ in {
         app_service_config_files = [
           config.deployment.keys."mautrix-telegram-registration-file.yaml".path
           config.deployment.keys."mautrix-signal-registration-file.yaml".path
-          config.deployment.keys."mautrix-sms-registration-file.yaml".path
         ];
       };
 
@@ -212,17 +196,6 @@ in {
       serviceDependencies = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
     };
 
-    mautrix-wsproxy = {
-      enable = true;
-      secretsFile = config.deployment.keys.mautrix-wsproxy-environment-file.path;
-    };
-
-    mautrix-syncproxy = {
-      inherit homeserverUrl;
-      enable = true;
-      secretsFile = config.deployment.keys.mautrix-syncproxy-environment-file.path;
-    };
-
     postgresql.enable = true;
   };
 
@@ -234,7 +207,6 @@ in {
         "matrix-synapse-shared-secret-config.yaml-key.service"
         "mautrix-telegram-registration-file.yaml-key.service"
         "mautrix-signal-registration-file.yaml-key.service"
-        "mautrix-sms-registration-file.yaml-key.service"
       ];
       wants = [
         "matrix-synapse-signing-key-key.service"
@@ -242,7 +214,6 @@ in {
         "matrix-synapse-shared-secret-config.yaml-key.service"
         "mautrix-telegram-registration-file.yaml-key.service"
         "mautrix-signal-registration-file.yaml-key.service"
-        "mautrix-sms-registration-file.yaml-key.service"
       ];
       serviceConfig.ExecStartPre = lib.mkForce [];
     };
@@ -256,24 +227,6 @@ in {
       User = "mautrix-signal";
       Group = "mautrix-signal";
     };
-    mautrix-wsproxy = {
-      after = ["mautrix-wsproxy-environment-file-key.service"];
-      wants = ["mautrix-wsproxy-environment-file-key.service"];
-      serviceConfig = {
-        DynamicUser = lib.mkForce false;
-        User = "mautrix-wsproxy";
-        Group = "mautrix-wsproxy";
-      };
-    };
-    mautrix-syncproxy = {
-      after = ["mautrix-syncproxy-environment-file-key.service"];
-      wants = ["mautrix-syncproxy-environment-file-key.service"];
-      serviceConfig = {
-        DynamicUser = lib.mkForce false;
-        User = "mautrix-syncproxy";
-        Group = "mautrix-syncproxy";
-      };
-    };
   };
 
   # see https://github.com/NixOS/nixpkgs/blob/nixos-21.11/nixos/modules/misc/ids.nix
@@ -281,14 +234,10 @@ in {
     uids = {
       mautrix-telegram = 350;
       mautrix-signal = 351;
-      mautrix-wsproxy = 352;
-      mautrix-syncproxy = 353;
     };
     gids = {
       mautrix-telegram = 350;
       mautrix-signal = 351;
-      mautrix-wsproxy = 352;
-      mautrix-syncproxy = 353;
     };
   };
 
@@ -296,8 +245,6 @@ in {
     groups = {
       mautrix-telegram.gid = config.ids.gids.mautrix-telegram;
       mautrix-signal.gid = config.ids.gids.mautrix-signal;
-      mautrix-wsproxy.gid = config.ids.gids.mautrix-wsproxy;
-      mautrix-syncproxy.gid = config.ids.gids.mautrix-syncproxy;
     };
     users = {
       matrix-synapse.extraGroups = ["keys"];
@@ -316,16 +263,6 @@ in {
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.mautrix-signal;
         extraGroups = ["keys" "signald"];
-      };
-      mautrix-wsproxy = {
-        group = "mautrix-wsproxy";
-        uid = config.ids.uids.mautrix-wsproxy;
-        extraGroups = ["keys"];
-      };
-      mautrix-syncproxy = {
-        group = "mautrix-syncproxy";
-        uid = config.ids.uids.mautrix-syncproxy;
-        extraGroups = ["keys"];
       };
     };
   };

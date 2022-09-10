@@ -81,20 +81,6 @@
     echo "SHARED_SECRET=\"$(${getPassword}/bin/getPassword "$2")\""
   '';
 
-  getMautrixSyncproxyEnvironmentFile = pkgs.writeShellScriptBin "getMautrixSyncproxyEnvironmentFile" ''
-    set -euo pipefail
-    echo "DATABASE_URL=\"postgres://mautrix-syncproxy:$(${getPasswordField}/bin/getPasswordField "$1" "Database")@localhost/mautrix-syncproxy\""
-    echo "SHARED_SECRET=\"$(${getPassword}/bin/getPassword "$1")\""
-  '';
-
-  getMautrixWsproxyEnvironmentFile = pkgs.writeShellScriptBin "getMautrixWsproxyEnvironmentFile" ''
-    set -euo pipefail
-    getPasswordField=${getPasswordField}/bin/getPasswordField
-    echo "AS_TOKEN=\"$($getPasswordField "$1" "AS Token")\""
-    echo "HS_TOKEN=\"$($getPasswordField "$1" "HS Token")\""
-    echo "SYNC_PROXY_SHARED_SECRET=\"$(${getPassword}/bin/getPassword "$2")\""
-  '';
-
   getMautrixRegistrationFile = pkgs.writeShellScriptBin "getMautrixRegistrationFile" ''
     set -euo pipefail
     getPasswordField=${getPasswordField}/bin/getPasswordField
@@ -169,8 +155,6 @@ in {
       getMatrixSynapseSharedSecretConfigFile
       getMautrixTelegramEnvironmentFile
       getMautrixSignalEnvironmentFile
-      getMautrixSyncproxyEnvironmentFile
-      getMautrixWsproxyEnvironmentFile
       getMautrixRegistrationFile
       getWpaPassphraseFile
     ];
@@ -185,8 +169,6 @@ in {
   getMatrixSynapseSharedSecretConfigFile = name: ["getMatrixSynapseSharedSecretConfigFile" name];
   getMautrixTelegramEnvironmentFile = name: sharedSecret: ["getMautrixTelegramEnvironmentFile" name sharedSecret];
   getMautrixSignalEnvironmentFile = name: sharedSecret: ["getMautrixSignalEnvironmentFile" name sharedSecret];
-  getMautrixSyncproxyEnvironmentFile = name: ["getMautrixSyncproxyEnvironmentFile" name];
-  getMautrixWsproxyEnvironmentFile = name: syncproxyName: ["getMautrixWsproxyEnvironmentFile" name syncproxyName];
   getMautrixRegistrationFile = name: port: ["getMautrixRegistrationFile" name (toString port)];
   getWpaPassphraseFile = networks: ["getWpaPassphraseFile"] ++ networks;
 }
