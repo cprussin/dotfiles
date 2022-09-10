@@ -91,8 +91,8 @@ in {
             "${opts.filenameBase}-header-key.service"
           ];
           script = mkUnlockScript drive opts.filenameBase;
+          preStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
           serviceConfig = {
-            ExecStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
             RemainAfterExit = true;
             Type = "oneshot";
           };
