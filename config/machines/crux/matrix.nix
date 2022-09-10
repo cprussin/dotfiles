@@ -186,7 +186,6 @@ in {
       enable = true;
       environmentFile = config.deployment.keys.mautrix-signal-environment-file.path;
       settings = mautrix_settings mautrix-signal-port;
-      serviceDependencies = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
     };
   };
 
@@ -217,10 +216,6 @@ in {
       ];
       serviceConfig.ExecStartPre = lib.mkForce [];
     };
-    mautrix-signal.serviceConfig = {
-      DynamicUser = lib.mkForce false;
-      User = "mautrix-signal";
-      Group = "mautrix-signal";
     mautrix-telegram = {
       after = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
       requires = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
@@ -228,6 +223,15 @@ in {
         DynamicUser = lib.mkForce false;
         User = "mautrix-telegram";
         Group = "mautrix-telegram";
+      };
+    };
+    mautrix-signal = {
+      after = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
+      requires = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
+      serviceConfig = {
+        DynamicUser = lib.mkForce false;
+        User = "mautrix-signal";
+        Group = "mautrix-signal";
       };
     };
   };
