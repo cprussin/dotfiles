@@ -100,7 +100,11 @@ in {
       };
 
       keybindings = lib.mkOptionDefault {
-        "${modifier}+Shift+d" = "exec ${pkgs.launcher}/bin/run $(${pkgs.wl-clipboard}/bin/wl-paste)";
+        "${modifier}+space" = "exec ${config.primary-user.home-manager.wayland.windowManager.sway.config.menu}";
+        "${modifier}+Shift+space" = "exec ${pkgs.launcher}/bin/run $(${pkgs.wl-clipboard}/bin/wl-paste)";
+
+        "${modifier}+tab" = "focus mode_toggle";
+        "${modifier}+Shift+tab" = "floating toggle";
 
         "${modifier}+p" = "exec ${launcher-apps.passwords}";
         "${modifier}+Shift+Return" = "exec ${launcher-apps.lock}";
