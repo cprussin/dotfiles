@@ -86,6 +86,7 @@ in {
       pegasus = "10.43.0.11";
       shauna-computer = "10.43.0.20";
       shauna-phone = "10.43.0.21";
+      reece-computer = "10.43.0.31";
     };
   };
 

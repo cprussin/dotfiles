@@ -9,6 +9,7 @@
   gemini-public-key = "hmvFMJuINO7N6EO04Pnf32FJFaW5N0zDctot3Qpo8gg=";
   pegasus-public-key = "/ta8gnmtXXSwvz5ueU+I7jD6OKCZ2hSlyZ0DnzK1P20=";
   shauna-phone-public-key = "tifJWMO8/P4B5QDNpieB/CvLtCyvtuoXi5GnAQYywRU=";
+  reece-computer-public-key = "BXzJ+WBs4QITPbliB84U7qkQsxVM6PaCJAyXy2pb0jA=";
 in {
   deployment.keys = {
     wireguard-private-key = {
@@ -25,6 +26,10 @@ in {
     };
     shauna-phone-preshared-key = {
       keyCommand = passwords.getPassword "Connor/Infrastructure/wireguard/shauna-phone/psk";
+      destDir = "/secrets";
+    };
+    reece-computer-preshared-key = {
+      keyCommand = passwords.getPassword "Connor/Infrastructure/wireguard/reece-computer/psk";
       destDir = "/secrets";
     };
   };
@@ -54,6 +59,11 @@ in {
             publicKey = shauna-phone-public-key;
             presharedKeyFile = config.deployment.keys.shauna-phone-preshared-key.path;
           }
+          {
+            allowedIPs = ["${network.wireguard.nodes.reece-computer.address}/32"];
+            publicKey = reece-computer-public-key;
+            presharedKeyFile = config.deployment.keys.reece-computer-preshared-key.path;
+          }
         ];
       };
     };
@@ -65,12 +75,14 @@ in {
       "gemini-preshared-key-key.service"
       "pegasus-preshared-key-key.service"
       "shauna-phone-preshared-key-key.service"
+      "reece-computer-preshared-key-key.service"
     ];
     requires = [
       "wireguard-private-key-key.service"
       "gemini-preshared-key-key.service"
       "pegasus-preshared-key-key.service"
       "shauna-phone-preshared-key-key.service"
+      "reece-computer-preshared-key-key.service"
     ];
   };
 }
