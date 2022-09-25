@@ -3,7 +3,7 @@
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
-      "gemini crux" = {
+      "gemini crux mom-vm" = {
         checkHostIP = false;
         forwardAgent = true;
       };
