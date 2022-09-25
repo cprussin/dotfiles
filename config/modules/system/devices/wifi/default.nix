@@ -53,7 +53,7 @@
     CentarCar = {};
 
     # Friends' networks
-    "PC House2" = {};
+    "PC House 3" = {};
     DeathStar5 = {};
   };
 
