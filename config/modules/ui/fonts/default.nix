@@ -4,7 +4,8 @@
   ...
 }: {
   primary-user.home-manager.home.packages = lib.mkForce (lib.mkAfter [
-    pkgs.font-awesome_5
+    pkgs.noto-fonts-emoji
+    pkgs.dejavu_fonts
     pkgs.noto-fonts
     pkgs.google-fonts
   ]);

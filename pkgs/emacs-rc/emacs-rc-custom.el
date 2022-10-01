@@ -47,7 +47,7 @@
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-font-face "DejaVu Sans Mono"
+(defcustom emacs-rc-font-face "DejaVu Sans Mono Nerd Font"
   "Primary font face."
   :type 'string
   :group 'emacs-rc)

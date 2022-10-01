@@ -28,8 +28,8 @@
     };
 
     font = {
-      package = pkgs.dejavu_fonts;
-      face = "DejaVu Sans Mono";
+      package = pkgs.nerdfonts.override {fonts = ["DejaVuSansMono"];};
+      face = "DejaVu Sans Mono Nerd Font";
       size = 11.0;
     };
   };
