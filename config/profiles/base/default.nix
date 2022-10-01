@@ -14,9 +14,7 @@ in {
     ../../modules/security/sudo
     ../../modules/security/umask
 
-    ../../modules/system/auto-manage-nix-store
-    ../../modules/system/nix-binary-caches
-    ../../modules/system/nixpkgs
+    ../../modules/system/nix
     ../../modules/system/users
 
     ../../modules/ui/bash

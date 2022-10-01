@@ -103,7 +103,7 @@ The way this repository is able to work without channels has two parts:
 1. ~NIX_PATH~ is overridden when deploying in [[./shell.nix][shell.nix]].  This ensures that,
    when deploying, the version of nixpkgs pinned by niv is used.
 
-2. The system nix path is set in [[./config/modules/system/nixpkgs/default.nix][nixpkgs/default.nix]].  This enables using things
+2. The system nix path is set in [[./config/modules/system/nix/default.nix][nix/default.nix]].  This enables using things
    like ~nix-shell -p foo~ or ~<nixpkgs>~ on a deployed machine, with a
    guarantee that the version of ~nixpkgs~ used for those tools is the same as
    the version that was deployed to the system.
