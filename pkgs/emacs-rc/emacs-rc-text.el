@@ -51,7 +51,8 @@
   :config
   (global-aggressive-indent-mode)
   (add-to-list 'aggressive-indent-excluded-modes 'purescript-mode)
-  (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode))
+  (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'typescript-mode))
 
 ;; Show indentation guide
 (use-package indent-guide
