@@ -50,7 +50,8 @@
   (setq ivy-use-virtual-buffers t
         ivy-format-functions-alist '((t . ivy-format-function-line))
         ivy-initial-inputs-alist nil
-        ivy-re-builders-alist '((t . ivy--regex-plus)))
+        ivy-re-builders-alist '((t . ivy--regex-plus))
+        ivy-use-selectable-prompt t)
   (ivy-mode))
 
 ;; Turn on counsel for better ivy integration for M-x,
