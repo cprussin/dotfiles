@@ -71,30 +71,6 @@
         "url": "https://github.com/nix-community/home-manager/archive/4a3d01fb53f52ac83194081272795aa4612c2381.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "mautrix-syncproxy": {
-        "branch": "master",
-        "description": "A /sync proxy for encrypted Matrix appservices",
-        "homepage": null,
-        "owner": "mautrix",
-        "repo": "syncproxy",
-        "rev": "487908fc714b705ce194cde1e3e1cdd6f96ddfa6",
-        "sha256": "0jgadlnbwnl9433j15h7qmvsvs0b47pw0rqyn3ah07by4lzwqf51",
-        "type": "tarball",
-        "url": "https://github.com/mautrix/syncproxy/archive/487908fc714b705ce194cde1e3e1cdd6f96ddfa6.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "mautrix-wsproxy": {
-        "branch": "v1.0.0",
-        "description": "A simple HTTP push -> websocket proxy for Matrix appservices",
-        "homepage": null,
-        "owner": "mautrix",
-        "repo": "wsproxy",
-        "rev": "f3dc3f9fa73b0867845897b517cb3d62a0f132f5",
-        "sha256": "0a0g3wsshxlbj22b3bi6a4zwl7rf08f35v47ll9c30hdj5285490",
-        "type": "tarball",
-        "url": "https://github.com/mautrix/wsproxy/archive/f3dc3f9fa73b0867845897b517cb3d62a0f132f5.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "nixos-hardware": {
         "branch": "master",
         "description": "A collection of NixOS modules covering hardware quirks.",
