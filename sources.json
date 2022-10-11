@@ -1,14 +1,14 @@
 {
     "alejandra": {
-        "branch": "0.6.0",
+        "branch": "3.0.0",
         "description": "The Uncompromising Nix Code Formatter",
         "homepage": "https://kamadorueda.github.io/alejandra/",
         "owner": "kamadorueda",
         "repo": "alejandra",
-        "rev": "26aa434e096710d0de590af576109983eda2656e",
-        "sha256": "158xqn0cdnrlg61ki963whsrb4rqjs1v2pfc40a9plx8x0il81as",
+        "rev": "ef03f7ef74ec97fd91a016a51c9c9667fb315652",
+        "sha256": "18jm0d5xrxk38hw5sa470zgfz9xzdcyaskjhgjwhnmzd5fgacny4",
         "type": "tarball",
-        "url": "https://github.com/kamadorueda/alejandra/archive/26aa434e096710d0de590af576109983eda2656e.tar.gz",
+        "url": "https://github.com/kamadorueda/alejandra/archive/ef03f7ef74ec97fd91a016a51c9c9667fb315652.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "colmena": {

@@ -6,10 +6,9 @@
 }: let
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
 
-  otherMachineNames =
-    lib.remove config.networking.hostName (
-      builtins.attrNames (builtins.readDir ../../../machines)
-    );
+  otherMachineNames = lib.remove config.networking.hostName (
+    builtins.attrNames (builtins.readDir ../../../machines)
+  );
 
   # TODO this should really be driven from the cert files in the password store
   # automatically rather than manually copied here

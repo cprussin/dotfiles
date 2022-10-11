@@ -39,9 +39,11 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages =
       [cfg.pkg.terminfo]
-      ++ (if cfg.enableApplication
-      then [cfg.pkg]
-      else []);
+      ++ (
+        if cfg.enableApplication
+        then [cfg.pkg]
+        else []
+      );
 
     programs.zsh.initExtra = ''
       if [[ $TERM = ${cfg.termname} ]]; then

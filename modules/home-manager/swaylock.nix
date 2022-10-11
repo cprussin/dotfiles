@@ -401,11 +401,10 @@ in {
 
   config = lib.mkIf cfg.enable {
     home.packages = [pkgs.swaylock];
-    xdg.configFile."swaylock/config".text =
-      builtins.concatStringsSep "\n" (
-        lib.mapAttrsToList printConfigSetting (
-          lib.filterAttrs isValidConfigFileAttr cfg
-        )
-      );
+    xdg.configFile."swaylock/config".text = builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList printConfigSetting (
+        lib.filterAttrs isValidConfigFileAttr cfg
+      )
+    );
   };
 }

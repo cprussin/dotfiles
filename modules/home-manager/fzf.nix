@@ -63,12 +63,16 @@ in {
 
   config = lib.mkIf cfg.enable {
     programs.fzf.defaultOptions = lib.flatten [
-      (if cfg.colors == null
-      then []
-      else ["--color=${colors}"])
-      (if cfg.inline-info
-      then ["--inline-info"]
-      else [])
+      (
+        if cfg.colors == null
+        then []
+        else ["--color=${colors}"]
+      )
+      (
+        if cfg.inline-info
+        then ["--inline-info"]
+        else []
+      )
     ];
   };
 }

@@ -82,27 +82,28 @@ in {
   config = lib.mkIf (cfg != null) {
     deployment.keys = keys // headers;
 
-    systemd.services = lib.mapAttrs'
-    (
-      drive: opts:
-        lib.nameValuePair "unlock-${opts.filenameBase}" {
-          description = "Unlock encrypted device ${drive}.";
-          after = [
-            "${opts.filenameBase}-key-key.service"
-            "${opts.filenameBase}-header-key.service"
-          ];
-          requires = [
-            "${opts.filenameBase}-key-key.service"
-            "${opts.filenameBase}-header-key.service"
-          ];
-          script = mkUnlockScript drive opts.filenameBase;
-          preStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
-          serviceConfig = {
-            RemainAfterExit = true;
-            Type = "oneshot";
-          };
-        }
-    )
-    cfg;
+    systemd.services =
+      lib.mapAttrs'
+      (
+        drive: opts:
+          lib.nameValuePair "unlock-${opts.filenameBase}" {
+            description = "Unlock encrypted device ${drive}.";
+            after = [
+              "${opts.filenameBase}-key-key.service"
+              "${opts.filenameBase}-header-key.service"
+            ];
+            requires = [
+              "${opts.filenameBase}-key-key.service"
+              "${opts.filenameBase}-header-key.service"
+            ];
+            script = mkUnlockScript drive opts.filenameBase;
+            preStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
+            serviceConfig = {
+              RemainAfterExit = true;
+              Type = "oneshot";
+            };
+          }
+      )
+      cfg;
   };
 }

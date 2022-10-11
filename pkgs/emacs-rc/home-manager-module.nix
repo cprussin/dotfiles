@@ -8,11 +8,11 @@
 
   mkEmojiSets = emoji-pkgs:
     pkgs.linkFarm "emjoji-sets" (map
-    (path: {
-      inherit path;
-      name = "${path.pname}-v${path.version}";
-    })
-    emoji-pkgs);
+      (path: {
+        inherit path;
+        name = "${path.pname}-v${path.version}";
+      })
+      emoji-pkgs);
 in {
   options.programs.emacs.emacs-rc = {
     enable = lib.mkEnableOption "emacs-rc";
