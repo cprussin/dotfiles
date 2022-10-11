@@ -40,7 +40,10 @@
    :prefix "SPC eo"
    "" '(:ignore t :which-key "Org links")
    "y" '(org-store-link :which-key "yank")
-   "p" '(org-insert-link :which-key "insert")))
+   "p" '(org-insert-link :which-key "insert"))
+  ('(normal motion emacs)
+   :prefix "SPC o"
+   "" '(:ignore t :which-key "Org")))
 
 (use-package org-agenda
   :after general emojify evil evil-collection
@@ -60,7 +63,7 @@
       (= day last-day-of-month)))
 
   (setq org-agenda-window-setup 'only-window
-        org-agenda-files (list "~/Notes/Personal.org")
+        org-agenda-files (list "~/Notes")
         org-agenda-custom-commands '(("p" . "Personal searches")
 
                                      ("pc" . "2019 Subaru Ascent")
@@ -83,6 +86,21 @@
   :general
   ('(normal motion emacs)
    "SPC aa" '(org-agenda :which-key "Agenda")))
+
+(use-package org-roam
+  :custom (org-roam-directory (file-truename "~/Notes"))
+  :config (org-roam-db-autosync-mode)
+  :general
+  ('(normal motion emacs)
+   :prefix "SPC or"
+   "" '(:ignore t :which-key "Roam")
+   "c" '(org-roam-capture :which-key "capture")
+   "f" '(org-roam-node-find :which-key "find")
+   "i" '(org-roam-node-insert :which-key "insert")
+   "g" '(org-roam-graph :which-key "graph")
+   "b" '(:ignore t :which-key "Roam Buffer")
+   "bp" '(org-roam-buffer-toggle :which-key "follow point")
+   "bd" '(org-roam-buffer-display-dedicated :which-key "dedicated")))
 
 (use-package evil-org
   :delight

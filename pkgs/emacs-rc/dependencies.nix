@@ -43,6 +43,7 @@
   epkgs.nix-mode
   epkgs.org
   epkgs.org-bullets
+  epkgs.org-roam
   epkgs.pdf-tools
   epkgs.pkg-info
   epkgs.powerline
