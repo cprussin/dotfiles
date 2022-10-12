@@ -88,13 +88,68 @@
    "SPC aa" '(org-agenda :which-key "Agenda")))
 
 (use-package org-roam
+  :demand
   :custom (org-roam-directory (file-truename "~/Notes"))
-  :config (org-roam-db-autosync-mode)
+  :config
+  (org-roam-db-autosync-mode)
+
+  (defun org-roam-buffer-prop-get (name)
+    "Get a buffer property called NAME as a string."
+    (org-with-point-at 1
+      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                               (point-max) t)
+        (buffer-substring-no-properties
+         (match-beginning 1)
+         (match-end 1)))))
+
+  (defun org-roam-agenda-category (&optional len)
+    "Get category of item at point for agenda.
+
+Category is defined by one of the following items:
+
+- CATEGORY property
+- TITLE keyword
+- TITLE property
+- filename without directory and extension
+
+When LEN is a number, resulting string is padded right with
+spaces and then truncated with ... on the right if result is
+longer than LEN.
+
+Usage example:
+
+  (setq org-agenda-prefix-format
+        '((agenda . \" %(org-roam-agenda-category) %?-12t %12s\")))
+
+Refer to `org-agenda-prefix-format' for more information."
+    (let* ((file-name (when buffer-file-name
+                        (file-name-sans-extension
+                         (file-name-nondirectory buffer-file-name))))
+           (title (org-roam-buffer-prop-get "title"))
+           (category (org-get-category))
+           (result
+            (or (if (and
+                     title
+                     (string-equal category file-name))
+                    title
+                  category)
+                "")))
+      (if (numberp len)
+          (s-truncate len (s-pad-right len " " result))
+        result)))
+
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %(org-roam-agenda-category 16)   %?-12t% s")
+          (todo . " %i %(org-roam-agenda-category 16)   ")
+          (tags . " %i %(org-roam-agenda-category 16)   ")
+          (search . " %i %(org-roam-agenda-category 16)   ")))
+
   :general
   ('(normal motion emacs)
    :prefix "SPC or"
    "" '(:ignore t :which-key "Roam")
    "c" '(org-roam-capture :which-key "capture")
+   "e" '(org-roam-extract-subtree :which-key "extract")
    "f" '(org-roam-node-find :which-key "find")
    "i" '(org-roam-node-insert :which-key "insert")
    "g" '(org-roam-graph :which-key "graph")
