@@ -21,6 +21,7 @@
   epkgs.flycheck-pos-tip
   epkgs.general
   epkgs.git-gutter
+  epkgs.git-timemachine
   epkgs.go-mode
   epkgs.good-scroll
   epkgs.graphql-mode
