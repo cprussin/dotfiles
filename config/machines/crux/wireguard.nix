@@ -8,6 +8,7 @@
   wireguardListenPort = 45676;
   gemini-public-key = "hmvFMJuINO7N6EO04Pnf32FJFaW5N0zDctot3Qpo8gg=";
   pegasus-public-key = "/ta8gnmtXXSwvz5ueU+I7jD6OKCZ2hSlyZ0DnzK1P20=";
+  steam-deck-public-key = "AVscY2MnbeE7H3QkBWmJFhFJ6tMQR/77259nNZoaFwM=";
   shauna-phone-public-key = "tifJWMO8/P4B5QDNpieB/CvLtCyvtuoXi5GnAQYywRU=";
   reece-computer-public-key = "BXzJ+WBs4QITPbliB84U7qkQsxVM6PaCJAyXy2pb0jA=";
   mom-vm-public-key = "ZycHSW5YU/++Csw73iLbZHo75QM4y38Q3kT3xADsFA0=";
@@ -23,6 +24,10 @@ in {
     };
     pegasus-preshared-key = {
       keyCommand = passwords.getPassword "Connor/Infrastructure/wireguard/pegasus/psk";
+      destDir = "/secrets";
+    };
+    steam-deck-preshared-key = {
+      keyCommand = passwords.getPassword "Connor/Infrastructure/wireguard/steam-deck/psk";
       destDir = "/secrets";
     };
     shauna-phone-preshared-key = {
@@ -60,6 +65,11 @@ in {
             presharedKeyFile = config.deployment.keys.pegasus-preshared-key.path;
           }
           {
+            allowedIPs = ["${network.wireguard.nodes.steam-deck.address}/32"];
+            publicKey = steam-deck-public-key;
+            presharedKeyFile = config.deployment.keys.steam-deck-preshared-key.path;
+          }
+          {
             allowedIPs = ["${network.wireguard.nodes.shauna-phone.address}/32"];
             publicKey = shauna-phone-public-key;
             presharedKeyFile = config.deployment.keys.shauna-phone-preshared-key.path;
@@ -84,6 +94,7 @@ in {
       "wireguard-private-key-key.service"
       "gemini-preshared-key-key.service"
       "pegasus-preshared-key-key.service"
+      "steam-deck-preshared-key-key.service"
       "shauna-phone-preshared-key-key.service"
       "reece-computer-preshared-key-key.service"
       "mom-vm-preshared-key-key.service"
@@ -92,6 +103,7 @@ in {
       "wireguard-private-key-key.service"
       "gemini-preshared-key-key.service"
       "pegasus-preshared-key-key.service"
+      "steam-deck-preshared-key-key.service"
       "shauna-phone-preshared-key-key.service"
       "reece-computer-preshared-key-key.service"
       "mom-vm-preshared-key-key.service"
