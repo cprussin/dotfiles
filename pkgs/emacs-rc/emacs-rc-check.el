@@ -15,7 +15,9 @@
 (use-package flycheck
   :demand
   :commands global-flycheck-mode flycheck-add-mode flycheck-add-next-checker
+  :init (setq flycheck-emacs-lisp-load-path 'inherit)
   :config (global-flycheck-mode))
+
 (use-package flycheck-pos-tip
   :demand
   :commands flycheck-pos-tip-mode
