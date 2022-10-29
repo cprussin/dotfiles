@@ -1,6 +1,4 @@
-{...}: let
-  sources = import ../../sources.nix;
-in {
+{...}: {
   imports = [
     ./autologin-graphical-session.nix
     ./color-theme.nix

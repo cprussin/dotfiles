@@ -18,7 +18,7 @@
     };
   };
 
-  alejandra-overlay = self: _: {
+  alejandra-overlay = _: _: {
     alejandra = import alejandra {};
   };
 
