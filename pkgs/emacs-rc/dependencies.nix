@@ -1,5 +1,7 @@
 {epkgs}: [
   epkgs.aggressive-indent
+  epkgs.calfw
+  epkgs.calfw-org
   epkgs.company
   epkgs.company-emoji
   epkgs.company-quickhelp

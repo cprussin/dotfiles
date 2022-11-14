@@ -286,5 +286,23 @@ tasks."
   :after org
   :hook (org-mode . org-bullets-mode))
 
+(use-package calfw
+  :init
+  (setq cfw:fchar-junction ?╋
+        cfw:fchar-vertical-line ?┃
+        cfw:fchar-horizontal-line ?━
+        cfw:fchar-left-junction ?┣
+        cfw:fchar-right-junction ?┫
+        cfw:fchar-top-junction ?┯
+        cfw:fchar-top-left-corner ?┏
+        cfw:fchar-top-right-corner ?┓))
+
+(use-package calfw-org
+  :after calfw org
+  :general
+  ('(normal motion emacs)
+   :prefix "SPC a"
+   "c" '(cfw:open-org-calendar :which-key "Calendar")))
+
 (provide 'emacs-rc-org)
 ;;; emacs-rc-org.el ends here
