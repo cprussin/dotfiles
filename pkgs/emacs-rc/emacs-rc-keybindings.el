@@ -20,6 +20,7 @@
     :prefix "SPC"
     "" nil
     "a" '(:ignore t :which-key "Apps")
+    "ac" '(calc :which-key "Calculator")
     "b" '(:ignore t :which-key "Buffers")
     "bm" '(buffer-menu :which-key "menu")
     "bn" '(next-buffer :which-key "next")
