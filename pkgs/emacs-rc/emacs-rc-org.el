@@ -253,6 +253,7 @@ tasks."
 
   (advice-add 'org-agenda :before #'org-roam-agenda-files-update)
   (advice-add 'org-todo-list :before #'org-roam-agenda-files-update)
+  (advice-add 'cfw:open-org-calendar :before #'org-roam-agenda-files-update)
   ;;;
   ;;; End shamelessly stolen from vulpea!
   ;;;
