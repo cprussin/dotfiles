@@ -303,7 +303,7 @@ tasks."
   :general
   ('(normal motion emacs)
    :prefix "SPC a"
-   "c" '(cfw:open-org-calendar :which-key "Calendar")))
+   "m" '(cfw:open-org-calendar :which-key "Calendar")))
 
 (provide 'emacs-rc-org)
 ;;; emacs-rc-org.el ends here
