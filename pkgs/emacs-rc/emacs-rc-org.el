@@ -36,14 +36,10 @@
   ;; hardly ever use emoji in org docs anyways
   (push 'org-mode emojify-inhibit-major-modes)
   :general
-  ('(normal motion emacs)
-   :prefix "SPC eo"
-   "" '(:ignore t :which-key "Org links")
-   "y" '(org-store-link :which-key "yank")
-   "p" '(org-insert-link :which-key "insert"))
-  ('(normal motion emacs)
-   :prefix "SPC o"
-   "" '(:ignore t :which-key "Org")))
+  (edit-menu-def
+   "o" '(:ignore t :which-key "Org links")
+   "oy" '(org-store-link :which-key "yank")
+   "op" '(org-insert-link :which-key "insert")))
 
 (use-package org-agenda
   :after general emojify evil evil-collection
@@ -83,9 +79,7 @@
                                      ("ppr" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
                                      ("pps" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
                                      ("ppu" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}")))
-  :general
-  ('(normal motion emacs)
-   "SPC aa" '(org-agenda :which-key "Agenda")))
+  :general (apps-menu-def "a" '(org-agenda :which-key "Agenda")))
 
 (use-package org-roam
   :demand
@@ -259,17 +253,16 @@ tasks."
   ;;;
 
   :general
-  ('(normal motion emacs)
-   :prefix "SPC or"
-   "" '(:ignore t :which-key "Roam")
-   "c" '(org-roam-capture :which-key "capture")
-   "e" '(org-roam-extract-subtree :which-key "extract")
-   "f" '(org-roam-node-find :which-key "find")
-   "i" '(org-roam-node-insert :which-key "insert")
-   "g" '(org-roam-graph :which-key "graph")
-   "b" '(:ignore t :which-key "Roam Buffer")
-   "bp" '(org-roam-buffer-toggle :which-key "follow point")
-   "bd" '(org-roam-buffer-display-dedicated :which-key "dedicated")))
+  (apps-menu-def
+    "r" '(:ignore t :which-key "Org Roam")
+    "rc" '(org-roam-capture :which-key "capture")
+    "re" '(org-roam-extract-subtree :which-key "extract")
+    "rf" '(org-roam-node-find :which-key "find")
+    "ri" '(org-roam-node-insert :which-key "insert")
+    "rg" '(org-roam-graph :which-key "graph")
+    "rb" '(:ignore t :which-key "Roam Buffer")
+    "rbp" '(org-roam-buffer-toggle :which-key "follow point")
+    "rbd" '(org-roam-buffer-display-dedicated :which-key "dedicated")))
 
 (use-package evil-org
   :delight
@@ -300,10 +293,7 @@ tasks."
 
 (use-package calfw-org
   :after calfw org
-  :general
-  ('(normal motion emacs)
-   :prefix "SPC a"
-   "m" '(cfw:open-org-calendar :which-key "Calendar")))
+  :general (apps-menu-def "m" '(cfw:open-org-calendar :which-key "Calendar")))
 
 (provide 'emacs-rc-org)
 ;;; emacs-rc-org.el ends here

@@ -19,10 +19,8 @@
   (pdf-tools-install t)
   (require 'pdf-occur)
   :general
-  (pdf-view-mode-map
-   "SPC" nil)
-  (pdf-view-mode-map
-   :prefix "SPC m"
+  (major-mode-menu-def
+   :keymaps 'pdf-view-mode-map
    "" '(:ignore t :which-key "Major Mode (PDF)")
    "f" '(:ignore t :which-key "Fit")
    "fh" '(pdf-view-fit-height-to-window :which-key "height")
@@ -33,25 +31,26 @@
    "rd" '(pdf-view-dark-minor-mode :which-key "dark")
    "rm" '(pdf-view-midnight-minor-mode :which-key "midnight")
    "rp" '(pdf-view-printer-minor-mode :which-key "printer"))
-  (pdf-annot-minor-mode-map
-   :prefix "SPC ma"
-   "" '(:ignore t :which-key "Annotate")
-   "a" '(pdf-annot-attachment-dired :which-key "attach")
-   "d" '(pdf-annot-delete :which-key "delete")
-   "l" '(pdf-annot-list-annotations :which-key "list")
-   "m" '(:ignore t :which-key "Markup")
-   "mh" '(pdf-annot-add-highlight-markup-annotation
-          :which-key "add highlight markup")
-   "mm" '(pdf-annot-add-markup-annotation :which-key "add markup")
-   "ms" '(pdf-annot-add-squiggly-markup-annotation
-          :which-key "add squiggly markup")
-   "mt" '(pdf-annot-add-strikeout-markup-annotation
-          :which-key "add strikeout markup")
-   "mu" '(pdf-annot-add-underline-markup-annotation
-          :which-key "add underline markup")
-   "t" '(pdf-annot-add-text-annotation :which-key "add text"))
-  (pdf-misc-minor-mode-map
-   "SPC mm" '(pdf-misc-display-metadata :which-key "show metadata")))
+  (major-mode-menu-def
+   :keymaps 'pdf-annot-minor-mode-map
+   "a" '(:ignore t :which-key "Annotate")
+   "aa" '(pdf-annot-attachment-dired :which-key "attach")
+   "ad" '(pdf-annot-delete :which-key "delete")
+   "al" '(pdf-annot-list-annotations :which-key "list")
+   "am" '(:ignore t :which-key "Markup")
+   "amh" '(pdf-annot-add-highlight-markup-annotation
+           :which-key "add highlight markup")
+   "amm" '(pdf-annot-add-markup-annotation :which-key "add markup")
+   "ams" '(pdf-annot-add-squiggly-markup-annotation
+           :which-key "add squiggly markup")
+   "amt" '(pdf-annot-add-strikeout-markup-annotation
+           :which-key "add strikeout markup")
+   "amu" '(pdf-annot-add-underline-markup-annotation
+           :which-key "add underline markup")
+   "at" '(pdf-annot-add-text-annotation :which-key "add text"))
+  (major-mode-menu-def
+   :keymaps 'pdf-misc-minor-mode-map
+   "m" '(pdf-misc-display-metadata :which-key "show metadata")))
 
 (provide 'emacs-rc-pdf)
 ;;; emacs-rc-pdf.el ends here

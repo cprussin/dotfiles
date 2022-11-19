@@ -30,9 +30,9 @@
 ;; Turn on swiper for a better search
 (use-package swiper
   :after ivy
-  :general ('(normal motion emacs)
-            "/" '(swiper :which-key "search")
-            "SPC sf" '(swiper :which-key "search in file")))
+  :general
+  ('(normal emacs visual) "/" '(swiper :which-key "search"))
+  (search-menu-def "f" '(swiper :which-key "search in file")))
 
 ;; Turn on rainbow delimiters
 (use-package rainbow-delimiters
@@ -103,17 +103,18 @@
   (global-emojify-mode-line-mode))
 
 (use-package imenu-list
+  :after general
   :config (setq imenu-list-focus-after-activation t
                 imenu-list-auto-resize t)
-  :general ('(normal motion emacs)
-            "SPC ei" '(imenu-list-smart-toggle :which-key "Imenu")))
+  :general (edit-menu-def "i" '(imenu-list-smart-toggle :which-key "Imenu")))
 
 (use-package link-hint
-  :general ('(normal motion emacs)
-            :prefix "SPC el"
-            "" '(:ignore t :which-key "Links")
-            "o" '(link-hint-open-link :which-key "open")
-            "y" '(link-hint-copy-link :which-key "copy")))
+  :after general
+  :general
+  (edit-menu-def
+    "l" '(:ignore t :which-key "Links")
+    "lo" '(link-hint-open-link :which-key "open")
+    "ly" '(link-hint-copy-link :which-key "copy")))
 
 (use-package rainbow-mode
   :hook (prog-mode . rainbow-mode))

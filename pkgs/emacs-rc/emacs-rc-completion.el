@@ -60,16 +60,15 @@
   :demand
   :commands counsel-mode
   :delight
-  :after ivy delight
+  :after general ivy delight
   :config
   (setq counsel-rg-base-command (concat emacs-rc-rg-path
                                         " -M 240 --with-filename --no-heading --line-number --color never %s"))
   (ivy-configure 'counsel-M-x :display-transformer-fn #'emacs-rc--transform-func)
   (counsel-mode)
-  :general ('(normal motion emacs)
-            :prefix "SPC"
-            "SPC" '(counsel-M-x :which-key "Run")
-            "ep" '(counsel-yank-pop :which-key "kill ring")))
+  :general
+  (main-menu-def "SPC" '(counsel-M-x :which-key "Run"))
+  (edit-menu-def "p" '(counsel-yank-pop :which-key "kill ring")))
 
 (provide 'emacs-rc-completion)
 ;;; emacs-rc-completion.el ends here

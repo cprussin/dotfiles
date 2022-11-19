@@ -51,16 +51,13 @@
   :after counsel projectile
   :config (counsel-projectile-mode)
   :general
-  ('(normal motion emacs)
-   "SPC sp" '(counsel-projectile-rg :which-key "search in project"))
-  ('(normal motion emac)
-   :prefix "SPC p"
-   "a" '(counsel-projectile-org-agenda :which-key "agenda")
-   "d" '(counsel-projectile-find-dir :which-key "find directory")
-   "f" '(counsel-projectile-find-file :which-key "find file")
-   "g" '(counsel-projectile-switch-project :which-key "go to project")
-   "o" '(counsel-projectile-org-capture :which-key "capture note")
-   "s" '(counsel-projectile-rg :which-key "search")))
+  (search-menu-def "p" '(counsel-projectile-rg :which-key "search in project"))
+  (project-menu-def "a" '(counsel-projectile-org-agenda :which-key "agenda")
+                    "d" '(counsel-projectile-find-dir :which-key "find directory")
+                    "f" '(counsel-projectile-find-file :which-key "find file")
+                    "g" '(counsel-projectile-switch-project :which-key "go to project")
+                    "o" '(counsel-projectile-org-capture :which-key "capture note")
+                    "s" '(counsel-projectile-rg :which-key "search")))
 
 (provide 'emacs-rc-projects)
 ;;; emacs-rc-projects.el ends here

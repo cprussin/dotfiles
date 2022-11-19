@@ -41,8 +41,8 @@
   :hook ((js-mode . emacs-rc--setup-js-files)
          (js-mode . emacs-rc--set-checker-eslint))
   :general
-  ('(normal motion emacs) js-mode-map
-   :prefix "SPC m"
+  (major-mode-menu-def
+   :keymaps 'js-mode-map
    "" '(:ignore t :which-key "Major Mode (JS)"))
   :config
   (defun emacs-rc--set-checker-eslint ()
@@ -57,8 +57,8 @@
   :hook (typescript-mode . emacs-rc--setup-js-files)
   :after general
   :general
-  ('(normal motion emacs) typescript-mode-map
-   :prefix "SPC m"
+  (major-mode-menu-map
+   :keymaps 'typescript-mode-map
    "" '(:ignore t :which-key "Major Mode (Typescript)"))
   :config
   (flycheck-add-mode 'css-stylelint 'typescript-mode))
@@ -93,26 +93,28 @@
     (setq-local jest-executable (emacs-rc--find-in-node-modules "jest")))
   (setq jest-arguments '("--colors"))
   :general
-  ('(normal motion emacs) (js-mode-map typescript-mode-map)
-   "SPC m j" '(jest-popup :which-key "Jest")))
+  (major-mode-menu-map
+   :keymaps '(js-mode-map typescript-mode-map)
+   "j" '(jest-popup :which-key "Jest")))
 
 (use-package purescript-mode
   :demand
   :hook (purescript-mode . turn-on-purescript-indentation)
-  :general ('(normal motion emacs) purescript-mode-map
-            :prefix "SPC m"
-            "" '(:ignore t :which-key "Major Mode (Purescript)")
-            "." '(purescript-mode-format-imports
-                  :which-key "format imports")))
+  :general
+  (major-mode-menu-map
+   :keymaps 'purescript-mode-map
+   "" '(:ignore t :which-key "Major Mode (Purescript)")
+   "." '(purescript-mode-format-imports
+         :which-key "format imports")))
 
 (use-package psc-ide
   :hook (purescript-mode . psc-ide-mode)
   :general
-  ('(normal motion emacs) psc-ide-mode-map
+  (psc-ide-mode-map
    :jump t
    "C-]" #'psc-ide-goto-definition)
-  ('(normal motion emacs) psc-ide-mode-map
-   :prefix "SPC m"
+  (major-mode-menu-map
+   :keymaps 'psc-ide-mode-map
    "a" '(psc-ide-add-clause :which-key "add clause")
    "b" '(psc-ide-rebuild :which-key "rebuild")
    "c" '(psc-ide-case-split :which-key "split cases")

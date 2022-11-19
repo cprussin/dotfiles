@@ -107,6 +107,7 @@
   :config (global-display-line-numbers-mode))
 
 (use-package zoom-frm
+  :after general
   :general ("C-+" #'zoom-frm-in
             "C--" #'zoom-frm-out
             "C-*" #'zoom-frm-unzoom))
@@ -131,9 +132,8 @@
   (setq undo-tree-visualizer-timestamps t
         undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   (global-undo-tree-mode)
-  :general ('(normal motion emacs)
-            "SPC et" '(undo-tree-visualize
-                       :which-key "undo/redo tree")))
+  :general (edit-menu-def "t" '(undo-tree-visualize
+                                :which-key "undo/redo tree")))
 
 (use-package good-scroll
   :commands good-scroll-mode

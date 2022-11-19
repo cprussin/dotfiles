@@ -11,28 +11,54 @@
 
 (use-package general
   :demand
-  ;; This has to load after evil so that we can correctly override the `SPC'
-  ;; keybinding
-  :after evil
   :commands general-define-key
-  :config
-  (general-def '(normal motion emacs)
+  :preface
+  (general-create-definer main-menu-def
+    :states '(normal insert emacs visual motion operator outer-tex-objects inner-text-objects replace-state)
+    :keymaps 'override
     :prefix "SPC"
-    "" nil
-    "a" '(:ignore t :which-key "Apps")
-    "ac" '(calc :which-key "Calculator")
-    "b" '(:ignore t :which-key "Buffers")
-    "bm" '(buffer-menu :which-key "menu")
-    "bn" '(next-buffer :which-key "next")
-    "bp" '(previous-buffer :which-key "previous")
-    "bs" '(ivy-switch-buffer :which-key "switch")
-    "bx" '(kill-current-buffer t :which-key "close")
-    "e" '(:ignore t :which-key "Editing")
-    "g" '(:ignore t :which-key "Git")
-    "h" '(:ignore t :which-key "Help")
-    "p" '(:ignore t :which-key "Project")
-    "s" '(:ignore t :which-key "Search")
-    "w" '(evil-window-map :which-key "Window")))
+    :non-normal-prefix "M-SPC")
+  (general-create-definer apps-menu-def
+    :wrapping main-menu-def
+    :infix "a")
+  (general-create-definer buffer-menu-def
+    :wrapping main-menu-def
+    :infix "b")
+  (general-create-definer edit-menu-def
+    :wrapping main-menu-def
+    :infix "e")
+  (general-create-definer git-menu-def
+    :wrapping main-menu-def
+    :infix "g")
+  (general-create-definer help-menu-def
+    :wrapping main-menu-def
+    :infix "h")
+  (general-create-definer major-mode-menu-def
+    :wrapping main-menu-def
+    :infix "m")
+  (general-create-definer project-menu-def
+    :wrapping main-menu-def
+    :infix "p")
+  (general-create-definer search-menu-def
+    :wrapping main-menu-def
+    :infix "s")
+  :config
+  (main-menu-def "" nil
+                 "w" '(evil-window-map :which-key "Window"))
+  (apps-menu-def "" '(:ignore t :which-key "Apps")
+                 "c" '(calc :which-key "Calculator"))
+  (buffer-menu-def  "" '(:ignore t :which-key "Buffers")
+                    "m" '(buffer-menu :which-key "menu")
+                    "n" '(next-buffer :which-key "next")
+                    "p" '(previous-buffer :which-key "previous")
+                    "s" '(switch-to-buffer :which-key "switch")
+                    "x" '(kill-current-buffer :which-key "close"))
+  (edit-menu-def "" '(:ignore t :which-key "Editing"))
+  (git-menu-def "" '(:ignore t :which-key "Git"))
+  (help-menu-def "" '(:ignore t :which-key "Help"))
+  (major-mode-menu-def "" '(:ignore t :which-key "Major Mode"))
+  (project-menu-def "" '(:ignore t :which-key "Project"))
+  (search-menu-def "" '(:ignore t :which-key "Search")))
 
 ;; Silence compile-time errors about evil-want-keybinding needing to be set
 ;; before loading evil or evil-collection.

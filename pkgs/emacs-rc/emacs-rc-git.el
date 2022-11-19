@@ -15,15 +15,10 @@
   :after general
   :config (setq magit-git-executable emacs-rc-git-path)
   :general
-  (magit-mode-map
-   "SPC" nil
-   "?" nil)
-  ('(normal motion emacs)
-   :prefix "SPC g"
-   "c" '(magit-clone :which-key "git clone")
-   "b" '(magit-blame :which-key "git blame")
-   "l" '(magit-log :which-key "git log")
-   "s" '(magit-status :which-key "git status")))
+  (git-menu-def "c" '(magit-clone :which-key "git clone")
+                "b" '(magit-blame :which-key "git blame")
+                "l" '(magit-log :which-key "git log")
+                "s" '(magit-status :which-key "git status")))
 
 ;; Show git status in the gutter
 (use-package git-gutter
@@ -36,12 +31,10 @@
 (use-package git-timemachine
   :after general
   :general
-  ('(normal motion emacs)
-   :prefix "SPC g"
-   "t" '(git-timemachine-toggle :which-key "Toggle Time Machine"))
-  (git-timemachine-mode-map
-   :prefix "SPC m"
-   "" '(:ignore t :which-key "Time Machine")
+  (git-menu-def "t" '(git-timemachine-toggle :which-key "Toggle Time Machine"))
+  (major-mode-menu-def
+   :keymaps 'git-timemachine-mode-map
+   "" '(:ignore t :which-key "Major Mode (Time Machine)")
    "p" '(git-timemachine-show-previous-revision :which-key "Previous Revision")
    "n" '(git-timemachine-show-next-revision :which-key "Next Revision")
    "h" '(git-timemachine-kill-abbreviated-revision :which-key "Copy Abbreviated Revision Hash")

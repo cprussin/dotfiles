@@ -16,7 +16,7 @@
                 markdown-asymmetric-header t
                 markdown-fontify-code-blocks-natively t)
   :general
-  ('(normal motion emacs) markdown-mode-map
+  (markdown-mode-map
    "{" #'markdown-backward-block
    "}" #'markdown-forward-block
    "<<" #'markdown-promote
@@ -26,8 +26,8 @@
   ('(visual) markdown-mode-map
    ">" #'markdown-indent-region
    "<" #'markdown-outdent-region)
-  ('(normal motion emacs) markdown-mode-map
-   :prefix "SPC m"
+  (major-mode-menu-def
+   :keymaps 'markdown-mode-map
    "" '(:ignore t :which-key "Major Mode (Markdown)")
    "'" '(markdown-edit-code-block :which-key "edit code")
    "]" '(markdown-complete :which-key "complete")

@@ -17,14 +17,13 @@
   :after general
   :hook (shell-mode . ansi-color-for-comint-mode-on)
   :general
-  ('(normal motion emacs)
-   "SPC as" '(shell :which-key "shell"))
   (shell-mode-map
    "C-c" #'comint-interrupt-subjob
    "C-n" #'comint-next-input
    "C-p" #'comint-previous-input)
-  ('(normal motion emacs) shell-mode-map
-   :prefix "SPC m"
+  (apps-menu-def "s" '(shell :which-key "shell"))
+  (major-mode-menu-def
+   :keymaps 'shell-mode-map
    "" '(:ignore t :which-key "Major Mode (Shell)")
    "q" '(comint-kill-subjob :which-key "quit")
    "w" '(comint-write-output :which-key "save")))
