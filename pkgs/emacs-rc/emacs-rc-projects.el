@@ -8,8 +8,10 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-custom)
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-custom)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (defun emacs-rc--git-cmd (args)
   "Return a string representing the git command ARGS."

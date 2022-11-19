@@ -9,7 +9,7 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-custom)
+(use-package emacs-rc-custom)
 
 ;; Enable flycheck for source code checks
 (use-package flycheck

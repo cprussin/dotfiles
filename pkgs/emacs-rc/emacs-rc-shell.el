@@ -8,8 +8,10 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-custom)
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-custom)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (setq shell-file-name emacs-rc-shell-path)
 

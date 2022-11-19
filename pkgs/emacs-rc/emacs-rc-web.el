@@ -9,8 +9,12 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-check)
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-check
+  :demand
+  :commands flycheck-add-mode flycheck-add-next-checker)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (defun emacs-rc--find-in-node-modules (program)
   "Find PROGRAM either in node_modules or as a global."

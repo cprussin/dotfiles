@@ -12,8 +12,10 @@
 (use-package mmm-mode
   :config
   (setq mmm-parse-when-idle t
-        mmm-global-mode 'buffers-with-submode-classes)
-  (require 'mmm-auto))
+        mmm-global-mode 'buffers-with-submode-classes))
+
+(use-package mmm-auto
+  :after mmm-mode)
 
 (provide 'emacs-rc-mmm)
 ;;; emacs-rc-mmm.el ends here

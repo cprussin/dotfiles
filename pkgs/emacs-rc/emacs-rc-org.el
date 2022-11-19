@@ -8,8 +8,10 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-keybindings)
-(require 'emacs-rc-text) ;; for emojify
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
+(use-package emacs-rc-text) ;; for emojify
 
 ;; Set up org-mode
 (use-package org
@@ -267,13 +269,13 @@ tasks."
 (use-package evil-org
   :delight
   :after delight general org
-  :functions evil-org-agenda-set-keys
   :hook ((org-mode . evil-org-mode)
-         (evil-org-mode . evil-org-set-key-theme))
-  :init
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys)
-  (evil-define-key 'motion org-agenda-mode-map (kbd "SPC") nil))
+         (evil-org-mode . evil-org-set-key-theme)))
+
+(use-package evil-org-agenda
+  :after evil-org
+  :commands evil-org-agenda-set-keys
+  :hook (org-agenda-mode . evil-org-agenda-set-keys))
 
 ;; Use pretty bullets in org-mode
 (use-package org-bullets

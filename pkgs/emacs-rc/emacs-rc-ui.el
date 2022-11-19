@@ -8,8 +8,10 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-custom)
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-custom)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (define-fringe-bitmap 'tilde [#b00000000
                               #b00000000
@@ -59,7 +61,7 @@
   :config
   (setq x-underline-at-descent-line t)
   (deftheme solarized-dark-with-fixes)
-  (eval-when-compile (require 'solarized-palettes))
+  (use-package solarized-palettes)
   (solarized-with-color-variables
     'dark
     'solarized-dark-with-fixes

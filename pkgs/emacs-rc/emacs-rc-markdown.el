@@ -8,7 +8,9 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (use-package markdown-mode
   :demand

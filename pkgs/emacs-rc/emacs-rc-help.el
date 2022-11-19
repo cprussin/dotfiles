@@ -8,9 +8,15 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-util)
-(require 'emacs-rc-keybindings)
-(require 'emacs-rc-completion)
+(use-package emacs-rc-util
+  :demand
+  :commands emacs-rc--transform-var emacs-rc--transform-func)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
+(use-package emacs-rc-completion
+  :demand
+  :commands ivy-configure)
 
 ;; Set up which-key to discover keybindings
 (use-package which-key

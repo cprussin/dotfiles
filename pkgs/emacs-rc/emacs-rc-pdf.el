@@ -8,7 +8,9 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (use-package pdf-tools
   :after general
@@ -17,7 +19,6 @@
   :config
   (setq-default pdf-view-display-size 'fit-page)
   (pdf-tools-install t)
-  (require 'pdf-occur)
   :general
   (major-mode-menu-def
    :keymaps 'pdf-view-mode-map
@@ -51,6 +52,9 @@
   (major-mode-menu-def
    :keymaps 'pdf-misc-minor-mode-map
    "m" '(pdf-misc-display-metadata :which-key "show metadata")))
+
+(use-package pdf-occur
+  :after pdf-tools)
 
 (provide 'emacs-rc-pdf)
 ;;; emacs-rc-pdf.el ends here

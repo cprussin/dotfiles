@@ -8,8 +8,10 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-custom)
-(require 'emacs-rc-keybindings)
+(use-package emacs-rc-custom)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
 
 (setq-default indent-tabs-mode nil
               fill-column 80)
@@ -67,7 +69,7 @@
   :demand
   :commands smartparens-global-mode
   :config
-  (require 'smartparens-config)
+  (use-package smartparens-config)
   (smartparens-global-mode))
 (use-package evil-smartparens
   :after smartparens delight

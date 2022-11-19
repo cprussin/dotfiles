@@ -8,10 +8,14 @@
 
 (eval-when-compile (require 'use-package))
 
-(require 'emacs-rc-custom)
-(require 'emacs-rc-keybindings)
-(require 'emacs-rc-util)
-(require 'emacs-rc-ui)
+(use-package emacs-rc-custom)
+(use-package emacs-rc-keybindings
+  :demand
+  :commands general-define-key)
+(use-package emacs-rc-util
+  :demand
+  :commands emacs-rc--transform-func)
+(use-package emacs-rc-ui)
 
 (use-package company
   :demand
