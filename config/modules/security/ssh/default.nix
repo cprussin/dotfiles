@@ -3,10 +3,7 @@
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
-      "gemini crux mom-vm" = {
-        checkHostIP = false;
-        forwardAgent = true;
-      };
+      "gemini crux mom-vm".forwardAgent = true;
       rsync = {
         user = "zh2593";
         hostname = "zh2593.rsync.net";
