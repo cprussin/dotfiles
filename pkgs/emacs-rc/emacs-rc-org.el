@@ -101,6 +101,7 @@
   (advice-add 'org-agenda :before #'emacs-rc--org-roam-agenda-files-update)
   (advice-add 'org-todo-list :before #'emacs-rc--org-roam-agenda-files-update)
   (advice-add 'cfw:open-org-calendar :before #'emacs-rc--org-roam-agenda-files-update)
+  (org-roam-db-autosync-mode)
   :general
   (apps-menu-def
     "r" '(:ignore t :which-key "Org Roam")
