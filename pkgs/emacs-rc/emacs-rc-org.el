@@ -47,20 +47,6 @@
 (use-package org-agenda
   :after general emojify evil evil-collection
   :config
-  ;;; ORG-MODE:  * My Task
-  ;;;              SCHEDULED: <%%(diary-last-day-of-month date)>
-  ;;; DIARY:  %%(diary-last-day-of-month date) Last Day of the Month
-  ;;; See also:  (setq org-agenda-include-diary t)
-  ;;; (diary-last-day-of-month '(2 28 2017))
-  (defun diary-last-day-of-month (date)
-    "Return `t` if DATE is the last day of the month."
-    (let* ((day (calendar-extract-day date))
-           (month (calendar-extract-month date))
-           (year (calendar-extract-year date))
-           (last-day-of-month
-            (calendar-last-day-of-month month year)))
-      (= day last-day-of-month)))
-
   (setq org-agenda-window-setup 'only-window
         org-agenda-files (list "~/Notes")
         org-agenda-custom-commands '(("p" . "Personal searches")
