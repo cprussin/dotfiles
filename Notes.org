@@ -28,9 +28,16 @@
 ** TODO Auto-mount /secure :user:system:
 ** TODO Clear environment more betterer :user:system:
 ** TODO Get a smart card
-** TODO Extract identity to common module [0/2] :user:
-   - [ ] GPG keys (including keygrip)
-   - [ ] Name / emails / etc
+** TODO Entity-based config
+   - [ ] People (me & reece)
+   - [ ] Identities (people have multiple)
+     - [ ] GPG keys
+     - [ ] Names
+     - [ ] Emails
+     - [ ] etc
+   - [ ] Users (people bound to machines)
+   - [ ] Machines (physical)
+   - [ ] Directories (syncthing / backup)
 ** TODO Sync mail using imap idle
 ** TODO Investigate using ssh certificate based auth
 ** TODO Rebuild toggle-colors :user:
