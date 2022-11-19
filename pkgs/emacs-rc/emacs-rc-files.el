@@ -15,5 +15,9 @@
   :config (setq make-backup-files nil
                 auto-save-default nil))
 
+(use-package autorevert
+  :init (setq global-auto-revert-non-file-buffers t)
+  :config (global-auto-revert-mode))
+
 (provide 'emacs-rc-files)
 ;;; emacs-rc-files.el ends here
