@@ -4,8 +4,8 @@
   ...
 }: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
-  rsyncUser = "11795";
-  rsyncHost = "ch-s011.rsync.net";
+  rsyncUser = "zh2593";
+  rsyncHost = "zh2593.rsync.net";
   userAtHost = "${rsyncUser}@${rsyncHost}";
   zfs = "${pkgs.zfs}/bin/zfs";
   awk = "${pkgs.gawk}/bin/awk";
@@ -108,5 +108,5 @@ in {
     };
   };
 
-  programs.ssh.knownHosts."ch-s011.rsync.net".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEYEyoL8HADxd4D1md7t2LGcM8nNhShc5qCjttVH1vTg";
+  programs.ssh.knownHosts."zh2593.rsync.net".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJtclizeBy1Uo3D86HpgD3LONGVH0CJ0NT+YfZlldAJd";
 }

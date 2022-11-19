@@ -8,8 +8,8 @@
         forwardAgent = true;
       };
       rsync = {
-        user = "11795";
-        hostname = "ch-s011.rsync.net";
+        user = "zh2593";
+        hostname = "zh2593.rsync.net";
       };
     };
   };
