@@ -67,7 +67,9 @@ To initialize a new machine into the network, follow these steps:
    (make sure the folder name for the machine configuration matches the hostname
    of the new machine).
 
-3. Deploy the configuration to the new machine:
+3. Turn on agent forwarding to the new machine [[./config/modules/security/ssh/default.nix][here]].
+
+4. Deploy the configuration to the new machine:
 
    #+BEGIN_SRC bash
      nix-shell --run 'deploy --on <new machine>'
