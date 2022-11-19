@@ -14,7 +14,7 @@
 
 (use-package pdf-tools
   :after general
-  :commands pdf-tools-install pdf-view-mode
+  :commands pdf-tools-install pdf-view-mode pdf-misc-display-metadata
   :mode  ("\\.pdf\\'" . pdf-view-mode)
   :config
   (setq-default pdf-view-display-size 'fit-page)

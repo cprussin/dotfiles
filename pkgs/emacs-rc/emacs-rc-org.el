@@ -17,6 +17,7 @@
 (use-package org
   :demand
   :after general emojify evil evil-collection
+  :commands org-get-category
   :hook (org-mode . emacs-rc--prettify-org)
   :config
   (defun emacs-rc--prettify-org ()

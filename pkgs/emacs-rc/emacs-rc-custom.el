@@ -8,7 +8,7 @@
 ;;; Code:
 
 (defgroup emacs-rc nil
-  "Emacs configuration file"
+  "Emacs configuration file."
   :group 'environment
   :prefix "emacs-rc-")
 

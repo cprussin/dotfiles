@@ -76,7 +76,7 @@
 (use-package evil-collection
   :demand
   :commands evil-collection-init
-  :after evil company-tng
+  :after evil
   :config
   (setq evil-collection-key-blacklist '("SPC"))
   (evil-collection-init))

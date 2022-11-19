@@ -97,6 +97,10 @@
 
 ;; Show emojis!
 (use-package emojify
+  :preface
+  ;; Suppress compile-time warnings by setting this to some path that is guaranteed to exist
+  (eval-when-compile (setq emojify-emojis-dir "/"
+                           emojify-emoji-set "/"))
   :demand
   :commands global-emojify-mode global-emojify-mode-line-mode
   :config

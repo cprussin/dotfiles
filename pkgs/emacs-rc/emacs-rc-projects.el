@@ -21,9 +21,8 @@
   :demand
   :commands direnv-mode
   :after diff-mode
-  :config
-  (setq direnv-always-show-summary nil)
-  (direnv-mode))
+  :init (setq direnv-always-show-summary nil)
+  :config (direnv-mode))
 
 ;; Set up editorconfig
 (use-package editorconfig
@@ -31,20 +30,18 @@
   :commands editorconfig-mode
   :after delight
   :delight
-  :config
-  (setq editorconfig-exec-path emacs-rc-editorconfig-path)
-  (editorconfig-mode))
+  :init (setq editorconfig-exec-path emacs-rc-editorconfig-path)
+  :config (editorconfig-mode))
 
 ;; Enable projectile
 (use-package projectile
   :demand
   :commands projectile-mode
-  :config
-  (setq projectile-completion-system 'ivy
-        projectile-git-command (emacs-rc--git-cmd "ls-files -zco --exclude-standard")
-        projectile-git-submodule-command (emacs-rc--git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
-        projectile-git-ignored-command (emacs-rc--git-cmd "ls-files -zcoi --exclude-standard"))
-  (projectile-mode))
+  :init (setq projectile-completion-system 'ivy
+              projectile-git-command (emacs-rc--git-cmd "ls-files -zco --exclude-standard")
+              projectile-git-submodule-command (emacs-rc--git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
+              projectile-git-ignored-command (emacs-rc--git-cmd "ls-files -zcoi --exclude-standard"))
+  :config (projectile-mode))
 
 ;; And enable counsel-projectile, for better ivy integration
 (use-package counsel-projectile
