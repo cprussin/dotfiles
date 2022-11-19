@@ -84,177 +84,23 @@
                                      ("ppu" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}")))
   :general (apps-menu-def "a" '(org-agenda :which-key "Agenda")))
 
-(use-package org-roam
+(use-package emacs-rc-org-roam
   :demand
+  :commands
+  org-roam-db-autosync-mode emacs-rc--org-roam-tasks-update-tag
+  emacs-rc--org-roam-agenda-files-update
   :custom (org-roam-directory (file-truename "~/Notes"))
+  :hook ((find-file before-save) . emacs-rc--org-roam-tasks-update-tag)
+  :init
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %(emacs-rc--org-roam-agenda-category 16)   %?-12t% s")
+          (todo . " %i %(emacs-rc--org-roam-agenda-category 16)   ")
+          (tags . " %i %(emacs-rc--org-roam-agenda-category 16)   ")
+          (search . " %i %(emacs-rc--org-roam-agenda-category 16)   ")))
   :config
-  (org-roam-db-autosync-mode)
-
-  ;;;
-  ;;; Shamelessly stolen from vulpea!
-  ;;;
-  ;;; TODO should just use vulpea (but I think a lot of this is just on
-  ;;; https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html)
-  ;;; and isn't even in the library
-  ;;;
-  (defun org-roam-buffer-prop-get (name)
-    "Get a buffer property called NAME as a string."
-    (org-with-point-at 1
-      (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
-                               (point-max) t)
-        (buffer-substring-no-properties
-         (match-beginning 1)
-         (match-end 1)))))
-
-  (defun org-roam-agenda-category (&optional len)
-    "Get category of item at point for agenda.
-
-Category is defined by one of the following items:
-
-- CATEGORY property
-- TITLE keyword
-- TITLE property
-- filename without directory and extension
-
-When LEN is a number, resulting string is padded right with
-spaces and then truncated with ... on the right if result is
-longer than LEN.
-
-Usage example:
-
-  (setq org-agenda-prefix-format
-        '((agenda . \" %(org-roam-agenda-category) %?-12t %12s\")))
-
-Refer to `org-agenda-prefix-format' for more information."
-    (let* ((file-name (when buffer-file-name
-                        (file-name-sans-extension
-                         (file-name-nondirectory buffer-file-name))))
-           (title (org-roam-buffer-prop-get "title"))
-           (category (org-get-category))
-           (result
-            (or (if (and
-                     title
-                     (string-equal category file-name))
-                    title
-                  category)
-                "")))
-      (if (numberp len)
-          (s-truncate len (s-pad-right len " " result))
-        result)))
-
-  (setq org-agenda-prefix-format
-        '((agenda . " %i %(org-roam-agenda-category 16)   %?-12t% s")
-          (todo . " %i %(org-roam-agenda-category 16)   ")
-          (tags . " %i %(org-roam-agenda-category 16)   ")
-          (search . " %i %(org-roam-agenda-category 16)   ")))
-
-  (defun org-roam-buffer-prop-set (name value)
-    "Set a file property called NAME to VALUE in buffer file.
-If the property is already set, replace its value."
-    (setq name (downcase name))
-    (org-with-point-at 1
-      (let ((case-fold-search t))
-        (if (re-search-forward (concat "^#\\+" name ":\\(.*\\)")
-                               (point-max) t)
-            (replace-match (concat "#+" name ": " value) 'fixedcase)
-          (while (and (not (eobp))
-                      (looking-at "^[#:]"))
-            (if (save-excursion (end-of-line) (eobp))
-                (progn
-                  (end-of-line)
-                  (insert "\n"))
-              (forward-line)
-              (beginning-of-line)))
-          (insert "#+" name ": " value "\n")))))
-
-  (defun org-roam-buffer-tags-set (&rest tags)
-    "Set TAGS in current buffer.
-If filetags value is already set, replace it."
-    (org-roam-buffer-prop-set "filetags" (string-join tags " ")))
-
-
-  (defun org-roam-buffer-tags-get ()
-    "Return filetags value in current buffer."
-    (org-roam-buffer-prop-get-list "filetags" " "))
-
-  (defun org-roam-buffer-prop-get-list (name &optional separators)
-    "Get a buffer property NAME as a list using SEPARATORS.
-If SEPARATORS is non-nil, it should be a regular expression
-matching text that separates, but is not part of, the substrings.
-If nil it defaults to `split-string-default-separators', normally
-\"[ \f\t\n\r\v]+\", and OMIT-NULLS is forced to t."
-    (let ((value (org-roam-buffer-prop-get name)))
-      (when (and value (not (string-empty-p value)))
-        (split-string-and-unquote value separators))))
-
-  (defun org-roam-tasks-p ()
-    "Return non-nil if current buffer has any todo entry.
-
-TODO entries marked as done are ignored, meaning the this
-function returns nil if current buffer contains only completed
-tasks."
-    (seq-find                                 ; (3)
-     (lambda (type)
-       (eq type 'todo))
-     (org-element-map                         ; (2)
-         (org-element-parse-buffer 'headline) ; (1)
-         'headline
-       (lambda (h)
-         (org-element-property :todo-type h)))))
-
-  (defun org-roam-tasks-update-tag ()
-    "Update TASKS tag in the current buffer."
-    (when (and (not (active-minibuffer-window))
-               (org-roam-buffer-p))
-      (save-excursion
-        (goto-char (point-min))
-        (let* ((tags (org-roam-buffer-tags-get))
-               (original-tags tags))
-          (if (org-roam-tasks-p)
-              (setq tags (cons "tasks" tags))
-            (setq tags (remove "tasks" tags)))
-
-          ;; cleanup duplicates
-          (setq tags (seq-uniq tags))
-
-          ;; update tags if changed
-          (when (or (seq-difference tags original-tags)
-                    (seq-difference original-tags tags))
-            (apply #'org-roam-buffer-tags-set tags))))))
-
-  (defun org-roam-buffer-p ()
-    "Return non-nil if the currently visited buffer is a note."
-    (and buffer-file-name
-         (string-prefix-p
-          (expand-file-name (file-name-as-directory org-roam-directory))
-          (file-name-directory buffer-file-name))))
-
-  (defun org-roam-task-files ()
-    "Return a list of note files containing 'tasks' tag." ;
-    (seq-uniq
-     (seq-map
-      #'car
-      (org-roam-db-query
-       [:select [nodes:file]
-                :from tags
-                :left-join nodes
-                :on (= tags:node-id nodes:id)
-                :where (like tag (quote "%\"tasks\"%"))]))))
-
-  (defun org-roam-agenda-files-update (&rest _)
-    "Update the value of `org-agenda-files'."
-    (setq org-agenda-files (org-roam-task-files)))
-
-  (add-hook 'find-file-hook #'org-roam-tasks-update-tag)
-  (add-hook 'before-save-hook #'org-roam-tasks-update-tag)
-
-  (advice-add 'org-agenda :before #'org-roam-agenda-files-update)
-  (advice-add 'org-todo-list :before #'org-roam-agenda-files-update)
-  (advice-add 'cfw:open-org-calendar :before #'org-roam-agenda-files-update)
-  ;;;
-  ;;; End shamelessly stolen from vulpea!
-  ;;;
-
+  (advice-add 'org-agenda :before #'emacs-rc--org-roam-agenda-files-update)
+  (advice-add 'org-todo-list :before #'emacs-rc--org-roam-agenda-files-update)
+  (advice-add 'cfw:open-org-calendar :before #'emacs-rc--org-roam-agenda-files-update)
   :general
   (apps-menu-def
     "r" '(:ignore t :which-key "Org Roam")
