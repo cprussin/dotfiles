@@ -1,7 +1,7 @@
 {pkgs, ...}: let
   sources = import ../../../../sources.nix;
   emacs-overlay = self: super: {
-    emacs = (self.emacsPackagesFor super.emacsPgtkNativeComp).withPackages (epkgs: [epkgs.emacs-rc]);
+    emacs = (self.emacsPackagesFor super.emacsPgtk).withPackages (epkgs: [epkgs.emacs-rc]);
   };
 in {
   nixpkgs.overlays = [

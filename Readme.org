@@ -59,7 +59,7 @@ To initialize a new machine into the network, follow these steps:
          extraGroups = [ "wheel" ];
          openssh.authorizedKeys.keys = [ "..." ];
        };
-       nix.trustedUsers = [ "root" "cprussin" ];
+       nix.settings.trusted-users = [ "root" "cprussin" ];
      }
    #+END_SRC
 

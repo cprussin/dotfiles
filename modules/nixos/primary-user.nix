@@ -38,6 +38,6 @@ in {
       isNormalUser = true;
       passwordFile = config.deployment.keys.primary-user-password.path;
     };
-    nix.trustedUsers = [cfg.name];
+    nix.settings.trusted-users = [cfg.name];
   };
 }

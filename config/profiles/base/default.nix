@@ -15,6 +15,7 @@ in {
     ../../modules/security/umask
 
     ../../modules/system/nix
+    ../../modules/system/stateVersion
     ../../modules/system/users
 
     ../../modules/ui/bash

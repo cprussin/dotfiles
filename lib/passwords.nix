@@ -132,8 +132,8 @@
           shift
           identity="$(${getPasswordField}/bin/getPasswordField "Connor/Wifi/$network" "Identity")"
           echo "$identity_var_name=\"$identity\""
-          hashedPassword="$(${getPassword}/bin/getPassword "Connor/Wifi/$network" | ${tr} -d '\n' | ${iconv} -t utf16le | ${openssl} md4 | ${cut} -d ' ' -f 2)"
-          echo "$password_var_name=hash:$hashedPassword"
+          password="$(${getPassword}/bin/getPassword "Connor/Wifi/$network")"
+          echo "$password_var_name=\"$password\""
           ;;
         *)
           echo "ERROR: Unknown network type: $network_type" >&2

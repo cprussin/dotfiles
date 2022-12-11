@@ -7,6 +7,6 @@
 
   programs.fzf = {
     enable = true;
-    inline-info = true;
+    defaultOptions = ["--inline-info"];
   };
 }

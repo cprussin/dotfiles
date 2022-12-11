@@ -36,7 +36,7 @@
           pairwise=CCMP
           eap=PEAP
           identity="@${peapMschapIdentityEnvVar networkName}@"
-          password=@${peapMschapPasswordEnvVar networkName}@
+          password="@${peapMschapPasswordEnvVar networkName}@"
           phase1="peaplabel=0"
           phase2="auth=MSCHAPV2"
         '';

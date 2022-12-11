@@ -41,7 +41,7 @@ in {
         inherit (cfg) package;
         name = pangoFont;
       };
-      swaylock.font = pangoFont;
+      swaylock.settings.font = pangoFont;
       mako.font = pangoFont;
       zathura.options.font = pangoFont;
       waybar-custom.styles.common = {

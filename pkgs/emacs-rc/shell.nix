@@ -34,7 +34,7 @@
 
   emacs-pkg = pkgs.symlinkJoin {
     name = "emacs";
-    paths = [((pkgs.emacsPackagesFor pkgs.emacsPgtkNativeComp).withPackages emacs-packages)];
+    paths = [((pkgs.emacsPackagesFor pkgs.emacsPgtk).withPackages emacs-packages)];
     buildInputs = [pkgs.makeWrapper];
     postBuild = "wrapProgram $out/bin/emacs --add-flags '--no-init-file --load ${entry-point}'";
   };

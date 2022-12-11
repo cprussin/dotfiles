@@ -96,7 +96,7 @@ in {
         render-loading-fg = cfg.highlightForeground;
       };
 
-      swaylock = {
+      swaylock.settings = {
         color = removeOctothorpe cfg.background;
         text-caps-lock-color = removeOctothorpe cfg.background;
         text-ver-color = removeOctothorpe cfg.background;
