@@ -2,15 +2,13 @@
   pkgs,
   config,
   ...
-}: let
-  launcher-apps = config.primary-user.home-manager.programs.launcher.apps;
-in {
+}: {
   primary-user.home-manager.services.swayidle = {
     enable = true;
     timeouts = [
       {
-        timeout = 300;
-        command = toString launcher-apps.lock;
+        timeout = 330;
+        command = "${pkgs.systemd}/bin/loginctl lock-session";
       }
       {
         timeout = 300;
@@ -21,11 +19,11 @@ in {
     events = [
       {
         event = "before-sleep";
-        command = toString launcher-apps.lock;
+        command = "${pkgs.systemd}/bin/loginctl lock-session";
       }
       {
         event = "lock";
-        command = toString launcher-apps.lock;
+        command = "(${config.security.wrapperDir}/sudo ${config.primary-user.secure.exportCmd}; ${pkgs.swaylock}/bin/swaylock)";
       }
     ];
   };

@@ -57,10 +57,10 @@ in {
         gmail = email;
         home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
-        insecure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.exportCmd}";
+        insecure = pkgs.writeShellScript "insecure" "sudo ${config.primary-user.secure.exportCmd}";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
         library = mkWebApp "library" "https://library.internal.prussin.net";
-        lock = pkgs.callPackage ./apps/lock.nix {inherit config;};
+        lock = pkgs.writeShellScript "lock" "${pkgs.systemd}/bin/loginctl lock-session";
         makemkv = "${pkgs.makemkv}/bin/makemkv";
         mic-volume = pkgs.callPackage ./apps/mic-volume.nix {};
         mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
