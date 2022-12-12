@@ -54,6 +54,9 @@ in {
     ];
   };
 
-  home-manager.useGlobalPkgs = true;
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+  };
   primary-user.home-manager.xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 }
