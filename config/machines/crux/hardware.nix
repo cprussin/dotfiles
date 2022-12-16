@@ -22,7 +22,7 @@
   drives =
     zfsDrives
     ++ [
-      "usb-WD_Elements_25A3_564347414D34534D-0:0"
+      "wwn-0x5000cca0b0c4d39c"
     ];
 in {
   imports = [
