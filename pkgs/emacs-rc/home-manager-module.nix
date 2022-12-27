@@ -46,6 +46,36 @@ in {
       default = "${pkgs.editorconfig-core-c}/bin/editorconfig";
     };
 
+    jpegtran = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.libjpeg}/bin/jpegtran";
+    };
+
+    pngnq = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.pngnq}/bin/pngnq";
+    };
+
+    exiftool = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.exiftool}/bin/exiftool";
+    };
+
+    pngcrush = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.pngcrush}/bin/pngcrush";
+    };
+
+    convert = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.imagemagick}/bin/convert";
+    };
+
+    optipng = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.optipng}/bin/optipng";
+    };
+
     emojiSets = lib.mkOption {
       type = lib.types.path;
       default = "${mkEmojiSets [pkgs.emojione-png]}";
@@ -75,6 +105,12 @@ in {
               emacs-rc-shell-path "${cfg.shell}"
               emacs-rc-ispell-path "${cfg.ispell}"
               emacs-rc-editorconfig-path "${cfg.editorconfig}"
+              emacs-rc-jpegtran-path "${cfg.jpegtran}"
+              emacs-rc-pngnq-path "${cfg.pngnq}"
+              emacs-rc-exiftool-path "${cfg.exiftool}"
+              emacs-rc-pngcrush-path "${cfg.pngcrush}"
+              emacs-rc-convert-path "${cfg.convert}"
+              emacs-rc-optipng-path "${cfg.optipng}"
               emacs-rc-emoji-sets-path "${cfg.emojiSets}"
               emacs-rc-font-face "${cfg.font.face}"
               emacs-rc-font-size ${toString cfg.font.size})

@@ -22,6 +22,12 @@
           emacs-rc-shell-path "${pkgs.stdenv.shell}"
           emacs-rc-ispell-path "${pkgs.ispell}/bin/ispell"
           emacs-rc-editorconfig-path "${pkgs.editorconfig-core-c}/bin/editorconfig"
+          emacs-rc-jpegtran-path "${pkgs.libjpeg}/bin/jpegtran"
+          emacs-rc-pngnq-path "${pkgs.pngnq}/bin/pngnq"
+          emacs-rc-exiftool-path "${pkgs.exiftool}/bin/exiftool"
+          emacs-rc-pngcrush-path "${pkgs.pngcrush}/bin/pngcrush"
+          emacs-rc-convert-path "${pkgs.imagemagick}/bin/convert"
+          emacs-rc-optipng-path "${pkgs.optipng}/bin/optipng"
           emacs-rc-emoji-sets-path "${mkEmojiSets [pkgs.emojione-png]}")
 
     (require 'emacs-rc)
