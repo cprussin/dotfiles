@@ -89,6 +89,44 @@ in {
           path = "${config.primary-user.home}/Phone/WhatsApp Media";
           devices = ["crux" "pegasus"];
         };
+        SMS_Backup = {
+          path = "${config.primary-user.home}/Phone/SMS";
+          devices = ["crux" "pegasus"];
+        };
+        Game_Boy_Saves = {
+          path = "${config.primary-user.home}/Game Saves/Game Boy";
+          devices = ["crux"];
+        };
+        Game_Boy_Color_Saves = {
+          path = "${config.primary-user.home}/Game Saves/Game Boy Color";
+          devices = ["crux"];
+        };
+        Game_Boy_Advance_Saves = {
+          path = "${config.primary-user.home}/Game Saves/Game Boy Advance";
+          devices = ["crux"];
+        };
+        Super_Nintendo_Saves = {
+          path = "${config.primary-user.home}/Game Saves/Super Nintendo";
+          devices = ["crux"];
+        };
+        GameCube_Saves = {
+          path = "${config.primary-user.home}/Game Saves/GameCube";
+          devices = ["crux"];
+        };
+        Stardew_Valley_Saves = {
+          path =
+            if config.networking.hostName == "crux"
+            then "${config.primary-user.home}/Game Saves/Stardew Valley"
+            else "${config.primary-user.home}/.config/StardewValley/Saves";
+          devices = ["crux" "gemini" "pegasus"];
+        };
+        Factorio_Saves = {
+          path =
+            if config.networking.hostName == "crux"
+            then "${config.primary-user.home}/Game Saves/Factorio"
+            else "${config.primary-user.home}/.factorio/saves";
+          devices = ["crux" "gemini"];
+        };
       };
     };
 

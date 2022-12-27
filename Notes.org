@@ -14,7 +14,6 @@
 - [X] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
 ** TODO Fix emacs performance issues
 ** TODO Fix slow wifi reconnects
-** TODO Back up emulator saves (and anything else from phone?)
 ** TODO Fix search for special characters
 ** TODO Make zfs configuration more declarative somehow
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
@@ -45,6 +44,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Back up emulator saves (and anything else from phone?)
+CLOSED: [2022-12-26 Mon 15:02]
 ** DONE Complete wireguard migration
 CLOSED: [2022-08-21 Sun 12:46]
 ** DONE Ensure reboots work properly for crux

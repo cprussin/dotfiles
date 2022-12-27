@@ -52,6 +52,7 @@ in {
         "tank/persisted-state/Brave-Browser".mountpoint = "/home/cprussin/.config/BraveSoftware/Brave-Browser";
         "tank/persisted-state/Element".mountpoint = "/home/cprussin/.config/Element";
         "tank/persisted-state/Slack".mountpoint = "/home/cprussin/.config/Slack";
+        "tank/persisted-state/StardewValleySaves".mountpoint = "/home/cprussin/.config/StardewValley/Saves";
         "tank/persisted-state/Steam".mountpoint = "/home/cprussin/.local/share/Steam";
         "tank/persisted-state/Zulip".mountpoint = "/home/cprussin/.config/Zulip";
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
