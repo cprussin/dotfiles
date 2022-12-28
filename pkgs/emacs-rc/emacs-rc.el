@@ -11,6 +11,7 @@
 (use-package emacs-rc-check)
 (use-package emacs-rc-completion)
 (use-package emacs-rc-custom)
+(use-package emacs-rc-dired)
 (use-package emacs-rc-files)
 (use-package emacs-rc-git)
 (use-package emacs-rc-help)
