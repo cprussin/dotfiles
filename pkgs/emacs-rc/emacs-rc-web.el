@@ -46,8 +46,8 @@
          (js-mode . emacs-rc--set-checker-eslint))
   :general
   (major-mode-menu-def
-   :keymaps 'js-mode-map
-   "" '(:ignore t :which-key "Major Mode (JS)"))
+    :keymaps 'js-mode-map
+    "" '(:ignore t :which-key "Major Mode (JS)"))
   :config
   (defun emacs-rc--set-checker-eslint ()
     "Set `javascript-eslint' as the current flycheck checker."
@@ -61,9 +61,9 @@
   :hook (typescript-mode . emacs-rc--setup-js-files)
   :after general
   :general
-  (major-mode-menu-map
-   :keymaps 'typescript-mode-map
-   "" '(:ignore t :which-key "Major Mode (Typescript)"))
+  (major-mode-menu-def
+    :keymaps 'typescript-mode-map
+    "" '(:ignore t :which-key "Major Mode (Typescript)"))
   :config
   (flycheck-add-mode 'css-stylelint 'typescript-mode))
 
@@ -97,19 +97,19 @@
     (setq-local jest-executable (emacs-rc--find-in-node-modules "jest")))
   (setq jest-arguments '("--colors"))
   :general
-  (major-mode-menu-map
-   :keymaps '(js-mode-map typescript-mode-map)
-   "j" '(jest-popup :which-key "Jest")))
+  (major-mode-menu-def
+    :keymaps '(js-mode-map typescript-mode-map)
+    "j" '(jest-popup :which-key "Jest")))
 
 (use-package purescript-mode
   :demand
   :hook (purescript-mode . turn-on-purescript-indentation)
   :general
-  (major-mode-menu-map
-   :keymaps 'purescript-mode-map
-   "" '(:ignore t :which-key "Major Mode (Purescript)")
-   "." '(purescript-mode-format-imports
-         :which-key "format imports")))
+  (major-mode-menu-def
+    :keymaps 'purescript-mode-map
+    "" '(:ignore t :which-key "Major Mode (Purescript)")
+    "." '(purescript-mode-format-imports
+          :which-key "format imports")))
 
 (use-package psc-ide
   :hook (purescript-mode . psc-ide-mode)
@@ -117,16 +117,16 @@
   (psc-ide-mode-map
    :jump t
    "C-]" #'psc-ide-goto-definition)
-  (major-mode-menu-map
-   :keymaps 'psc-ide-mode-map
-   "a" '(psc-ide-add-clause :which-key "add clause")
-   "b" '(psc-ide-rebuild :which-key "rebuild")
-   "c" '(psc-ide-case-split :which-key "split cases")
-   "i" '(psc-ide-add-import :which-key "add import")
-   "l" '(psc-ide-load-all :which-key "load modules")
-   "q" '(psc-ide-server-quit :which-key "quit server")
-   "s" '(psc-ide-server-start :which-key "start server")
-   "t" '(psc-ide-show-type :which-key "show type")))
+  (major-mode-menu-def
+    :keymaps 'psc-ide-mode-map
+    "a" '(psc-ide-add-clause :which-key "add clause")
+    "b" '(psc-ide-rebuild :which-key "rebuild")
+    "c" '(psc-ide-case-split :which-key "split cases")
+    "i" '(psc-ide-add-import :which-key "add import")
+    "l" '(psc-ide-load-all :which-key "load modules")
+    "q" '(psc-ide-server-quit :which-key "quit server")
+    "s" '(psc-ide-server-start :which-key "start server")
+    "t" '(psc-ide-show-type :which-key "show type")))
 
 (provide 'emacs-rc-web)
 ;;; emacs-rc-web.el ends here
