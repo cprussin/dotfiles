@@ -33,6 +33,7 @@ in
     case "$1" in
       *.stl | *.3mf) exec $prusaSlicer "$1" ;;
       *.stp | *.step | *.FCStd | *.FCStd1) exec $freecad "$1" ;;
+      *.mp4) exec $mpv "$1" ;;
       *)
         case $($file --brief --mime-type "$1") in
           text/html) exec $browse "$1" ;;
