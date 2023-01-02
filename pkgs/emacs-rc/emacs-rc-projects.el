@@ -41,7 +41,9 @@
               projectile-git-command (emacs-rc--git-cmd "ls-files -zco --exclude-standard")
               projectile-git-submodule-command (emacs-rc--git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
               projectile-git-ignored-command (emacs-rc--git-cmd "ls-files -zcoi --exclude-standard"))
-  :config (projectile-mode))
+  :config (projectile-mode)
+  :general
+  (project-menu-def "c" '(projectile-compile-project :which-key "compile project")))
 
 ;; And enable counsel-projectile, for better ivy integration
 (use-package counsel-projectile

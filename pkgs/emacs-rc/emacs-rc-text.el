@@ -125,5 +125,9 @@
 (use-package rainbow-mode
   :hook (prog-mode . rainbow-mode))
 
+(use-package compile
+  :config (setq compilation-scroll-output t
+                compilation-always-kill t))
+
 (provide 'emacs-rc-text)
 ;;; emacs-rc-text.el ends here
