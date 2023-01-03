@@ -41,7 +41,7 @@ in {
         script = ''
           . /etc/set-environment
           . /etc/profiles/per-user/${cfg.user}/etc/profile.d/hm-session-vars.sh
-          ${cfg.sessionScript}
+          exec ${cfg.sessionScript}
         '';
 
         serviceConfig = {
