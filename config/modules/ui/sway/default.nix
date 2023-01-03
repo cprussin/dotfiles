@@ -37,6 +37,8 @@ in {
         "*".bg = "${./background.png} fill";
       };
 
+      input."type:mouse".pointer_accel = "0.5";
+
       focus = {
         mouseWarping = true;
         forceWrapping = true;
