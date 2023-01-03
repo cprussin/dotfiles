@@ -23,5 +23,8 @@
   };
   environment.etc."machine-id".text = "bf6ba660172042baa958c54739b5fdb9\n";
   services.getty.greetingLine = builtins.readFile ./greeting;
-  programs.powerpanel.enable = true;
+  programs.powerpanel = {
+    enable = true;
+    enable-alarm = false;
+  };
 }
