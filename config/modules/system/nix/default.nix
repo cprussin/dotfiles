@@ -1,10 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{config, ...}: let
   sources = import ../../../../sources.nix;
-  passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
 in {
   primary-user.extraGroups = ["nix-access-tokens"];
   ids.gids.nix-access-tokens = 500;

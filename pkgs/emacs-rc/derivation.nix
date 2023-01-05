@@ -2,7 +2,6 @@
   trivialBuild,
   callPackage,
   epkgs,
-  git,
 }:
 (trivialBuild {
   pname = "emacs-rc";

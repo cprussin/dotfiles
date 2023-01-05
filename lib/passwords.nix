@@ -1,15 +1,11 @@
 {pkgs}: let
   pass = "${pkgs.pass}/bin/pass";
   head = "${pkgs.coreutils}/bin/head";
-  cut = "${pkgs.coreutils}/bin/cut";
-  tr = "${pkgs.coreutils}/bin/tr";
   base64 = "${pkgs.coreutils}/bin/base64";
   grep = "${pkgs.gnugrep}/bin/grep";
   sed = "${pkgs.gnused}/bin/sed";
   mkpasswd = "${pkgs.mkpasswd}/bin/mkpasswd";
   wpa_passphrase = "${pkgs.wpa_supplicant}/bin/wpa_passphrase";
-  iconv = "${pkgs.glibc.bin}/bin/iconv";
-  openssl = "${pkgs.openssl}/bin/openssl";
 
   getFullPassword = pkgs.writeShellScriptBin "getFullPassword" ''
     set -euo pipefail

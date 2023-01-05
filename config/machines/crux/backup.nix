@@ -69,6 +69,7 @@ in {
 
   systemd.services = {
     "borgbackup-job-rsync.net-import-keyfile" = {
+      inherit (config.services.borgbackup.jobs."rsync.net") environment;
       description = "Import the borgbackup keyfile for rsync.net.";
       after = [
         "borgbackup-keyfile-key.service"
@@ -78,7 +79,6 @@ in {
         "borgbackup-keyfile-key.service"
         "rsync.net-ssh-key.service"
       ];
-      environment = config.services.borgbackup.jobs."rsync.net".environment;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

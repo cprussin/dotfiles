@@ -43,11 +43,11 @@ in {
 
       hostKeys = [
         {
-          path = config.deployment.keys.sshHostED25519Key.path;
+          inherit (config.deployment.keys.sshHostED25519Key) path;
           type = "ed25519";
         }
         {
-          path = config.deployment.keys.sshHostRSAKey.path;
+          inherit (config.deployment.keys.sshHostRSAKey) path;
           type = "rsa";
           bits = 4096;
         }

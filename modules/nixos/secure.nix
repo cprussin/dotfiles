@@ -99,14 +99,12 @@ in {
             };
           };
 
-          config = let
-            pool = config.pool;
-          in {
-            passwords = lib.mkDefault "/${pool}/passwords";
-            gnupg = lib.mkDefault "/${pool}/gnupg";
-            luks = lib.mkDefault "/${pool}/crypt";
-            importCmd = pkgs.writeShellScript "import-${pool}" (importPool pool);
-            exportCmd = pkgs.writeShellScript "export-${pool}" (exportPool pool);
+          config = {
+            passwords = lib.mkDefault "/${config.pool}/passwords";
+            gnupg = lib.mkDefault "/${config.pool}/gnupg";
+            luks = lib.mkDefault "/${config.pool}/crypt";
+            importCmd = pkgs.writeShellScript "import-${config.pool}" (importPool config.pool);
+            exportCmd = pkgs.writeShellScript "export-${config.pool}" (exportPool config.pool);
           };
         }
       )
@@ -139,30 +137,28 @@ in {
     boot.initrd = lib.mkIf (lib.any (secure: (builtins.length secure.luksDrives > 0)) secures) {
       kernelModules = ["usb_storage" "loop"];
 
-      preLVMCommands = (
-        lib.mkMerge [
-          (
-            lib.mkBefore ''
-              echo -n "${awaitingMsg}"
-              while ${somePoolsUnavailable}
-              do
-                echo -n "."
-                sleep 0.25
-              done
-              echo -n " done!"
-              echo
-              ${mapConcatPools importPool "\n"}
-            ''
-          )
+      preLVMCommands = lib.mkMerge [
+        (
+          lib.mkBefore ''
+            echo -n "${awaitingMsg}"
+            while ${somePoolsUnavailable}
+            do
+              echo -n "."
+              sleep 0.25
+            done
+            echo -n " done!"
+            echo
+            ${mapConcatPools importPool "\n"}
+          ''
+        )
 
-          (
-            lib.mkAfter ''
-              echo "${closingMsg}"
-              ${mapConcatPools exportPool "\n"}
-            ''
-          )
-        ]
-      );
+        (
+          lib.mkAfter ''
+            echo "${closingMsg}"
+            ${mapConcatPools exportPool "\n"}
+          ''
+        )
+      ];
 
       luks.devices =
         lib.foldl (acc: secure: acc // (luksDevicesFor secure)) {} secures;

@@ -1,5 +1,5 @@
 self: super: {
   mako = self.callPackage ./derivation.nix {
-    mako = super.mako;
+    inherit (super) mako;
   };
 }

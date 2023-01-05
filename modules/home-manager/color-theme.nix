@@ -130,8 +130,8 @@ in {
       };
 
       waybar-custom.styles.frame = {
+        inherit (cfg) background;
         color = cfg.bright;
-        background = cfg.background;
       };
 
       fzf.colors = {
@@ -154,6 +154,8 @@ in {
     };
 
     wayland.windowManager.sway.config.colors = {
+      inherit (cfg) background;
+
       focused = {
         border = cfg.selection;
         background = cfg.selection;
@@ -185,8 +187,6 @@ in {
         indicator = cfg.urgent;
         childBorder = cfg.urgent;
       };
-
-      background = cfg.background;
     };
   };
 }

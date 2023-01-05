@@ -10,14 +10,15 @@
 in {
   deployment.keys = {
     "home-assistant.internal.prussin.net.crt" = {
+      inherit (config.users.users.nginx) group;
       keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssl/home-assistant.internal.prussin.net/cert";
       user = config.users.users.nginx.name;
-      group = config.users.users.nginx.group;
     };
+
     "home-assistant.internal.prussin.net.key" = {
+      inherit (config.users.users.nginx) group;
       keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssl/home-assistant.internal.prussin.net/key";
       user = config.users.users.nginx.name;
-      group = config.users.users.nginx.group;
     };
   };
 

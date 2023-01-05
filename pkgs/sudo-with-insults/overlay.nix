@@ -1,5 +1,5 @@
 self: super: {
   sudo = self.callPackage ./derivation.nix {
-    sudo = super.sudo;
+    inherit (super) sudo;
   };
 }

@@ -1,5 +1,5 @@
 {config, ...}: let
-  home = config.primary-user.home;
+  inherit (config.primary-user) home;
 in {
   primary-user.home-manager.xdg.userDirs = {
     enable = true;

@@ -1,4 +1,4 @@
-{}: _: {
+_: _: {
   tuya = {};
   uart = {
     rx_pin = "GPIO3";

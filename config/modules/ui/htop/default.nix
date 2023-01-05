@@ -1,4 +1,4 @@
-{...}: {
+_: {
   primary-user.home-manager.programs.htop = {
     enable = true;
     settings = {

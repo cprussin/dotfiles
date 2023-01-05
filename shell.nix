@@ -27,7 +27,7 @@
   };
 
   password-utils-overlay = self: _: {
-    passwordUtils = (self.callPackage ./lib/passwords.nix {}).passwordUtils;
+    inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
   };
 
   pkgs-unstable = import nixpkgs-unstable {
@@ -53,12 +53,16 @@
   files = "$(find . -name '*.nix')";
 
   check = pkgs.writeShellScriptBin "check" ''
-    ${pkgs.nix-linter}/bin/nix-linter ${files}
+    ${pkgs.nix-linter}/bin/nix-linter ${files} && \
+    ${pkgs.statix}/bin/statix check . && \
+    ${pkgs.deadnix}/bin/deadnix . && \
     ${pkgs.alejandra}/bin/alejandra --check ${files}
   '';
 
   fix = pkgs.writeShellScriptBin "fix" ''
-    ${pkgs.alejandra}/bin/alejandra ${files}
+    ${pkgs.alejandra}/bin/alejandra ${files} && \
+    ${pkgs.statix}/bin/statix fix . && \
+    ${pkgs.deadnix}/bin/deadnix -e .
   '';
 
   deploy = pkgs.writeShellScriptBin "deploy" ''
@@ -67,6 +71,10 @@
 
   collect-garbage = pkgs.writeShellScriptBin "collect-garbage" ''
     sudo ${pkgs.nix}/bin/nix-collect-garbage -d
+  '';
+
+  check-vulnerabilities = pkgs.writeShellScriptBin "check-vulnerabilities" ''
+    ${pkgs.vulnix}/bin/vulnix --system
   '';
 
   replace-password-commands = pkgs.writers.writePython3Bin "replace-password-commands" {} ''
@@ -119,6 +127,7 @@ in
       check
       fix
       deploy
+      check-vulnerabilities
       collect-garbage
       iot
     ];

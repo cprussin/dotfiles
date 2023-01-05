@@ -230,17 +230,21 @@ in {
         lib.filterAttrs (_: v: v != null) (
           getModuleConfigs allModules
           // {
-            layer = cfg.layer;
-            output = cfg.output;
-            position = cfg.position;
-            height = cfg.height;
-            width = cfg.width;
-            margin = cfg.margin;
-            name = cfg.name;
-            margin-top = cfg.margin-top;
-            margin-left = cfg.margin-left;
-            margin-bottom = cfg.margin-bottom;
-            margin-right = cfg.margin-right;
+            inherit
+              (cfg)
+              layer
+              output
+              position
+              height
+              width
+              margin
+              name
+              margin-top
+              margin-left
+              margin-bottom
+              margin-right
+              ;
+
             modules-left = getName cfg.modules.left;
             modules-center = getName cfg.modules.center;
             modules-right = getName cfg.modules.right;

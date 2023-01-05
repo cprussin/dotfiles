@@ -10,14 +10,14 @@
 in {
   deployment.keys = {
     "library.internal.prussin.net.crt" = {
+      inherit (config.users.users.nginx) group;
       keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssl/library.internal.prussin.net/cert";
       user = config.users.users.nginx.name;
-      group = config.users.users.nginx.group;
     };
     "library.internal.prussin.net.key" = {
+      inherit (config.users.users.nginx) group;
       keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssl/library.internal.prussin.net/key";
       user = config.users.users.nginx.name;
-      group = config.users.users.nginx.group;
     };
   };
 
