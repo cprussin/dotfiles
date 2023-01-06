@@ -1,4 +1,6 @@
 * Tasks
+** TODO Fix missing emoji in starship prompt
+** TODO Fix pass completion
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
 ** TODO Fix crux activation scripts unmounting tank
 ** TODO Why is postgres getting corrupted?
