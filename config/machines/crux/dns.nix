@@ -29,9 +29,12 @@
     }
   '';
 in {
-  networking.firewall = {
-    allowedTCPPorts = [53];
-    allowedUDPPorts = [53];
+  networking = {
+    firewall = {
+      allowedTCPPorts = [53];
+      allowedUDPPorts = [53];
+    };
+    nameservers = [network.wireguard.nodes.crux.address];
   };
   services.coredns = {
     enable = true;
