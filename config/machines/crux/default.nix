@@ -5,15 +5,14 @@
     ../../profiles/server
 
     ./backup.nix
-    ./syncthing.nix
-    ./dynamic-dns.nix
-    ./dvd-ripping.nix
-
-    ./wireguard.nix
     ./dns.nix
-    ./library.nix
+    ./dvd-ripping.nix
+    ./dynamic-dns.nix
     ./home-assistant.nix
+    ./library.nix
     ./matrix.nix
+    ./syncthing.nix
+    ./wireguard.nix
   ];
 
   primary-user.name = "cprussin";
