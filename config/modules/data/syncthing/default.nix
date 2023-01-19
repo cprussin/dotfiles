@@ -81,10 +81,6 @@ in {
           path = "${config.primary-user.home}/Phone/Pictures";
           devices = ["crux" "pegasus"];
         };
-        Total_Launcher_Backups = {
-          path = "${config.primary-user.home}/Phone/Total Launcher Backups";
-          devices = ["crux" "pegasus"];
-        };
         WhatsApp_Media = {
           path = "${config.primary-user.home}/Phone/WhatsApp Media";
           devices = ["crux" "pegasus"];
