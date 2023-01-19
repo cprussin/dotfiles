@@ -53,7 +53,7 @@ in {
           lib.mapAttrsToList (peer: publicKey: {
             inherit publicKey;
             allowedIPs = ["${network.wireguard.nodes."${peer}".address}/32"];
-            presharedKeyFile = config.deployment.keys."${peer}-preshared-key".path;
+            presharedKeyFile = config.deployment.keys."${psk-keyfile peer}".path;
           })
           peer-public-keys;
       };
