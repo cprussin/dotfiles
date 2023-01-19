@@ -53,21 +53,21 @@
 
                                      ("pc" . "2019 Subaru Ascent")
                                      ("pca" tags-todo  "+2019_Subaru_Ascent")
-                                     ("pcr" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
-                                     ("pcs" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
-                                     ("pcu" tags-todo  "+2019_Subaru_Ascent-SCHEDULED={.+}")
+                                     ("pcr" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={.+\\+.+}|+2019_Subaru_Ascent+DEADLINE={.+\\+.+}")
+                                     ("pcs" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}|+2019_Subaru_Ascent+DEADLINE={^[^\\+]+$}")
+                                     ("pcu" tags-todo  "+2019_Subaru_Ascent-SCHEDULED={.+}&+2019_Subaru_Ascent-DEADLINE={.+}")
 
                                      ("ph" . "720 Natoma Drive")
                                      ("pha" tags-todo  "+720_Natoma_Drive")
-                                     ("phr" tags-todo  "+720_Natoma_Drive+SCHEDULED={.+\\+.+}")
-                                     ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}")
-                                     ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}")
+                                     ("phr" tags-todo  "+720_Natoma_Drive+SCHEDULED={.+\\+.+}|+720_Natoma_Drive+DEADLINE={.+\\+.+}")
+                                     ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}|+720_Natoma_Drive+DEADLINE={^[^\\+]+$}")
+                                     ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}&+720_Natoma_Drive-DEADLINE={.+}")
 
                                      ("pp" . "Other")
                                      ("ppa" tags-todo "-720_Natoma_Drive-2019_Subaru_Ascent")
-                                     ("ppr" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}")
-                                     ("pps" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}")
-                                     ("ppu" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}")))
+                                     ("ppr" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}|-720_Natoma_Drive-2019_Subaru_Ascent+DEADLINE={.+\\+.+}")
+                                     ("pps" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}|-720_Natoma_Drive-2019_Subaru_Ascent+DEADLINE={^[^\\+]+$}")
+                                     ("ppu" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}&-720_Natoma_Drive-2019_Subaru_Ascent-DEADLINE={.+}")))
   :general (apps-menu-def "a" '(org-agenda :which-key "Agenda")))
 
 (use-package emacs-rc-org-roam
