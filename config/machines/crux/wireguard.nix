@@ -11,7 +11,7 @@
 
   peer-public-keys = {
     gemini = "hmvFMJuINO7N6EO04Pnf32FJFaW5N0zDctot3Qpo8gg=";
-    pegasus = "/ta8gnmtXXSwvz5ueU+I7jD6OKCZ2hSlyZ0DnzK1P20=";
+    pegasus = "H/hoEAN8RieoOSuxPG3y35fPdhxjLS+iNJcD2CoGS1g=";
     steam-deck = "AVscY2MnbeE7H3QkBWmJFhFJ6tMQR/77259nNZoaFwM=";
     shauna-phone = "tifJWMO8/P4B5QDNpieB/CvLtCyvtuoXi5GnAQYywRU=";
     reece-computer = "BXzJ+WBs4QITPbliB84U7qkQsxVM6PaCJAyXy2pb0jA=";
