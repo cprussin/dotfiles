@@ -11,6 +11,7 @@
     ./home-assistant.nix
     ./library.nix
     ./matrix.nix
+    ./nfs.nix
     ./syncthing.nix
     ./wireguard.nix
   ];
