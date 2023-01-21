@@ -114,7 +114,7 @@ in {
             if config.networking.hostName == "crux"
             then "${config.primary-user.home}/Game Saves/Stardew Valley"
             else "${config.primary-user.home}/.config/StardewValley/Saves";
-          devices = ["crux" "gemini" "pegasus"];
+          devices = ["crux" "gemini"];
         };
         Factorio_Saves = {
           path =
