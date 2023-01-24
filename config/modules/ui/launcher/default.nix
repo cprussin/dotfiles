@@ -68,6 +68,7 @@ in {
         passwords = mkModal "passwords" "${pkgs.fzf-pass}/bin/fzf-pass";
         plex = mkWebApp "plex" "https://app.plex.tv/desktop";
         presentation = pkgs.callPackage ./apps/presentation.nix {};
+        printotron = mkWebApp "printotron" "https://printotron.internal.prussin.net";
         reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot";
         remacs = pkgs.callPackage ./apps/remacs.nix {};
         scan = "${pkgs.simple-scan}/bin/simple-scan";
