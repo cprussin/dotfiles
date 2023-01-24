@@ -3,6 +3,7 @@ _: {
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
+      printotron.user = "pi";
       "gemini crux mom-vm".forwardAgent = true;
       rsync = {
         user = "zh2593";
