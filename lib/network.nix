@@ -85,6 +85,7 @@ in {
       gemini = "10.43.0.10";
       pegasus = "10.43.0.11";
       steam-deck = "10.43.0.12";
+      printotron = "10.43.0.13";
       shauna-computer = "10.43.0.20";
       shauna-phone = "10.43.0.21";
       reece-computer = "10.43.0.31";
