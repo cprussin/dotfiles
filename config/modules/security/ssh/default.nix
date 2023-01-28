@@ -2,6 +2,7 @@ _: {
   primary-user.home-manager.programs.ssh = {
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
+    controlMaster = "auto";
     matchBlocks = {
       printotron.user = "pi";
       rsync = {
