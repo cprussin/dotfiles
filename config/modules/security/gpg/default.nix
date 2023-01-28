@@ -3,13 +3,27 @@
   lib,
   ...
 }: {
+  services.pcscd.enable = true;
+
   primary-user.home-manager = {
     home.packages = lib.mkForce [pkgs.gnupg];
+
+    programs.gpg = {
+      enable = true;
+      mutableKeys = false;
+      mutableTrust = false;
+      publicKeys = [
+        {
+          source = ./pubkey.asc;
+          trust = "ultimate";
+        }
+      ];
+    };
 
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      sshKeys = ["828682F09BD928BC5B3285F89A8B9FBFCBD05482 0"];
+      sshKeys = ["B8B6B7089A55037230D37A2D303706E909665E80"];
       pinentryFlavor = "qt";
     };
   };

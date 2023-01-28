@@ -10,7 +10,6 @@
     ./preLVMTempMount.nix
     ./primary-user.nix
     ./route53DynamicDns.nix
-    ./secure.nix
     ./sudo-cmds.nix
     ./umask.nix
   ];

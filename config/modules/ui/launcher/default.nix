@@ -57,7 +57,6 @@ in {
         gmail = email;
         home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
-        insecure = pkgs.writeShellScript "insecure" "sudo ${config.primary-user.secure.exportCmd}";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
         library = mkWebApp "library" "https://library.internal.prussin.net";
         lock = pkgs.writeShellScript "lock" "${pkgs.systemd}/bin/loginctl lock-session";
@@ -73,7 +72,6 @@ in {
         remacs = pkgs.callPackage ./apps/remacs.nix {};
         scan = "${pkgs.simple-scan}/bin/simple-scan";
         screenshot = pkgs.callPackage ./apps/screenshot.nix {};
-        secure = pkgs.writeShellScript "secure" "sudo ${config.primary-user.secure.importCmd}";
         shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
         sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/11yYp4Ma5t7wJxSBZQYyVcO7FlWuG6cEOJrPXcQCv3AI";
         steam = "${pkgs.steam}/bin/steam";

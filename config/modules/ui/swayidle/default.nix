@@ -1,8 +1,4 @@
-{
-  pkgs,
-  config,
-  ...
-}: {
+{pkgs, ...}: {
   primary-user.home-manager.services.swayidle = {
     enable = true;
     timeouts = [
@@ -23,7 +19,7 @@
       }
       {
         event = "lock";
-        command = "(${config.security.wrapperDir}/sudo ${config.primary-user.secure.exportCmd}; ${pkgs.swaylock}/bin/swaylock)";
+        command = "${pkgs.swaylock}/bin/swaylock";
       }
     ];
   };

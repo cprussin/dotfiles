@@ -6,9 +6,9 @@
 
     ../../modules/security/gpg
     ../../modules/security/pass
-    ../../modules/security/secure
     ../../modules/security/ssh
     ../../modules/security/wireguard
+    ../../modules/security/yubikey
 
     ../../modules/system/avahi
     ../../modules/system/dbus

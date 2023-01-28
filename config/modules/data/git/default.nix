@@ -11,7 +11,7 @@
       userName = "Connor Prussin";
       userEmail = "connor@prussin.net";
       signing = {
-        key = "C72452E036D53A6A";
+        key = "0x426ABF93ACE024D0";
         signByDefault = true;
       };
       extraConfig = {

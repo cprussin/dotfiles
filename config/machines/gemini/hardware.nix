@@ -6,6 +6,7 @@
 }: let
   sources = import ../../../sources.nix;
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
+  disk-id = "nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987";
 in {
   imports = [
     "${sources.nixos-hardware}/lenovo/thinkpad/t480s"
@@ -17,17 +18,37 @@ in {
     eth = "enp0s31f6";
   };
 
-  primary-user = {
-    secure.luksDrives = ["nvme-SAMSUNG_MZVLB512HAJQ-000L7_S3TNNX0K785987"];
-    home-manager.wayland.windowManager.sway.config.output.eDP-1.scale = "1.15";
-  };
+  primary-user.home-manager.wayland.windowManager.sway.config.output.eDP-1.scale = "1.15";
 
   boot = {
     kernelModules = ["kvm-intel"];
     extraModulePackages = [];
+    preLVMTempMount."/boot" = {
+      inherit (config.fileSystems."/boot") device fsType;
+      afterMount = ''
+        cp /boot/luks/${disk-id}/key \
+           /gpg-keys//dev/disk/by-id/${disk-id}/cryptkey.gpg
+      '';
+    };
     initrd = {
       availableKernelModules = ["xhci_pci" "nvme" "sd_mod" "sr_mod"];
       kernelModules = ["dm-snapshot" "nls_cp437" "nls_iso8859_1"];
+      luks = {
+        gpgSupport = true;
+        devices."crypt-${disk-id}" = {
+          device = "/dev/disk/by-id/${disk-id}";
+          header = "/boot/luks/${disk-id}/header";
+          gpgCard = {
+            publicKey = ../../modules/security/gpg/pubkey.asc;
+
+            # I don't want this in the store.  However due to how the module is
+            # written, I have to put something here, and I have to copy the
+            # encrypted key into a specific path, which is done in the
+            # preLVMTempMount afterMount command above.
+            encryptedPass = pkgs.writeText "dummy" "";
+          };
+        };
+      };
     };
   };
 
@@ -47,6 +68,7 @@ in {
       zfs.mkZfsFileSystems {
         "tank/nix".mountpoint = "/nix";
         "tank/data/Notes".mountpoint = "/home/${config.primary-user.name}/Notes";
+        "tank/data/Passwords".mountpoint = "/home/${config.primary-user.name}/.password-store";
         "tank/data/Projects".mountpoint = "/home/${config.primary-user.name}/Projects";
         "tank/data/Scratch".mountpoint = "/home/${config.primary-user.name}/Scratch";
         "tank/persisted-state/BitwigStudio".mountpoint = "/home/${config.primary-user.name}/.BitwigStudio";

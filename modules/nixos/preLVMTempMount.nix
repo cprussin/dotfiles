@@ -32,6 +32,7 @@
             -t ${opts.fsType} \
             -o ro \
             "${opts.device}" "${mountPoint}"
+          ${opts.afterMount}
         ''
       )
       filesystems
@@ -67,6 +68,12 @@ in {
             fsType = lib.mkOption {
               type = lib.types.str;
               description = "The type of filesystem used for the device.";
+            };
+
+            afterMount = lib.mkOption {
+              type = lib.types.lines;
+              default = "";
+              description = "Commands to run after mounting";
             };
           };
         }

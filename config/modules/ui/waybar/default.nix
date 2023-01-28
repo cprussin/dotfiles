@@ -39,7 +39,6 @@ in {
 
       right = map stripOverrides (
         builtins.filter (m: m != null) [
-          (pkgs.callPackage ./modules/secure.nix {inherit config;})
           (pkgs.callPackage ./modules/presentation.nix {inherit colors;})
           (pkgs.callPackage ./modules/bluetooth.nix {inherit config colors;})
           (
