@@ -4,7 +4,6 @@ _: {
     userKnownHostsFile = "${./known_hosts}";
     matchBlocks = {
       printotron.user = "pi";
-      "gemini crux mom-vm".forwardAgent = true;
       rsync = {
         user = "zh2593";
         hostname = "zh2593.rsync.net";

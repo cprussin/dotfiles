@@ -37,7 +37,6 @@ in {
     services.openssh = {
       enable = true;
       passwordAuthentication = false;
-      permitRootLogin = "no";
       extraConfig = "PermitUserEnvironment yes";
 
       hostKeys = [
@@ -64,6 +63,8 @@ in {
       public-key
       gaming-computer-wsl-public-key
     ];
+
+    users.users.root.openssh.authorizedKeys.keys = [public-key];
 
     boot.initrd.network = lib.mkIf config.enableSshdAtInitrd {
       enable = true;

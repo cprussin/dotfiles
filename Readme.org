@@ -41,25 +41,15 @@ To initialize a new machine into the network, follow these steps:
 
 1. Follow the [[https://nixos.org/manual/nixos/stable/index.html#ch-installation][NixOS installation guide]] to install & boot into a minimal bootable
    NixOS on the new machine.  Make sure to set the hostname, and make sure to
-   enable sshd and create your primary user.  You also must enable passwordless
-   sudo via ssh agent for your primary user (see [[https://github.com/NixOS/nixops/pull/1270][here]]).  For example, the
-   ~configuration.nix~ may look like:
+   enable sshd.  Also make sure your ssh key is authorized to login as root.
+   For example, the ~configuration.nix~ may look like:
 
    #+BEGIN_SRC nix
      { config, pkgs, ... }: {
        imports = [ ./hardware-configuration.nix ];
        networking.hostName = "foobar";
        services.sshd.enable = true;
-       security.pam = {
-         enableSSHAgentAuth = true;
-         services.sudo.sshAgentAuth = true;
-       };
-       users.users.cprussin = {
-         isNormalUser = true;
-         extraGroups = [ "wheel" ];
-         openssh.authorizedKeys.keys = [ "..." ];
-       };
-       nix.settings.trusted-users = [ "root" "cprussin" ];
+       users.users.root.openssh.authorizedKeys.keys = [ "..." ];
      }
    #+END_SRC
 
@@ -67,9 +57,7 @@ To initialize a new machine into the network, follow these steps:
    (make sure the folder name for the machine configuration matches the hostname
    of the new machine).
 
-3. Turn on agent forwarding to the new machine [[./config/modules/security/ssh/default.nix][here]].
-
-4. Deploy the configuration to the new machine:
+3. Deploy the configuration to the new machine:
 
    #+BEGIN_SRC bash
      nix-shell --run 'deploy --on <new machine>'

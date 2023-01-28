@@ -3,11 +3,8 @@
   nixpkgs ? sources.nixpkgs,
   machineDir ? ./config/machines,
 }: let
-  mkMachine = targetHost: {config, ...}: {
-    deployment = {
-      inherit targetHost;
-      targetUser = config.primary-user.name;
-    };
+  mkMachine = targetHost: {...}: {
+    deployment = {inherit targetHost;};
     imports = ["${toString machineDir}/${targetHost}"];
   };
 
