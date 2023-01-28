@@ -67,15 +67,16 @@ in {
     // (
       zfs.mkZfsFileSystems {
         "tank/nix".mountpoint = "/nix";
+        "tank/data/Factorio".mountpoint = "/home/${config.primary-user.name}/.factorio";
         "tank/data/Notes".mountpoint = "/home/${config.primary-user.name}/Notes";
         "tank/data/Passwords".mountpoint = "/home/${config.primary-user.name}/.password-store";
         "tank/data/Projects".mountpoint = "/home/${config.primary-user.name}/Projects";
         "tank/data/Scratch".mountpoint = "/home/${config.primary-user.name}/Scratch";
+        "tank/data/Stardew Valley Saves".mountpoint = "/home/${config.primary-user.name}/.config/StardewValley/Saves";
         "tank/persisted-state/BitwigStudio".mountpoint = "/home/${config.primary-user.name}/.BitwigStudio";
         "tank/persisted-state/Brave-Browser".mountpoint = "/home/${config.primary-user.name}/.config/BraveSoftware/Brave-Browser";
         "tank/persisted-state/Element".mountpoint = "/home/${config.primary-user.name}/.config/Element";
         "tank/persisted-state/Slack".mountpoint = "/home/${config.primary-user.name}/.config/Slack";
-        "tank/persisted-state/StardewValleySaves".mountpoint = "/home/${config.primary-user.name}/.config/StardewValley/Saves";
         "tank/persisted-state/Steam".mountpoint = "/home/${config.primary-user.name}/.local/share/Steam";
         "tank/persisted-state/Zulip".mountpoint = "/home/${config.primary-user.name}/.config/Zulip";
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
@@ -83,7 +84,6 @@ in {
         "tank/persisted-state/chromium".mountpoint = "/home/${config.primary-user.name}/.config/chromium";
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
-        "tank/persisted-state/factorio".mountpoint = "/home/${config.primary-user.name}/.factorio";
         "tank/persisted-state/log".mountpoint = "/var/log";
         "tank/persisted-state/secrets" = {
           mountpoint = "/secrets";
