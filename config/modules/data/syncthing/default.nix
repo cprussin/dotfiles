@@ -7,10 +7,6 @@
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
   network = pkgs.callPackage ../../../../lib/network.nix {};
 
-  otherMachineNames = lib.remove config.networking.hostName (
-    builtins.attrNames (builtins.readDir ../../../machines)
-  );
-
   # TODO this should really be driven from the cert files in the password store
   # automatically rather than manually copied here
   syncthingMachineIds = {
@@ -18,6 +14,10 @@
     crux = "I4ZIHKH-5UQLYN3-I6TGPKJ-IXVKJYK-NTO6RQG-QPIFI4Y-NMC3IHO-4OPHDAM";
     pegasus = "2R6PRKY-KL77MPG-NJELBK7-H6ER2NM-CQRBWKQ-CAMS45M-FFVKWZA-LBKJXA4";
   };
+
+  otherMachineNames = lib.remove config.networking.hostName (
+    builtins.attrNames syncthingMachineIds
+  );
 
   includesCurrentDevice = lib.any (dev: dev == config.networking.hostName);
   removeCurrentDeviceFromFolder = folder:
@@ -56,6 +56,7 @@ in {
       enable = true;
       openDefaultPorts = true;
       user = config.primary-user.name;
+      group = "users";
       cert = config.deployment.keys.syncthing-cert.path;
       key = config.deployment.keys.syncthing-key.path;
       extraOptions.options = {
@@ -64,6 +65,7 @@ in {
         localAnnounceEnabled = false;
         natEnabled = false;
         relaysEnabled = false;
+        urAccepted = -1;
       };
       devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
         id = syncthingMachineIds."${machine}";
