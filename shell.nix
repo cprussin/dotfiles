@@ -117,6 +117,8 @@
 
     ${pkgs.esphome}/bin/esphome $cmd iot-build/*.yaml
   '';
+
+  build-iso = pkgs.writeShellScriptBin "build-iso" "nix build -f ./isos $1";
 in
   pkgs.mkShell {
     buildInputs = [
@@ -130,6 +132,7 @@ in
       check-vulnerabilities
       collect-garbage
       iot
+      build-iso
     ];
 
     shellHook = "export NIX_PATH=\"nixpkgs=${nixpkgs}\"";
