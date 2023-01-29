@@ -5,6 +5,7 @@
   ...
 }: let
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
+  network = pkgs.callPackage ../../../../lib/network.nix {};
 
   otherMachineNames = lib.remove config.networking.hostName (
     builtins.attrNames (builtins.readDir ../../../machines)
@@ -57,8 +58,16 @@ in {
       user = config.primary-user.name;
       cert = config.deployment.keys.syncthing-cert.path;
       key = config.deployment.keys.syncthing-key.path;
+      extraOptions.options = {
+        listenAddresses = ["tcp://${network.wireguard.nodes."${config.networking.hostName}".address}:22000"];
+        globalAnnounceEnabled = false;
+        localAnnounceEnabled = false;
+        natEnabled = false;
+        relaysEnabled = false;
+      };
       devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
         id = syncthingMachineIds."${machine}";
+        addresses = ["tcp://${network.wireguard.nodes."${machine}".address}:22000"];
       });
       folders = foldersForCurrentDevice {
         Notes = {
