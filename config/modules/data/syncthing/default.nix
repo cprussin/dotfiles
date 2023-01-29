@@ -84,6 +84,10 @@ in {
           path = "${config.primary-user.home}/Scratch";
           devices = ["crux" "gemini" "pegasus"];
         };
+        Passwords = {
+          path = "${config.primary-user.home}/.password-store";
+          devices = ["crux" "gemini" "pegasus"];
+        };
         DCIM = {
           path = "${config.primary-user.home}/Phone/DCIM";
           devices = ["crux" "pegasus"];
