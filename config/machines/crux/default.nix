@@ -5,6 +5,7 @@
     ../../profiles/server
 
     ./backup.nix
+    ./circinus.nix
     ./dns.nix
     ./dvd-ripping.nix
     ./dynamic-dns.nix

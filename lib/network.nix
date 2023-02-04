@@ -47,6 +47,10 @@ in {
       router = "10.42.0.1";
     };
 
+    static = {
+      circinus = "10.42.1.1";
+    };
+
     iot = {
       aidens-room-lights = "10.42.5.1";
       bar-lights = "10.42.5.2";
