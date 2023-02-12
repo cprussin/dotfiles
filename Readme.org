@@ -74,7 +74,7 @@ This one is pretty simple:
 You can also deploy to only the machines you want to touch:
 
 #+BEGIN_SRC bash
-  nix-shell --run 'deploy --include crux'
+  nix-shell --run 'deploy --on crux'
 #+END_SRC
 
 ** Channels
