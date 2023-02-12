@@ -1,4 +1,9 @@
 * Tasks
+** TODO Install exa (ls replacement) and bat (cat replacement)
+** TODO Don't store crux luks keys on /boot at all (send via ssh on boot)
+** TODO Only open crux firewall ports to wireguard interface
+** TODO Containerize crux?
+** TODO Build energy dashboard
 ** TODO Fix missing emoji in starship prompt
 ** TODO Fix pass completion
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
