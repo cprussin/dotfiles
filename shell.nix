@@ -3,7 +3,6 @@
   nixpkgs ? sources.nixpkgs,
   nixpkgs-unstable ? sources.nixpkgs-unstable,
   niv ? sources.niv,
-  alejandra ? sources.alejandra,
   colmena ? sources.colmena,
 }: let
   niv-overlay = self: _: {
@@ -16,10 +15,6 @@
           --add-flags "--sources-file ${toString ./sources.json}"
       '';
     };
-  };
-
-  alejandra-overlay = _: _: {
-    alejandra = import alejandra {};
   };
 
   colmena-overlay = _: _: {
@@ -42,7 +37,6 @@
   pkgs = import nixpkgs {
     overlays = [
       niv-overlay
-      alejandra-overlay
       colmena-overlay
       password-utils-overlay
       unstable-esphome-overlay
