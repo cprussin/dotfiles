@@ -1,7 +1,6 @@
 {
   sources ? import ./sources.nix,
   nixpkgs ? sources.nixpkgs,
-  nixpkgs-unstable ? sources.nixpkgs-unstable,
   niv ? sources.niv,
   colmena ? sources.colmena,
 }: let
@@ -25,21 +24,11 @@
     inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
   };
 
-  pkgs-unstable = import nixpkgs-unstable {
-    overlays = [];
-    config = {};
-  };
-
-  unstable-esphome-overlay = _: _: {
-    inherit (pkgs-unstable) esphome;
-  };
-
   pkgs = import nixpkgs {
     overlays = [
       niv-overlay
       colmena-overlay
       password-utils-overlay
-      unstable-esphome-overlay
     ];
     config = {};
   };
