@@ -22,7 +22,7 @@
 ** TODO Fix emacs performance issues
 ** TODO Fix slow wifi reconnects
 ** TODO Fix search for special characters
-** TODO Make zfs configuration more declarative somehow
+** TODO Make zfs configuration more declarative somehow (https://github.com/nix-community/disko)
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
    - [X] dunst
    - [X] volume
@@ -32,7 +32,6 @@
    - [X] zsh
    - [ ] emacs
 ** TODO Clear environment more betterer :user:system:
-** TODO Get a smart card
 ** TODO Entity-based config
    - [ ] People (me & reece)
    - [ ] Identities (people have multiple)
@@ -43,13 +42,14 @@
    - [ ] Users (people bound to machines)
    - [ ] Machines (physical)
    - [ ] Directories (syncthing / backup)
-** TODO Sync mail using imap idle
 ** TODO Investigate using ssh certificate based auth
 ** TODO Rebuild toggle-colors :user:
 ** TODO Add local caching DNS server :system:
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Get a smart card
+CLOSED: [2023-02-13 Mon 09:41]
 ** DONE Fix pass completion
 CLOSED: [2023-02-13 Mon 09:40]
 ** DONE Fix missing emoji in starship prompt
