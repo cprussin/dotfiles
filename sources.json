@@ -59,6 +59,18 @@
         "url": "https://github.com/nix-community/home-manager/archive/65c47ced082e3353113614f77b1bc18822dc731f.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "mkCli": {
+        "branch": "main",
+        "description": "Simple development environment cli generator for nix",
+        "homepage": null,
+        "owner": "cprussin",
+        "repo": "mkCli",
+        "rev": "8d1ea6afb0333d42c13c51e3654b539b6fc3f69d",
+        "sha256": "0cpwn55l63pvjkp28jiybmp18i4cvrnik9p1d3p1bm6jg2kbv5r4",
+        "type": "tarball",
+        "url": "https://github.com/cprussin/mkCli/archive/8d1ea6afb0333d42c13c51e3654b539b6fc3f69d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixos-hardware": {
         "branch": "master",
         "description": "A collection of NixOS modules covering hardware quirks.",
