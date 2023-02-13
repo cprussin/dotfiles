@@ -1,4 +1,6 @@
 * Tasks
+** TODO Fix icons / cursor themes in some apps (simple-scanner eg)
+** TODO Set default fonts better in theme (see fonts.fontconfig.defaultFonts in nixpkgs but do it in home-manager)
 ** TODO Install exa (ls replacement) and bat (cat replacement)
 ** TODO Don't store crux luks keys on /boot at all (send via ssh on boot)
 ** TODO Only open crux firewall ports to wireguard interface
