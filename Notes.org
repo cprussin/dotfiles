@@ -6,7 +6,6 @@
 ** TODO Only open crux firewall ports to wireguard interface
 ** TODO Containerize crux?
 ** TODO Build energy dashboard
-** TODO Fix pass completion
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
 ** TODO Fix crux activation scripts unmounting tank
 ** TODO Why is postgres getting corrupted?
@@ -51,6 +50,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Fix pass completion
+CLOSED: [2023-02-13 Mon 09:40]
 ** DONE Fix missing emoji in starship prompt
 CLOSED: [2023-02-12 Sun 19:28]
 ** DONE Auto-mount /secure :user:system:
