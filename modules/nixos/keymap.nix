@@ -14,7 +14,7 @@ in {
 
   config = lib.mkIf (cfg != null) {
     console.keyMap = pkgs.runCommand "console-keymap" {} ''
-      '${pkgs.ckbcomp}/bin/ckbcomp' \
+      ${pkgs.ckbcomp}/bin/ckbcomp \
         -layout '${cfg.layout}' \
         -option '${cfg.options}' \
         -variant '${cfg.variant}' > "$out"
