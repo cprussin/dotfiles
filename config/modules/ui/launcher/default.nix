@@ -37,8 +37,6 @@ in {
         inherit email sms matrix slack discord zulip comms;
 
         agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
-        amazon = mkWebApp "amazon" "https://www.amazon.com/";
-        aws = mkWebApp "aws" "https://console.aws.amazon.com/console/home?region=us-east-1#";
         bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
         bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluez}/bin/bluetoothctl";
         brave = pkgs.writeShellScript "brave" "${pkgs.launcher}/bin/browse --browser brave $*";
@@ -51,10 +49,7 @@ in {
         dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
         emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
         firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
-        gdrive = mkWebApp "gdrive" "https://drive.google.com?authuser=connor@prussin.net";
         gimp = "${pkgs.gimp}/bin/gimp";
-        github = mkWebApp "github" "https://github.com/";
-        gmail = email;
         home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
         htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
         journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
@@ -65,7 +60,6 @@ in {
         mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
         nix-shell = pkgs.writeShellScript "nix-shell" "exec nix-shell -p $1 --run \"$*\"";
         passwords = mkModal "passwords" "${pkgs.fzf-pass}/bin/fzf-pass";
-        plex = mkWebApp "plex" "https://app.plex.tv/desktop";
         presentation = pkgs.callPackage ./apps/presentation.nix {};
         printotron = mkWebApp "printotron" "https://printotron.internal.prussin.net";
         reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot";
