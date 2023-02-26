@@ -16,7 +16,6 @@ in
     wpa="${wpa_cli} -p /var/run/wpa_supplicant -i $device"
 
     $wpa scan >/dev/null
-    # sleep 2 # TODO how to know when wpa_cli scan is actually complete?
     results="$($wpa scan_results)"
     ssid="$(echo "$results" | cut -f 5- | sed '1d;/^$/d' | sort | uniq | ${fzf'} --layout=reverse --prompt "Select a network: ")"
     if [ ! "$ssid" ]
