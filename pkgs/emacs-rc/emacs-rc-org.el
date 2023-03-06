@@ -34,7 +34,8 @@
   (setq org-tags-column 0
         org-log-done 'time
         org-log-repeat nil
-        org-fontify-done-headline t)
+        org-fontify-done-headline t
+        org-todo-keywords '((sequence "TODO" "BLOCKED" "|" "DONE")))
   ;; Disable emoji in org-mode since they mess with my prettier checklists and I
   ;; hardly ever use emoji in org docs anyways
   (push 'org-mode emojify-inhibit-major-modes)
@@ -49,25 +50,14 @@
   :config
   (setq org-agenda-window-setup 'only-window
         org-agenda-files (list "~/Notes")
-        org-agenda-custom-commands '(("p" . "Personal searches")
-
-                                     ("pc" . "2019 Subaru Ascent")
-                                     ("pca" tags-todo  "+2019_Subaru_Ascent")
-                                     ("pcr" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={.+\\+.+}|+2019_Subaru_Ascent+DEADLINE={.+\\+.+}")
-                                     ("pcs" tags-todo  "+2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}|+2019_Subaru_Ascent+DEADLINE={^[^\\+]+$}")
-                                     ("pcu" tags-todo  "+2019_Subaru_Ascent-SCHEDULED={.+}&+2019_Subaru_Ascent-DEADLINE={.+}")
-
-                                     ("ph" . "720 Natoma Drive")
-                                     ("pha" tags-todo  "+720_Natoma_Drive")
-                                     ("phr" tags-todo  "+720_Natoma_Drive+SCHEDULED={.+\\+.+}|+720_Natoma_Drive+DEADLINE={.+\\+.+}")
-                                     ("phs" tags-todo  "+720_Natoma_Drive+SCHEDULED={^[^\\+]+$}|+720_Natoma_Drive+DEADLINE={^[^\\+]+$}")
-                                     ("phu" tags-todo  "+720_Natoma_Drive-SCHEDULED={.+}&+720_Natoma_Drive-DEADLINE={.+}")
-
-                                     ("pp" . "Other")
-                                     ("ppa" tags-todo "-720_Natoma_Drive-2019_Subaru_Ascent")
-                                     ("ppr" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={.+\\+.+}|-720_Natoma_Drive-2019_Subaru_Ascent+DEADLINE={.+\\+.+}")
-                                     ("pps" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent+SCHEDULED={^[^\\+]+$}|-720_Natoma_Drive-2019_Subaru_Ascent+DEADLINE={^[^\\+]+$}")
-                                     ("ppu" tags-todo  "-720_Natoma_Drive-2019_Subaru_Ascent-SCHEDULED={.+}&-720_Natoma_Drive-2019_Subaru_Ascent-DEADLINE={.+}")))
+        org-agenda-hide-tags-regexp "\\|tasks"
+        org-agenda-custom-commands '(("A" "All Todos" tags-todo "-BLOCKED")
+                                     ("a" "Agenda" ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("BLOCKED")))))
+                                                    (todo "BLOCKED")))
+                                     ("b" "Blocked Items" todo "BLOCKED")
+                                     ("r" "Recurring Items" tags-todo "SCHEDULED={.+\\+.+}/!-BLOCKED|DEADLINE={.+\\+.+}/!-BLOCKED")
+                                     ("s" "Scheduled Items" tags-todo "SCHEDULED={^[^\\+]+$}/!-BLOCKED|DEADLINE={^[^\\+]+$}/!-BLOCKED")
+                                     ("u" "Unscheduled Items" tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/!-BLOCKED")))
   :general (apps-menu-def "a" '(org-agenda :which-key "Agenda")))
 
 (use-package emacs-rc-org-roam
