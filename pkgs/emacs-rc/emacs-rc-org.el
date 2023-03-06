@@ -41,9 +41,9 @@
   (push 'org-mode emojify-inhibit-major-modes)
   :general
   (edit-menu-def
-   "o" '(:ignore t :which-key "Org links")
-   "oy" '(org-store-link :which-key "yank")
-   "op" '(org-insert-link :which-key "insert")))
+    "o" '(:ignore t :which-key "Org links")
+    "oy" '(org-store-link :which-key "yank")
+    "op" '(org-insert-link :which-key "insert")))
 
 (use-package org-agenda
   :after general emojify evil evil-collection
