@@ -44,12 +44,12 @@
   );
 
   wpa3Networks = mkWpa3Networks {
-    Centar = {priority = 1;};
+    Centar.priority = 1;
+    CentarPhone.priority = 2;
   };
 
   wpaNetworks = mkWpaNetworks {
     # Home networks
-    CentarPhone = {priority = 2;};
     CentarCar = {};
 
     # Friends' networks
