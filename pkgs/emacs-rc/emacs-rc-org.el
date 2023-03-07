@@ -16,8 +16,8 @@
 ;; Set up org-mode
 (use-package org
   :demand
-  :after general emojify evil evil-collection
-  :commands org-get-category
+  :after general emojify evil evil-collection evil-org
+  :commands org-get-category org-todo
   :hook (org-mode . emacs-rc--prettify-org)
   :config
   (defun emacs-rc--prettify-org ()
@@ -53,7 +53,7 @@
     "C-c C-b" '(emacs-rc--org-nextset :which-key "Toggle blocked")))
 
 (use-package org-agenda
-  :after general emojify evil evil-collection
+  :after general emojify evil evil-collection evil-org-agenda
   :config
   (setq org-agenda-window-setup 'only-window
         org-agenda-files (list "~/Notes")
@@ -102,12 +102,14 @@
     "rbd" '(org-roam-buffer-display-dedicated :which-key "dedicated")))
 
 (use-package evil-org
+  :demand
   :delight
-  :after delight general org
+  :after delight general
   :hook ((org-mode . evil-org-mode)
          (evil-org-mode . evil-org-set-key-theme)))
 
 (use-package evil-org-agenda
+  :demand
   :after evil-org
   :commands evil-org-agenda-set-keys
   :hook (org-agenda-mode . evil-org-agenda-set-keys))
