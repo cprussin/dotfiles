@@ -26,6 +26,9 @@
     (push '("[X]" . "☑") prettify-symbols-alist)
     (push '("[-]" . "❍") prettify-symbols-alist)
     (prettify-symbols-mode))
+  (defun emacs-rc--org-nextset ()
+    (interactive)
+    (org-todo 'nextset))
   ;; Make checked checklist entries use the `org-headline-done' face
   (font-lock-add-keywords
    'org-mode
@@ -35,7 +38,8 @@
         org-log-done 'time
         org-log-repeat nil
         org-fontify-done-headline t
-        org-todo-keywords '((sequence "TODO" "BLOCKED" "|" "DONE")))
+        org-todo-keywords '((sequence "TODO" "|" "DONE")
+                            (sequence "BLOCKED")))
   ;; Disable emoji in org-mode since they mess with my prettier checklists and I
   ;; hardly ever use emoji in org docs anyways
   (push 'org-mode emojify-inhibit-major-modes)
@@ -43,7 +47,10 @@
   (edit-menu-def
     "o" '(:ignore t :which-key "Org links")
     "oy" '(org-store-link :which-key "yank")
-    "op" '(org-insert-link :which-key "insert")))
+    "op" '(org-insert-link :which-key "insert"))
+  (general-def
+    :keymaps 'org-mode-map
+    "C-c C-b" '(emacs-rc--org-nextset :which-key "Toggle blocked")))
 
 (use-package org-agenda
   :after general emojify evil evil-collection
@@ -58,7 +65,11 @@
                                      ("r" "Recurring Items" tags-todo "SCHEDULED={.+\\+.+}/!-BLOCKED|DEADLINE={.+\\+.+}/!-BLOCKED")
                                      ("s" "Scheduled Items" tags-todo "SCHEDULED={^[^\\+]+$}/!-BLOCKED|DEADLINE={^[^\\+]+$}/!-BLOCKED")
                                      ("u" "Unscheduled Items" tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/!-BLOCKED")))
-  :general (apps-menu-def "a" '(org-agenda :which-key "Agenda")))
+  :general
+  (apps-menu-def "a" '(org-agenda :which-key "Agenda"))
+  (general-def
+    :keymaps 'org-agenda-mode-map
+    "C-c C-b" '(org-agenda-todo-nextset :which-key "Toggle blocked")))
 
 (use-package emacs-rc-org-roam
   :demand

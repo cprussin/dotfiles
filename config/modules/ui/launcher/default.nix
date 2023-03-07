@@ -36,7 +36,7 @@ in {
       apps = {
         inherit email sms matrix slack discord zulip comms;
 
-        agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda-list)'";
+        agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
         bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
         bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluez}/bin/bluetoothctl";
         brave = pkgs.writeShellScript "brave" "${pkgs.launcher}/bin/browse --browser brave $*";
