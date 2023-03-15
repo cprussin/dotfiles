@@ -6,6 +6,12 @@
 
   mkIso = configPath:
     release {
+      nixpkgs = {
+        inherit (nixpkgs) outPath;
+        revCount = 0;
+        shortRev = builtins.substring 0 7 nixpkgs.rev;
+      };
+      stableBranch = true;
       supportedSystems = ["x86_64-linux"];
       configuration = import configPath;
     };

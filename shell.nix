@@ -54,7 +54,7 @@
 
     deploy = "${pkgs.colmena}/bin/colmena apply";
 
-    build-iso = "${pkgs.nix}/bin/nix build -f ./isos";
+    build-iso = "${pkgs.nix}/bin/nix build -f ./isos --out-link ./iso-build";
 
     collect-garbage = "sudo ${pkgs.nix}/bin/nix-collect-garbage -d";
 
