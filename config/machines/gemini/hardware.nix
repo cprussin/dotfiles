@@ -25,6 +25,7 @@ in {
     extraModulePackages = [];
     preLVMTempMount."/boot" = {
       inherit (config.fileSystems."/boot") device fsType;
+      # TODO Could I, or should I, use colmena keys here?
       afterMount = ''
         cp /boot/luks/${disk-id}/key \
            /gpg-keys//dev/disk/by-id/${disk-id}/cryptkey.gpg

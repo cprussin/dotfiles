@@ -11,6 +11,8 @@
 in {
   users.mutableUsers = false;
 
+  # TODO fix this to not suck
+  #   Should we update mounts that start with /user instead?
   systemd.services.install-user-mountpoints = {
     wantedBy = ["local-fs.target"];
     wants = ["local-fs-pre.target"];
