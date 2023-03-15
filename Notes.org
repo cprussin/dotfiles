@@ -1,5 +1,4 @@
 * Tasks
-** TODO Fix icons / cursor themes in some apps (simple-scanner eg)
 ** TODO Set default fonts better in theme (see fonts.fontconfig.defaultFonts in nixpkgs but do it in home-manager)
 ** TODO Install exa (ls replacement) and bat (cat replacement)
 ** TODO Don't store crux luks keys on /boot at all (send via ssh on boot)
@@ -48,6 +47,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Fix icons / cursor themes in some apps (simple-scanner eg)
+CLOSED: [2023-02-22 Wed 16:18]
 ** DONE Get a smart card
 CLOSED: [2023-02-13 Mon 09:41]
 ** DONE Fix pass completion
