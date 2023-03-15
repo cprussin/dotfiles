@@ -39,7 +39,7 @@
         org-log-repeat nil
         org-fontify-done-headline t
         org-todo-keywords '((sequence "TODO" "|" "DONE")
-                            (sequence "BLOCKED")))
+                            (sequence "BLOCKED" "|")))
   ;; Disable emoji in org-mode since they mess with my prettier checklists and I
   ;; hardly ever use emoji in org docs anyways
   (push 'org-mode emojify-inhibit-major-modes)
