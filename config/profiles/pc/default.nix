@@ -3,6 +3,7 @@
     ../physical-machine
 
     ../../modules/data/git
+    ../../modules/data/library
 
     ../../modules/security/gpg
     ../../modules/security/pass
