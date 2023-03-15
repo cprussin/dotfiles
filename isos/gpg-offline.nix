@@ -3,15 +3,37 @@
   pkgs,
   ...
 }: let
-  gpg-agent-conf = pkgs:
-    pkgs.writeText "gpg-agent.conf" ''
-      pinentry-program ${pkgs.pinentry.curses}/bin/pinentry
-    '';
+  sources = import ../sources.nix;
 
-  gpg-conf = pkgs: pkgs.writeText "gpg.conf" "no-symkey-cache";
+  solarized-dark = pkgs.callPackage ../lib/color-themes/solarized/dark.nix {};
+
+  gpg-conf = pkgs.writeText "gpg.conf" "no-symkey-cache";
+
+  update-key-expiry = pkgs.writeShellScriptBin "update-key-expiry" ''
+    echo "Step 1: Update gpg-agent.conf to use correct pinentry (maybe we can skip this though?)"
+    echo "Step 2: Update expiry on subkeys (add selection)"
+    echo "Step 3: Export public key to a place on liveusb"
+    echo "Step 4: Update master zfs dataset"
+    echo "Step 5: Scrub master zfs dataset"
+    echo "Step 6: Sync to backup zfs datasets"
+    echo "Step 7: Scrub backup zfs datasets"
+  '';
 in {
-  nixpkgs.config.allowBroken = true;
-  isoImage.isoBaseName = lib.mkForce "nixos-yubikey";
+  nixpkgs = {
+    config.allowBroken = true;
+    overlays = [
+      (
+        import ../pkgs/dircolors-solarized/overlay.nix {
+          src = sources.dircolors-solarized;
+        }
+      )
+    ];
+  };
+
+  isoImage = {
+    isoBaseName = lib.mkForce "gpg-offline";
+    appendToMenuLabel = " GPG Offline System";
+  };
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -24,13 +46,19 @@ in {
   services = {
     pcscd.enable = true;
     gpm.enable = true;
+    openssh.enable = lib.mkForce false;
     udev.packages = [pkgs.yubikey-personalization];
+    getty = {
+      greetingLine = lib.mkForce "> GPG Offline System <";
+      helpLine = lib.mkForce "Useful commands:\n  - `update-key-expiry`";
+    };
   };
 
   programs = {
     ssh.startAgent = false;
     gnupg.agent = {
       enable = true;
+      pinentryFlavor = "curses";
       enableSSHSupport = true;
     };
   };
@@ -48,12 +76,32 @@ in {
     networkmanager.enable = lib.mkForce false;
   };
 
-  console.keyMap = pkgs.runCommand "console-keymap" {} ''
-    ${pkgs.ckbcomp}/bin/ckbcomp \
-      -layout us \
-      -option caps:escape \
-      -variant dvp > "$out"
-  '';
+  console = {
+    keyMap = pkgs.runCommand "console-keymap" {} ''
+      ${pkgs.ckbcomp}/bin/ckbcomp \
+        -layout us \
+        -option caps:escape \
+        -variant dvp > "$out"
+    '';
+    colors = map (builtins.replaceStrings ["#"] [""]) [
+      solarized-dark.background
+      solarized-dark.red
+      solarized-dark.green
+      solarized-dark.yellow
+      solarized-dark.blue
+      solarized-dark.purple
+      solarized-dark.cyan
+      solarized-dark.foreground
+      solarized-dark.grey
+      solarized-dark.lightRed
+      solarized-dark.lightGreen
+      solarized-dark.lightYellow
+      solarized-dark.lightBlue
+      solarized-dark.lightPurple
+      solarized-dark.lightCyan
+      solarized-dark.white
+    ];
+  };
 
   environment = {
     systemPackages = [
@@ -70,6 +118,7 @@ in {
       pkgs.yubico-piv-tool
       pkgs.yubikey-manager
       pkgs.yubikey-personalization
+      update-key-expiry
     ];
 
     etc."inputrc".text = "set editing-mode vi";
@@ -77,13 +126,10 @@ in {
     interactiveShellInit = ''
       unset HISTFILE
 
-      export GNUPGHOME="/run/user/$(id -u)/gnupg"
-      if [ ! -d "$GNUPGHOME" ]; then
-        echo "Creating \$GNUPGHOME…"
-        install --verbose -m=0700 --directory="$GNUPGHOME"
-      fi
-      [ ! -f "$GNUPGHOME/gpg.conf" ] && cp --verbose ${gpg-conf pkgs} "$GNUPGHOME/gpg.conf"
-      [ ! -f "$GNUPGHOME/gpg-agent.conf" ] && cp --verbose ${gpg-agent-conf pkgs} "$GNUPGHOME/gpg-agent.conf"
+      export GNUPGHOME="$HOME/.gnupg"
+      [ ! -d "$GNUPGHOME" ] && install -m=0700 --directory "$GNUPGHOME"
+      [ ! -f "$GNUPGHOME/gpg.conf" ] && cp ${gpg-conf} "$GNUPGHOME/gpg.conf"
+
       echo "\$GNUPGHOME is \"$GNUPGHOME\""
     '';
   };
