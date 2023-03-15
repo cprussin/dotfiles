@@ -1,6 +1,6 @@
 * Tasks
 ** TODO Set up kerberos / ldap
-** TODO Stop using emacs-overlay and remove emacs from unstable-pkgs (when emacs 29 with pgtk lands in nixpkgs)
+** TODO Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)
 ** TODO Store luks keys somewhere that isn't visible to non-root accounts
 ** TODO Install exa (ls replacement) and bat (cat replacement) and nushell (zsh replacement)
 ** TODO Manage gemini luks keys with colmena

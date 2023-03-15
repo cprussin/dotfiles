@@ -10,6 +10,6 @@ let
   };
 in
   _: _: {
-    inherit (pkgs-unstable) syncthing bitwig-studio signald emacs;
+    inherit (pkgs-unstable) syncthing bitwig-studio signald;
     inherit (pkgs-master) makemkv;
   }
