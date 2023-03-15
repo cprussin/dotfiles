@@ -30,11 +30,6 @@
 (setq-default indicate-empty-lines t
               fringe-indicator-alist '((empty-line . tilde)))
 
-(use-package frame
-  :config (add-to-list 'default-frame-alist
-                       `(font . ,(concat emacs-rc-font-face "-"
-                                         (number-to-string emacs-rc-font-size)))))
-
 (use-package menu-bar
   :config (menu-bar-mode -1))
 

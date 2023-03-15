@@ -4,58 +4,62 @@
   ...
 }: let
   cfg = config.font;
-  pangoFont = "${cfg.face} ${toString cfg.size}";
-in {
-  options.font = lib.mkOption {
-    default = {};
-    type = lib.types.submodule {
-      options = {
-        package = lib.mkOption {
-          description = "The package that provides the font";
-          default = null;
-          type = lib.types.nullOr lib.types.package;
-        };
 
-        face = lib.mkOption {
-          type = lib.types.str;
-          description = "The font face name.";
-        };
+  genDefault = fonts: name: ''
+    <alias binding="same">
+      <family>${name}</family>
+      <prefer>
+        ${lib.concatStringsSep "" (map (font: "<family>${font.face}</family>") fonts)}
+      </prefer>
+    </alias>
+  '';
 
-        size = lib.mkOption {
-          type = lib.types.float;
-          description = "The font size.";
-        };
+  fontModule = lib.types.submodule {
+    options = {
+      package = lib.mkOption {
+        type = lib.types.package;
+        description = "The package that provides the font";
+      };
+
+      face = lib.mkOption {
+        type = lib.types.str;
+        description = "The font face name.";
       };
     };
   };
-
-  config = lib.mkIf (cfg.package != null) {
-    home.packages = [cfg.package];
-
-    programs = {
-      termite = {
-        font = pangoFont;
-        hintsFont = pangoFont;
+in {
+  options.font = lib.mkOption {
+    default = null;
+    type = lib.types.nullOr (lib.types.submodule {
+      options = {
+        sansSerif = lib.mkOption {
+          type = lib.types.listOf fontModule;
+        };
+        serif = lib.mkOption {
+          type = lib.types.listOf fontModule;
+        };
+        monospace = lib.mkOption {
+          type = lib.types.listOf fontModule;
+        };
+        emoji = lib.mkOption {
+          type = lib.types.listOf fontModule;
+        };
       };
-      kitty.font = {
-        inherit (cfg) package;
-        name = pangoFont;
-      };
-      swaylock.settings.font = pangoFont;
-      mako.font = pangoFont;
-      zathura.options.font = pangoFont;
-      waybar-custom.styles.common = {
-        font-family = cfg.face;
-        font-size = "${toString cfg.size}pt";
-      };
-      imv.overlayFont = {inherit (cfg) face size;};
-      emacs.emacs-rc.font = {inherit (cfg) face size;};
-    };
+    });
+  };
 
-    wayland.windowManager.sway.config.fonts = {
-      inherit (cfg) size;
-      style = "Book";
-      names = [cfg.face];
-    };
+  config = lib.mkIf (cfg != null) {
+    home.packages = map (font: font.package) (cfg.sansSerif ++ cfg.serif ++ cfg.monospace ++ cfg.emoji);
+
+    xdg.configFile."fontconfig/conf.d/53-default-fonts.conf".text = ''
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+      <fontconfig>
+        ${genDefault cfg.sansSerif "sans-serif"}
+        ${genDefault cfg.serif "serif"}
+        ${genDefault cfg.monospace "monospace"}
+        ${genDefault cfg.emoji "emoji"}
+      </fontconfig>
+    '';
   };
 }

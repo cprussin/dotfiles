@@ -4,17 +4,6 @@
   ...
 }: let
   cfg = config.programs.imv;
-
-  fontModule = lib.types.submodule {
-    options = {
-      face = lib.mkOption {
-        type = lib.types.str;
-      };
-      size = lib.mkOption {
-        type = lib.types.float;
-      };
-    };
-  };
 in {
   options.programs.imv = {
     enable = lib.mkEnableOption "imv";
@@ -87,15 +76,6 @@ in {
       type = lib.types.bool;
       description = "Start with the overlay visible.";
       default = false;
-    };
-
-    overlayFont = lib.mkOption {
-      type = fontModule;
-      description = "Use the specified font in the overlay.";
-      default = {
-        face = "Monospace";
-        size = 24;
-      };
     };
 
     overlayText = lib.mkOption {
@@ -220,7 +200,6 @@ in {
       list_files_at_exit = ${lib.boolToString cfg.listFilesAtExit}
       loop_input = ${lib.boolToString cfg.loopInput}
       overlay = ${lib.boolToString cfg.overlay}
-      overlay_font = ${cfg.overlayFont.face}:${toString cfg.overlayFont.size}
       overlay_text = ${cfg.overlayText}
       recursively = ${lib.boolToString cfg.recursively}
       scaling_mode = ${cfg.scalingMode}

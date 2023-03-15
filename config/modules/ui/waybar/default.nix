@@ -18,6 +18,7 @@ in {
         min-height = "35px";
         padding = "0 20px";
         margin = "4px 10px 0 10px";
+        font-family = "monospace";
       };
       frame = {
         border-top = "3px solid ${colors.selection}";

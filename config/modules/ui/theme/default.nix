@@ -3,17 +3,21 @@
   lib,
   config,
   ...
-}: {
+}: let
+  hm-conf = config.primary-user.home-manager;
+in {
   colorTheme.name = "solarized/dark";
 
   home-manager.users.root.colorTheme.name = config.colorTheme.name;
 
   primary-user.home-manager = {
-    home.packages = lib.mkForce [
-      config.primary-user.home-manager.cursorTheme.package
-      config.primary-user.home-manager.iconTheme.package
-      config.primary-user.home-manager.font.package
-    ];
+    home.packages = lib.mkForce (map (theme: theme.package) (
+      [hm-conf.cursorTheme hm-conf.iconTheme]
+      ++ hm-conf.font.sansSerif
+      ++ hm-conf.font.serif
+      ++ hm-conf.font.monospace
+      ++ hm-conf.font.emoji
+    ));
 
     colorTheme.name = config.colorTheme.name;
 
@@ -28,9 +32,30 @@
     };
 
     font = {
-      package = pkgs.nerdfonts.override {fonts = ["DejaVuSansMono"];};
-      face = "DejaVu Sans Mono Nerd Font";
-      size = 11.0;
+      sansSerif = [
+        {
+          package = pkgs.dejavu_fonts;
+          face = "DejaVu Sans";
+        }
+      ];
+      serif = [
+        {
+          package = pkgs.dejavu_fonts;
+          face = "DejaVu Serif";
+        }
+      ];
+      monospace = [
+        {
+          package = pkgs.nerdfonts.override {fonts = ["DejaVuSansMono"];};
+          face = "DejaVu Sans Mono Nerd Font";
+        }
+      ];
+      emoji = [
+        {
+          package = pkgs.noto-fonts-emoji;
+          face = "Noto Color Emoji";
+        }
+      ];
     };
   };
 }

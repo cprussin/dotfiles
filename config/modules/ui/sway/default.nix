@@ -39,6 +39,8 @@ in {
 
       input."type:mouse".pointer_accel = "0.5";
 
+      fonts.size = 11.0;
+
       focus = {
         mouseWarping = true;
         forceWrapping = true;

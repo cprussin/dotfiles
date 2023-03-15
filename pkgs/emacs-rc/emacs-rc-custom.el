@@ -77,15 +77,5 @@
   :type 'string
   :group 'emacs-rc)
 
-(defcustom emacs-rc-font-face "DejaVu Sans Mono Nerd Font"
-  "Primary font face."
-  :type 'string
-  :group 'emacs-rc)
-
-(defcustom emacs-rc-font-size 12
-  "Primary font size."
-  :type 'int
-  :group 'emacs-rc)
-
 (provide 'emacs-rc-custom)
 ;;; emacs-rc-custom.el ends here

@@ -80,20 +80,6 @@ in {
       type = lib.types.path;
       default = "${mkEmojiSets [pkgs.emojione-png]}";
     };
-
-    font = lib.mkOption {
-      type = lib.types.submodule {
-        options = {
-          face = lib.mkOption {
-            type = lib.types.str;
-          };
-
-          size = lib.mkOption {
-            type = lib.types.float;
-          };
-        };
-      };
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -111,9 +97,7 @@ in {
               emacs-rc-pngcrush-path "${cfg.pngcrush}"
               emacs-rc-convert-path "${cfg.convert}"
               emacs-rc-optipng-path "${cfg.optipng}"
-              emacs-rc-emoji-sets-path "${cfg.emojiSets}"
-              emacs-rc-font-face "${cfg.font.face}"
-              emacs-rc-font-size ${toString cfg.font.size})
+              emacs-rc-emoji-sets-path "${cfg.emojiSets}")
 
         (require 'emacs-rc)
       '';
