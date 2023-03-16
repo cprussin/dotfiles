@@ -1,5 +1,6 @@
 {epkgs}: [
   epkgs.aggressive-indent
+  epkgs.all-the-icons
   epkgs.calfw
   epkgs.calfw-org
   epkgs.company
@@ -29,6 +30,7 @@
   epkgs.graphql-mode
   epkgs.groovy-mode
   epkgs.haskell-mode
+  epkgs.hass
   epkgs.helpful
   epkgs.highlight-numbers
   epkgs.hl-todo
@@ -67,6 +69,7 @@
   epkgs.undo-tree
   epkgs.unicode-fonts
   epkgs.use-package
+  epkgs.websocket
   epkgs.which-key
   epkgs.ws-butler
   epkgs.yaml-mode

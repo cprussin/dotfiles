@@ -14,6 +14,7 @@
 (use-package emacs-rc-dired)
 (use-package emacs-rc-files)
 (use-package emacs-rc-git)
+(use-package emacs-rc-hass)
 (use-package emacs-rc-help)
 (use-package emacs-rc-image)
 (use-package emacs-rc-keybindings)
