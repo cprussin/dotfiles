@@ -21,8 +21,7 @@ in {
     home = {
       packages = [cfg.package];
       pointerCursor = {
-        package = cfg.package;
-        name = cfg.name;
+        inherit (cfg) name package;
         gtk.enable = true;
       };
     };
