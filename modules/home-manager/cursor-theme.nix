@@ -20,8 +20,11 @@ in {
   config = lib.mkIf (cfg.package != null) {
     home = {
       packages = [cfg.package];
-      pointerCursor = cfg;
+      pointerCursor = {
+        package = cfg.package;
+        name = cfg.name;
+        gtk.enable = true;
+      };
     };
-    gtk.cursorTheme = cfg;
   };
 }
