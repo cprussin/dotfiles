@@ -60,6 +60,16 @@ in {
   };
 
   systemd.services = {
+    nginx = {
+      after = [
+        "home-assistant.internal.prussin.net.crt-key.service"
+        "home-assistant.internal.prussin.net.key-key.service"
+      ];
+      requires = [
+        "home-assistant.internal.prussin.net.crt-key.service"
+        "home-assistant.internal.prussin.net.key-key.service"
+      ];
+    };
     "container@home-assistant-proxy" = {
       after = [
         "home-assistant.internal.prussin.net.crt-key.service"
