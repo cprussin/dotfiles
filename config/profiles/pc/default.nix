@@ -33,6 +33,7 @@
     ../../modules/ui/mako
     ../../modules/ui/mpv
     ../../modules/ui/opengl
+    ../../modules/ui/plymouth
     ../../modules/ui/sway
     ../../modules/ui/swayidle
     ../../modules/ui/swaylock

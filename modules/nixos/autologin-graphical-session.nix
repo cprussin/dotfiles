@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   config,
   ...
@@ -28,13 +27,10 @@ in {
         aliases = ["display-manager.service"];
         after = [
           "systemd-user-sessions.service"
-          "getty@tty7.service"
-          "plymouth-quit-wait.service"
+          "getty@tty1.service"
         ];
-        conflicts = [
-          "getty@tty7.service"
-          "plymouth-quit.service"
-        ];
+        before = ["plymouth-quit.service"];
+        conflicts = ["getty@tty1.service"];
 
         environment.XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.${cfg.user}.uid}";
 
@@ -46,13 +42,12 @@ in {
 
         serviceConfig = {
           WorkingDirectory = config.users.users.${cfg.user}.home;
-          ExecStartPre = "${pkgs.kbd}/bin/chvt 7";
 
           PAMName = "login";
           User = cfg.user;
 
-          UtmpIdentifier = "tty7";
-          TTYPath = "/dev/tty7";
+          UtmpIdentifier = "tty1";
+          TTYPath = "/dev/tty1";
           TTYReset = "yes";
           TTYVTDisallocate = "yes";
 
