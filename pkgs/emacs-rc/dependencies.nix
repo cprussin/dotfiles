@@ -21,7 +21,7 @@
   epkgs.evil-org
   epkgs.evil-smartparens
   epkgs.flycheck
-  epkgs.flycheck-pos-tip
+  epkgs.flycheck-popup-tip
   epkgs.general
   epkgs.git-gutter
   epkgs.git-timemachine

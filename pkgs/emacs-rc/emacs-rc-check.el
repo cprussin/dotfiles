@@ -18,12 +18,10 @@
   :init (setq flycheck-emacs-lisp-load-path 'inherit)
   :config (global-flycheck-mode))
 
-(use-package flycheck-pos-tip
+(use-package flycheck-popup-tip
   :demand
-  :commands flycheck-pos-tip-mode
-  :config
-  (setq flycheck-pos-tip-timeout 0)
-  (flycheck-pos-tip-mode))
+  :commands flycheck-popup-tip-mode
+  :hook (flycheck-mode . flycheck-popup-tip-mode))
 
 ;; Turn on spell checking
 (use-package flyspell
