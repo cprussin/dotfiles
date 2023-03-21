@@ -16,7 +16,7 @@ in
 
     wifi = {
       ssid = "Centar";
-      passwordCommand = passwords.getPassword "Connor/Wifi/Centar";
+      password.keyCommand = passwords.getPassword "Connor/Wifi/Centar";
       domain = ".lan";
       manual_ip = {
         inherit (network.home) subnet;
@@ -25,14 +25,14 @@ in
       };
       ap = {
         ssid = name;
-        passwordCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "AP";
+        password.keyCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "AP";
       };
     };
 
     logger.baud_rate = 0;
     captive_portal = {};
-    api.passwordCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "API";
-    ota.passwordCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "OTA";
+    api.encryption.key.keyCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "Encryption Key";
+    ota.password.keyCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "OTA";
 
     sensor = [
       {

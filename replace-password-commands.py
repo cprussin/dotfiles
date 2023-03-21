@@ -4,13 +4,13 @@ import sys
 
 
 def replace_password_commands(o):
-    if 'passwordCommand' in o:
-        out = subprocess.check_output(o['passwordCommand'])
-        o['password'] = out.decode('UTF-8').strip()
-        del o['passwordCommand']
     for k, v in o.items():
         if isinstance(v, dict):
-            o[k] = replace_password_commands(o[k])
+            if 'keyCommand' in v:
+                out = subprocess.check_output(v['keyCommand'])
+                o[k] = out.decode('UTF-8').strip()
+            else:
+                o[k] = replace_password_commands(o[k])
     return o
 
 
