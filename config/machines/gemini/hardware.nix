@@ -40,7 +40,7 @@ in {
           device = "/dev/disk/by-id/${disk-id}";
           header = "/boot/luks/${disk-id}/header";
           gpgCard = {
-            publicKey = ../../modules/security/gpg/pubkey.asc;
+            publicKey = sources.gpg-key;
 
             # I don't want this in the store.  However due to how the module is
             # written, I have to put something here, and I have to copy the

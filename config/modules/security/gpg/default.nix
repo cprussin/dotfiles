@@ -2,7 +2,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  sources = import ../../../../sources.nix;
+in {
   services.pcscd.enable = true;
 
   primary-user.home-manager = {
@@ -14,7 +16,7 @@
       mutableTrust = false;
       publicKeys = [
         {
-          source = ./pubkey.asc;
+          source = sources.gpg-key;
           trust = "ultimate";
         }
       ];

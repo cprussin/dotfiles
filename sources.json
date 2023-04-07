@@ -47,6 +47,12 @@
         "url": "https://github.com/cprussin/fzf-pass/archive/5ecf629b73dd6a1c3ddf5d2b6e0487fd2b9ad9e6.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "gpg-key": {
+        "sha256": "0mv8lw0jkbsg2w32h2269c2x8hmlji1ir2vv97h8d940p4vnlz7k",
+        "type": "file",
+        "url": "https://connor.prussin.net/pubkey.asc",
+        "url_template": "https://connor.prussin.net/pubkey.asc"
+    },
     "home-manager": {
         "branch": "release-22.11",
         "description": "Manage a user environment using Nix",
