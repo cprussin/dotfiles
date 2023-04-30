@@ -12,7 +12,7 @@
 (use-package general
   :demand
   :commands general-define-key
-  :preface
+  :config
   (general-create-definer main-menu-def
     :states '(normal insert emacs visual motion operator outer-tex-objects inner-text-objects replace-state)
     :keymaps 'override
@@ -42,17 +42,16 @@
   (general-create-definer search-menu-def
     :wrapping main-menu-def
     :infix "s")
-  :config
   (main-menu-def "" nil
-                 "w" '(evil-window-map :which-key "Window"))
+    "w" '(evil-window-map :which-key "Window"))
   (apps-menu-def "" '(:ignore t :which-key "Apps")
-                 "c" '(calc :which-key "Calculator"))
+    "c" '(calc :which-key "Calculator"))
   (buffer-menu-def  "" '(:ignore t :which-key "Buffers")
-                    "m" '(buffer-menu :which-key "menu")
-                    "n" '(next-buffer :which-key "next")
-                    "p" '(previous-buffer :which-key "previous")
-                    "s" '(switch-to-buffer :which-key "switch")
-                    "x" '(kill-current-buffer :which-key "close"))
+    "m" '(buffer-menu :which-key "menu")
+    "n" '(next-buffer :which-key "next")
+    "p" '(previous-buffer :which-key "previous")
+    "s" '(switch-to-buffer :which-key "switch")
+    "x" '(kill-current-buffer :which-key "close"))
   (edit-menu-def "" '(:ignore t :which-key "Editing"))
   (git-menu-def "" '(:ignore t :which-key "Git"))
   (help-menu-def "" '(:ignore t :which-key "Help"))
