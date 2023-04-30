@@ -23,7 +23,9 @@
   :after general delight
   :delight
   :general ("C-SPC" 'company-complete)
-  :config (global-company-mode))
+  :config
+  (global-company-mode)
+  (setq company-tooltip-align-annotations t))
 
 (use-package company-tng
   :after company
