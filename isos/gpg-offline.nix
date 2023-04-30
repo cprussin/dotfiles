@@ -7,16 +7,78 @@
 
   solarized-dark = pkgs.callPackage ../lib/color-themes/solarized/dark.nix {};
 
-  gpg-conf = pkgs.writeText "gpg.conf" "no-symkey-cache";
-
   update-key-expiry = pkgs.writeShellScriptBin "update-key-expiry" ''
-    echo "Step 1: Update gpg-agent.conf to use correct pinentry (maybe we can skip this though?)"
-    echo "Step 2: Update expiry on subkeys (add selection)"
-    echo "Step 3: Export public key to a place on liveusb"
-    echo "Step 4: Update master zfs dataset"
-    echo "Step 5: Scrub master zfs dataset"
-    echo "Step 6: Sync to backup zfs datasets"
-    echo "Step 7: Scrub backup zfs datasets"
+    set -e
+
+    echo
+    echo -e "\e[1;37mImporting master...\e[0m"
+    sudo zpool import master
+    sudo zfs load-key master/enc
+    sudo zfs mount master/enc
+
+    echo
+    echo -e "\e[1;37mMounting liveusb...\e[0m"
+    sudo mkdir /liveusb
+    sudo mount /dev/disk/by-label/EFIBOOT /liveusb
+
+    echo
+    echo -e "\e[1;37mUpdating expiry on subkeys...\e[0m"
+    printf "key 1\nkey 2\nkey 3\nexpire\ny\n1m\nsave\n" | gpg --batch --command-fd 0 --status-fd=2 --pinentry-mode loopback --passphrase-fd 3 --edit-key connor@prussin.net 3</master/enc/pw
+
+    echo
+    echo -e "\e[1;37mExporting public key to /pubkey.asc on liveusb...\e[0m"
+    gpg --batch --export --armor connor@prussin.net | sudo tee /liveusb/pubkey.asc
+
+    echo
+    echo -e "\e[1;37mEjecting liveusb...\e[0m"
+    sudo umount /liveusb
+
+    echo
+    echo -e "\e[1;37mSnapshotting master...\e[0m"
+    oldsnap="$(zfs list -t snapshot -o name -s creation -r master/enc | tail -1 | sed 's/^master\/enc@//')"
+    newsnap="$(date +%F)"
+    sudo zfs snapshot master/enc@$newsnap
+
+    echo
+    echo -e "\e[1;37mScrubbing master...\e[0m"
+    sudo zpool scrub -w master
+    sudo zpool status master
+
+    echo
+    echo -e "\e[1;37mRunning backups...\e[0m"
+    while true; do
+      echo
+      echo
+      echo -ne "\e[1;37mAre there more filesystems to back up (Y/n)?\e[0m "
+      read button
+      if [ "$button" == "n" ]; then
+        echo
+        echo
+        echo -e "\e[1;37mAll done, please reboot and extract public key from /pubkey.asc"
+        echo "on the live usb.  Make sure to deploy the new public key to"
+        echo "dotfiles, keyservers (keyserver.ubuntu.com, keys.openpgp.org,"
+        echo -e "pgp.mit.edu), and phone.\e[0m"
+        exit
+      else
+        echo -ne "\e[1;37mPlease insert next filesystem\e[0m "
+        while ! $(sudo zpool import -t master master-bak 2>/dev/null); do
+            echo -n "."
+            sleep 0.5
+        done
+        sudo zfs load-key master-bak/enc
+        sudo zfs mount master-bak/enc
+        echo
+        sudo zfs send -I master/enc@$oldsnap master/enc@$newsnap | sudo zfs recv -Fd master-bak/enc
+        sudo zpool scrub -w master-bak
+        zpool status master-bak
+        sudo zpool export master-bak
+        echo -ne "\e[1;37mPlease remove filesystem\e[0m "
+        while [ "$(sudo zpool import 2>/dev/null | grep master)" ]; do
+            echo -n "."
+            sleep 0.5
+        done
+      fi
+    done
   '';
 in {
   nixpkgs = {
@@ -36,7 +98,6 @@ in {
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = ["copytoram"];
     cleanTmpDir = true;
     kernel.sysctl."kernel.unprivileged_bpf_disabled" = 1;
@@ -125,12 +186,7 @@ in {
 
     interactiveShellInit = ''
       unset HISTFILE
-
-      export GNUPGHOME="$HOME/.gnupg"
-      [ ! -d "$GNUPGHOME" ] && install -m=0700 --directory "$GNUPGHOME"
-      [ ! -f "$GNUPGHOME/gpg.conf" ] && cp ${gpg-conf} "$GNUPGHOME/gpg.conf"
-
-      echo "\$GNUPGHOME is \"$GNUPGHOME\""
+      export GNUPGHOME=/master/enc/gnupg
     '';
   };
 }
