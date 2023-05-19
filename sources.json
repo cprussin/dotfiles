@@ -48,7 +48,7 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "gpg-key": {
-        "sha256": "1jrhabwx90xxg0ymxrc6s6bbglx6g7g66p6vk2d5lq3s8y2x617v",
+        "sha256": "1fpri8rh3n59iwn8qpxjwxrkwwvn180d9jd60x2hvqskfclns004",
         "type": "file",
         "url": "https://connor.prussin.net/pubkey.asc",
         "url_template": "https://connor.prussin.net/pubkey.asc"
