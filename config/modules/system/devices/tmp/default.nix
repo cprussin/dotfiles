@@ -1,3 +1,3 @@
 _: {
-  boot.tmpOnTmpfs = true;
+  boot.tmp.useTmpfs = true;
 }

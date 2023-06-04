@@ -6,11 +6,11 @@
       warning = 15;
       critical = 5;
     };
-    format = "{icon}  {capacity}%";
-    format-charging = "  {capacity}%";
-    format-plugged = " {capacity}%";
+    format = "{icon} {capacity}%";
+    format-charging = "{icon} 󰚥 {capacity}%";
+    format-plugged = "󰚥 {capacity}%";
     format-alt = "{icon} {time}";
-    format-icons = ["" "" "" "" "" "" "" "" "" ""];
+    format-icons = ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
   };
 
   style = {

@@ -69,7 +69,7 @@
       rm -f iot-build/*.{yaml,json}
       for target in "$@"; do
         nix-build --out-link "iot-build/''${target}.json" --attr "$target" ./config/iot >/dev/null
-        ${pkgs.python}/bin/python ./replace-password-commands.py "iot-build/''${target}.json" > "iot-build/''${target}.yaml"
+        ${pkgs.python3}/bin/python ./replace-password-commands.py "iot-build/''${target}.json" > "iot-build/''${target}.yaml"
       done
 
       ${pkgs.esphome}/bin/esphome $cmd iot-build/*.yaml

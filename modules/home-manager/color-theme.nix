@@ -122,13 +122,6 @@ in {
         separator-color = removeOctothorpe cfg.highlightBackground;
       };
 
-      mako = {
-        backgroundColor = "${cfg.foreground}E0";
-        textColor = cfg.background;
-        borderColor = cfg.highlightForeground;
-        progressColor = "source ${cfg.bright}";
-      };
-
       waybar-custom.styles.frame = {
         inherit (cfg) background;
         color = cfg.bright;
@@ -151,6 +144,13 @@ in {
       };
 
       imv.background = removeOctothorpe cfg.background;
+    };
+
+    services.mako = {
+      backgroundColor = "${cfg.foreground}E0";
+      textColor = cfg.background;
+      borderColor = cfg.highlightForeground;
+      progressColor = "source ${cfg.bright}";
     };
 
     wayland.windowManager.sway.config.colors = {

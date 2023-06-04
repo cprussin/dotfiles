@@ -1,7 +1,7 @@
 let
   nivSrc = fetchTarball {
-    url = "https://github.com/nmattia/niv/tarball/5830a4dd348d77e39a0f3c4c762ff2663b602d4c";
-    sha256 = "1d3lsrqvci4qz2hwjrcnd8h5vfkg8aypq3sjd4g3izbc8frwz5sm";
+    url = "https://github.com/nmattia/niv/tarball/0ebb80e003c26d5388a9b74645fbdcfca3bdd0ef";
+    sha256 = "0wpnk1n4vjyqwjjrm6dvkyh7xr7983rszfhfcg31v106qhfnh41c";
   };
   sources = import "${nivSrc}/nix/sources.nix" {
     sourcesFile = ./sources.json;

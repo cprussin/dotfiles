@@ -2,7 +2,6 @@
   prod ? false,
   sources ? import ../../sources.nix,
   nixpkgs ? sources.nixpkgs,
-  emacs-overlay ? sources.emacs-overlay,
   zoom-frm ? sources.zoom-frm,
 }: let
   mkEmojiSets = emoji-pkgs:
@@ -40,17 +39,14 @@
 
   emacs-pkg = pkgs.symlinkJoin {
     name = "emacs";
-    paths = [((pkgs.emacsPackagesFor pkgs.emacsPgtk).withPackages emacs-packages)];
+    paths = [((pkgs.emacsPackagesFor pkgs.emacs29-pgtk).withPackages emacs-packages)];
     buildInputs = [pkgs.makeWrapper];
     postBuild = "wrapProgram $out/bin/emacs --add-flags '--no-init-file --load ${entry-point}'";
   };
 
   pkgs = import nixpkgs {
     overlays =
-      [
-        (import emacs-overlay)
-      ]
-      ++ (
+      (
         if prod
         then [(import ./overlay.nix)]
         else []

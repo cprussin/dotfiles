@@ -5,7 +5,7 @@
   presentation = pkgs.writeShellScript "presentation" ''
     if ! systemctl --user is-active --quiet swayidle
     then
-      echo PRESENTATION
+      echo 󰐯
     fi
   '';
 in {

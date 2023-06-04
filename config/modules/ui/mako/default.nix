@@ -6,7 +6,7 @@
   primary-user.home-manager = {
     home.packages = lib.mkForce [pkgs.mako];
 
-    programs.mako = {
+    services.mako = {
       enable = true;
       borderSize = 3;
       padding = "20";

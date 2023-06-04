@@ -1,11 +1,10 @@
 {pkgs, ...}: let
   sources = import ../../../../sources.nix;
   emacs-overlay = self: super: {
-    emacs = (self.emacsPackagesFor super.emacsPgtk).withPackages (epkgs: [epkgs.emacs-rc]);
+    emacs = (self.emacsPackagesFor super.emacs29-pgtk).withPackages (epkgs: [epkgs.emacs-rc]);
   };
 in {
   nixpkgs.overlays = [
-    (import sources.emacs-overlay)
     (import ../../../../pkgs/emacs-rc/overlay.nix)
     (import ../../../../pkgs/emojione-png/overlay.nix)
     (import ../../../../pkgs/zoom-frm/overlay.nix {src = sources.zoom-frm;})

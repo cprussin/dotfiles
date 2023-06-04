@@ -36,8 +36,11 @@ in {
 
     services.openssh = {
       enable = true;
-      passwordAuthentication = false;
-      extraConfig = "PermitUserEnvironment yes";
+
+      settings = {
+        PasswordAuthentication = false;
+        PermitUserEnvironment = true;
+      };
 
       hostKeys = [
         {

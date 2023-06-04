@@ -1,6 +1,5 @@
 * Tasks
 ** TODO Set up kerberos / ldap
-** TODO Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)
 ** TODO Store luks keys somewhere that isn't visible to non-root accounts
 ** TODO Install exa (ls replacement) and bat (cat replacement) and nushell (zsh replacement)
 ** TODO Manage gemini luks keys with colmena
@@ -51,6 +50,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)
+CLOSED: [2023-06-04 Sun 12:54]
 ** DONE Set default fonts better in theme (see fonts.fontconfig.defaultFonts in nixpkgs but do it in home-manager)
 CLOSED: [2023-03-15 Wed 13:25]
 ** DONE Fix icons / cursor themes in some apps (simple-scanner eg)

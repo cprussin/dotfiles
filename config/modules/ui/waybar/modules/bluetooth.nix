@@ -23,12 +23,12 @@
       devs=$(devices)
       if [ "$devs" ]
       then
-        echo "{\"text\":\" $devs\"}"
+        echo "{\"text\":\"󰂱 $devs\"}"
       else
-        echo "{\"text\":\" $devs\",\"class\":\"disconnected\"}"
+        echo "{\"text\":\"󰂯 $devs\",\"class\":\"disconnected\"}"
       fi
     else
-      echo "{\"text\":\"\",\"class\":\"off\"}"
+      echo "{\"text\":\"󰂲\",\"class\":\"off\"}"
     fi
   '';
 

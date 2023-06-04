@@ -32,10 +32,7 @@ in {
       workspaceAutoBackAndForth = true;
       bars = [];
 
-      output = {
-        "${laptopOutput}".pos = lib.mkIf (!config.hardware.video.hidpi.enable) "0,0 scale 1";
-        "*".bg = "${./background.png} fill";
-      };
+      output."*".bg = "${./background.png} fill";
 
       input."type:mouse".pointer_accel = "0.5";
 
@@ -43,7 +40,7 @@ in {
 
       focus = {
         mouseWarping = true;
-        forceWrapping = true;
+        wrapping = "yes";
       };
 
       gaps = {
