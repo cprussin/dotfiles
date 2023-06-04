@@ -1,7 +1,7 @@
 * Tasks
 ** TODO Set up kerberos / ldap
 ** TODO Store luks keys somewhere that isn't visible to non-root accounts
-** TODO Install exa (ls replacement) and bat (cat replacement) and nushell (zsh replacement)
+** TODO Install exa (ls replacement) and bat (cat replacement) and nushell (zsh replacement) and erdtree (tree replacement)
 ** TODO Manage gemini luks keys with colmena
 ** TODO Don't store crux luks keys on /boot at all (send via ssh on boot)
 ** TODO Make install-user-mountpoints not suck
