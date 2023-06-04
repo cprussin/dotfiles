@@ -53,6 +53,9 @@
       read button
       if [ "$button" == "n" ]; then
         echo
+        echo -e "\e[1;37mEjecting master filesystem...\e[0m"
+        sudo zpool export master
+        echo
         echo
         echo -e "\e[1;37mAll done, please reboot and extract public key from /pubkey.asc"
         echo "on the live usb.  Make sure to deploy the new public key to"
@@ -65,6 +68,7 @@
             echo -n "."
             sleep 0.5
         done
+        echo
         sudo zfs load-key master-bak/enc
         sudo zfs mount master-bak/enc
         echo
