@@ -30,6 +30,10 @@
 (setq-default indicate-empty-lines t
               fringe-indicator-alist '((empty-line . tilde)))
 
+(use-package frame
+  :config (add-to-list 'default-frame-alist
+                       '(font . "monospace-10")))
+
 (use-package menu-bar
   :config (menu-bar-mode -1))
 
