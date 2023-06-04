@@ -58,13 +58,16 @@
   (setq org-agenda-window-setup 'only-window
         org-agenda-files (list "~/Notes")
         org-agenda-hide-tags-regexp "\\|tasks"
-        org-agenda-custom-commands '(("A" "All Todos" tags-todo "-BLOCKED")
-                                     ("a" "Agenda" ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("BLOCKED")))))
-                                                    (todo "BLOCKED")))
-                                     ("b" "Blocked Items" todo "BLOCKED")
-                                     ("r" "Recurring Items" tags-todo "SCHEDULED={.+\\+.+}/!-BLOCKED|DEADLINE={.+\\+.+}/!-BLOCKED")
-                                     ("s" "Scheduled Items" tags-todo "SCHEDULED={^[^\\+]+$}/!-BLOCKED|DEADLINE={^[^\\+]+$}/!-BLOCKED")
-                                     ("u" "Unscheduled Items" tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/!-BLOCKED")))
+        org-agenda-custom-commands '(("A" "All Tasks" tags-todo "-BLOCKED")
+                                     ("a" "Agenda" ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("BLOCKED")))
+                                                                (org-agenda-overriding-header "Agenda")))
+                                                    (todo "BLOCKED" ((org-agenda-overriding-header "Blocked Tasks")))
+                                                    (tags-todo "PRIORITY=\"A\"-SCHEDULED={.+}-DEADLINE={.+}/!-BLOCKED" ((org-agenda-overriding-header "On Deck")))
+                                                    (tags-todo "-PRIORITY=\"A\"-SCHEDULED={.+}-DEADLINE={.+}/!-BLOCKED" ((org-agenda-overriding-header "Backlog")))))
+                                     ("b" "Blocked Tasks" todo "BLOCKED")
+                                     ("r" "Recurring Tasks" tags-todo "SCHEDULED={.+\\+.+}/!-BLOCKED|DEADLINE={.+\\+.+}/!-BLOCKED")
+                                     ("s" "Scheduled Tasks" tags-todo "SCHEDULED={^[^\\+]+$}/!-BLOCKED|DEADLINE={^[^\\+]+$}/!-BLOCKED")
+                                     ("u" "Unscheduled Tasks" tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/!-BLOCKED")))
   :general
   (apps-menu-def "a" '(org-agenda :which-key "Agenda"))
   (general-def
