@@ -45,7 +45,7 @@ writeShellScript "volume" ''
   }
 
   toggle() {
-    $pamixer --toggle
+    $pamixer --toggle-mute
     showVolume
   }
 

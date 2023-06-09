@@ -45,7 +45,7 @@ writeShellScript "mic-volume" ''
   }
 
   toggle() {
-    $pamixer --default-source --toggle
+    $pamixer --default-source --toggle-mute
     showVolume
   }
 
