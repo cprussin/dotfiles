@@ -103,7 +103,7 @@ in {
 
   boot = {
     kernelParams = ["copytoram"];
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
     kernel.sysctl."kernel.unprivileged_bpf_disabled" = 1;
     initrd.network.enable = false;
   };
@@ -170,7 +170,6 @@ in {
 
   environment = {
     systemPackages = [
-      (pkgs.haskell.lib.justStaticExecutables pkgs.haskellPackages.hopenpgp-tools)
       pkgs.cfssl
       pkgs.cryptsetup
       pkgs.diceware
