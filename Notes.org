@@ -1,9 +1,11 @@
 * Tasks
-** TODO Set up kerberos / ldap
-** TODO Store luks keys somewhere that isn't visible to non-root accounts
 ** TODO Install exa (ls replacement) and bat (cat replacement) and nushell (zsh replacement) and erdtree (tree replacement)
-** TODO Manage gemini luks keys with colmena
-** TODO Don't store crux luks keys on /boot at all (send via ssh on boot)
+** TODO Fix publicly-visible keys on crux on /boot/crypt and gemini on /boot/luks
+- [ ] Deploy gemini boot keys with colmena (just copy encrypted header / key, will need to start decrypting header on boot)
+- [ ] Maybe put gemini boot keys on another partition with a fs that supports permissions or something?
+- [ ] Run ssh server on early boot of crux to receive keys so we don't need to store them at rest
+** TODO Set up kerberos / ldap
+** TODO Lock / unlock / login with gpg keys (kerberos?)
 ** TODO Make install-user-mountpoints not suck
 ** TODO Only open crux firewall ports to wireguard interface
 ** TODO Containerize crux?
