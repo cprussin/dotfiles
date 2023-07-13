@@ -15,6 +15,8 @@
 (use-package emacs-rc-keybindings
   :demand
   :commands general-define-key)
+(use-package emacs-rc-projects
+  :demand)
 
 (defun emacs-rc--find-in-node-modules (program)
   "Find PROGRAM either in node_modules or as a global."
@@ -41,55 +43,36 @@
 
 (use-package js
   :demand
+  ;;; TODO this isn't working...
+  :mode "\\.cjs\\'"
   :after flycheck general
-  :hook ((js-mode . emacs-rc--setup-js-files)
-         (js-mode . emacs-rc--set-checker-eslint))
+  :hook (js-mode . emacs-rc--setup-js-files)
   :general
   (major-mode-menu-def
     :keymaps 'js-mode-map
     "" '(:ignore t :which-key "Major Mode (JS)"))
   :config
-  (defun emacs-rc--set-checker-eslint ()
-    "Set `javascript-eslint' as the current flycheck checker."
-    (setq-local flycheck-checker 'javascript-eslint))
-  (flycheck-add-mode 'css-stylelint 'js-mode)
-  (flycheck-add-next-checker 'javascript-eslint '(t . css-stylelint)))
+  (flycheck-add-next-checker 'javascript-eslint 'css-stylelint 'append))
 
-(use-package typescript-mode
-  :demand
-  :mode "\\.tsx\\'"
-  :hook (typescript-mode . emacs-rc--setup-js-files)
+(use-package typescript-ts-mode
+  :demand t
   :after general
+  :hook (typescript-ts-base-mode . emacs-rc--setup-js-files)
   :general
   (major-mode-menu-def
-    :keymaps 'typescript-mode-map
-    "" '(:ignore t :which-key "Major Mode (Typescript)"))
-  :config
-  (flycheck-add-mode 'css-stylelint 'typescript-mode))
-
-(use-package prettier
-  :demand
-  :commands global-prettier-mode
-  :config (global-prettier-mode))
+    :keymaps 'typescript-ts-base-mode-map
+    "" '(:ignore t :which-key "Major Mode (Typescript)")))
 
 (use-package tide
-  :after typescript-mode company flycheck
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (tide-mode . emacs-rc--set-checker-tide))
+  :after typescript-ts-mode company flycheck
+  :hook ((typescript-ts-base-mode . tide-setup)
+         (tide-mode . tide-hl-identifier-mode))
   :config
-  (defun emacs-rc--set-checker-tide ()
-    "Set `typescript-tide' or `tsx-tide' as the current flycheck checker."
-    (setq-local flycheck-checker (if (string-equal "tsx" (file-name-extension buffer-file-name))
-                                     'tsx-tide
-                                   'typescript-tide)))
-  (flycheck-add-mode 'tsx-tide 'typescript-mode)
-  (flycheck-add-next-checker 'typescript-tide '(t . javascript-eslint))
-  (flycheck-add-next-checker 'tsx-tide '(t . javascript-eslint)))
+  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append))
 
 (use-package jest
-  :after general (:or js typescript-mode)
-  :hook ((js-mode typescript-mode) . emacs-rc--use-jest-from-node-modules)
+  :after general (:or js typescript-ts-mode)
+  :hook ((js-mode typescript-ts-base-mode) . emacs-rc--use-jest-from-node-modules)
   :commands jest-popup
   :config
   (defun emacs-rc--use-jest-from-node-modules ()
@@ -98,7 +81,7 @@
   (setq jest-arguments '("--colors"))
   :general
   (major-mode-menu-def
-    :keymaps '(js-mode-map typescript-mode-map)
+    :keymaps '(js-mode-map typescript-ts-base-mode-map)
     "j" '(jest-popup :which-key "Jest")))
 
 (use-package purescript-mode
