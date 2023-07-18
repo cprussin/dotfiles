@@ -1,15 +1,10 @@
 {config, ...}: let
   sources = import ../../../../sources.nix;
 in {
-  primary-user.extraGroups = ["nix-access-tokens"];
-  ids.gids.nix-access-tokens = 500;
-  users.groups.nix-access-tokens.gid = config.ids.gids.nix-access-tokens;
-
   nix = {
     nixPath = ["nixpkgs=${sources.nixpkgs}"];
     gc = {
       automatic = true;
-      dates = "weekly";
       options = "-d";
     };
     settings = {

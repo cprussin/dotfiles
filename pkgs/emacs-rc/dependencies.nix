@@ -21,6 +21,7 @@
   epkgs.evil-goggles
   epkgs.evil-org
   epkgs.evil-smartparens
+  epkgs.exec-path-from-shell
   epkgs.flycheck
   epkgs.flycheck-popup-tip
   epkgs.general
