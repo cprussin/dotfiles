@@ -2,9 +2,6 @@
   programs = {
     nushell = {
       enable = true;
-      extraConfig = ''
-        source ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/pass/pass-completions.nu
-      '';
       extraEnv = ''
         $env.config = {
           edit_mode: vi,

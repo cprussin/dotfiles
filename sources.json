@@ -53,6 +53,18 @@
         "url": "https://github.com/cprussin/mkCli/archive/3d356fd26d59dcfdccf47160e78f9389f150fc2c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nix-darwin": {
+        "branch": "master",
+        "description": "nix modules for darwin",
+        "homepage": "",
+        "owner": "LnL7",
+        "repo": "nix-darwin",
+        "rev": "afe83cbc2e673b1f08d32dd0f70df599678ff1e7",
+        "sha256": "1cbx0d745iy9qavj7jd758qqn57mpg6aak5lpg9cr8fvlr0zxb8s",
+        "type": "tarball",
+        "url": "https://github.com/LnL7/nix-darwin/archive/afe83cbc2e673b1f08d32dd0f70df599678ff1e7.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixos-hardware": {
         "branch": "master",
         "description": "A collection of NixOS modules covering hardware quirks.",

@@ -1,6 +1,7 @@
 {
   sources ? import ./sources.nix,
   nixpkgs ? sources.nixpkgs,
+  nix-darwin ? sources.nix-darwin,
   niv ? sources.niv,
   mkCli ? sources.mkCli,
 }: let
@@ -16,17 +17,28 @@
     };
   };
 
-  password-utils-overlay = self: _: {
-    inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
-  };
+  password-utils-overlay = self: super:
+    if super.stdenv.isDarwin
+    then {}
+    else {
+      inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
+    };
 
   mkCli-overlay = import "${mkCli}/overlay.nix";
+
+  darwin-rebuild-overlay = self: super:
+    if super.stdenv.isDarwin
+    then {
+      inherit (self.callPackage "${nix-darwin}/pkgs/nix-tools" {}) darwin-rebuild;
+    }
+    else {};
 
   pkgs = import nixpkgs {
     overlays = [
       niv-overlay
       password-utils-overlay
       mkCli-overlay
+      darwin-rebuild-overlay
     ];
     config = {};
   };
@@ -153,7 +165,10 @@
       format = "${pkgs.alejandra}/bin/alejandra .";
     };
 
-    deploy = "${pkgs.colmena}/bin/colmena apply";
+    deploy =
+      if pkgs.stdenv.isDarwin
+      then "NIX_PATH=$NIX_PATH:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix ${pkgs.darwin-rebuild}/bin/darwin-rebuild switch"
+      else "${pkgs.colmena}/bin/colmena apply";
 
     build-iso = "${pkgs.nix}/bin/nix build -f ./isos --out-link ./iso-build";
 
@@ -198,13 +213,27 @@
   };
 in
   pkgs.mkShell {
-    NIX_PATH = "nixpkgs=${nixpkgs}";
+    NIX_PATH = pkgs.lib.concatStringsSep ":" (
+      pkgs.lib.mapAttrsToList (name: value: "${name}=${value}") (
+        {inherit nixpkgs;}
+        // (
+          if pkgs.stdenv.isDarwin
+          then {darwin = nix-darwin;}
+          else {}
+        )
+      )
+    );
 
-    buildInputs = [
-      pkgs.git
-      pkgs.niv
-      pkgs.passwordUtils
-      pkgs.colmena
-      cli
-    ];
+    buildInputs =
+      [
+        pkgs.git
+        pkgs.niv
+        pkgs.colmena
+        cli
+      ]
+      ++ (
+        if pkgs.stdenv.isDarwin
+        then [pkgs.darwin-rebuild]
+        else [pkgs.passwordUtils]
+      );
   }

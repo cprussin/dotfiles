@@ -137,13 +137,6 @@
        esac
     done
   '';
-
-  getNixAccessToken = pkgs.writeShellScriptBin "getNixAccessToken" ''
-    set -euo pipefail
-    token="$(${getPassword}/bin/getPassword "$1")"
-    domain="$(${getPasswordField}/bin/getPasswordField "$1" "Host")"
-    echo "extra-access-tokens = $domain=$token"
-  '';
 in {
   passwordUtils = pkgs.symlinkJoin {
     name = "passwordUtils";
@@ -160,7 +153,6 @@ in {
       getMautrixSignalEnvironmentFile
       getMautrixRegistrationFile
       getWpaPassphraseFile
-      getNixAccessToken
     ];
   };
   getPassword = name: ["getPassword" name];
@@ -175,5 +167,4 @@ in {
   getMautrixSignalEnvironmentFile = name: sharedSecret: ["getMautrixSignalEnvironmentFile" name sharedSecret];
   getMautrixRegistrationFile = name: port: ["getMautrixRegistrationFile" name (toString port)];
   getWpaPassphraseFile = networks: ["getWpaPassphraseFile"] ++ networks;
-  getNixAccessToken = name: ["getNixAccessToken" name];
 }

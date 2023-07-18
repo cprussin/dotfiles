@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  home-manager.users.root.imports = [./home.nix];
+  # home-manager.users.root.imports = [./home.nix];
 
   nixpkgs.overlays = [
     (_: super: {
