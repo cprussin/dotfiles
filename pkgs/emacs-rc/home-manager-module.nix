@@ -80,6 +80,11 @@ in {
       type = lib.types.path;
       default = "${mkEmojiSets [pkgs.emojione-png]}";
     };
+
+    initExtra = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -100,6 +105,8 @@ in {
               emacs-rc-emoji-sets-path "${cfg.emojiSets}")
 
         (require 'emacs-rc)
+
+        ${cfg.initExtra}
       '';
     };
   };
