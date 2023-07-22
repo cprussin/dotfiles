@@ -62,9 +62,10 @@
   epkgs.scad-mode
   epkgs.smartparens
   epkgs.solarized-theme
+  epkgs.svelte-mode
   epkgs.swiper
-  epkgs.treesit-grammars.with-all-grammars
   epkgs.tide
+  epkgs.treesit-grammars.with-all-grammars
   epkgs.undo-tree
   epkgs.unicode-fonts
   epkgs.use-package

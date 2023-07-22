@@ -22,6 +22,7 @@
 (use-package nix-mode)
 (use-package rust-mode)
 (use-package scad-mode)
+(use-package svelte-mode)
 (use-package yaml-mode)
 
 (provide 'emacs-rc-modes)
