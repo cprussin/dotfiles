@@ -77,6 +77,8 @@
   };
 in
   pkgs.mkShell {
+    NIX_PATH = "nixpkgs=${nixpkgs}";
+
     buildInputs = [
       pkgs.git
       pkgs.niv
@@ -84,6 +86,4 @@ in
       pkgs.colmena
       cli
     ];
-
-    shellHook = "export NIX_PATH=\"nixpkgs=${nixpkgs}\"";
   }
