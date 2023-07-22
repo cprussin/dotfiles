@@ -1,3 +1,3 @@
 _: {
-  primary-user.home-manager.home.sessionVariables.LESS = "--mouse";
+  primary-user.home-manager.home.sessionVariables.LESS = "-R --mouse";
 }
