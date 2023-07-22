@@ -55,6 +55,9 @@
     # Friends' networks
     "PC House 3" = {};
     DeathStar5 = {};
+
+    # Work
+    Verkada-Guest = {};
   };
 
   peapMschapNetworks = mkPeapMschapNetworks {
