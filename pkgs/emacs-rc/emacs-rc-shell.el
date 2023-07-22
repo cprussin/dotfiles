@@ -15,20 +15,9 @@
 
 (setq shell-file-name emacs-rc-shell-path)
 
-(use-package shell
+(use-package eshell
   :after general
-  :hook (shell-mode . ansi-color-for-comint-mode-on)
-  :general
-  (shell-mode-map
-   "C-c" #'comint-interrupt-subjob
-   "C-n" #'comint-next-input
-   "C-p" #'comint-previous-input)
-  (apps-menu-def "s" '(shell :which-key "shell"))
-  (major-mode-menu-def
-   :keymaps 'shell-mode-map
-   "" '(:ignore t :which-key "Major Mode (Shell)")
-   "q" '(comint-kill-subjob :which-key "quit")
-   "w" '(comint-write-output :which-key "save")))
+  :general (apps-menu-def "s" '(eshell :which-key "shell")))
 
 (provide 'emacs-rc-shell)
 ;;; emacs-rc-shell.el ends here
