@@ -6,7 +6,7 @@
 }: let
   passwords = pkgs.callPackage ../../../../../lib/passwords.nix {};
 
-  sanitizedEnvVar = builtins.replaceStrings [" "] ["_"];
+  sanitizedEnvVar = builtins.replaceStrings [" " "-"] ["_" "_"];
 
   peapMschapIdentityEnvVar = networkName: "${sanitizedEnvVar networkName}_USERNAME";
   peapMschapPasswordEnvVar = networkName: "${sanitizedEnvVar networkName}_PASSWORD";
