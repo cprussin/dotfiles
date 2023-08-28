@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
@@ -14,6 +15,56 @@
   mkdir = "${pkgs.coreutils}/bin/mkdir";
   mount = "${config.security.wrapperDir}/mount";
   umount = "${config.security.wrapperDir}/umount";
+
+  runBackup = pkgs.writeShellScriptBin "run-backup" ''
+    set -e
+
+    if [ $UID -ne 0 ]
+    then
+      echo "This script must be run with sudo" >&2
+      exit 1
+    fi
+
+    if [ ! -e /dev/disk/by-id/wwn-0x5000cca0b0c4d39c ]
+    then
+      echo -ne "\e[1;37mWaiting for external drive to appear...\e[0m"
+      while [ ! -e /dev/disk/by-id/wwn-0x5000cca0b0c4d39c ]
+      do
+        echo -n '.'
+        sleep 0.5
+      done
+      echo
+    fi
+
+    echo
+    echo -e "\e[1;37mMounting tank-backup...\e[0m"
+    systemctl start unlock-wwn-0x5000cca0b0c4d39c.service
+    zpool import -N tank-backup
+
+    echo
+    echo -e "\e[1;37mCreating backup snapshot...\e[0m"
+    export TODAY=$(date +%F)
+    export LAST_SNAP_DATE=$(zfs list -Ht snapshot -o name tank | grep external-backup | sed 's/tank@external-backup-//')
+    zfs snapshot -r tank@external-backup-$TODAY
+
+    echo
+    echo -e "\e[1;37mSending incremental data...\e[0m"
+    zfs send -RI tank@external-backup-$LAST_SNAP_DATE tank@external-backup-$TODAY | zfs recv -Fdu tank-backup
+
+    echo
+    echo -e "\e[1;37mScrubbing tank-backup...\e[0m"
+    watch -n1 zpool status tank-backup &
+    PID=$!
+    zpool scrub -w tank-backup
+    kill -INT $PID
+    zpool status tank-backup
+
+    echo
+    echo -e "\e[1;37mCleaning up...\e[0m"
+    zpool export tank-backup
+    systemctl stop unlock-wwn-0x5000cca0b0c4d39c.service
+    zfs destroy -r tank@external-backup-$LAST_SNAP_DATE
+  '';
 in {
   services.borgbackup.jobs."rsync.net" = {
     paths = ["/tank"];
@@ -109,4 +160,6 @@ in {
   };
 
   programs.ssh.knownHosts."zh2593.rsync.net".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJtclizeBy1Uo3D86HpgD3LONGVH0CJ0NT+YfZlldAJd";
+
+  primary-user.home-manager.home.packages = lib.mkForce [runBackup];
 }
