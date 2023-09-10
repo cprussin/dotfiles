@@ -30,7 +30,7 @@ in {
     ../../modules/system/devices/cdrom
   ];
 
-  interfaces.eth = "enp7s0";
+  interfaces.eth = "enp8s0";
 
   detachedLuksWithNixopsKeys = builtins.listToAttrs (
     map
