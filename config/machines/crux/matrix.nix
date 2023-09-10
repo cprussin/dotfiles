@@ -5,11 +5,13 @@
   ...
 }: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
+  network = pkgs.callPackage ../../../lib/network.nix {};
   max_upload_size = "200M";
-  synapse_port = 8008;
+  federation_port_external = 8448;
+  federation_port_internal = 8008;
+  client_port_internal = 8009;
   mautrix-telegram-port = 29317;
   mautrix-signal-port = 29328;
-  homeserverUrl = "http://localhost:${toString synapse_port}";
 
   mautrix_settings = port: {
     appservice = {
@@ -17,7 +19,7 @@
       address = "http://localhost:${toString port}";
     };
     homeserver = {
-      address = homeserverUrl;
+      address = "http://localhost:${toString client_port_internal}";
       domain = "prussin.net";
     };
     bridge = {
@@ -34,6 +36,16 @@
   };
 in {
   deployment.keys = {
+    "matrix.internal.prussin.net.crt" = {
+      inherit (config.users.users.nginx) group;
+      keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssl/matrix.internal.prussin.net/cert";
+      user = config.users.users.nginx.name;
+    };
+    "matrix.internal.prussin.net.key" = {
+      inherit (config.users.users.nginx) group;
+      keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssl/matrix.internal.prussin.net/key";
+      user = config.users.users.nginx.name;
+    };
     "matrix-synapse-database-config.yaml" = {
       user = "matrix-synapse";
       group = "matrix-synapse";
@@ -98,20 +110,31 @@ in {
             addr = "[::]";
             port = 80;
           }
-          ####
+          # Matrix Federation Server
           {
             addr = "0.0.0.0";
-            port = 443;
+            port = federation_port_external;
             ssl = true;
           }
           {
             addr = "[::]";
-            port = 443;
+            port = federation_port_external;
             ssl = true;
           }
         ];
         locations."/" = {
-          proxyPass = "http://localhost:${toString synapse_port}";
+          proxyPass = "http://localhost:${toString federation_port_internal}";
+          extraConfig = "client_max_body_size ${max_upload_size};";
+        };
+      };
+      virtualHosts."matrix.internal.prussin.net" = {
+        listenAddresses = [network.wireguard.nodes.crux.address];
+        sslCertificate = "/run/keys/matrix.internal.prussin.net.crt";
+        sslCertificateKey = "/run/keys/matrix.internal.prussin.net.key";
+        forceSSL = true;
+        http2 = true;
+        locations."/" = {
+          proxyPass = "http://localhost:${toString client_port_internal}";
           extraConfig = "client_max_body_size ${max_upload_size};";
         };
       };
@@ -128,7 +151,19 @@ in {
 
         listeners = [
           {
-            port = synapse_port;
+            port = federation_port_internal;
+            bind_addresses = ["127.0.0.1"];
+            tls = false;
+            x_forwarded = true;
+            resources = [
+              {
+                names = ["federation"];
+                compress = false;
+              }
+            ];
+          }
+          {
+            port = client_port_internal;
             bind_addresses = ["127.0.0.1"];
             tls = false;
             x_forwarded = true;
@@ -136,10 +171,6 @@ in {
               {
                 names = ["client"];
                 compress = true;
-              }
-              {
-                names = ["federation"];
-                compress = false;
               }
             ];
           }
@@ -192,8 +223,16 @@ in {
   systemd.services = {
     # For acme to work correctly
     nginx = {
-      requires = ["import-tank.service"];
-      after = ["import-tank.service"];
+      requires = [
+        "import-tank.service"
+        "matrix.internal.prussin.net.crt-key.service"
+        "matrix.internal.prussin.net.key-key.service"
+      ];
+      after = [
+        "import-tank.service"
+        "matrix.internal.prussin.net.crt-key.service"
+        "matrix.internal.prussin.net.key-key.service"
+      ];
     };
     postgresql = {
       requires = ["import-tank.service"];

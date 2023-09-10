@@ -20,6 +20,7 @@
 
     library            IN A     ${network.wireguard.nodes.crux.address}
     home-assistant     IN A     ${network.wireguard.nodes.crux.address}
+    matrix             IN A     ${network.wireguard.nodes.crux.address}
 
     ${
       lib.concatStringsSep "\n" (
