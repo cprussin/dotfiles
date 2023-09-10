@@ -10,5 +10,5 @@ in {
       "/srv/Library/Google Drive" ${network.wireguard.id.cidr}(rw,no_subtree_check,insecure,all_squash)
     '';
   };
-  networking.firewall.allowedTCPPorts = [2049];
+  networking.firewall.interfaces.prussinnet.allowedTCPPorts = [2049];
 }

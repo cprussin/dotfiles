@@ -20,7 +20,7 @@ in {
       }
     ];
   };
-  networking.firewall = {
+  networking.firewall.interfaces.prussinnet = {
     allowedTCPPorts = [631];
     allowedUDPPorts = [631];
   };

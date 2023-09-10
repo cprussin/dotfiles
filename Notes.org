@@ -7,7 +7,6 @@
 ** TODO Set up kerberos / ldap
 ** TODO Lock / unlock / login with gpg keys (kerberos?)
 ** TODO Make install-user-mountpoints not suck
-** TODO Only open crux firewall ports to wireguard interface
 ** TODO Containerize crux?
 ** TODO Build energy dashboard
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
@@ -52,6 +51,8 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Only open crux firewall ports to wireguard interface
+CLOSED: [2023-09-10 Sun 00:46]
 ** DONE Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)
 CLOSED: [2023-06-04 Sun 12:54]
 ** DONE Set default fonts better in theme (see fonts.fontconfig.defaultFonts in nixpkgs but do it in home-manager)

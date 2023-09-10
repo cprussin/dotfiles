@@ -32,7 +32,11 @@
   '';
 in {
   networking = {
-    firewall = {
+    firewall.interfaces."${config.interfaces.eth}" = {
+      allowedTCPPorts = [53];
+      allowedUDPPorts = [53];
+    };
+    firewall.interfaces.prussinnet = {
       allowedTCPPorts = [53];
       allowedUDPPorts = [53];
     };

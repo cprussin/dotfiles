@@ -21,7 +21,7 @@ in {
     };
   };
 
-  networking.firewall = {
+  networking.firewall.interfaces.prussinnet = {
     allowedTCPPorts = [21 80 443];
     allowedTCPPortRanges = [
       {

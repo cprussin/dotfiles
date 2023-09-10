@@ -314,5 +314,6 @@ in {
   };
 
   # Port 80 is open only for ACME challenges
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.interfaces."${config.interfaces.eth}".allowedTCPPorts = [80 federation_port_external];
+  networking.firewall.interfaces.prussinnet.allowedTCPPorts = [80 443];
 }

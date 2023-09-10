@@ -41,7 +41,7 @@ in {
       peer-public-keys);
 
   networking = {
-    firewall.allowedUDPPorts = [wireguardListenPort];
+    firewall.interfaces."${config.interfaces.eth}".allowedUDPPorts = [wireguardListenPort];
 
     wireguard = {
       enable = true;

@@ -22,7 +22,7 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.interfaces.prussinnet.allowedTCPPorts = [80 443];
   users.users.nginx.extraGroups = ["keys"];
   services.nginx = {
     enable = true;
