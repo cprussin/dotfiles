@@ -5,30 +5,20 @@
   ...
 }: let
   network = pkgs.callPackage ../../../lib/network.nix {};
-  prussinnet-internal-zonefile = pkgs.writeText "db.internal.prussin.net" ''
-    $ORIGIN internal.prussin.net.
-    @	3600 IN	SOA sns.dns.icann.org. noc.dns.icann.org. (
-            2017042745 ; serial
-            7200       ; refresh (2 hours)
-            3600       ; retry (1 hour)
-            1209600    ; expire (2 weeks)
-            3600       ; minimum (1 hour)
-    )
 
-    3600 IN NS a.iana-servers.net.
-    3600 IN NS b.iana-servers.net.
-
-    library            IN A     ${network.wireguard.nodes.crux.address}
-    home-assistant     IN A     ${network.wireguard.nodes.crux.address}
-    matrix             IN A     ${network.wireguard.nodes.crux.address}
-
+  prussinnet-internal-hosts = pkgs.writeText "internal.prussin.net.hosts" ''
+    ${network.wireguard.nodes.crux.address} library.internal.prussin.net home-assistant.internal.prussin.net matrix.internal.prussin.net
     ${
       lib.concatStringsSep "\n" (
         lib.mapAttrsToList
-        (host: node: "${host} IN A ${node.address}")
+        (host: node: "${node.address} ${host}.internal.prussin.net")
         network.wireguard.nodes
       )
     }
+  '';
+
+  prussinnet-override-hosts = pkgs.writeText "prussin.net.hosts" ''
+    ${network.home.static.crux.address} crux.prussin.net
   '';
 in {
   networking = {
@@ -45,22 +35,30 @@ in {
   services.coredns = {
     enable = true;
     config = ''
-      internal.prussin.net {
-        bind prussinnet
-        file ${prussinnet-internal-zonefile}
+      (logging) {
+        prometheus
         log
         errors
       }
 
       (recursive) {
-        cache
-        hosts prussin.net {
-          ${network.home.static.crux.address} crux.prussin.net
+        hosts ${prussinnet-override-hosts} prussin.net {
+          reload 0
           fallthrough
         }
-        forward . 1.1.1.1 1.0.0.1
-        log
-        errors
+        forward . tls://1.1.1.1 tls://1.0.0.1 {
+          tls_servername tls.cloudflare-dns.com
+        }
+        cache
+        import logging
+      }
+
+      internal.prussin.net {
+        bind prussinnet
+        hosts ${prussinnet-internal-hosts} internal.prussin.net {
+          reload 0
+        }
+        import logging
       }
 
       . {
