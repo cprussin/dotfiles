@@ -17,10 +17,10 @@
 ** TODO Fix font sizes too small on Chrome
 ** TODO Improve wireguard
 - [ ] Lock down wireguard to it's own subnet and map in / proxy interfaces for coredns & home-assistant-proxy
-- [-] Fix dns
+- [X] Fix dns
+  - [X] Better wireguard dns
   - [X] Better wireguard domain
-  - [ ] Better wireguard dns
-  - [ ] Add local network dns for crux & wireguard
+  - [X] Add local network dns for crux & wireguard
 - [X] Modularize
 - [X] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
 ** TODO Fix emacs performance issues

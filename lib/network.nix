@@ -49,6 +49,7 @@ in {
 
     static = {
       circinus = "10.42.1.1";
+      crux = "10.42.1.2";
     };
 
     iot = {

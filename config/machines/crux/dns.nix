@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: let
   network = pkgs.callPackage ../../../lib/network.nix {};
@@ -40,17 +41,31 @@ in {
     enable = true;
     config = ''
       internal.prussin.net {
-        bind ${network.wireguard.nodes.crux.address}
+        bind prussinnet
         file ${prussinnet-internal-zonefile}
         log
         errors
       }
 
-      . {
-        bind ${network.wireguard.nodes.crux.address}
+      (recursive) {
+        cache
+        hosts prussin.net {
+          ${network.home.static.crux.address} crux.prussin.net
+          fallthrough
+        }
         forward . 1.1.1.1 1.0.0.1
         log
         errors
+      }
+
+      . {
+        bind prussinnet
+        import recursive
+      }
+
+      . {
+        bind ${config.interfaces.eth}
+        import recursive
       }
     '';
   };
