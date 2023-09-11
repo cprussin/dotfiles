@@ -16,6 +16,7 @@
     ./static-ip.nix
     ./syncthing.nix
     ./wireguard.nix
+    ./libvirtd.nix
   ];
 
   primary-user.name = "cprussin";
