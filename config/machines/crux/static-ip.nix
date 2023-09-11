@@ -13,5 +13,6 @@ in {
       }
     ];
     defaultGateway = network.home.net-hardware.router.address;
+    useDHCP = false;
   };
 }
