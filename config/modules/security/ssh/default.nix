@@ -3,6 +3,7 @@ _: {
     enable = true;
     userKnownHostsFile = "${./known_hosts}";
     controlMaster = "auto";
+    controlPersist = "1m";
     matchBlocks = {
       printotron.user = "pi";
       rsync = {
