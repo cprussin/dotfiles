@@ -73,6 +73,7 @@ in {
           steam = "${pkgs.steam}/bin/steam";
           syncthing = mkWebApp "syncthing" "http://localhost:8384";
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
+          virt-manager = "${pkgs.virt-manager}/bin/virt-manager";
           volume = pkgs.callPackage ./apps/volume.nix {};
         };
       };
