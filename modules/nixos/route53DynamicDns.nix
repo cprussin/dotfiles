@@ -47,50 +47,98 @@ in {
           export AWS_ACCESS_KEY_ID=$(<${cfg.accessKeyFile})
           export AWS_SECRET_ACCESS_KEY=$(<${cfg.secretAccessKeyFile})
 
-          VALID_IP_REGEX=^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$
+          VALID_IPV4_REGEX=^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$
+          VALID_IPV6_REGEX="^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
 
-          currentPublicIp=$($dig +short myip.opendns.com @resolver1.opendns.com)
+          currentPublicIpv4=$($dig +short myip.opendns.com @resolver1.opendns.com)
 
-          if [[ ! $currentPublicIp =~ $VALID_IP_REGEX ]]; then
-            currentPublicIp=$($dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed 's/"//g')
+          if [[ ! $currentPublicIpv4 =~ $VALID_IPV4_REGEX ]]; then
+            currentPublicIpv4=$($dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed 's/"//g')
           fi
 
-          if [[ ! $currentPublicIp =~ $VALID_IP_REGEX ]]; then
-            echo "Could not obtain current public IP address.  Attempt yielded:"
-            echo $currentPublicIp
+          if [[ ! $currentPublicIpv4 =~ $VALID_IPV4_REGEX ]]; then
+            echo "Could not obtain current public IPv4 address.  Attempt yielded:"
+            echo $currentPublicIpv4
             exit 1
           fi
 
-          nameserver=$($aws route53 get-hosted-zone --id ZPN01N69TQ4DV | $jq -r '.DelegationSet.NameServers[0]')
-          currentDnsRecord=$($dig +short ${cfg.cname} @$nameserver)
+          currentPublicIpv6=$($dig -6 TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed 's/"//g')
 
-          if [[ ! $currentDnsRecord =~ $VALID_IP_REGEX ]]; then
-            echo "Could not obtain current DNS record value.  Attempt yielded:"
-            echo $currentDnsRecord
+          if [[ ! $currentPublicIpv6 =~ $VALID_IPV6_REGEX ]]; then
+            echo "Could not obtain current public IPv6 address.  Attempt yielded:"
+            echo $currentPublicIpv6
             exit 1
           fi
 
-          if [[ $currentDnsRecord == $currentPublicIp ]]; then
-            echo "Current IP matches DNS record value, nothing to do."
-            exit
+          nameserver=$($aws route53 get-hosted-zone --id ${cfg.zoneId} | $jq -r '.DelegationSet.NameServers[0]')
+          currentARecord=$($dig +short A ${cfg.cname} @$nameserver)
+          currentAAAARecord=$($dig +short AAAA ${cfg.cname} @$nameserver)
+
+          if [[ ! $currentARecord =~ $VALID_IPV4_REGEX ]]; then
+            echo "Could not obtain current DNS A record value.  Attempt yielded:"
+            echo $currentARecord
+            exit 1
           fi
 
-          echo "Current IP ($currentPublicIp) differs from DNS record value ($currentDnsRecord), updating!"
-          read -r -d ''' BATCH <<-EOF || true
-          { "Comment": "Auto-update $(date)"
-          , "Changes":
-              [ { "Action": "UPSERT"
-                , "ResourceRecordSet":
-                    { "ResourceRecords":
-                      [ { "Value": "$currentPublicIp" } ]
-                    , "Name": "${cfg.cname}"
-                    , "Type": "A"
-                    , "TTL": 60
-                    }
+          if [[ ! $currentAAAARecord =~ $VALID_IPV6_REGEX ]]; then
+            echo "Could not obtain current DNS AAAA record value.  Attempt yielded:"
+            echo $currentAAAARecord
+            exit 1
+          fi
+
+          changes=()
+
+          if [[ $currentARecord == $currentPublicIpv4 ]]; then
+            echo "Current IPv4 matches DNS record value."
+          else
+            echo "Current IPv4 ($currentPublicIpv4) differs from DNS record value ($currentARecord), updating!"
+            read -r -d ''' change <<-EOF || true
+              { "Action": "UPSERT"
+              , "ResourceRecordSet":
+                { "ResourceRecords": [ { "Value": "$currentPublicIpv4" } ]
+                , "Name": "${cfg.cname}"
+                , "Type": "A"
+                , "TTL": 3600
                 }
-              ]
-          }
+              }
           EOF
+            changes+=( "$change" )
+          fi
+
+          if [[ $currentAAAARecord == $currentPublicIpv6 ]]; then
+            echo "Current IPv6 matches DNS record value."
+          else
+            echo "Current IPv6 ($currentPublicIpv6) differs from DNS record value ($currentAAAARecord), updating!"
+            read -r -d ''' change <<-EOF || true
+              { "Action": "UPSERT"
+              , "ResourceRecordSet":
+                { "ResourceRecords": [ { "Value": "$currentPublicIpv6" } ]
+                , "Name": "${cfg.cname}"
+                , "Type": "AAAA"
+                , "TTL": 3600
+                }
+              }
+          EOF
+            changes+=( "$change" )
+          fi
+
+          if [[ ''${#changes[@]} == 0 ]]; then
+            echo "Nothing to do!"
+            exit
+          elif [[ ''${#changes[@]} == 1 ]]; then
+            read -r -d ''' BATCH <<-EOF || true
+              { "Comment": "Auto-update $(date)"
+              , "Changes": [ ''${changes[0]} ]
+              }
+          EOF
+          else
+            read -r -d ''' BATCH <<-EOF || true
+              { "Comment": "Auto-update $(date)"
+              , "Changes": [ ''${changes[0]}, ''${changes[1]} ]
+              }
+          EOF
+          fi
+
           $aws route53 change-resource-record-sets \
             --hosted-zone-id ${cfg.zoneId} \
             --change-batch file://<(echo "$BATCH")

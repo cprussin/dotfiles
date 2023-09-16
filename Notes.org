@@ -53,6 +53,10 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 ** DONE Fix slow ping startup via wireguard (something to do with dns?)
 CLOSED: [2023-09-16 Sat 12:33]
+** DONE Fix wireguard services on mobile network
+CLOSED: [2023-09-15 Fri 22:56]
+** DONE Add ipv6 for route53 / route53 dynamic
+CLOSED: [2023-09-15 Fri 22:53]
 ** DONE Update wireguard network peers
 CLOSED: [2023-09-15 Fri 23:23]
 - [X] crux = "fc42::1";
