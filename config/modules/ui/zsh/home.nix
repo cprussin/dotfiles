@@ -14,6 +14,8 @@ in {
       shellAliases = {
         ls = toString ls;
         clear = toString clear;
+        cat = "${pkgs.bat}/bin/bat";
+        tree = "${pkgs.erdtree}/bin/erd";
       };
       defaultKeymap = "viins";
       autocd = true;

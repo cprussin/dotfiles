@@ -1,9 +1,9 @@
 * Tasks
-** TODO Install exa (ls replacement) and bat (cat replacement) and nushell (zsh replacement) and erdtree (tree replacement)
 ** TODO Fix publicly-visible keys on crux on /boot/crypt and gemini on /boot/luks
 - [ ] Deploy gemini boot keys with colmena (just copy encrypted header / key, will need to start decrypting header on boot)
 - [ ] Maybe put gemini boot keys on another partition with a fs that supports permissions or something?
 - [ ] Run ssh server on early boot of crux to receive keys so we don't need to store them at rest
+** TODO Explore moving to nushell
 ** TODO Set up kerberos / ldap
 ** TODO Lock / unlock / login with gpg keys (kerberos?)
 ** TODO Make install-user-mountpoints not suck
@@ -55,6 +55,8 @@
 CLOSED: [2023-09-15 Fri 23:54]
 - [X] Add localhost:631 shortcut
 - [X] Fix cups / ensure-printers on boot for crux
+** DONE Install exa (ls replacement) and bat (cat replacement) and erdtree (tree replacement)
+CLOSED: [2023-09-16 Sat 00:19]
 ** DONE Only open crux firewall ports to wireguard interface
 CLOSED: [2023-09-10 Sun 00:46]
 ** DONE Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)
