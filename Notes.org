@@ -53,12 +53,25 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 ** DONE Fix slow ping startup via wireguard (something to do with dns?)
 CLOSED: [2023-09-16 Sat 12:33]
+** DONE Update wireguard network peers
+CLOSED: [2023-09-15 Fri 23:23]
+- [X] crux = "fc42::1";
+- [X] gemini = "fc42::1:0:0";
+- [X] pegasus = "fc42::1:0:1";
+- [X] steam-deck = "fc42::1:1:0";
+- [X] printotron = "fc42::1:1:1";
+- [X] shauna-computer = "fc42::2:0:0";
+- [X] shauna-phone = "fc42::2:0:1";
+- [ ] reece-computer = "fc42::3:0:0";
+- [ ] mom-vm = "fc42::3:0:1";
 ** DONE Persist crux logs
 CLOSED: [2023-09-15 Fri 23:30]
 ** DONE Improve cups
 CLOSED: [2023-09-15 Fri 23:54]
 - [X] Add localhost:631 shortcut
 - [X] Fix cups / ensure-printers on boot for crux
+** DONE Fix vsftpd
+CLOSED: [2023-09-15 Fri 23:54]
 ** DONE Install exa (ls replacement) and bat (cat replacement) and erdtree (tree replacement)
 CLOSED: [2023-09-16 Sat 00:19]
 ** DONE Only open crux firewall ports to wireguard interface

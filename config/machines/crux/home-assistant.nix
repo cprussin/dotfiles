@@ -31,7 +31,7 @@ in {
     recommendedGzipSettings = true;
     recommendedProxySettings = true;
     virtualHosts."home-assistant.internal.prussin.net" = {
-      listenAddresses = [network.wireguard.nodes.crux.address];
+      listenAddresses = ["[${network.wireguard.crux.address}]"];
       sslCertificate = "/run/keys/home-assistant.internal.prussin.net.crt";
       sslCertificateKey = "/run/keys/home-assistant.internal.prussin.net.key";
       forceSSL = true;
@@ -54,7 +54,7 @@ in {
       ++ (
         lib.mapAttrsToList
         (host: node: "--add-host=${host}:${node.address}")
-        network.home.iot
+        (builtins.removeAttrs network.home ["id" "prefixLength" "router"])
       );
     volumes = ["/var/lib/hass:/config"];
   };

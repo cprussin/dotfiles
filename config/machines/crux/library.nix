@@ -44,7 +44,7 @@ in {
       recommendedGzipSettings = true;
       package = pkgs.nginxStable.override {modules = [pkgs.nginxModules.fancyindex];};
       virtualHosts."library.internal.prussin.net" = {
-        listenAddresses = [network.wireguard.nodes.crux.address];
+        listenAddresses = ["[${network.wireguard.crux.address}]"];
         sslCertificate = "/run/keys/library.internal.prussin.net.crt";
         sslCertificateKey = "/run/keys/library.internal.prussin.net.key";
         forceSSL = true;
@@ -66,9 +66,9 @@ in {
       extraConfig = ''
         allow_anon_ssl=YES
         ssl_ciphers=HIGH
-        listen_ipv6=NO
-        listen=YES
-        listen_address=${network.wireguard.nodes.crux.address}
+        listen=NO
+        listen_ipv6=YES
+        listen_address6=${network.wireguard.crux.address}
         pasv_enable=YES
         pasv_min_port=${toString minFtpPort}
         pasv_max_port=${toString maxFtpPort}

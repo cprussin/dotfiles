@@ -48,12 +48,12 @@ in {
       interfaces.prussinnet = {
         listenPort = wireguardListenPort;
         privateKeyFile = config.deployment.keys.wireguard-private-key.path;
-        ips = [network.wireguard.nodes.crux.cidr];
+        ips = [network.wireguard.crux.cidr];
 
         peers =
           lib.mapAttrsToList (peer: publicKey: {
             inherit publicKey;
-            allowedIPs = ["${network.wireguard.nodes."${peer}".address}/32"];
+            allowedIPs = ["${network.wireguard."${peer}".address}/128"];
             presharedKeyFile = config.deployment.keys."${psk-keyfile peer}".path;
           })
           peer-public-keys;
@@ -65,4 +65,6 @@ in {
     after = psk-deployment-keys ++ ["wireguard-private-key-key.service"];
     requires = psk-deployment-keys ++ ["wireguard-private-key-key.service"];
   };
+  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = "1";
+
 }
