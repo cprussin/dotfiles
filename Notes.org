@@ -53,6 +53,8 @@
 ** TODO Something for workgroups? :user:emacs:interface:
 ** DONE Fix slow ping startup via wireguard (something to do with dns?)
 CLOSED: [2023-09-16 Sat 12:33]
+** DONE Persist crux logs
+CLOSED: [2023-09-15 Fri 23:30]
 ** DONE Improve cups
 CLOSED: [2023-09-15 Fri 23:54]
 - [X] Add localhost:631 shortcut

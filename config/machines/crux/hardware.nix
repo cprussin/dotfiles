@@ -95,6 +95,7 @@ in {
     // (
       zfs.mkZfsFileSystems {
         "tank-fast/nix".mountpoint = "/nix";
+        "tank-fast/log".mountpoint = "/var/log";
         "tank-fast/secrets" = {
           mountpoint = "/secrets";
           neededForBoot = true;
