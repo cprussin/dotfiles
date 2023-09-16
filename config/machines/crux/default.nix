@@ -13,7 +13,6 @@
     ./library.nix
     ./matrix.nix
     ./nfs.nix
-    ./static-ip.nix
     ./syncthing.nix
     ./wireguard.nix
     ./libvirtd.nix

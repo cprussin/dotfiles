@@ -16,10 +16,6 @@
       )
     }
   '';
-
-  prussinnet-override-hosts = pkgs.writeText "prussin.net.hosts" ''
-    ${network.home.static.crux.address} crux.prussin.net
-  '';
 in {
   networking = {
     firewall.interfaces."${config.interfaces.eth}" = {
@@ -42,10 +38,6 @@ in {
       }
 
       (recursive) {
-        hosts ${prussinnet-override-hosts} prussin.net {
-          reload 0
-          fallthrough
-        }
         forward . tls://1.1.1.1 tls://1.0.0.1 {
           tls_servername tls.cloudflare-dns.com
         }
@@ -63,11 +55,6 @@ in {
 
       . {
         bind prussinnet
-        import recursive
-      }
-
-      . {
-        bind ${config.interfaces.eth}
         import recursive
       }
     '';
