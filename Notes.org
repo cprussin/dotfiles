@@ -1,19 +1,18 @@
 * Tasks
+** TODO Put home-assistant image in niv sources
+** TODO Fix home-assistant blocking shutdown for way too long on crux
+** TODO Fix search for special characters
 ** TODO Fix publicly-visible keys on crux on /boot/crypt and gemini on /boot/luks
 - [ ] Deploy gemini boot keys with colmena (just copy encrypted header / key, will need to start decrypting header on boot)
 - [ ] Maybe put gemini boot keys on another partition with a fs that supports permissions or something?
 - [ ] Run ssh server on early boot of crux to receive keys so we don't need to store them at rest
+** TODO Add systemd-resolved / split dns :system:
 ** TODO Explore moving to nushell
 ** TODO Set up kerberos / ldap
 ** TODO Lock / unlock / login with gpg keys (kerberos?)
 ** TODO Make install-user-mountpoints not suck
-** TODO Containerize crux?
+** TODO Kubernetecize crux
 ** TODO Build energy dashboard
-** TODO Fix home-assistant blocking shutdown for way too long on crux
-** TODO Fix crux activation scripts unmounting tank
-** TODO Why is postgres getting corrupted?
-** TODO Fix gemini locking up & caps lock flashing issue
-** TODO Fix font sizes too small on Chrome
 ** TODO Improve wireguard
 - [ ] Lock down wireguard to it's own subnet and map in / proxy interfaces for coredns & home-assistant-proxy
 - [X] Fix dns
@@ -22,9 +21,6 @@
   - [X] Add local network dns for crux & wireguard
 - [X] Modularize
 - [X] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
-** TODO Fix emacs performance issues
-** TODO Fix slow wifi reconnects
-** TODO Fix search for special characters
 ** TODO Make zfs configuration more declarative somehow (https://github.com/nix-community/disko)
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
    - [X] dunst
@@ -45,12 +41,7 @@
    - [ ] Users (people bound to machines)
    - [ ] Machines (physical)
    - [ ] Directories (syncthing / backup)
-** TODO Investigate using ssh certificate based auth
 ** TODO Rebuild toggle-colors :user:
-** TODO Add local caching DNS server :system:
-** TODO Smart tabs :user:emacs:editing:
-** TODO Sidebar :user:emacs:interface:
-** TODO Something for workgroups? :user:emacs:interface:
 ** DONE Fix slow ping startup via wireguard (something to do with dns?)
 CLOSED: [2023-09-16 Sat 12:33]
 ** DONE Fix wireguard services on mobile network
@@ -78,6 +69,8 @@ CLOSED: [2023-09-15 Fri 23:54]
 CLOSED: [2023-09-15 Fri 23:54]
 ** DONE Install exa (ls replacement) and bat (cat replacement) and erdtree (tree replacement)
 CLOSED: [2023-09-16 Sat 00:19]
+** DONE Investigate using ssh certificate based auth
+CLOSED: [2023-09-15 Fri 23:33]
 ** DONE Only open crux firewall ports to wireguard interface
 CLOSED: [2023-09-10 Sun 00:46]
 ** DONE Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)
