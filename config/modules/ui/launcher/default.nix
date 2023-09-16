@@ -47,6 +47,7 @@ in {
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
           connect-to-network = mkModal "connect-to-network" "${pkgs.connect-to-network}/bin/connect-to-network ${config.interfaces.wifi}";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
+          cups = mkWebApp "cups" "http://localhost:631";
           dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
           emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
           firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";

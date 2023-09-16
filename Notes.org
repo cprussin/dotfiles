@@ -51,6 +51,10 @@
 ** TODO Smart tabs :user:emacs:editing:
 ** TODO Sidebar :user:emacs:interface:
 ** TODO Something for workgroups? :user:emacs:interface:
+** DONE Improve cups
+CLOSED: [2023-09-15 Fri 23:54]
+- [X] Add localhost:631 shortcut
+- [X] Fix cups / ensure-printers on boot for crux
 ** DONE Only open crux firewall ports to wireguard interface
 CLOSED: [2023-09-10 Sun 00:46]
 ** DONE Stop using emacs-overlay (when emacs 29 with pgtk lands in nixpkgs)

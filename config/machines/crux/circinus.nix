@@ -3,6 +3,8 @@
 in {
   services.printing = {
     enable = true;
+    stateless = true;
+    startWhenNeeded = false;
     drivers = [pkgs.epson-escpr2];
     defaultShared = true;
     listenAddresses = ["${network.wireguard.nodes.crux.address}:631"];
