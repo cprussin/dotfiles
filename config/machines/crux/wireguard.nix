@@ -21,8 +21,6 @@
   };
 
   psk-keyfile = peer: "${peer}-preshared-key";
-
-  psk-deployment-keys = lib.mapAttrsToList (peer: _: "${psk-keyfile peer}-key.service") peer-public-keys;
 in {
   deployment.keys =
     {
@@ -53,6 +51,7 @@ in {
         peers =
           lib.mapAttrsToList (peer: publicKey: {
             inherit publicKey;
+            name = peer;
             allowedIPs = ["${network.wireguard."${peer}".address}/128"];
             presharedKeyFile = config.deployment.keys."${psk-keyfile peer}".path;
           })
@@ -61,10 +60,22 @@ in {
     };
   };
 
-  systemd.services.wireguard-prussinnet = {
-    after = psk-deployment-keys ++ ["wireguard-private-key-key.service"];
-    requires = psk-deployment-keys ++ ["wireguard-private-key-key.service"];
-  };
   boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = "1";
 
+  systemd.services =
+    {
+      wireguard-prussinnet = {
+        after = ["wireguard-private-key-key.service"];
+        requires = ["wireguard-private-key-key.service"];
+      };
+    }
+    // (
+      lib.mapAttrs'
+      (peer: _:
+        lib.nameValuePair "wireguard-prussinnet-peer-${peer}" {
+          after = ["${psk-keyfile peer}-key.service"];
+          requires = ["${psk-keyfile peer}-key.service"];
+        })
+      peer-public-keys
+    );
 }
