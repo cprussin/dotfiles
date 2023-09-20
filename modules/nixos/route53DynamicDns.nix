@@ -98,7 +98,7 @@ in {
                 { "ResourceRecords": [ { "Value": "$currentPublicIpv4" } ]
                 , "Name": "${cfg.cname}"
                 , "Type": "A"
-                , "TTL": 3600
+                , "TTL": 60
                 }
               }
           EOF
@@ -115,7 +115,7 @@ in {
                 { "ResourceRecords": [ { "Value": "$currentPublicIpv6" } ]
                 , "Name": "${cfg.cname}"
                 , "Type": "AAAA"
-                , "TTL": 3600
+                , "TTL": 60
                 }
               }
           EOF
