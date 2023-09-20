@@ -22,7 +22,7 @@ in
 
     resolvedPath="$(eval $echo \"$@\" 2>/dev/null)"
 
-    if $test -x "$HOME/.launcher-apps/''${1/ */}"
+    if $test -e $HOME/.launcher-apps/''${1/ */}
     then
       exec $HOME/.launcher-apps/$@
     elif $test "$resolvedPath" -a -e "$resolvedPath"
