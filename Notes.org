@@ -7,7 +7,6 @@
 - [ ] Maybe put gemini boot keys on another partition with a fs that supports permissions or something?
 - [ ] Run ssh server on early boot of crux to receive keys so we don't need to store them at rest
 ** TODO Add systemd-resolved / split dns :system:
-** TODO Explore moving to nushell
 ** TODO Set up kerberos / ldap
 ** TODO Lock / unlock / login with gpg keys (kerberos?)
 ** TODO Make install-user-mountpoints not suck
@@ -42,6 +41,11 @@
    - [ ] Machines (physical)
    - [ ] Directories (syncthing / backup)
 ** TODO Rebuild toggle-colors :user:
+** DONE Explore moving to nushell
+CLOSED: [2023-09-19 Tue 23:24]
+- [X] Fix launcher staying open
+- [X] Add completions (esp. pass)
+- [X] Fix vi point indicator (underscore or vertical line should be edit, block should be normal)
 ** DONE Fix slow ping startup via wireguard (something to do with dns?)
 CLOSED: [2023-09-16 Sat 12:33]
 ** DONE Fix wireguard services on mobile network

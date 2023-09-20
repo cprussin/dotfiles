@@ -26,6 +26,7 @@ in
       ../../modules/ui/htop
       ../../modules/ui/kitty
       ../../modules/ui/less
+      ../../modules/ui/nushell
       ../../modules/ui/readline
       ../../modules/ui/terminfo
       ../../modules/ui/theme

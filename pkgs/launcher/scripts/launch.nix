@@ -6,6 +6,7 @@
   gnused,
   fortune,
   fzf,
+  bash,
 }: let
   run = callPackage ./run.nix {};
   preview = callPackage ./preview.nix {};
@@ -23,6 +24,7 @@ in
     preview=${preview}/bin/preview
 
     showPrompt() {
+      export SHELL=${bash}/bin/bash
       $fzf \
         --preview "$preview {}" \
         --exact \
