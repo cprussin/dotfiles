@@ -45,7 +45,7 @@ in
       password.keyCommand = passwords.getPassword "Connor/Wifi/Centar";
       domain = ".lan";
       manual_ip = {
-        subnet = subnets."${network.home.prefixLength}";
+        subnet = subnets."${toString network.home.prefixLength}";
         static_ip = network.home."${id}".address;
         gateway = network.home.router.address;
       };
