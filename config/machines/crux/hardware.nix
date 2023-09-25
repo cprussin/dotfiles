@@ -47,7 +47,6 @@ in {
   systemd.services.import-tank = {
     after = map (drive: "unlock-${drive}.service") zfsDrives;
     bindsTo = map (drive: "unlock-${drive}.service") zfsDrives;
-    wantedBy = ["zfs.target"];
     script = ''
       if [ "$(${pkgs.zfs}/bin/zpool get -H health tank | cut -f 3)" = "ONLINE" ]; then
         echo "Already imported: tank"
