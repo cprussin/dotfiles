@@ -12,14 +12,6 @@
 ** TODO Make install-user-mountpoints not suck
 ** TODO Kubernetecize crux
 ** TODO Build energy dashboard
-** TODO Improve wireguard
-- [ ] Lock down wireguard to it's own subnet and map in / proxy interfaces for coredns & home-assistant-proxy
-- [X] Fix dns
-  - [X] Better wireguard dns
-  - [X] Better wireguard domain
-  - [X] Add local network dns for crux & wireguard
-- [X] Modularize
-- [X] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
 ** TODO Make zfs configuration more declarative somehow (https://github.com/nix-community/disko)
 ** TODO Consolidate solarized theme configs :user:emacs:xmonad:
    - [X] dunst
@@ -41,6 +33,14 @@
    - [ ] Machines (physical)
    - [ ] Directories (syncthing / backup)
 ** TODO Rebuild toggle-colors :user:
+** DONE Improve wireguard
+CLOSED: [2023-09-24 Sun 20:19]
+- [X] Fix dns
+  - [X] Better wireguard dns
+  - [X] Better wireguard domain
+  - [X] Add local network dns for crux & wireguard
+- [X] Modularize
+- [X] Ensure wireguard & home-assistant correctly restarts on clean reboot (looks like key services aren't actually awaiting key dependencies)
 ** DONE Explore moving to nushell
 CLOSED: [2023-09-19 Tue 23:24]
 - [X] Fix launcher staying open
