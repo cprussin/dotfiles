@@ -8,7 +8,7 @@ in {
     drivers = [pkgs.epson-escpr2];
     defaultShared = true;
     listenAddresses = ["[${network.wireguard.crux.address}]:631"];
-    allowFrom = ["${network.wireguard.id.cidr}"];
+    allowFrom = ["@IF(prussinnet)" "localhost"];
   };
   hardware.printers = {
     ensureDefaultPrinter = "circinus";
