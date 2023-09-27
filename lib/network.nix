@@ -28,14 +28,14 @@ in {
     kitchen-lights = "10.42.5.9";
     living-room-lights = "10.42.5.10";
     master-bedroom-lights = "10.42.5.11";
-    spare-dimmer-1 = "10.42.5.12";
+    garage-lights = "10.42.5.12";
     aidens-room-fan = "10.42.5.50";
     bodhis-room-fan = "10.42.5.51";
     guest-room-fan = "10.42.5.52";
     master-bedroom-fan = "10.42.5.53";
     entry-light = "10.42.5.100";
     front-porch-light = "10.42.5.101";
-    spare-switch-1 = "10.42.5.102";
+    trash-light = "10.42.5.102";
     plug-1 = "10.42.5.150";
     plug-2 = "10.42.5.151";
     plug-3 = "10.42.5.152";

@@ -36,7 +36,7 @@ in
     (dimmer "Kitchen Lights" {})
     (dimmer "Living Room Lights" {})
     (dimmer "Master Bedroom Lights" {})
-    (dimmer "Spare Dimmer 1" {})
+    (dimmer "Garage Lights" {})
     (dual_plug "Dual Plug 1" {})
     (dual_plug "Dual Plug 2" {})
     (dual_plug "Dual Plug 3" {})
@@ -52,5 +52,5 @@ in
     (plug "Plug 5" {})
     (switch "Entry Light" {})
     (switch "Front Porch Light" {})
-    (switch "Spare Switch 1" {})
+    (switch "Trash Light" {})
   ]

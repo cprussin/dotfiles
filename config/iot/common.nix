@@ -44,6 +44,7 @@ in
       ssid = "Centar";
       password.keyCommand = passwords.getPassword "Connor/Wifi/Centar";
       domain = ".lan";
+      use_address = network.home."${id}".address;
       manual_ip = {
         subnet = subnets."${toString network.home.prefixLength}";
         static_ip = network.home."${id}".address;
