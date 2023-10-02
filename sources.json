@@ -36,7 +36,7 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "gpg-key": {
-        "sha256": "025854b5769hsj527f0bgl5dyx92gfaakxy5hvvmd9n0s4qfwbhk",
+        "sha256": "0gvcks5lahm1qwahj5hl7dhk5i0g2qirhlzl3k4f2x9wx98kdchr",
         "type": "file",
         "url": "https://connor.prussin.net/pubkey.asc",
         "url_template": "https://connor.prussin.net/pubkey.asc"
@@ -95,10 +95,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d9035278d8975ae5d3028a5bbf288d8b44c7efa8",
-        "sha256": "0pi21rwl77lgiblswcfdyg788b43n68prf8n0zkx8ka45xqy7i2i",
+        "rev": "400be47328b7b27729604dbb7b0367e30695644a",
+        "sha256": "1v7nda0kchixb07wqpg1lx13lil1p6qjsgic9bhb1ixx2prl848f",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/d9035278d8975ae5d3028a5bbf288d8b44c7efa8.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/400be47328b7b27729604dbb7b0367e30695644a.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs-unstable": {
