@@ -1,11 +1,9 @@
-_: let
-  sources = import ../../../../sources.nix;
-in {
+{pkgs, ...}: {
   programs = {
     nushell = {
       enable = true;
       extraConfig = ''
-        use ${sources.nu_scripts}/custom-completions/pass/pass-completions.nu *
+        source ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/pass/pass-completions.nu
       '';
       extraEnv = ''
         $env.config = {

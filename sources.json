@@ -125,18 +125,6 @@
         "url": "https://github.com/vlevit/notify-send.sh/archive/4b90bb968dbe7364ec9526e76d349950627e967f.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nu_scripts": {
-        "branch": "main",
-        "description": "A place to share Nushell scripts with each other",
-        "homepage": null,
-        "owner": "nushell",
-        "repo": "nu_scripts",
-        "rev": "694701430662f08071cc1b88cb3fa438539c39ea",
-        "sha256": "1mdw64xz2z0wkrs6fbjpgvhcflh7kllfd0izjc637rq10p39jrb7",
-        "type": "tarball",
-        "url": "https://github.com/nushell/nu_scripts/archive/694701430662f08071cc1b88cb3fa438539c39ea.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "zoom-frm": {
         "branch": "master",
         "description": "Commands to zoom frame font size",
