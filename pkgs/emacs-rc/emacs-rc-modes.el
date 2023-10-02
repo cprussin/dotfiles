@@ -13,6 +13,7 @@
 (use-package dhall-mode)
 (use-package diff-mode)
 (use-package dockerfile-mode)
+(use-package ess)
 (use-package go-mode)
 (use-package graphql-mode)
 (use-package groovy-mode)

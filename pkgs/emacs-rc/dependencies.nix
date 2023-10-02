@@ -15,6 +15,7 @@
   epkgs.dockerfile-mode
   epkgs.editorconfig
   epkgs.emojify
+  epkgs.ess
   epkgs.evil
   epkgs.evil-collection
   epkgs.evil-goggles
