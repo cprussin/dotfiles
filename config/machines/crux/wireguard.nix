@@ -47,13 +47,13 @@ in {
       interfaces.prussinnet = {
         listenPort = wireguardListenPort;
         privateKeyFile = config.deployment.keys.wireguard-private-key.path;
-        ips = [network.wireguard.crux.cidr];
+        ips = [network.wireguard6.crux.cidr network.wireguard4.crux.cidr];
 
         peers =
           lib.mapAttrsToList (peer: publicKey: {
             inherit publicKey;
             name = peer;
-            allowedIPs = ["${network.wireguard."${peer}".address}/128"];
+            allowedIPs = ["${network.wireguard6."${peer}".address}/128" "${network.wireguard4."${peer}".address}/32"];
             presharedKeyFile = config.deployment.keys."${psk-keyfile peer}".path;
           })
           peer-public-keys;

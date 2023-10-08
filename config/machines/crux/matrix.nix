@@ -128,7 +128,7 @@ in {
         };
       };
       virtualHosts."matrix.internal.prussin.net" = {
-        listenAddresses = ["[${network.wireguard.crux.address}]"];
+        listenAddresses = ["[${network.wireguard6.crux.address}]" "${network.wireguard4.crux.address}"];
         sslCertificate = "/run/keys/matrix.internal.prussin.net.crt";
         sslCertificateKey = "/run/keys/matrix.internal.prussin.net.key";
         forceSSL = true;

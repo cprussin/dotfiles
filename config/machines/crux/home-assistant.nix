@@ -31,7 +31,7 @@ in {
     recommendedGzipSettings = true;
     recommendedProxySettings = true;
     virtualHosts."home-assistant.internal.prussin.net" = {
-      listenAddresses = ["[${network.wireguard.crux.address}]"];
+      listenAddresses = ["[${network.wireguard6.crux.address}]" "${network.wireguard4.crux.address}"];
       sslCertificate = "/run/keys/home-assistant.internal.prussin.net.crt";
       sslCertificateKey = "/run/keys/home-assistant.internal.prussin.net.key";
       forceSSL = true;

@@ -60,7 +60,7 @@ in {
       cert = config.deployment.keys.syncthing-cert.path;
       key = config.deployment.keys.syncthing-key.path;
       extraOptions.options = {
-        listenAddresses = ["tcp://[${network.wireguard."${config.networking.hostName}".address}]:22000"];
+        listenAddresses = ["tcp://[${network.wireguard6."${config.networking.hostName}".address}]:22000" "tcp://[${network.wireguard4."${config.networking.hostName}".address}]:22000"];
         globalAnnounceEnabled = false;
         localAnnounceEnabled = false;
         natEnabled = false;
@@ -69,7 +69,7 @@ in {
       };
       devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
         id = syncthingMachineIds."${machine}";
-        addresses = ["tcp://[${network.wireguard."${machine}".address}]:22000"];
+        addresses = ["tcp://${machine}.internal.prussin.net:22000"];
       });
       folders = foldersForCurrentDevice {
         Notes = {

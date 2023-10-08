@@ -47,7 +47,7 @@ in {
     dual-plug-4 = "10.42.5.203";
   };
 
-  wireguard = mkNetwork "fc42::/48" {
+  wireguard6 = mkNetwork "fc42::/48" {
     crux = "fc42::1";
     gemini = "fc42::1:0:0";
     pegasus = "fc42::1:0:1";
@@ -58,5 +58,18 @@ in {
     shauna-phone = "fc42::2:0:1";
     reece-computer = "fc42::3:0:0";
     mom-vm = "fc42::3:0:1";
+  };
+
+  wireguard4 = mkNetwork "10.43.0.0/16" {
+    crux = "10.43.0.1";
+    gemini = "10.43.1.0";
+    pegasus = "10.43.1.1";
+    andromeda = "10.43.1.100";
+    steam-deck = "10.43.2.0";
+    printotron = "10.43.2.1";
+    shauna-computer = "10.43.3.0";
+    shauna-phone = "10.43.3.1";
+    reece-computer = "10.43.4.0";
+    mom-vm = "10.43.4.1";
   };
 }

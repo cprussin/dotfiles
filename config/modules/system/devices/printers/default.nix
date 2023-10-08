@@ -1,6 +1,4 @@
-{pkgs, ...}: let
-  network = pkgs.callPackage ../../../../../lib/network.nix {};
-in {
+{pkgs, ...}: {
   services.printing.enable = true;
   hardware.printers = {
     ensureDefaultPrinter = "circinus";
@@ -9,7 +7,7 @@ in {
         name = "circinus";
         location = "Office";
         description = "Epson ET-3760";
-        deviceUri = "ipp://[${network.wireguard.crux.address}]:631/printers/circinus";
+        deviceUri = "ipp://circinus.internal.prussin.net/printers/circinus";
         model = "everywhere";
       }
     ];
