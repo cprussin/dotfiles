@@ -51,6 +51,7 @@ in {
     crux = "fc42::1";
     gemini = "fc42::1:0:0";
     pegasus = "fc42::1:0:1";
+    andromeda = "fc42::1:0:f001";
     steam-deck = "fc42::1:1:0";
     printotron = "fc42::1:1:1";
     shauna-computer = "fc42::2:0:0";
