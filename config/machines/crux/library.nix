@@ -22,7 +22,7 @@ in {
   };
 
   networking.firewall.interfaces.prussinnet = {
-    allowedTCPPorts = [21 80 443];
+    allowedTCPPorts = [21 80 443 2049];
     allowedTCPPortRanges = [
       {
         from = minFtpPort;
@@ -73,6 +73,17 @@ in {
         pasv_enable=YES
         pasv_min_port=${toString minFtpPort}
         pasv_max_port=${toString maxFtpPort}
+      '';
+    };
+
+    nfs.server = {
+      enable = true;
+      hostName = "${network.wireguard6.crux.address},${network.wireguard4.crux.address}";
+      exports = ''
+        /srv/Library *(ro,fsid=0,no_subtree_check,crossmnt,insecure,all_squash)
+        "/srv/Library/Family Photos" *(rw,no_subtree_check,insecure,all_squash)
+        "/srv/Library/Documents" *(rw,no_subtree_check,insecure,all_squash)
+        "/srv/Library/Google Drive" *(rw,no_subtree_check,insecure,all_squash)
       '';
     };
   };

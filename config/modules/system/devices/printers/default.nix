@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   services.printing.enable = true;
   hardware.printers = {
     ensureDefaultPrinter = "circinus";

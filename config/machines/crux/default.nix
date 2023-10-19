@@ -11,11 +11,11 @@
     ./dynamic-dns.nix
     ./home-assistant.nix
     ./library.nix
+    ./libvirtd.nix
     ./matrix.nix
-    ./nfs.nix
+    ./powerpanel.nix
     ./syncthing.nix
     ./wireguard.nix
-    ./libvirtd.nix
   ];
 
   primary-user.name = "cprussin";
@@ -25,8 +25,4 @@
   };
   environment.etc."machine-id".text = "bf6ba660172042baa958c54739b5fdb9\n";
   services.getty.greetingLine = builtins.readFile ./greeting;
-  programs.powerpanel = {
-    enable = true;
-    enable-alarm = false;
-  };
 }
