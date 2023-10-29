@@ -6,6 +6,7 @@ in
       "${sources.home-manager}/nixos"
       ../../../modules
 
+      ../../modules/data/backup
       ../../modules/data/session-vars
       ../../modules/data/syncthing
       ../../modules/data/xdg-user-dirs

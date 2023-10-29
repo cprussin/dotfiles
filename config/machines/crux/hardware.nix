@@ -21,9 +21,7 @@
 
   drives =
     zfsDrives
-    ++ [
-      "wwn-0x5000cca0b0c4d39c"
-    ];
+    ++ [config.backupDiskId];
 in {
   imports = [
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
