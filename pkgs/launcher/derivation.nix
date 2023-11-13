@@ -12,4 +12,5 @@ symlinkJoin {
     (callPackage ./scripts/run.nix {})
     (callPackage ./scripts/search.nix {})
   ];
+  postBuild = "ln -s $out/bin/run $out/bin/xdg-open";
 }
