@@ -12,8 +12,8 @@
 
   email = mkWebApp "gmail" "https://mail.google.com?authuser=connor@prussin.net";
   sms = mkWebApp "sms" "https://messages.google.com/web/conversations";
-  matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland";
-  slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --enable-features=UseOzonePlatform --ozone-platform=wayland -g warn";
+  matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
+  slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   discord = "${pkgs.discord}/bin/discord";
   zulip = "${pkgs.zulip}/bin/zulip";
 
