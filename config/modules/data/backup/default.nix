@@ -30,10 +30,10 @@
   mountExternalBackup = pkgs.writeShellScriptBin "mount-external-backup" ''
     set -e
 
-    if [ ! -e /dev/disk/by-id/${config.backupDiskId} ]
+    if [ ! -e /dev/disk/by-id/${config.backupDisk.diskId} ]
     then
       echo -n "Waiting for external drive to appear..."
-      while [ ! -e /dev/disk/by-id/${config.backupDiskId} ]
+      while [ ! -e /dev/disk/by-id/${config.backupDisk.diskId} ]
       do
         echo -n '.'
         sleep 0.5
@@ -41,9 +41,9 @@
       echo
     fi
     TEMP=$(mktemp -d)
-    ${pkgs.pass}/bin/pass show Connor/Infrastructure/luks/crux/${config.backupDiskId}/header > $TEMP/header.img
-    ${pkgs.pass}/bin/pass show Connor/Infrastructure/luks/crux/${config.backupDiskId}/key |\
-      sudo cryptsetup open --key-file - --header $TEMP/header.img /dev/disk/by-id/${config.backupDiskId} ${config.backupDiskId}
+    ${pkgs.pass}/bin/pass show Connor/Infrastructure/luks/crux/${config.backupDisk.filenameBase}/header > $TEMP/header.img
+    ${pkgs.pass}/bin/pass show Connor/Infrastructure/luks/crux/${config.backupDisk.filenameBase}/key |\
+      sudo cryptsetup open --key-file - --header $TEMP/header.img /dev/disk/by-id/${config.backupDisk.diskId} crypt-${config.backupDisk.filenameBase}
     sudo zpool import -o readonly=on tank-backup -R /tank-backup
     mkdir ~/.bak
     sudo ${pkgs.bindfs}/bin/bindfs --perms=0400,u+X --force-user=cprussin /tank-backup /home/cprussin/.bak
@@ -59,10 +59,10 @@
     sudo umount /home/cprussin/.bak
     rmdir ~/.bak
     sudo zpool export tank-backup
-    sudo cryptsetup close ${config.backupDiskId}
+    sudo cryptsetup close crypt-${config.backupDisk.filenameBase}
   '';
 in {
-  backupDiskId = "usb-WD_Elements_2621_575836324436334A5A325659-0:0";
+  backupDisk.diskId = "usb-WD_Elements_2621_575836324436334A5A325659-0:0";
 
   primary-user.home-manager.home.packages = lib.mkForce [
     mountRsyncBackup

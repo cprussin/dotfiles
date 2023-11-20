@@ -25,10 +25,10 @@
       exit 1
     fi
 
-    if [ ! -e /dev/disk/by-id/${config.backupDiskId} ]
+    if [ ! -e /dev/disk/by-id/${config.backupDisk.diskId} ]
     then
       echo -ne "\e[1;37mWaiting for external drive to appear...\e[0m"
-      while [ ! -e /dev/disk/by-id/${config.backupDiskId} ]
+      while [ ! -e /dev/disk/by-id/${config.backupDisk.diskId} ]
       do
         echo -n '.'
         sleep 0.5
@@ -38,7 +38,7 @@
 
     echo
     echo -e "\e[1;37mMounting tank-backup...\e[0m"
-    systemctl start unlock-${config.detachedLuksWithNixopsKeys."${config.backupDiskId}".filenameBase}.service
+    systemctl start unlock-${config.detachedLuksWithNixopsKeys."${config.backupDisk.diskId}".filenameBase}.service
     zpool import -N tank-backup
 
     echo
@@ -62,7 +62,7 @@
     echo
     echo -e "\e[1;37mCleaning up...\e[0m"
     zpool export tank-backup
-    systemctl stop unlock-${config.detachedLuksWithNixopsKeys."${config.backupDiskId}".filenameBase}.service
+    systemctl stop unlock-${config.detachedLuksWithNixopsKeys."${config.backupDisk.diskId}".filenameBase}.service
     zfs destroy -r tank@external-backup-$LAST_SNAP_DATE
   '';
 in {

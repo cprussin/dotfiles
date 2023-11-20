@@ -6,22 +6,13 @@
 }: let
   sources = import ../../../sources.nix;
 
-  passwords = pkgs.callPackage ../../../lib/passwords.nix {};
-
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
-
-  getLuksFile = drive: file:
-    passwords.getBase64EncodedPassword "Connor/Infrastructure/luks/crux/${drive}/${file}";
 
   zfsDrives = [
     "ata-ST10000VN0008-2JJ101_ZHZ06Y2A"
     "ata-ST10000VN0008-2JJ101_ZHZ08V0G"
     "ata-ST10000VN0008-2JJ101_ZHZ0L7WG"
   ];
-
-  drives =
-    zfsDrives
-    ++ [config.backupDiskId];
 in {
   imports = [
     "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
@@ -30,17 +21,13 @@ in {
 
   interfaces.eth = "enp8s0";
 
-  detachedLuksWithNixopsKeys = builtins.listToAttrs (
-    map
-    (
-      drive:
-        lib.nameValuePair drive {
-          key = getLuksFile drive "key";
-          header = getLuksFile drive "header";
-        }
-    )
-    drives
-  );
+  detachedLuksWithNixopsKeys =
+    {
+      "${config.backupDisk.diskId}" = {
+        inherit (config.backupDisk) filenameBase;
+      };
+    }
+    // builtins.listToAttrs (map (drive: lib.nameValuePair drive {}) zfsDrives);
 
   systemd.services.import-tank = {
     after = map (drive: "unlock-${drive}.service") zfsDrives;

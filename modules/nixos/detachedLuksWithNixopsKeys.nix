@@ -4,18 +4,26 @@
   pkgs,
   ...
 }: let
+  passwords = pkgs.callPackage ../../lib/passwords.nix {};
+
   cfg = config.detachedLuksWithNixopsKeys;
 
   base64Decode = path: "${pkgs.coreutils}/bin/base64 -d ${path}";
 
   keys =
     lib.mapAttrs'
-    (_: v: lib.nameValuePair "${v.filenameBase}-key" {keyCommand = v.key;})
+    (_: v:
+      lib.nameValuePair "${v.filenameBase}-key" {
+        keyCommand = passwords.getBase64EncodedPassword "Connor/Infrastructure/luks/${config.networking.hostName}/${v.filenameBase}/key";
+      })
     cfg;
 
   headers =
     lib.mapAttrs'
-    (_: v: lib.nameValuePair "${v.filenameBase}-header" {keyCommand = v.header;})
+    (_: v:
+      lib.nameValuePair "${v.filenameBase}-header" {
+        keyCommand = passwords.getBase64EncodedPassword "Connor/Infrastructure/luks/${config.networking.hostName}/${v.filenameBase}/header";
+      })
     cfg;
 
   mkUnlockScript = drive: filenameBase: ''
@@ -50,18 +58,6 @@ in {
         lib.types.submodule (
           {name, ...}: {
             options = {
-              key = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                description = ''
-                  The base64-encoded contents of the luks key for this drive
-                '';
-              };
-              header = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                description = ''
-                  The base64-encoded contents of the luks header for this drive
-                '';
-              };
               filenameBase = lib.mkOption {
                 type = lib.types.str;
                 default = builtins.replaceStrings [":"] [""] name;
