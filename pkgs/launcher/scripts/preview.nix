@@ -22,7 +22,7 @@ writeShellScriptBin "preview" ''
   tar=${gnutar}/bin/tar
   eyeD3=${python3Packages.eyeD3}/bin/eyeD3
   pdftotext=${poppler_utils}/bin/pdftotext
-  kitty=${kitty}/bin/kitty
+  kitten=${kitty}/bin/kitten
   gs=${ghostscript}/bin/gs
   ffmpeg=${ffmpeg}/bin/ffmpeg
 
@@ -33,8 +33,8 @@ writeShellScriptBin "preview" ''
   }
 
   # Kitty kittens in fzf are broken, see https://github.com/junegunn/fzf/issues/3228
-  # showimg="$kitty +kitten icat --place 79x53@85x1"
-  # $kitty +kitten icat --clear
+  showimg="$kitten icat --clear --transfer-mode=memory --stdin=no --place=79x53@85x1 {} > /dev/tty"
+  kitten icat --clear --transfer-mode=memory --stdin=no > /dev/tty
 
   homefile=$HOME/"$1"
 
@@ -45,10 +45,10 @@ writeShellScriptBin "preview" ''
   then
     case $($file --mime-type "$homefile" | $sed 's/.*: //') in
       application/gzip) $tar ztvf "$homefile" | limit ;;
-      # application/pdf) $gs -q -sOutputFile=- -sDEVICE=jpeg -dNOPAUSE -dBATCH -dFirstPage=1 -dLastPage=1 -dJPEG=90 -r300 "$homefile" | $showimg ;;
+      application/pdf) $gs -q -sOutputFile=- -sDEVICE=jpeg -dNOPAUSE -dBATCH -dFirstPage=1 -dLastPage=1 -dJPEG=90 -r300 "$homefile" | $showimg ;;
       audio/*) $eyeD3 "$homefile" ;;
-      # image/*) $showimg "$homefile" ;;
-      # video/*) $ffmpeg -v 0 -ss 00:00:15 -i "$homefile" -vframes 1 -q:v 2 -f singlejpeg - | $showimg ;;
+      image/*) $showimg "$homefile" ;;
+      video/*) $ffmpeg -v 0 -ss 00:00:15 -i "$homefile" -vframes 1 -q:v 2 -f singlejpeg - | $showimg ;;
       *) $bat --style=numbers --color=always "$homefile" | limit ;;
     esac
   else
