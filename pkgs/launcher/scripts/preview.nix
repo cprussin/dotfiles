@@ -32,8 +32,14 @@ writeShellScriptBin "preview" ''
     $head -n $lineLimit
   }
 
-  # Kitty kittens in fzf are broken, see https://github.com/junegunn/fzf/issues/3228
-  showimg="$kitten icat --clear --transfer-mode=memory --stdin=no --place=79x53@85x1 {} > /dev/tty"
+  showimg() {
+    if [ "$1" ]; then
+      stdin=no
+    else
+      stdin=yes
+    fi
+    $kitten icat --clear --transfer-mode=memory --place="$COLUMNS"x"$LINES"@"$((COLUMNS + 5))"x0 --align center --stdin $stdin "$1" > /dev/tty
+  }
   kitten icat --clear --transfer-mode=memory --stdin=no > /dev/tty
 
   homefile=$HOME/"$1"
@@ -45,10 +51,10 @@ writeShellScriptBin "preview" ''
   then
     case $($file --mime-type "$homefile" | $sed 's/.*: //') in
       application/gzip) $tar ztvf "$homefile" | limit ;;
-      application/pdf) $gs -q -sOutputFile=- -sDEVICE=jpeg -dNOPAUSE -dBATCH -dFirstPage=1 -dLastPage=1 -dJPEG=90 -r300 "$homefile" | $showimg ;;
+      application/pdf) $gs -q -sOutputFile=- -sDEVICE=jpeg -dNOPAUSE -dBATCH -dFirstPage=1 -dLastPage=1 -dJPEG=90 -r300 "$homefile" | showimg ;;
       audio/*) $eyeD3 "$homefile" ;;
-      image/*) $showimg "$homefile" ;;
-      video/*) $ffmpeg -v 0 -ss 00:00:15 -i "$homefile" -vframes 1 -q:v 2 -f singlejpeg - | $showimg ;;
+      image/*) showimg "$homefile" ;;
+      video/*) $ffmpeg -v 0 -ss 00:00:15 -i "$homefile" -vframes 1 -q:v 2 -f image2pipe - | showimg ;;
       *) $bat --style=numbers --color=always "$homefile" | limit ;;
     esac
   else

@@ -28,6 +28,7 @@ in
       $fzf \
         --preview "$preview {}" \
         --exact \
+        --preview-window "right,50%,border-left" \
         --print-query \
         --layout=reverse \
         --header "$($fortune)"
