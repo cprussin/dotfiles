@@ -85,6 +85,7 @@ in {
         "tank/persisted-state/chromium".mountpoint = "/home/${config.primary-user.name}/.config/chromium";
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
+        "tank/persisted-state/syncthing".mountpoint = "/home/${config.primary-user.name}/.cache/syncthing";
         "tank/persisted-state/log".mountpoint = "/var/log";
         "tank/persisted-state/secrets" = {
           mountpoint = "/secrets";

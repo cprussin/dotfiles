@@ -6,7 +6,6 @@
     ./emacs-rc.nix
     ./font.nix
     ./icon-theme.nix
-    ./imv.nix
     ./keymap.nix
     ./launcher.nix
     ./waybar.nix

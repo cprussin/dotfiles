@@ -1,12 +1,12 @@
 {
   writeShellScript,
   coreutils,
-  exa,
+  eza,
 }:
 writeShellScript "ls" ''
   echo=${coreutils}/bin/echo
   realpath=${coreutils}/bin/realpath
-  exa=${exa}/bin/exa
+  eza=${eza}/bin/eza
   pwd=${coreutils}/bin/pwd
   test=${coreutils}/bin/test
 
@@ -15,7 +15,7 @@ writeShellScript "ls" ''
   }
 
   lsWithArgs() {
-    $exa --icons -HF --color=always --group-directories-first "$@"
+    $eza --icons -HF --color=always --group-directories-first "$@"
   }
 
   if $test $# -eq 0

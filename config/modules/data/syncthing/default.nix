@@ -59,84 +59,88 @@ in {
       group = "users";
       cert = config.deployment.keys.syncthing-cert.path;
       key = config.deployment.keys.syncthing-key.path;
-      extraOptions.options = {
-        listenAddresses = ["tcp://[${network.wireguard6."${config.networking.hostName}".address}]:22000" "tcp://[${network.wireguard4."${config.networking.hostName}".address}]:22000"];
-        globalAnnounceEnabled = false;
-        localAnnounceEnabled = false;
-        natEnabled = false;
-        relaysEnabled = false;
-        urAccepted = -1;
-      };
-      devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
-        id = syncthingMachineIds."${machine}";
-        addresses = ["tcp://${machine}.internal.prussin.net:22000"];
-      });
-      folders = foldersForCurrentDevice {
-        Notes = {
-          path = "${config.primary-user.home}/Notes";
-          devices = ["crux" "gemini" "pegasus"];
+      configDir = "/home/cprussin/.config/syncthing";
+      dataDir = "/home/cprussin/.cache/syncthing";
+      settings = {
+        devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
+          id = syncthingMachineIds."${machine}";
+          addresses = ["tcp://${machine}.internal.prussin.net:22000"];
+        });
+        folders = foldersForCurrentDevice {
+          Notes = {
+            path = "${config.primary-user.home}/Notes";
+            devices = ["crux" "gemini" "pegasus"];
+          };
+          Projects = {
+            path = "${config.primary-user.home}/Projects";
+            devices = ["crux" "gemini"];
+          };
+          Scratch = {
+            path = "${config.primary-user.home}/Scratch";
+            devices = ["crux" "gemini" "pegasus"];
+          };
+          Passwords = {
+            path = "${config.primary-user.home}/.password-store";
+            devices = ["crux" "gemini" "pegasus"];
+          };
+          DCIM = {
+            path = "${config.primary-user.home}/Phone/DCIM";
+            devices = ["crux" "pegasus"];
+          };
+          Pictures = {
+            path = "${config.primary-user.home}/Phone/Pictures";
+            devices = ["crux" "pegasus"];
+          };
+          WhatsApp_Media = {
+            path = "${config.primary-user.home}/Phone/WhatsApp Media";
+            devices = ["crux" "pegasus"];
+          };
+          SMS_Backup = {
+            path = "${config.primary-user.home}/Phone/SMS";
+            devices = ["crux" "pegasus"];
+          };
+          Game_Boy_Saves = {
+            path = "${config.primary-user.home}/Game Saves/Game Boy";
+            devices = ["crux"];
+          };
+          Game_Boy_Color_Saves = {
+            path = "${config.primary-user.home}/Game Saves/Game Boy Color";
+            devices = ["crux"];
+          };
+          Game_Boy_Advance_Saves = {
+            path = "${config.primary-user.home}/Game Saves/Game Boy Advance";
+            devices = ["crux"];
+          };
+          Super_Nintendo_Saves = {
+            path = "${config.primary-user.home}/Game Saves/Super Nintendo";
+            devices = ["crux"];
+          };
+          GameCube_Saves = {
+            path = "${config.primary-user.home}/Game Saves/GameCube";
+            devices = ["crux"];
+          };
+          Stardew_Valley_Saves = {
+            path =
+              if config.networking.hostName == "crux"
+              then "${config.primary-user.home}/Game Saves/Stardew Valley"
+              else "${config.primary-user.home}/.config/StardewValley/Saves";
+            devices = ["crux" "gemini"];
+          };
+          Factorio_Saves = {
+            path =
+              if config.networking.hostName == "crux"
+              then "${config.primary-user.home}/Game Saves/Factorio"
+              else "${config.primary-user.home}/.factorio/saves";
+            devices = ["crux" "gemini"];
+          };
         };
-        Projects = {
-          path = "${config.primary-user.home}/Projects";
-          devices = ["crux" "gemini"];
-        };
-        Scratch = {
-          path = "${config.primary-user.home}/Scratch";
-          devices = ["crux" "gemini" "pegasus"];
-        };
-        Passwords = {
-          path = "${config.primary-user.home}/.password-store";
-          devices = ["crux" "gemini" "pegasus"];
-        };
-        DCIM = {
-          path = "${config.primary-user.home}/Phone/DCIM";
-          devices = ["crux" "pegasus"];
-        };
-        Pictures = {
-          path = "${config.primary-user.home}/Phone/Pictures";
-          devices = ["crux" "pegasus"];
-        };
-        WhatsApp_Media = {
-          path = "${config.primary-user.home}/Phone/WhatsApp Media";
-          devices = ["crux" "pegasus"];
-        };
-        SMS_Backup = {
-          path = "${config.primary-user.home}/Phone/SMS";
-          devices = ["crux" "pegasus"];
-        };
-        Game_Boy_Saves = {
-          path = "${config.primary-user.home}/Game Saves/Game Boy";
-          devices = ["crux"];
-        };
-        Game_Boy_Color_Saves = {
-          path = "${config.primary-user.home}/Game Saves/Game Boy Color";
-          devices = ["crux"];
-        };
-        Game_Boy_Advance_Saves = {
-          path = "${config.primary-user.home}/Game Saves/Game Boy Advance";
-          devices = ["crux"];
-        };
-        Super_Nintendo_Saves = {
-          path = "${config.primary-user.home}/Game Saves/Super Nintendo";
-          devices = ["crux"];
-        };
-        GameCube_Saves = {
-          path = "${config.primary-user.home}/Game Saves/GameCube";
-          devices = ["crux"];
-        };
-        Stardew_Valley_Saves = {
-          path =
-            if config.networking.hostName == "crux"
-            then "${config.primary-user.home}/Game Saves/Stardew Valley"
-            else "${config.primary-user.home}/.config/StardewValley/Saves";
-          devices = ["crux" "gemini"];
-        };
-        Factorio_Saves = {
-          path =
-            if config.networking.hostName == "crux"
-            then "${config.primary-user.home}/Game Saves/Factorio"
-            else "${config.primary-user.home}/.factorio/saves";
-          devices = ["crux" "gemini"];
+        extraOptions.options = {
+          listenAddresses = ["tcp://[${network.wireguard6."${config.networking.hostName}".address}]:22000" "tcp://[${network.wireguard4."${config.networking.hostName}".address}]:22000"];
+          globalAnnounceEnabled = false;
+          localAnnounceEnabled = false;
+          natEnabled = false;
+          relaysEnabled = false;
+          urAccepted = -1;
         };
       };
     };

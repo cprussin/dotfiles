@@ -183,16 +183,7 @@ in {
       };
 
       plugins = [
-        (config.services.matrix-synapse.package.plugins.matrix-synapse-shared-secret-auth.overrideAttrs (_: {
-          version = "2.0.1";
-          src = pkgs.fetchFromGitHub {
-            owner = "devture";
-            repo = "matrix-synapse-shared-secret-auth";
-            rev = "2.0.1";
-            sha256 = "0cbpj6npbnda23qrp7z5l33c95sh5mh21m9sc32xxiqaikj29ali";
-          };
-          buildInputs = [config.services.matrix-synapse.package];
-        }))
+        config.services.matrix-synapse.package.plugins.matrix-synapse-shared-secret-auth
       ];
 
       extraConfigFiles = [

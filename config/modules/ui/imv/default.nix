@@ -2,7 +2,7 @@ _: {
   primary-user.home-manager.programs.imv = {
     enable = true;
 
-    binds = {
+    settings.binds = {
       n = "next";
       p = "prev";
       "<Ctrl+plus>" = "zoom 1";

@@ -143,7 +143,7 @@ in {
         gutter = cfg.highlightBackground;
       };
 
-      imv.background = removeOctothorpe cfg.background;
+      imv.settings.options.background = removeOctothorpe cfg.background;
     };
 
     services.mako = {

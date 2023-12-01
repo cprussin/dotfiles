@@ -22,7 +22,7 @@
 in {
   primary-user.home-manager.wayland.windowManager.sway = {
     enable = true;
-    systemdIntegration = true;
+    systemd.enable = true;
 
     config = {
       inherit modifier;

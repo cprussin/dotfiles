@@ -2,7 +2,6 @@
   sources ? import ./sources.nix,
   nixpkgs ? sources.nixpkgs,
   niv ? sources.niv,
-  colmena ? sources.colmena,
   mkCli ? sources.mkCli,
 }: let
   niv-overlay = self: _: {
@@ -17,10 +16,6 @@
     };
   };
 
-  colmena-overlay = _: _: {
-    colmena = import colmena;
-  };
-
   password-utils-overlay = self: _: {
     inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
   };
@@ -30,7 +25,6 @@
   pkgs = import nixpkgs {
     overlays = [
       niv-overlay
-      colmena-overlay
       password-utils-overlay
       mkCli-overlay
     ];

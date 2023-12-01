@@ -23,7 +23,7 @@ in {
     (lib.mkAliasOptionModule ["primary-user" "uid"] ["users" "users" cfg.name "uid"])
     (lib.mkAliasOptionModule ["primary-user" "openssh"] ["users" "users" cfg.name "openssh"])
     (lib.mkAliasOptionModule ["primary-user" "isNormalUser"] ["users" "users" cfg.name "isNormalUser"])
-    (lib.mkAliasOptionModule ["primary-user" "passwordFile"] ["users" "users" cfg.name "passwordFile"])
+    (lib.mkAliasOptionModule ["primary-user" "hashedPasswordFile"] ["users" "users" cfg.name "hashedPasswordFile"])
   ];
 
   config = lib.mkIf (cfg.name != null) {
@@ -35,7 +35,7 @@ in {
       extraGroups = ["wheel"];
       uid = lib.mkDefault 1000;
       isNormalUser = true;
-      passwordFile = config.deployment.keys.primary-user-password.path;
+      hashedPasswordFile = config.deployment.keys.primary-user-password.path;
     };
     nix.settings.trusted-users = [cfg.name];
   };
