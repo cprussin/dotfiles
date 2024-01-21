@@ -69,7 +69,7 @@ in {
           scan = "${pkgs.simple-scan}/bin/simple-scan";
           screenshot = pkgs.callPackage ./apps/screenshot.nix {};
           shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
-          sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/11yYp4Ma5t7wJxSBZQYyVcO7FlWuG6cEOJrPXcQCv3AI";
+          sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
           steam = "${pkgs.steam}/bin/steam";
           syncthing = mkWebApp "syncthing" "http://localhost:8384";
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
