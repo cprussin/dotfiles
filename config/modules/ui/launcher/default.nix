@@ -72,6 +72,7 @@ in {
           sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
           steam = "${pkgs.steam}/bin/steam";
           syncthing = mkWebApp "syncthing" "http://localhost:8384";
+          systemctl = mkModal "systemctl" "${pkgs.sysz}/bin/sysz";
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
           virt-manager = "${pkgs.virt-manager}/bin/virt-manager";
           volume = pkgs.callPackage ./apps/volume.nix {};
