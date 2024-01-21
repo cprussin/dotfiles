@@ -21,7 +21,6 @@
     ../../modules/system/devices/redshift
     ../../modules/system/devices/scanners
 
-    ../../modules/ui/audio
     ../../modules/ui/direnv
     ../../modules/ui/emacs
     ../../modules/ui/fonts
