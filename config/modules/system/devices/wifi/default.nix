@@ -46,6 +46,9 @@
   wpa3Networks = mkWpa3Networks {
     Centar.priority = 1;
     CentarPhone.priority = 2;
+
+    # Work
+    Verkada-Guest = {};
   };
 
   wpaNetworks = mkWpaNetworks {
@@ -55,9 +58,6 @@
     # Friends' networks
     "PC House 3" = {};
     DeathStar5 = {};
-
-    # Work
-    Verkada-Guest = {};
   };
 
   peapMschapNetworks = mkPeapMschapNetworks {
