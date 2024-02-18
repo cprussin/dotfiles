@@ -102,6 +102,7 @@ in {
               emacs-rc-pngcrush-path "${cfg.pngcrush}"
               emacs-rc-convert-path "${cfg.convert}"
               emacs-rc-optipng-path "${cfg.optipng}"
+              emacs-rc-optipng-path "${cfg.optipng}"
               emacs-rc-emoji-sets-path "${cfg.emojiSets}")
 
         (require 'emacs-rc)

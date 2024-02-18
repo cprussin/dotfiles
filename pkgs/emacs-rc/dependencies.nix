@@ -42,6 +42,8 @@
   epkgs.json-mode
   epkgs.kotlin-mode
   epkgs.link-hint
+  epkgs.lsp-mode
+  epkgs.lsp-ui
   epkgs.magit
   epkgs.markdown-mode
   epkgs.mmm-mode
@@ -60,7 +62,7 @@
   epkgs.purescript-mode
   epkgs.rainbow-delimiters
   epkgs.rainbow-mode
-  epkgs.rust-mode
+  epkgs.rustic
   epkgs.scad-mode
   epkgs.smartparens
   epkgs.solarized-theme

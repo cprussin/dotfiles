@@ -22,7 +22,6 @@
 (use-package kotlin-mode)
 (use-package nix-mode)
 (use-package nushell-mode)
-(use-package rust-mode)
 (use-package scad-mode)
 (use-package svelte-mode)
 (use-package yaml-mode)
