@@ -66,7 +66,7 @@ in {
           printotron = mkWebApp "printotron" "https://printotron.internal.prussin.net";
           reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot";
           remacs = pkgs.callPackage ./apps/remacs.nix {};
-          scan = "${pkgs.simple-scan}/bin/simple-scan";
+          scan = "${pkgs.xsane}/bin/xsane";
           screenshot = pkgs.callPackage ./apps/screenshot.nix {};
           shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
           sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
