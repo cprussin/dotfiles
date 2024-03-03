@@ -1,4 +1,8 @@
 * Tasks
+** TODO Configure lsp-ui keybindings
+** TODO Configure rustic options
+** TODO Set up yasnippet
+** TODO Set up dap-mode
 ** TODO Put home-assistant image in niv sources
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
 ** TODO Fix search for special characters
