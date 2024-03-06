@@ -46,6 +46,7 @@ in {
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
           connect-to-network = mkModal "connect-to-network" "${pkgs.connect-to-network}/bin/connect-to-network ${config.interfaces.wifi}";
+          credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
           cups = mkWebApp "cups" "http://localhost:631";
           dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
