@@ -2,10 +2,9 @@
   lib,
   config,
   pkgs,
+  modulesPath,
   ...
 }: let
-  sources = import ../../../sources.nix;
-
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
 
   zfsDrives = [
@@ -15,7 +14,7 @@
   ];
 in {
   imports = [
-    "${sources.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
+    "${modulesPath}/installer/scan/not-detected.nix"
     ../../modules/system/devices/cdrom
   ];
 

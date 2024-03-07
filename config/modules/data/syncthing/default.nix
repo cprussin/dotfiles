@@ -11,6 +11,7 @@
   # automatically rather than manually copied here
   syncthingMachineIds = {
     gemini = "SNVES23-LNUWRQA-EYZW3SB-NGPXW5F-5OYCJ2N-J43WSKW-PXX2KAI-ZJ3ZUQ7";
+    aries = "EKTBGJJ-SH75ED7-Y2GAYCQ-W4O7G2X-P7Z6QT3-OE36JNW-PVTF3EE-GLZFUQ2";
     crux = "I4ZIHKH-5UQLYN3-I6TGPKJ-IXVKJYK-NTO6RQG-QPIFI4Y-NMC3IHO-4OPHDAM";
     pegasus = "OAODBXR-CP465WC-LOMXEFB-KM4TYOE-V7TGBKD-YYI35ZN-3GBBGQB-HLCH4AR";
   };
@@ -69,19 +70,19 @@ in {
         folders = foldersForCurrentDevice {
           Notes = {
             path = "${config.primary-user.home}/Notes";
-            devices = ["crux" "gemini" "pegasus"];
+            devices = ["crux" "gemini" "aries" "pegasus"];
           };
           Projects = {
             path = "${config.primary-user.home}/Projects";
-            devices = ["crux" "gemini"];
+            devices = ["crux" "gemini" "aries"];
           };
           Scratch = {
             path = "${config.primary-user.home}/Scratch";
-            devices = ["crux" "gemini" "pegasus"];
+            devices = ["crux" "gemini" "aries" "pegasus"];
           };
           Passwords = {
             path = "${config.primary-user.home}/.password-store";
-            devices = ["crux" "gemini" "pegasus"];
+            devices = ["crux" "gemini" "aries" "pegasus"];
           };
           DCIM = {
             path = "${config.primary-user.home}/Phone/DCIM";

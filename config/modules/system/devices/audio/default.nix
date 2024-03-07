@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+_: {
   sound.enable = true;
 
   security.rtkit.enable = true;
