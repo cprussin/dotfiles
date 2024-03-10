@@ -35,6 +35,10 @@ in {
       output."*".bg = "${./background.png} fill";
 
       input."type:mouse".pointer_accel = "0.5";
+      input."type:touchpad" = {
+        tap = "enabled";
+        tap_button_map = "lrm";
+      };
 
       fonts.size = 11.0;
 
