@@ -11,7 +11,6 @@
 
   peer-public-keys = {
     aries = "ptwFBYmwVMAAY9XJ5ZZazT8peTZ5feyx69bfZkiSOlo=";
-    gemini = "hmvFMJuINO7N6EO04Pnf32FJFaW5N0zDctot3Qpo8gg=";
     pegasus = "H/hoEAN8RieoOSuxPG3y35fPdhxjLS+iNJcD2CoGS1g=";
     andromeda = "8LO9GBh9oQMnx2MCBjButhXy7ikim7ziqnBPzEUNJxY=";
     steam-deck = "AVscY2MnbeE7H3QkBWmJFhFJ6tMQR/77259nNZoaFwM=";

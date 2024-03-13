@@ -49,9 +49,8 @@ in {
 
   wireguard6 = mkNetwork "fc42::/48" {
     crux = "fc42::1";
-    gemini = "fc42::1:0:0";
+    aries = "fc42::1:0:0";
     pegasus = "fc42::1:0:1";
-    aries = "fc42::1:0:2";
     andromeda = "fc42::1:0:f001";
     steam-deck = "fc42::1:1:0";
     printotron = "fc42::1:1:1";
@@ -63,9 +62,8 @@ in {
 
   wireguard4 = mkNetwork "10.43.0.0/16" {
     crux = "10.43.0.1";
-    gemini = "10.43.1.0";
+    aries = "10.43.1.0";
     pegasus = "10.43.1.1";
-    aries = "10.43.1.2";
     andromeda = "10.43.1.100";
     steam-deck = "10.43.2.0";
     printotron = "10.43.2.1";
