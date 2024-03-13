@@ -42,6 +42,7 @@
       jq="${pkgs.jq}/bin/jq"
       dig="${pkgs.dnsutils}/bin/dig"
       syncthing="${pkgs.syncthing}/bin/syncthing"
+      xmllint="${pkgs.libxml2}/bin/xmllint"
 
       echo -n "Checking if crux is up on wireguard ipv6...  "
       if ping -q -c 1 -W 1 ${network.wireguard6.crux.address} >/dev/null; then
@@ -84,7 +85,7 @@
 
       echo -n "Checking if library (http) is running...  "
       LIBRARY_RES=$(curl -s https://library.internal.prussin.net)
-      if [ "$(echo "$LIBRARY_RES" | $xidel -e '//title' 2>/dev/null)" == "Index of /" ]; then
+      if [ "$(echo "$LIBRARY_RES" | $xmllint --html --xpath 'string(/html/head/title)' -)" == "Index of /" ]; then
           echo "✅"
       else
           echo "❌"
