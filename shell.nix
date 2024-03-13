@@ -41,7 +41,6 @@
       curl="${pkgs.curl}/bin/curl"
       jq="${pkgs.jq}/bin/jq"
       dig="${pkgs.dnsutils}/bin/dig"
-      xidel="${pkgs.xidel}/bin/xidel"
       syncthing="${pkgs.syncthing}/bin/syncthing"
 
       echo -n "Checking if crux is up on wireguard ipv6...  "
