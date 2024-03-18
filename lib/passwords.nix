@@ -144,6 +144,21 @@
     domain="$(${getPasswordField}/bin/getPasswordField "$1" "Host")"
     echo "extra-access-tokens = $domain=$token"
   '';
+
+  getVaultwardenSecrets = pkgs.writeShellScriptBin "getVaultwardenSecrets" ''
+    set -euo pipefail
+    password="$(${getPassword}/bin/getPassword "$1")"
+    username="$(${getPasswordField}/bin/getPasswordField "$1" "Username")"
+    database="$(${getPasswordField}/bin/getPasswordField "$1" "Database")"
+    pushId="$(${getPasswordField}/bin/getPasswordField "$2" "Installation ID")"
+    pushKey="$(${getPassword}/bin/getPassword "$2")"
+    echo "DATABASE_URL=postgresql://$username:$password@localhost/$database"
+    echo "PUSH_INSTALLATION_ID=$pushId"
+    echo "PUSH_INSTALLATION_KEY=$pushKey"
+    if [ "''${3-}" ]; then
+      echo "ADMIN_TOKEN=$(${getPassword}/bin/getPassword "$3")"
+    fi
+  '';
 in {
   passwordUtils = pkgs.symlinkJoin {
     name = "passwordUtils";
@@ -161,6 +176,7 @@ in {
       getMautrixRegistrationFile
       getWpaPassphraseFile
       getNixAccessToken
+      getVaultwardenSecrets
     ];
   };
   getPassword = name: ["getPassword" name];
@@ -176,4 +192,11 @@ in {
   getMautrixRegistrationFile = name: port: ["getMautrixRegistrationFile" name (toString port)];
   getWpaPassphraseFile = networks: ["getWpaPassphraseFile"] ++ networks;
   getNixAccessToken = name: ["getNixAccessToken" name];
+  getVaultwardenSecrets = database: push: adminToken:
+    ["getVaultwardenSecrets" database push]
+    ++ (
+      if adminToken == null
+      then []
+      else [adminToken]
+    );
 }

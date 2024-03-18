@@ -15,6 +15,7 @@
     ./matrix.nix
     ./powerpanel.nix
     ./syncthing.nix
+    ./vaultwarden.nix
     ./wireguard.nix
   ];
 
