@@ -1,5 +1,5 @@
 let
-  stateVersion = "22.11";
+  stateVersion = "23.11";
 in
   _: {
     system.stateVersion = stateVersion;
