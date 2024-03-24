@@ -87,8 +87,8 @@ in {
       IFS="
       "
       getSnaps() {
-        ${zfs} list -H -s name -o name,net.prussin:backup -t snapshot |\
-        ${awk} -F '\t' '$1 ~ /@borgsnap/ && tolower($2) ~ /true/ {print $1}'
+        ${zfs} list -H -s name -o name,net.prussin:backup -t snapshot -r tank |\
+        ${awk} -F '\t' '$1 ~ /@borgsnap$/ && tolower($2) ~ /true/ {print $1}'
       }
       for snap in $(getSnaps)
       do
