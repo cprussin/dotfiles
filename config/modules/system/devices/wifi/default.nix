@@ -46,9 +46,6 @@
   wpa3Networks = mkWpa3Networks {
     Centar.priority = 1;
     CentarPhone.priority = 2;
-
-    # Work
-    Verkada-Guest = {};
   };
 
   wpaNetworks = mkWpaNetworks {

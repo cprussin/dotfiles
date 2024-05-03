@@ -26,16 +26,8 @@
     printf "key 1\nkey 2\nkey 3\nexpire\ny\n1m\nsave\n" | gpg --batch --command-fd 0 --status-fd=2 --pinentry-mode loopback --passphrase-fd 3 --edit-key connor@prussin.net 3</master/enc/pw
 
     echo
-    echo -e "\e[1;37mUpdating expiry on subkeys for connor.prussin@verkada.com...\e[0m"
-    printf "key 1\nkey 2\nkey 3\nexpire\ny\n1m\nsave\n" | gpg --batch --command-fd 0 --status-fd=2 --pinentry-mode loopback --passphrase-fd 3 --edit-key connor.prussin@verkada.com 3</master/enc/pw-verkada
-
-    echo
     echo -e "\e[1;37mExporting connor@prussin.net public keys to /connor@prussin.net-pubkey.asc on liveusb...\e[0m"
     gpg --batch --export --armor connor@prussin.net | sudo tee /liveusb/connor@prussin.net-pubkey.asc
-
-    echo
-    echo -e "\e[1;37mExporting connor.prussin@verkada.com public keys to /connor.prussin@verkada.com-pubkey.asc on liveusb...\e[0m"
-    gpg --batch --export --armor connor.prussin@verkada.com | sudo tee /liveusb/connor.prussin@verkada.com-pubkey.asc
 
     echo
     echo -e "\e[1;37mEjecting liveusb...\e[0m"
