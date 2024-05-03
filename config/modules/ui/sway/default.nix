@@ -92,6 +92,15 @@ in {
               "shortcuts_inhibitor disable"
             ];
           }
+          {
+            criteria = {
+              class = "zoom";
+            };
+            commands = [
+              "border none"
+              "floating enable"
+            ];
+          }
         ];
       };
 
