@@ -21,10 +21,10 @@ in
       ../../modules/system/users
 
       ../../modules/ui/bash
+      ../../modules/ui/btop
       ../../modules/ui/dvp
       ../../modules/ui/fzf
       ../../modules/ui/greeting
-      ../../modules/ui/htop
       ../../modules/ui/kitty
       ../../modules/ui/less
       ../../modules/ui/nushell

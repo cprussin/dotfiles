@@ -43,6 +43,7 @@ in {
           bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluez}/bin/bluetoothctl";
           brave = pkgs.writeShellScript "brave" "${pkgs.launcher}/bin/browse --browser brave $*";
           brightness = pkgs.callPackage ./apps/brightness.nix {};
+          btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
           calendar = mkWebApp "calendar" "https://calendar.google.com?authuser=connor@prussin.net";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
@@ -55,7 +56,6 @@ in {
           firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
           gimp = "${pkgs.gimp}/bin/gimp";
           home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
-          htop = mkTerminalApp "htop" "${pkgs.htop}/bin/htop";
           journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
           library = mkWebApp "library" "https://library.internal.prussin.net";
           lock = pkgs.writeShellScript "lock" "${pkgs.systemd}/bin/loginctl lock-session";
