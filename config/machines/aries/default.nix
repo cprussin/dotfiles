@@ -11,4 +11,5 @@
   };
   environment.etc."machine-id".text = "70ef59137eb5416e835a6246288bbd32\n";
   services.getty.greetingLine = builtins.readFile ./greeting;
+  services.fwupd.enable = true;
 }
