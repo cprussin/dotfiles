@@ -17,10 +17,10 @@
         "homepage": null,
         "owner": "cprussin",
         "repo": "fzf-pass",
-        "rev": "5ecf629b73dd6a1c3ddf5d2b6e0487fd2b9ad9e6",
-        "sha256": "1xknn96q5m0lisx9vn7q4k9m500cihkqhs8wm0v0x1y7rr4hix4k",
+        "rev": "cee79cce90f90cf11b54e00fdcdfd8e83b32b0f0",
+        "sha256": "0n9ycpbggsdxn5m32g1z5frv6qzhvgi27bmyhayf1083s50rbr0m",
         "type": "tarball",
-        "url": "https://github.com/cprussin/fzf-pass/archive/5ecf629b73dd6a1c3ddf5d2b6e0487fd2b9ad9e6.tar.gz",
+        "url": "https://github.com/cprussin/fzf-pass/archive/cee79cce90f90cf11b54e00fdcdfd8e83b32b0f0.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "gpg-key": {
