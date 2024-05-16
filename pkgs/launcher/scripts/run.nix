@@ -3,7 +3,6 @@
   callPackage,
   coreutils,
   gnugrep,
-  zoom-us,
 }: let
   open = callPackage ./open.nix {};
   browse = callPackage ./browse.nix {};
@@ -16,7 +15,6 @@ in
     echo=${coreutils}/bin/echo
     test=${coreutils}/bin/test
     grep=${gnugrep}/bin/grep
-    zoom=${zoom-us}/bin/zoom
 
     tlds='com|net|org|gov|edu|co|io|do|me'
     browsePrefixes='http://|go/|localhost|chrome://'
@@ -24,10 +22,7 @@ in
 
     resolvedPath="$(eval $echo \"$@\" 2>/dev/null)"
 
-    if [[ "$1" == zoommtg://* ]]
-    then
-      exec $zoom "$1"
-    elif $test -e $HOME/.launcher-apps/''${1/ */}
+    if $test -e $HOME/.launcher-apps/''${1/ */}
     then
       exec $HOME/.launcher-apps/$@
     elif $test "$resolvedPath" -a -e "$resolvedPath"
