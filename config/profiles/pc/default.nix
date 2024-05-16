@@ -17,6 +17,7 @@
     ../../modules/system/devices/audio
     ../../modules/system/devices/cdrom
     ../../modules/system/devices/dialout
+    ../../modules/system/devices/ledger
     ../../modules/system/devices/printers
     ../../modules/system/devices/redshift
     ../../modules/system/devices/scanners
