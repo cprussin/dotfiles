@@ -38,6 +38,7 @@
     ../../modules/ui/swayidle
     ../../modules/ui/swaylock
     ../../modules/ui/waybar
+    ../../modules/ui/xdg-portal
   ];
 
   enableSshdAtBoot = false;
