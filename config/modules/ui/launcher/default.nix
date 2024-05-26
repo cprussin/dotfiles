@@ -5,14 +5,15 @@
   ...
 }: let
   mkWebApp = pkgs.callPackage ./utils/mkWebApp.nix {};
+  mkGoogleApp = pkgs.callPackage ./utils/mkGoogleApp.nix {};
   mkTerminalApp' = pkgs.callPackage ./utils/mkTerminalApp.nix {inherit config;};
   mkTerminalApp = name: mkTerminalApp' name name;
   mkModal = pkgs.callPackage ./utils/mkModal.nix {inherit config;};
   mkConfirmationDialog = pkgs.callPackage ./utils/mkConfirmationDialog.nix {inherit config;};
   screen = pkgs.callPackage ./apps/screen.nix {};
 
-  email = mkWebApp "gmail" "https://mail.google.com?authuser=connor@prussin.net";
-  sms = mkWebApp "sms" "https://messages.google.com/web/conversations";
+  email = mkGoogleApp "gmail" "https://mail.google.com";
+  sms = mkWebApp "sms" "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
   matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   discord = "${pkgs.discord}/bin/discord";
@@ -20,6 +21,9 @@
 
   comms = pkgs.writeShellScript "" ''
     ${email} &
+    ${email} surge &
+    ${email} pyth &
+    ${email} getsharpe &
     ${sms} &
     ${matrix} &
     ${slack} &
@@ -44,11 +48,11 @@ in {
           brave = pkgs.writeShellScript "brave" "${pkgs.launcher}/bin/browse --browser brave $*";
           brightness = pkgs.callPackage ./apps/brightness.nix {};
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
-          calendar = mkWebApp "calendar" "https://calendar.google.com?authuser=connor@prussin.net";
+          calendar = mkGoogleApp "calendar" "https://calendar.google.com";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
           connect-to-network = mkModal "connect-to-network" "${pkgs.connect-to-network}/bin/connect-to-network ${config.interfaces.wifi}";
-          credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
+          credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
           cups = mkWebApp "cups" "http://localhost:631";
           dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
@@ -72,7 +76,7 @@ in {
           screen-record = pkgs.writeShellScript "screenshot" "${screen} record $*";
           screenshot = pkgs.writeShellScript "screenshot" "${screen} shot $*";
           shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
-          sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
+          sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
           steam = "${pkgs.steam}/bin/steam";
           stop-screen-record = pkgs.writeShellScript "stop-screen-record" "pkill wf-recorder";
           syncthing = mkWebApp "syncthing" "http://localhost:8384";
