@@ -8,6 +8,7 @@
     ../../modules/security/gpg
     ../../modules/security/pass
     ../../modules/security/ssh
+    ../../modules/security/tailscale
     ../../modules/security/wireguard
     ../../modules/security/yubikey
 
