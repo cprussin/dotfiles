@@ -1,3 +1,6 @@
 _: {
-  services.logind.extraConfig = "HandlePowerKey=lock";
+  services.logind = {
+    powerKey = "lock";
+    powerKeyLongPress = "poweroff";
+  };
 }
