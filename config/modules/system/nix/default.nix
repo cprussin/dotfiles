@@ -1,12 +1,33 @@
-{config, ...}: let
-  sources = import ../../../../sources.nix;
+{config, pkgs, ...}: let
+  pkgs-unstable = import config.flake-inputs.nixpkgs-unstable {
+    overlays = [];
+    config = import ./nixpkgs-config.nix;
+    system = pkgs.system;
+  };
+  pkgs-master = import config.flake-inputs.nixpkgs-master {
+    overlays = [];
+    config = import ./nixpkgs-config.nix;
+    system = pkgs.system;
+  };
+  unstable-pkgs-overlay = _: super: {
+    inherit (pkgs-unstable) syncthing bitwig-studio signald waybar;
+    inherit (pkgs-master) makemkv;
+
+    emacsPackagesFor = emacs: (
+      (super.emacsPackagesFor emacs).overrideScope' (
+        _: _: {
+          inherit (pkgs-unstable.emacsPackagesFor emacs) nushell-mode;
+        }
+      )
+    );
+  };
 in {
   primary-user.extraGroups = ["nix-access-tokens"];
   ids.gids.nix-access-tokens = 500;
   users.groups.nix-access-tokens.gid = config.ids.gids.nix-access-tokens;
 
   nix = {
-    nixPath = ["nixpkgs=${sources.nixpkgs}"];
+    nixPath = ["nixpkgs=${config.flake-inputs.nixpkgs}"];
     gc = {
       automatic = true;
       dates = "weekly";
@@ -27,15 +48,19 @@ in {
   nixpkgs = {
     config = import ./nixpkgs-config.nix;
     overlays = [
-      (import ../../../../overlays/0-unstable-pkgs)
-      (import ../../../../overlays/dircolors-solarized)
-      (import ../../../../overlays/fzf-pass)
-      (import ../../../../overlays/makemkv)
-      (import ../../../../overlays/mako)
-      (import ../../../../overlays/notify-send)
-      (import ../../../../overlays/pass-with-otp)
-      (import ../../../../overlays/powerpanel)
-      (import ../../../../overlays/sudo-with-insults)
+      unstable-pkgs-overlay
+      (import ../../../../pkgs/dircolors-solarized/overlay.nix {
+        src = config.flake-inputs.dircolors-solarized;
+      })
+      (import "${config.flake-inputs.fzf-pass}/overlay.nix")
+      (import ../../../../pkgs/makemkv/overlay.nix)
+      (import ../../../../pkgs/mako/overlay.nix)
+      (import ../../../../pkgs/notify-send/overlay.nix {
+        src = config.flake-inputs.notify-send;
+      })
+      (import ../../../../pkgs/pass-with-otp/overlay.nix)
+      (import ../../../../pkgs/powerpanel/overlay.nix)
+      (import ../../../../pkgs/sudo-with-insults/overlay.nix)
       (import ../../../../pkgs/connect-to-network/overlay.nix)
     ];
   };

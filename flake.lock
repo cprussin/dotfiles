@@ -1,0 +1,231 @@
+{
+  "nodes": {
+    "dircolors-solarized": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1709818368,
+        "narHash": "sha256-lY3KvXLQvNsK6jdru/oHsOAztIjLVrZrxENkh8j5thY=",
+        "owner": "seebi",
+        "repo": "dircolors-solarized",
+        "rev": "6714ca06aa98befd7d732e90bcf10bdcb3ea224e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "seebi",
+        "repo": "dircolors-solarized",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "fzf-pass": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1715815350,
+        "narHash": "sha256-FeSVQdEDgeC8gr6uI+Lb8GOzsys/PDFqsb3p99ZlPlk=",
+        "owner": "cprussin",
+        "repo": "fzf-pass",
+        "rev": "cee79cce90f90cf11b54e00fdcdfd8e83b32b0f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cprussin",
+        "repo": "fzf-pass",
+        "type": "github"
+      }
+    },
+    "gpg-key": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-ojWGYcV2gzfX8XdyhwcNs7zJN6GyPIGWWmBF09sQC+A=",
+        "type": "file",
+        "url": "https://connor.prussin.net/pubkey.asc"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://connor.prussin.net/pubkey.asc"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1717476296,
+        "narHash": "sha256-ScHe38Tr+TxGURC17kby4mIIxOG3aJvZWXzPM79UnEk=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "095ef64aa3b2ab4a4f1bf07f29997e21e3a5576a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-23.11",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "mkCli": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1682555240,
+        "narHash": "sha256-gW5tZsrv3GxcQPQOagMvwLeZCAdr4wc2ANIrbULybLQ=",
+        "owner": "cprussin",
+        "repo": "mkCli",
+        "rev": "3d356fd26d59dcfdccf47160e78f9389f150fc2c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cprussin",
+        "repo": "mkCli",
+        "type": "github"
+      }
+    },
+    "nixos-hardware": {
+      "locked": {
+        "lastModified": 1717574423,
+        "narHash": "sha256-cz3P5MZffAHwL2IQaNzsqUBsJS+u0J/AAwArHMAcCa0=",
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "d6c6cf6f5fead4057d8fb2d5f30aa8ac1727f177",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "master",
+        "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1717530100,
+        "narHash": "sha256-b4Dn+PnrZoVZ/BoR9JN2fTxXxplJrAsdSUIePf4Cacs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a2e1d0414259a144ebdc048408a807e69e0565af",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-master": {
+      "locked": {
+        "lastModified": 1717733237,
+        "narHash": "sha256-QO36AMa5+QjbNetyfKp2y/NjJ9+VbhsqDZMubIsKcOQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "074e00af9b1af6c8b9aaf20ec46bfe6f91cdd2e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1717602782,
+        "narHash": "sha256-pL9jeus5QpX5R+9rsp3hhZ+uplVHscNJh8n8VpqscM0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e8057b67ebf307f01bdcc8fba94d94f75039d1f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "notify-send": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646324558,
+        "narHash": "sha256-p0Q+aYJb8OqmZiQGf95/aUMHWA7QF52epNFWki3ekXg=",
+        "owner": "vlevit",
+        "repo": "notify-send.sh",
+        "rev": "2bac09be65e6007c77e82710bfd9c22189d731d8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vlevit",
+        "repo": "notify-send.sh",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "dircolors-solarized": "dircolors-solarized",
+        "flake-utils": "flake-utils",
+        "fzf-pass": "fzf-pass",
+        "gpg-key": "gpg-key",
+        "home-manager": "home-manager",
+        "mkCli": "mkCli",
+        "nixos-hardware": "nixos-hardware",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-master": "nixpkgs-master",
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "notify-send": "notify-send",
+        "zoom-frm": "zoom-frm"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "zoom-frm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1533442465,
+        "narHash": "sha256-/mE/SRmfYeP8sQ234vZVqQ4OVH09UXgUlf88ecDxy1Q=",
+        "owner": "cprussin",
+        "repo": "zoom-frm",
+        "rev": "08dd33d2518f4f9a90c804e09baac1db74ffa58f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cprussin",
+        "repo": "zoom-frm",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

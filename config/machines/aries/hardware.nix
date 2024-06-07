@@ -5,12 +5,10 @@
   modulesPath,
   ...
 }: let
-  sources = import ../../../sources.nix;
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
   disk-id = "nvme-WD_BLACK_SN770_1TB_234639801768";
 in {
   imports = [
-    "${sources.nixos-hardware}/framework/13-inch/11th-gen-intel"
     "${modulesPath}/installer/scan/not-detected.nix"
   ];
 
@@ -37,7 +35,7 @@ in {
           device = "/dev/disk/by-id/${disk-id}";
           header = "/boot/luks/${disk-id}/header";
           gpgCard = {
-            publicKey = sources.gpg-key;
+            publicKey = config.flake-inputs.gpg-key;
 
             # I don't want this in the store.  However due to how the module is
             # written, I have to put something here, and I have to copy the

@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
-  sources = import ../../../../sources.nix;
-in {
+{ pkgs, lib, config, ...  }: {
   primary-user.home-manager = {
     home.packages = lib.mkForce [pkgs.gnupg];
 
@@ -14,7 +8,7 @@ in {
       mutableTrust = false;
       publicKeys = [
         {
-          source = sources.gpg-key;
+          source = config.flake-inputs.gpg-key;
           trust = "ultimate";
         }
       ];
