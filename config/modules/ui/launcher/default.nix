@@ -16,9 +16,6 @@
   sms = mkWebApp "sms" "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
   matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
-  discord = "${pkgs.discord}/bin/discord";
-  zulip = "${pkgs.zulip}/bin/zulip";
-
   comms = pkgs.writeShellScript "" ''
     ${email} &
     ${email} surge &
@@ -40,8 +37,10 @@ in {
       launcher = {
         enable = true;
         apps = {
-          inherit email sms matrix slack discord zulip comms;
+          inherit email sms matrix slack comms;
 
+          discord = "${pkgs.discord}/bin/discord";
+          zulip = "${pkgs.zulip}/bin/zulip";
           agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
           bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
           bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluez}/bin/bluetoothctl";
