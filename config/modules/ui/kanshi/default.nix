@@ -18,7 +18,7 @@ _: {
           }
 
           {
-            criteria = "Dell Inc. DELL U3219Q 2ZLS413";
+            criteria = "Dell Inc. DELL U3219Q H8KF413";
             status = "enable";
             transform = "270";
             position = "0,0";
@@ -32,7 +32,7 @@ _: {
           }
 
           {
-            criteria = "Dell Inc. DELL U3219Q H8KF413";
+            criteria = "Dell Inc. DELL U3219Q 2ZLS413";
             status = "enable";
             transform = "270";
             position = "4320,0";
