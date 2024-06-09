@@ -11,7 +11,6 @@
   federation_port_internal = 8008;
   client_port_internal = 8009;
   mautrix-telegram-port = 29317;
-  mautrix-signal-port = 29328;
 
   mautrix_settings = port: {
     appservice = {
@@ -70,16 +69,6 @@ in {
       user = "matrix-synapse";
       group = "matrix-synapse";
       keyCommand = passwords.getMautrixRegistrationFile "telegram" mautrix-telegram-port;
-    };
-    mautrix-signal-environment-file = {
-      user = "mautrix-signal";
-      group = "mautrix-signal";
-      keyCommand = passwords.getMautrixSignalEnvironmentFile "Connor/Infrastructure/matrix/bridges/signal" "Connor/Infrastructure/matrix/matrix-synapse-shared-secret";
-    };
-    "mautrix-signal-registration-file.yaml" = {
-      user = "matrix-synapse";
-      group = "matrix-synapse";
-      keyCommand = passwords.getMautrixRegistrationFile "signal" mautrix-signal-port;
     };
   };
 
@@ -178,7 +167,6 @@ in {
 
         app_service_config_files = [
           config.deployment.keys."mautrix-telegram-registration-file.yaml".path
-          config.deployment.keys."mautrix-signal-registration-file.yaml".path
         ];
       };
 
@@ -202,12 +190,6 @@ in {
           backfill.initial_limit = -1;
         };
       };
-    };
-
-    mautrix-signal = {
-      enable = true;
-      environmentFile = config.deployment.keys.mautrix-signal-environment-file.path;
-      settings = mautrix_settings mautrix-signal-port;
     };
   };
 
@@ -235,14 +217,12 @@ in {
         "matrix-synapse-database-config.yaml-key.service"
         "matrix-synapse-shared-secret-config.yaml-key.service"
         "mautrix-telegram-registration-file.yaml-key.service"
-        "mautrix-signal-registration-file.yaml-key.service"
       ];
       requires = [
         "matrix-synapse-signing-key-key.service"
         "matrix-synapse-database-config.yaml-key.service"
         "matrix-synapse-shared-secret-config.yaml-key.service"
         "mautrix-telegram-registration-file.yaml-key.service"
-        "mautrix-signal-registration-file.yaml-key.service"
       ];
       serviceConfig.ExecStartPre = lib.mkForce [];
     };
@@ -255,34 +235,16 @@ in {
         Group = "mautrix-telegram";
       };
     };
-    mautrix-signal = {
-      after = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
-      requires = ["postgresql.service" "mautrix-signal-environment-file-key.service"];
-      serviceConfig = {
-        DynamicUser = lib.mkForce false;
-        User = "mautrix-signal";
-        Group = "mautrix-signal";
-      };
-    };
   };
 
   # see https://github.com/NixOS/nixpkgs/blob/nixos-21.11/nixos/modules/misc/ids.nix
   ids = {
-    uids = {
-      mautrix-telegram = 350;
-      mautrix-signal = 351;
-    };
-    gids = {
-      mautrix-telegram = 350;
-      mautrix-signal = 351;
-    };
+    uids.mautrix-telegram = 350;
+    gids.mautrix-telegram = 350;
   };
 
   users = {
-    groups = {
-      mautrix-telegram.gid = config.ids.gids.mautrix-telegram;
-      mautrix-signal.gid = config.ids.gids.mautrix-signal;
-    };
+    groups.mautrix-telegram.gid = config.ids.gids.mautrix-telegram;
     users = {
       matrix-synapse.extraGroups = ["keys"];
       mautrix-telegram = {
@@ -292,14 +254,6 @@ in {
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.mautrix-telegram;
         extraGroups = ["keys"];
-      };
-      mautrix-signal = {
-        group = "mautrix-signal";
-        home = "/var/lib/mautrix-signal";
-        createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
-        uid = config.ids.uids.mautrix-signal;
-        extraGroups = ["keys" "signald"];
       };
     };
   };

@@ -14,7 +14,7 @@
     inherit (pkgs-master) makemkv;
 
     emacsPackagesFor = emacs: (
-      (super.emacsPackagesFor emacs).overrideScope' (
+      (super.emacsPackagesFor emacs).overrideScope (
         _: _: {
           inherit (pkgs-unstable.emacsPackagesFor emacs) nushell-mode;
         }

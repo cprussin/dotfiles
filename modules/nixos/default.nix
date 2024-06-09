@@ -5,7 +5,6 @@
     ./color-theme.nix
     ./detachedLuksWithNixopsKeys.nix
     ./keymap.nix
-    ./mautrix-signal.nix
     ./network-interfaces.nix
     ./powerpanel.nix
     ./preLVMTempMount.nix
