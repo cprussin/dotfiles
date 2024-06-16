@@ -1,4 +1,4 @@
-{ config, ... }: let
+{config, ...}: let
   emacs-overlay = self: super: {
     emacs = (self.emacsPackagesFor super.emacs29-pgtk).withPackages (epkgs: [epkgs.emacs-rc]);
   };

@@ -3,7 +3,7 @@ _: {
     enable = true;
     settings = {
       daemonize = true;
-      image = builtins.toPath ../sway/background.png;
+      image = ./.. + "/sway/background.png";
       indicator-radius = 200;
       indicator-thickness = 50;
     };

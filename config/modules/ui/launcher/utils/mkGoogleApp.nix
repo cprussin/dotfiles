@@ -1,7 +1,8 @@
 {
   writeShellScript,
   launcher,
-}: name: url: writeShellScript name ''
+}: name: url:
+writeShellScript name ''
   case $1 in
     surge) USER=connor@surgehq.ai ;;
     pyth) USER=connor@dourolabs.xyz ;;

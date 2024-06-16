@@ -1,13 +1,17 @@
-{config, pkgs, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   pkgs-unstable = import config.flake-inputs.nixpkgs-unstable {
     overlays = [];
     config = import ./nixpkgs-config.nix;
-    system = pkgs.system;
+    inherit (pkgs) system;
   };
   pkgs-master = import config.flake-inputs.nixpkgs-master {
     overlays = [];
     config = import ./nixpkgs-config.nix;
-    system = pkgs.system;
+    inherit (pkgs) system;
   };
   unstable-pkgs-overlay = _: super: {
     inherit (pkgs-unstable) syncthing bitwig-studio signald waybar;

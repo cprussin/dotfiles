@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   primary-user.home-manager.programs.btop = {
     enable = true;
     settings = {

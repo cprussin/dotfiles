@@ -1,6 +1,7 @@
-{ pkgs, ... }: let
+{pkgs, ...}: let
   network = pkgs.callPackage ./lib/network.nix {};
-in pkgs.writeShellScript "systems-test" ''
+in
+  pkgs.writeShellScript "systems-test" ''
     pass="${pkgs.pass}/bin/pass"
     curl="${pkgs.curl}/bin/curl"
     jq="${pkgs.jq}/bin/jq"
@@ -103,4 +104,4 @@ in pkgs.writeShellScript "systems-test" ''
     echo
     echo
     echo "✅ All systems good!"
-''
+  ''

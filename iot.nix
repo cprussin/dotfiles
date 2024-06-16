@@ -1,4 +1,5 @@
-{ pkgs, ... }: pkgs.writeShellScript "iot" ''
+{pkgs, ...}:
+pkgs.writeShellScript "iot" ''
   set -e
 
   jq="${pkgs.jq}/bin/jq"
