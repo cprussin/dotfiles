@@ -1,2 +1,4 @@
 /iot-build
 /iso-build
+.direnv/
+result

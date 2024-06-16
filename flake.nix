@@ -35,16 +35,24 @@
     };
   };
 
-  outputs = {nixpkgs, flake-utils, mkCli, home-manager, nixos-hardware, ... }@flake-inputs:
-    (flake-utils.lib.eachDefaultSystem
-      (system:
-        let
-          password-utils-overlay = self: _: {
-            inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
+  outputs = {
+    nixpkgs,
+    flake-utils,
+    mkCli,
+    home-manager,
+    nixos-hardware,
+    ...
+  } @ flake-inputs:
+    (
+      flake-utils.lib.eachDefaultSystem
+      (
+        system: let
+          password-utils-overlay = final: _: {
+            inherit (final.callPackage ./lib/passwords.nix {}) passwordUtils;
           };
 
-          cli-overlay = self: _: {
-            cli = self.callPackage ./cli.nix {};
+          cli-overlay = final: _: {
+            cli = final.callPackage ./cli.nix {};
           };
 
           pkgs = import nixpkgs {
@@ -67,47 +75,51 @@
           };
         }
       )
-    ) // {
-      colmena =
-        let
-          # See https://jade.fyi/blog/flakes-arent-real/ for why we do this and
-          # don't use `specialArgs`.
-          injectFlakeInputs = { lib, ... }: {
-            options.flake-inputs = lib.mkOption {
-              type = lib.types.attrsOf lib.types.unspecified;
-            };
-            config = {
-              inherit flake-inputs;
-            };
+    )
+    // {
+      colmena = let
+        # See https://jade.fyi/blog/flakes-arent-real/ for why we do this and
+        # don't use `specialArgs`.
+        injectFlakeInputs = {lib, ...}: {
+          options.flake-inputs = lib.mkOption {
+            type = lib.types.attrsOf lib.types.unspecified;
           };
+          config = {
+            inherit flake-inputs;
+          };
+        };
 
-          machineDir = ./config/machines;
+        machineDir = ./config/machines;
 
-          mkMachine = { targetHost, extraModules ? [] }: {
-            deployment = {inherit targetHost;};
-            imports = extraModules ++ [
+        mkMachine = {
+          targetHost,
+          extraModules ? [],
+        }: {
+          deployment = {inherit targetHost;};
+          imports =
+            extraModules
+            ++ [
               home-manager.nixosModules.home-manager
               injectFlakeInputs
               "${toString machineDir}/${targetHost}"
             ];
+        };
+      in {
+        meta = {
+          nixpkgs = import nixpkgs {
+            system = "x86_64-linux";
           };
-        in {
-          meta = {
-            nixpkgs = import nixpkgs {
-              system = "x86_64-linux";
-            };
-          };
+        };
 
-          aries = mkMachine {
-            targetHost = "aries";
-            extraModules = [
-              nixos-hardware.nixosModules.framework-11th-gen-intel
-            ];
-          };
+        aries = mkMachine {
+          targetHost = "aries";
+          extraModules = [
+            nixos-hardware.nixosModules.framework-11th-gen-intel
+          ];
+        };
 
-          crux = mkMachine {
-            targetHost = "crux";
-          };
+        crux = mkMachine {
+          targetHost = "crux";
         };
     };
 }
