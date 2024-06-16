@@ -22,6 +22,7 @@
     ../../modules/system/devices/printers
     ../../modules/system/devices/redshift
     ../../modules/system/devices/scanners
+    ../../modules/system/podman
 
     ../../modules/ui/direnv
     ../../modules/ui/emacs

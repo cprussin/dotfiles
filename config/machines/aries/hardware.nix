@@ -75,6 +75,7 @@ in {
         "tank/persisted-state/Slack".mountpoint = "/home/${config.primary-user.name}/.config/Slack";
         "tank/persisted-state/Steam".mountpoint = "/home/${config.primary-user.name}/.local/share/Steam";
         "tank/persisted-state/Zulip".mountpoint = "/home/${config.primary-user.name}/.config/Zulip";
+        "tank/persisted-state/containers".mountpoint = "/home/${config.primary-user.name}/.local/share/containers";
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
         "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
         "tank/persisted-state/chromium".mountpoint = "/home/${config.primary-user.name}/.config/chromium";
