@@ -121,5 +121,29 @@
         crux = mkMachine {
           targetHost = "crux";
         };
+      };
+
+      packages = let
+        release = import "${nixpkgs}/nixos/release.nix";
+
+        isoDir = ./isos;
+
+        mkMinimalIso = name:
+          builtins.mapAttrs (_: drv: {"${name}" = drv;})
+          (release {
+            nixpkgs = {
+              inherit (nixpkgs) outPath;
+              revCount = 0;
+              shortRev = builtins.substring 0 7 nixpkgs.rev;
+            };
+            stableBranch = true;
+            supportedSystems = ["x86_64-linux"];
+            configuration = "${toString isoDir}/${name}.nix";
+          })
+          .iso_minimal;
+
+        isos = mkMinimalIso "gpg-offline";
+      in
+        isos;
     };
 }
