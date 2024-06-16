@@ -23,10 +23,7 @@
       url = "https://connor.prussin.net/pubkey.asc";
       flake = false;
     };
-    mkCli = {
-      url = "github:cprussin/mkCli";
-      flake = false;
-    };
+    mkCli.url = "github:cprussin/mkCli";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     notify-send = {
       url = "github:vlevit/notify-send.sh";
@@ -46,8 +43,6 @@
             inherit (self.callPackage ./lib/passwords.nix {}) passwordUtils;
           };
 
-          mkCli-overlay = import "${mkCli}/overlay.nix";
-
           cli-overlay = self: _: {
             cli = self.callPackage ./cli.nix {};
           };
@@ -56,7 +51,7 @@
             inherit system;
             overlays = [
               password-utils-overlay
-              mkCli-overlay
+              mkCli.overlays.default
               cli-overlay
             ];
             config = {};
