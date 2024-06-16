@@ -3,7 +3,7 @@ _: {
     enable = true;
     settings = {
       daemonize = true;
-      image = ./.. + "/sway/background.png";
+      image = toString (./.. + "/sway/background.png");
       indicator-radius = 200;
       indicator-thickness = 50;
     };
