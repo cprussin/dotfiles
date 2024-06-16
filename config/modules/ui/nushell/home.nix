@@ -32,6 +32,9 @@
             vi_insert: line,
             vi_normal: block,
             emacs: block
+          },
+          history: {
+            sync_on_enter: false
           }
         }
       '';
