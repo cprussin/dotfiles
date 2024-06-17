@@ -6,6 +6,10 @@ _: {
       enable = true;
       flags = "-k -p --utc";
     };
-    autoScrub.enable = true;
+    autoScrub = {
+      enable = true;
+      interval = "Sun, 02:00";
+      randomizedDelaySec = "1h";
+    };
   };
 }
