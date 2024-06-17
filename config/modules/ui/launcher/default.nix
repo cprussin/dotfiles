@@ -43,7 +43,7 @@ in {
           zulip = "${pkgs.zulip}/bin/zulip";
           agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
           bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
-          bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluez}/bin/bluetoothctl";
+          bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluetuith}/bin/bluetuith";
           brave = pkgs.writeShellScript "brave" "${pkgs.launcher}/bin/browse --browser brave $*";
           brightness = pkgs.callPackage ./apps/brightness.nix {};
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
