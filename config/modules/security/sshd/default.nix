@@ -6,7 +6,6 @@
 }: let
   # TODO this should really be driven from gpg automatically rather than manually synced to a file...
   public-key = builtins.readFile ./public-key;
-  gaming-computer-wsl-public-key = builtins.readFile ./gaming-computer-wsl-public-key;
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
 in {
   options = {
@@ -64,7 +63,6 @@ in {
 
     primary-user.openssh.authorizedKeys.keys = [
       public-key
-      gaming-computer-wsl-public-key
     ];
 
     users.users.root.openssh.authorizedKeys.keys = [public-key];
