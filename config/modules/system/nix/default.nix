@@ -31,7 +31,8 @@ in {
   users.groups.nix-access-tokens.gid = config.ids.gids.nix-access-tokens;
 
   nix = {
-    nixPath = ["nixpkgs=${config.flake-inputs.nixpkgs}"];
+    channel.enable = false;
+    registry.nixpkgs.flake = config.flake-inputs.nixpkgs;
     gc = {
       automatic = true;
       dates = "weekly";
