@@ -4,12 +4,9 @@ _: {
     userKnownHostsFile = "${./known_hosts}";
     controlMaster = "auto";
     controlPersist = "1m";
-    matchBlocks = {
-      printotron.user = "pi";
-      rsync = {
-        user = "zh2593";
-        hostname = "zh2593.rsync.net";
-      };
+    matchBlocks.rsync = {
+      user = "zh2593";
+      hostname = "zh2593.rsync.net";
     };
   };
 }
