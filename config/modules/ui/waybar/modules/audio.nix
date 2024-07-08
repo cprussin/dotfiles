@@ -3,7 +3,7 @@
   pavucontrol,
   pamixer,
 }: {
-  name = "pulseaudio#sink";
+  name = "wireplumber";
 
   config = {
     format = "{icon} {volume}%";
