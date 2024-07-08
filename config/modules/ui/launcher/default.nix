@@ -12,15 +12,10 @@
   mkConfirmationDialog = pkgs.callPackage ./utils/mkConfirmationDialog.nix {inherit config;};
   screen = pkgs.callPackage ./apps/screen.nix {};
 
-  email = mkGoogleApp "gmail" "https://mail.google.com";
   sms = mkWebApp "sms" "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
   matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   comms = pkgs.writeShellScript "" ''
-    ${email} &
-    ${email} surge &
-    ${email} pyth &
-    ${email} getsharpe &
     ${sms} &
     ${matrix} &
     ${slack} &
@@ -37,10 +32,8 @@ in {
       launcher = {
         enable = true;
         apps = {
-          inherit email sms matrix slack comms;
+          inherit sms matrix slack comms;
 
-          discord = "${pkgs.discord}/bin/discord";
-          zulip = "${pkgs.zulip}/bin/zulip";
           agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
           bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
           bluetooth = mkTerminalApp "bluetooth" "${pkgs.bluetuith}/bin/bluetuith";
@@ -54,8 +47,10 @@ in {
           credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
           cups = mkWebApp "cups" "http://localhost:631";
+          discord = "${pkgs.discord}/bin/discord";
           dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
           emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
+          email = mkGoogleApp "gmail" "https://mail.google.com";
           firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
           gimp = "${pkgs.gimp}/bin/gimp";
           home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
@@ -83,6 +78,7 @@ in {
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
           virt-manager = "${pkgs.virt-manager}/bin/virt-manager";
           volume = pkgs.callPackage ./apps/volume.nix {};
+          zulip = "${pkgs.zulip}/bin/zulip";
         };
       };
 
