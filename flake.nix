@@ -24,6 +24,7 @@
       flake = false;
     };
     mkCli.url = "github:cprussin/mkCli";
+    gmail-new-mail-counter.url = "github:cprussin/gmail-new-mail-counter";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     notify-send = {
       url = "github:vlevit/notify-send.sh";

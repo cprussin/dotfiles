@@ -159,6 +159,13 @@
       echo "ADMIN_TOKEN=$(${getPassword}/bin/getPassword "$3")"
     fi
   '';
+
+  getGmailNewMailCounterEnvFile = pkgs.writeShellScriptBin "getGmailNewMailCounterEnvFile" ''
+    set -euo pipefail
+    echo "CLIENT_SECRET=$(${getPassword}/bin/getPassword "$1")"
+    echo "CLIENT_ID=$(${getPasswordField}/bin/getPasswordField "$1" "Client ID")"
+    echo "PROJECT_ID=$(${getPasswordField}/bin/getPasswordField "$1" "Project ID")"
+  '';
 in {
   passwordUtils = pkgs.symlinkJoin {
     name = "passwordUtils";
@@ -177,6 +184,7 @@ in {
       getWpaPassphraseFile
       getNixAccessToken
       getVaultwardenSecrets
+      getGmailNewMailCounterEnvFile
     ];
   };
   getPassword = name: ["getPassword" name];
@@ -199,4 +207,5 @@ in {
       then []
       else [adminToken]
     );
+  getGmailNewMailCounterEnvFile = name: ["getGmailNewMailCounterEnvFile" name];
 }
