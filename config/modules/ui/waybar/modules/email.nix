@@ -4,8 +4,8 @@
   gmail-new-mail-counter,
   address,
   indicatorName,
-  launcher
-}:  let
+  launcher,
+}: let
   get-mail = pkgs.writeShellScript "get-mail" ''
     ${gmail-new-mail-counter}/bin/gmail_new_mail_counter \
       --format '{{#if (gt total 0)}}{"text":"✉ ${indicatorName} {{ unread }} / {{ total }}"{{#if (gt unread 0) }},"class":"unread"{{/if}}}{{/if}}' \

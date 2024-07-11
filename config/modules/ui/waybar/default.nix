@@ -62,10 +62,26 @@ in {
       right = map stripOverrides (
         builtins.filter (m: m != null) [
           (pkgs.callPackage ./modules/presentation.nix {inherit colors;})
-          (pkgs.callPackage ./modules/email.nix {inherit colors; address = "connor@prussin.net"; indicatorName = "PrussinNet"; })
-          (pkgs.callPackage ./modules/email.nix {inherit colors; address = "connor@dourolabs.xyz"; indicatorName = "Pyth"; })
-          (pkgs.callPackage ./modules/email.nix {inherit colors; address = "connor@surgehq.ai"; indicatorName = "Surge"; })
-          (pkgs.callPackage ./modules/email.nix {inherit colors; address = "cprussin@getsharpe.io"; indicatorName = "GetSharpe"; })
+          (pkgs.callPackage ./modules/email.nix {
+            inherit colors;
+            address = "connor@prussin.net";
+            indicatorName = "PrussinNet";
+          })
+          (pkgs.callPackage ./modules/email.nix {
+            inherit colors;
+            address = "connor@dourolabs.xyz";
+            indicatorName = "Pyth";
+          })
+          (pkgs.callPackage ./modules/email.nix {
+            inherit colors;
+            address = "connor@surgehq.ai";
+            indicatorName = "Surge";
+          })
+          (pkgs.callPackage ./modules/email.nix {
+            inherit colors;
+            address = "cprussin@getsharpe.io";
+            indicatorName = "GetSharpe";
+          })
           (pkgs.callPackage ./modules/bluetooth.nix {inherit config colors;})
           (
             if config.interfaces.wifi == null
