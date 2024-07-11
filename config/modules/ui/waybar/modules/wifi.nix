@@ -1,6 +1,8 @@
 {
   config,
   colors,
+  iwgtk,
+  lib,
 }: {
   name = "network#wireless";
 
@@ -13,6 +15,7 @@
     format-wifi = "{icon} ({essid}) {ipaddr} [{signalStrength}%]";
     format-alt = "{icon} {ifname}: ({essid}) {ipaddr}/{cidr} {frequency}mhz [{signalStrength}%]";
     format-icons = ["󰤟" "󰤢" "󰤥" "󰤨"];
+    on-click = lib.getExe iwgtk;
   };
 
   style.":not(.wifi)".color = colors.foreground;
