@@ -15,7 +15,25 @@ _: {
       }
       {
         profile = {
-          name = "homeOffice";
+          name = "homeOfficeCenterOnly";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              status = "disable";
+            }
+
+            {
+              criteria = "Dell Inc. DELL U3219Q G3MS413";
+              status = "enable";
+              transform = "normal";
+              position = "0,0";
+            }
+          ];
+        };
+      }
+      {
+        profile = {
+          name = "homeOfficeFull";
           outputs = [
             {
               criteria = "eDP-1";
