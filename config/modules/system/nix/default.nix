@@ -14,16 +14,8 @@
     inherit (pkgs) system;
   };
   unstable-pkgs-overlay = _: super: {
-    inherit (pkgs-unstable) syncthing bitwig-studio signald waybar;
+    inherit (pkgs-unstable) syncthing bitwig-studio;
     inherit (pkgs-master) makemkv;
-
-    emacsPackagesFor = emacs: (
-      (super.emacsPackagesFor emacs).overrideScope (
-        _: _: {
-          inherit (pkgs-unstable.emacsPackagesFor emacs) nushell-mode;
-        }
-      )
-    );
   };
 in {
   primary-user.extraGroups = ["nix-access-tokens"];
