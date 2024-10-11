@@ -74,11 +74,6 @@ in {
           })
           (pkgs.callPackage ./modules/email.nix {
             inherit colors;
-            address = "connor@surgehq.ai";
-            indicatorName = "Surge";
-          })
-          (pkgs.callPackage ./modules/email.nix {
-            inherit colors;
             address = "cprussin@getsharpe.io";
             indicatorName = "GetSharpe";
           })
