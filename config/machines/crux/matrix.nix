@@ -10,7 +10,6 @@
   federation_port_external = 8448;
   federation_port_internal = 8008;
   client_port_internal = 8009;
-  mautrix-telegram-port = 29317;
 
   mautrix_settings = port: {
     appservice = {
@@ -59,16 +58,6 @@ in {
       user = "matrix-synapse";
       group = "matrix-synapse";
       keyCommand = passwords.getFullPassword "Connor/Infrastructure/matrix/signing-keys/prussin.net";
-    };
-    mautrix-telegram-environment-file = {
-      user = "mautrix-telegram";
-      group = "mautrix-telegram";
-      keyCommand = passwords.getMautrixTelegramEnvironmentFile "Connor/Infrastructure/matrix/bridges/telegram" "Connor/Infrastructure/matrix/matrix-synapse-shared-secret";
-    };
-    "mautrix-telegram-registration-file.yaml" = {
-      user = "matrix-synapse";
-      group = "matrix-synapse";
-      keyCommand = passwords.getMautrixRegistrationFile "telegram" mautrix-telegram-port;
     };
   };
 
@@ -164,10 +153,6 @@ in {
             ];
           }
         ];
-
-        app_service_config_files = [
-          config.deployment.keys."mautrix-telegram-registration-file.yaml".path
-        ];
       };
 
       plugins = [
@@ -178,18 +163,6 @@ in {
         config.deployment.keys."matrix-synapse-database-config.yaml".path
         config.deployment.keys."matrix-synapse-shared-secret-config.yaml".path
       ];
-    };
-
-    mautrix-telegram = {
-      enable = true;
-      environmentFile = config.deployment.keys.mautrix-telegram-environment-file.path;
-      settings = lib.recursiveUpdate (mautrix_settings mautrix-telegram-port) {
-        bridge = {
-          sync_create_limit = 0;
-          sync_direct_chats = true;
-          backfill.initial_limit = -1;
-        };
-      };
     };
   };
 
@@ -216,47 +189,17 @@ in {
         "matrix-synapse-signing-key-key.service"
         "matrix-synapse-database-config.yaml-key.service"
         "matrix-synapse-shared-secret-config.yaml-key.service"
-        "mautrix-telegram-registration-file.yaml-key.service"
       ];
       requires = [
         "matrix-synapse-signing-key-key.service"
         "matrix-synapse-database-config.yaml-key.service"
         "matrix-synapse-shared-secret-config.yaml-key.service"
-        "mautrix-telegram-registration-file.yaml-key.service"
       ];
       serviceConfig.ExecStartPre = lib.mkForce [];
     };
-    mautrix-telegram = {
-      after = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
-      requires = ["postgresql.service" "mautrix-telegram-environment-file-key.service"];
-      serviceConfig = {
-        DynamicUser = lib.mkForce false;
-        User = "mautrix-telegram";
-        Group = "mautrix-telegram";
-      };
-    };
   };
 
-  # see https://github.com/NixOS/nixpkgs/blob/nixos-21.11/nixos/modules/misc/ids.nix
-  ids = {
-    uids.mautrix-telegram = 350;
-    gids.mautrix-telegram = 350;
-  };
-
-  users = {
-    groups.mautrix-telegram.gid = config.ids.gids.mautrix-telegram;
-    users = {
-      matrix-synapse.extraGroups = ["keys"];
-      mautrix-telegram = {
-        group = "mautrix-telegram";
-        home = "/var/lib/mautrix-telegram";
-        createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
-        uid = config.ids.uids.mautrix-telegram;
-        extraGroups = ["keys"];
-      };
-    };
-  };
+  users.users.matrix-synapse.extraGroups = ["keys"];
 
   # Port 80 is open only for ACME challenges
   networking.firewall.interfaces."${config.interfaces.eth}".allowedTCPPorts = [80 federation_port_external];

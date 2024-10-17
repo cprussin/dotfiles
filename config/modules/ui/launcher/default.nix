@@ -15,9 +15,11 @@
   sms = mkWebApp "sms" "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
   matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
+  telegram = pkgs.writeShellScript "telegram" "${pkgs.telegram-desktop}/bin/telegram-desktop --ozone-platform-hint=auto -g warn";
   comms = pkgs.writeShellScript "" ''
     ${sms} &
     ${matrix} &
+    ${telegram} &
     ${slack} &
   '';
 in {
@@ -32,7 +34,7 @@ in {
       launcher = {
         enable = true;
         apps = {
-          inherit sms matrix slack comms;
+          inherit sms matrix slack telegram comms;
 
           agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
           bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
