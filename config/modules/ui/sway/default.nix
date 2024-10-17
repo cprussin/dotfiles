@@ -59,6 +59,7 @@ in {
           {
             criteria.app_id = "launcher";
             commands = [
+              "border pixel"
               "floating enable"
               "sticky enable"
               "resize set 1500 1000"
@@ -67,38 +68,61 @@ in {
           {
             criteria.app_id = "modal";
             commands = [
+              "border pixel"
+              "floating enable"
+              "sticky enable"
+            ];
+          }
+          {
+            criteria.app_id = "pinentry-qt";
+            commands = [
+              "border pixel"
               "floating enable"
               "sticky enable"
             ];
           }
           {
             criteria.app_id = "pavucontrol";
-            commands = ["floating enable"];
+            commands = [
+              "floating enable"
+            ];
           }
           {
             criteria.app_id = "bluetooth";
-            commands = ["floating enable"];
-          }
-          {
-            criteria.app_id = "pinentry-qt";
             commands = [
               "floating enable"
-              "sticky enable"
+            ];
+          }
+          {
+            criteria.app_id = "org.twosheds.iwgtk";
+            commands = [
+              "floating enable"
+            ];
+          }
+          {
+            criteria.title = "Phantom Wallet";
+            commands = [
+              "floating enable"
             ];
           }
           {
             criteria.app_id = "^brave-.*";
             commands = [
               "shortcuts_inhibitor disable"
+              "inhibit_idle fullscreen"
             ];
           }
           {
-            criteria = {
-              class = "zoom";
-            };
+            criteria.app_id = "mpv";
             commands = [
-              "border none"
+              "inhibit_idle fullscreen"
+            ];
+          }
+          {
+            criteria.title = "(?:Open|Save) (?:File|Folder|As)";
+            commands = [
               "floating enable"
+              "resize set width 1030 height 710"
             ];
           }
         ];
