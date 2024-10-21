@@ -6,6 +6,7 @@
   colmena,
   vulnix,
   callPackage,
+  writeShellScript,
   ...
 }:
 lib.mkCli "cli" {
@@ -27,4 +28,10 @@ lib.mkCli "cli" {
   check-vulnerabilities = "${vulnix}/bin/vulnix --system";
   iot = callPackage ./iot.nix {};
   systems-test = callPackage ./systems-test.nix {};
+  upload-keys = "${colmena}/bin/colmena upload-keys --on crux";
+  send-gpg-keys = writeShellScript "upload-gpg-keys" ''
+    gpg --keyserver keyserver.ubuntu.com --send-key 0x426ABF93ACE024D0
+    gpg --keyserver keys.openpgp.org --send-key 0x426ABF93ACE024D0
+    gpg --keyserver pgp.mit.edu --send-key 0x426ABF93ACE024D0
+  '';
 }
