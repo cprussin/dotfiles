@@ -72,11 +72,6 @@ in {
             address = "connor@dourolabs.xyz";
             indicatorName = "Pyth";
           })
-          (pkgs.callPackage ./modules/email.nix {
-            inherit colors;
-            address = "cprussin@getsharpe.io";
-            indicatorName = "GetSharpe";
-          })
           (pkgs.callPackage ./modules/bluetooth.nix {inherit config colors;})
           (
             if config.interfaces.wifi == null
