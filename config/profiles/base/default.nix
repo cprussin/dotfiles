@@ -12,6 +12,7 @@
     ../../modules/security/sudo
     ../../modules/security/umask
 
+    ../../modules/system/bpftune
     ../../modules/system/nix
     ../../modules/system/stateVersion
     ../../modules/system/users
