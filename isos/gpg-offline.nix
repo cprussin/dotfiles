@@ -58,9 +58,9 @@
         echo
         echo
         echo -e "\e[1;37mAll done, please reboot and extract public key from /pubkey.asc"
-        echo "on the live usb.  Make sure to deploy the new public key to"
-        echo "dotfiles, keyservers (keyserver.ubuntu.com, keys.openpgp.org,"
-        echo -e "pgp.mit.edu), phone, website, and github.\e[0m"
+        echo "on the live usb.  Make sure to deploy the new public key to website,"
+        echo "dotfiles, keyservers (keyserver.ubuntu.com, keys.openpgp.org, pgp.mit.edu),"
+        echo -e "phone, and github.\e[0m"
         exit
       else
         echo -ne "\e[1;37mPlease insert next filesystem\e[0m "
