@@ -55,6 +55,11 @@
     :keymaps 'typescript-ts-base-mode-map
     "" '(:ignore t :which-key "Major Mode (Typescript)")))
 
+(use-package json-ts-mode
+  :demand t
+  :after general
+  :mode (("\\.json\\'" .  json-ts-mode)))
+
 (use-package tide
   :after typescript-ts-mode company flycheck
   :hook ((typescript-ts-base-mode . tide-setup)
