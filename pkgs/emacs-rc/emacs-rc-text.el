@@ -52,9 +52,16 @@
   :after delight
   :config
   (global-aggressive-indent-mode)
-  (add-to-list 'aggressive-indent-excluded-modes 'purescript-mode)
-  (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
-  (add-to-list 'aggressive-indent-excluded-modes 'typescript-mode))
+  (dolist (excluded-mode
+           '(purescript-mode
+             haskell-mode
+             tsx-ts-mode
+             typescript-ts-mode
+             js-mode
+             scss-mode
+             css-mode
+             nix-mode))
+    (add-to-list 'aggressive-indent-excluded-modes excluded-mode)))
 
 ;; Show indentation guide
 (use-package indent-guide
