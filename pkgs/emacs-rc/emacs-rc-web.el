@@ -41,23 +41,15 @@
   (setq-local flycheck-javascript-eslint-executable (emacs-rc--find-in-node-modules "eslint")
               flycheck-css-stylelint-executable (emacs-rc--find-in-node-modules "stylelint")))
 
-(use-package js
-  :demand
-  ;;; TODO this isn't working...
-  :mode "\\.cjs\\'"
-  :after flycheck general
-  :hook (js-mode . emacs-rc--setup-js-files)
-  :general
-  (major-mode-menu-def
-    :keymaps 'js-mode-map
-    "" '(:ignore t :which-key "Major Mode (JS)"))
-  :config
-  (flycheck-add-next-checker 'javascript-eslint 'css-stylelint 'append))
-
 (use-package typescript-ts-mode
   :demand t
   :after general
   :hook (typescript-ts-base-mode . emacs-rc--setup-js-files)
+  :mode (("\\.js\\'"  . typescript-ts-mode)
+         ("\\.mjs\\'" . typescript-ts-mode)
+         ("\\.mts\\'" . typescript-ts-mode)
+         ("\\.cjs\\'" . typescript-ts-mode)
+         ("\\.jsx\\'" . tsx-ts-mode))
   :general
   (major-mode-menu-def
     :keymaps 'typescript-ts-base-mode-map
