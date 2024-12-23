@@ -126,6 +126,7 @@ in {
         server_name = "prussin.net";
         signing_key_path = config.deployment.keys.matrix-synapse-signing-key.path;
         suppress_key_server_warning = true;
+        public_baseurl = "https://matrix.internal.prussin.net";
 
         listeners = [
           {
