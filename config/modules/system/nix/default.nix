@@ -13,7 +13,7 @@
     config = import ./nixpkgs-config.nix;
     inherit (pkgs) system;
   };
-  unstable-pkgs-overlay = _: super: {
+  unstable-pkgs-overlay = _: _: {
     inherit (pkgs-unstable) syncthing bitwig-studio;
     inherit (pkgs-master) makemkv;
   };

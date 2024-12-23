@@ -10,28 +10,6 @@
   federation_port_external = 8448;
   federation_port_internal = 8008;
   client_port_internal = 8009;
-
-  mautrix_settings = port: {
-    appservice = {
-      inherit port;
-      address = "http://localhost:${toString port}";
-    };
-    homeserver = {
-      address = "http://localhost:${toString client_port_internal}";
-      domain = "prussin.net";
-    };
-    bridge = {
-      permissions = {
-        "prussin.net" = "full";
-        "@connor:prussin.net" = "admin";
-      };
-      login_shared_secret_map."prussin.net" = "$SHARED_SECRET";
-      encryption = {
-        allow = true;
-        default = true;
-      };
-    };
-  };
 in {
   deployment.keys = {
     "matrix.internal.prussin.net.crt" = {
