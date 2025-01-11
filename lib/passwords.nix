@@ -5,7 +5,6 @@
   grep = "${pkgs.gnugrep}/bin/grep";
   sed = "${pkgs.gnused}/bin/sed";
   mkpasswd = "${pkgs.mkpasswd}/bin/mkpasswd";
-  wpa_passphrase = "${pkgs.wpa_supplicant}/bin/wpa_passphrase";
 
   getFullPassword = pkgs.writeShellScriptBin "getFullPassword" ''
     set -euo pipefail
