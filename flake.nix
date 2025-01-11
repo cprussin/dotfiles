@@ -43,29 +43,60 @@
     home-manager,
     nixos-hardware,
     ...
-  } @ flake-inputs:
+  } @ flake-inputs: let
+    password-utils-overlay = final: _: {
+      inherit (final.callPackage ./lib/passwords.nix {}) passwordUtils;
+    };
+
+    cli-overlay = final: _: {
+      cli = final.callPackage ./cli.nix {};
+    };
+
+    iot-overlay = final: _: {
+      iot-devices = final.callPackage ./config/iot {};
+    };
+
+    release = import "${nixpkgs}/nixos/release.nix";
+
+    isoDir = ./isos;
+
+    mkMinimalIso = name:
+      builtins.mapAttrs (_: drv: {"${name}" = drv;})
+      (release {
+        nixpkgs = {
+          inherit (nixpkgs) outPath;
+          revCount = 0;
+          shortRev = builtins.substring 0 7 nixpkgs.rev;
+        };
+        stableBranch = true;
+        supportedSystems = ["x86_64-linux"];
+        configuration = "${toString isoDir}/${name}.nix";
+      })
+      .iso_minimal;
+
+    isos = mkMinimalIso "gpg-offline";
+  in
     (
       flake-utils.lib.eachDefaultSystem
       (
         system: let
-          password-utils-overlay = final: _: {
-            inherit (final.callPackage ./lib/passwords.nix {}) passwordUtils;
-          };
-
-          cli-overlay = final: _: {
-            cli = final.callPackage ./cli.nix {};
-          };
-
           pkgs = import nixpkgs {
             inherit system;
             overlays = [
               password-utils-overlay
               mkCli.overlays.default
               cli-overlay
+              iot-overlay
             ];
             config = {};
           };
         in {
+          packages =
+            (isos."${system}" or {})
+            // {
+              inherit (pkgs) iot-devices;
+            };
+
           devShells.default = pkgs.mkShell {
             buildInputs = [
               pkgs.git
@@ -124,27 +155,6 @@
         };
       };
 
-      packages = let
-        release = import "${nixpkgs}/nixos/release.nix";
-
-        isoDir = ./isos;
-
-        mkMinimalIso = name:
-          builtins.mapAttrs (_: drv: {"${name}" = drv;})
-          (release {
-            nixpkgs = {
-              inherit (nixpkgs) outPath;
-              revCount = 0;
-              shortRev = builtins.substring 0 7 nixpkgs.rev;
-            };
-            stableBranch = true;
-            supportedSystems = ["x86_64-linux"];
-            configuration = "${toString isoDir}/${name}.nix";
-          })
-          .iso_minimal;
-
-        isos = mkMinimalIso "gpg-offline";
-      in
-        isos;
+      overlays.iot-devices = iot-overlay;
     };
 }

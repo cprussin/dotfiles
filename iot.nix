@@ -6,9 +6,20 @@ pkgs.writeShellScript "iot" ''
   cmd="$1"
   shift
 
-  rm -f iot-build/*.{yaml,json}
+  rm -rf iot-build
+  nix build --out-link "iot-build/sources" .#iot-devices
+
   for target in "$@"; do
-    nix-build --out-link "iot-build/''${target}.json" --attr "$target" ./config/iot >/dev/null
+    # Convert to lower case
+    target_name="''${target,,}"
+
+    # Replace spaces with dashes
+    target_name="''${target_name// /-}"
+
+    # Remove apostrophes
+    target_name="''${target_name//\'/}"
+
+    target_path="./iot-build/sources/''${target_name}.yaml"
 
     # Replace password commands with password values by:
     # 1) Extract the list of password commands using jq
@@ -26,8 +37,8 @@ pkgs.writeShellScript "iot" ''
     # reconcile them later, or switch back to python or something, but I'd
     # prefer to stay in jq for something this simple.
     (
-        cat "./iot-build/''${target}.json";
-        $jq -r '.. | .keyCommand? | select(. != null) | map("\"\(.)\"") | join(" ")' <"iot-build/''${target}.json" | bash | $jq -R
+        cat "''${target_path}";
+        $jq -r '.. | .keyCommand? | select(. != null) | map("\"\(.)\"") | join(" ")' <"''${target_path}" | bash | $jq -R
     ) | $jq -c 'walk(if type == "object" and .keyCommand? then input else . end)' > "iot-build/''${target}.yaml"
   done
 
