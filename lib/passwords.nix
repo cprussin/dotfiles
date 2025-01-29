@@ -31,6 +31,16 @@
     ${pass} show "$1" | ${mkpasswd} -m sha-512 -s
   '';
 
+  getMatrixSynapseDatabaseConfigFile = pkgs.writeShellScriptBin "getMatrixSynapseDatabaseConfigFile" ''
+    set -euo pipefail
+    echo "database:"
+    echo "  name: \"psycopg2\""
+    echo "  args:"
+    echo "    password: \"$(${getPassword}/bin/getPassword "$1")\""
+    echo "    database: \"matrix-synapse\""
+    echo "    user: \"matrix-synapse\""
+  '';
+
   getVaultwardenSecrets = pkgs.writeShellScriptBin "getVaultwardenSecrets" ''
     set -euo pipefail
     password="$(${getPassword}/bin/getPassword "$1")"
@@ -61,6 +71,7 @@ in {
       getPasswordField
       getBase64EncodedPassword
       getHashedUserPassword
+      getMatrixSynapseDatabaseConfigFile
       getVaultwardenSecrets
       getGmailNewMailCounterEnvFile
     ];
@@ -70,6 +81,7 @@ in {
   getPasswordField = name: field: ["getPasswordField" name field];
   getBase64EncodedPassword = name: ["getBase64EncodedPassword" name];
   getHashedUserPassword = name: ["getHashedUserPassword" name];
+  getMatrixSynapseDatabaseConfigFile = name: ["getMatrixSynapseDatabaseConfigFile" name];
   getVaultwardenSecrets = database: push: adminToken:
     ["getVaultwardenSecrets" database push]
     ++ (

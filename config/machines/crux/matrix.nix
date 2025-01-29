@@ -27,11 +27,6 @@ in {
       group = "matrix-synapse";
       keyCommand = passwords.getMatrixSynapseDatabaseConfigFile "Connor/Infrastructure/matrix/matrix-synapse-database";
     };
-    "matrix-synapse-shared-secret-config.yaml" = {
-      user = "matrix-synapse";
-      group = "matrix-synapse";
-      keyCommand = passwords.getMatrixSynapseSharedSecretConfigFile "Connor/Infrastructure/matrix/matrix-synapse-shared-secret";
-    };
     matrix-synapse-signing-key = {
       user = "matrix-synapse";
       group = "matrix-synapse";
@@ -134,13 +129,8 @@ in {
         ];
       };
 
-      plugins = [
-        config.services.matrix-synapse.package.plugins.matrix-synapse-shared-secret-auth
-      ];
-
       extraConfigFiles = [
         config.deployment.keys."matrix-synapse-database-config.yaml".path
-        config.deployment.keys."matrix-synapse-shared-secret-config.yaml".path
       ];
     };
   };
@@ -167,12 +157,10 @@ in {
       after = [
         "matrix-synapse-signing-key-key.service"
         "matrix-synapse-database-config.yaml-key.service"
-        "matrix-synapse-shared-secret-config.yaml-key.service"
       ];
       requires = [
         "matrix-synapse-signing-key-key.service"
         "matrix-synapse-database-config.yaml-key.service"
-        "matrix-synapse-shared-secret-config.yaml-key.service"
       ];
       serviceConfig.ExecStartPre = lib.mkForce [];
     };
