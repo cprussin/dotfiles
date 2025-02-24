@@ -14,8 +14,6 @@ in {
 
   interfaces.wifi = "wlan0";
 
-  primary-user.home-manager.wayland.windowManager.sway.config.output.eDP-1.scale = "1.15";
-
   boot = {
     kernelModules = ["kvm-intel"];
     extraModulePackages = [];

@@ -29,6 +29,7 @@ in {
 
       menu = "${terminal} --class launcher --title launcher --name launcher ${pkgs.launcher}/bin/launch ${pkgs.sway}/bin/swaymsg exec";
 
+      defaultWorkspace = "workspace 1";
       workspaceAutoBackAndForth = true;
       bars = [];
 

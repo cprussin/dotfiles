@@ -1,68 +1,125 @@
-_: {
-  primary-user.home-manager.services.kanshi = {
-    enable = true;
-    settings = [
-      {
-        profile = {
-          name = "laptopOnly";
-          outputs = [
-            {
-              criteria = "eDP-1";
-              status = "enable";
-            }
-          ];
-        };
-      }
-      {
-        profile = {
-          name = "homeOfficeCenterOnly";
-          outputs = [
-            {
-              criteria = "eDP-1";
-              status = "disable";
-            }
+{pkgs, ...}: let
+  laptopPanel = mkMonitor "eDP-1" {
+    scale = 1.2;
+    width = 2256;
+    height = 1504;
+    refreshRate = 60;
+  };
 
-            {
-              criteria = "Dell Inc. DELL U3219Q G3MS413";
-              status = "enable";
-              transform = "normal";
-              position = "0,0";
-            }
-          ];
-        };
-      }
-      {
-        profile = {
-          name = "homeOfficeFull";
-          outputs = [
-            {
-              criteria = "eDP-1";
-              status = "disable";
-            }
+  left = mkMonitor "Dell Inc. DELL U3219Q H8KF413" externalMonitorDimensions;
+  center = mkMonitor "Dell Inc. DELL U3219Q G3MS413" externalMonitorDimensions;
+  right = mkMonitor "Dell Inc. DELL U3219Q 2ZLS413" externalMonitorDimensions;
 
-            {
-              criteria = "Dell Inc. DELL U3219Q H8KF413";
-              status = "enable";
-              transform = "270";
-              position = "0,0";
-            }
+  externalMonitorDimensions = {
+    scale = 1.2;
+    width = 3840;
+    height = 2160;
+    refreshRate = 60;
+  };
 
-            {
-              criteria = "Dell Inc. DELL U3219Q G3MS413";
-              status = "enable";
-              transform = "270";
-              position = "2160,0";
-            }
+  mkMonitor = id: dimensions: {
+    inherit id;
+    width = dimensions.width / dimensions.scale;
+    height = dimensions.height / dimensions.scale;
+    output = {
+      criteria = id;
+      status = "enable";
+      inherit (dimensions) scale;
+      mode = "${toString dimensions.width}x${toString dimensions.height}@${toString dimensions.refreshRate}Hz";
+    };
+  };
 
-            {
-              criteria = "Dell Inc. DELL U3219Q 2ZLS413";
-              status = "enable";
-              transform = "270";
-              position = "4320,0";
-            }
-          ];
-        };
-      }
-    ];
+  mkPos = pos: toString (builtins.ceil pos);
+in {
+  primary-user.home-manager = {
+    wayland.windowManager.sway.config = {
+      workspaceOutputAssign = [
+        {
+          workspace = "1";
+          output = [left.id center.id laptopPanel.id];
+        }
+        {
+          workspace = "2";
+          output = [center.id laptopPanel.id];
+        }
+        {
+          workspace = "3";
+          output = [right.id];
+        }
+      ];
+      startup = [
+        {
+          command = "${pkgs.systemd}/bin/systemctl --user reload-or-restart kanshi";
+          always = true;
+        }
+      ];
+    };
+
+    services.kanshi = {
+      enable = true;
+      settings = [
+        {
+          profile = {
+            name = "laptopOnly";
+            outputs = [laptopPanel.output];
+          };
+        }
+        {
+          profile = {
+            name = "homeOfficeCenterOnly";
+            outputs = [
+              (laptopPanel.output
+                // {
+                  position = "0,${mkPos (center.height - laptopPanel.height)}";
+                })
+
+              (center.output
+                // {
+                  position = "${mkPos laptopPanel.width},0";
+                  transform = "normal";
+                })
+            ];
+            exec = [
+              "${pkgs.sway}/bin/swaymsg \"workspace2, move workspace to '${laptopPanel.id}', focus output '${laptopPanel.id}'\", workspace 2"
+              "${pkgs.sway}/bin/swaymsg \"focus output '${center.id}'\", workspace 1"
+            ];
+          };
+        }
+        {
+          profile = {
+            name = "homeOfficeFull";
+            outputs = [
+              {
+                criteria = laptopPanel.id;
+                status = "disable";
+              }
+
+              (left.output
+                // {
+                  position = "0,0";
+                  transform = "270";
+                })
+
+              (center.output
+                // {
+                  position = "${mkPos left.height},0";
+                  transform = "270";
+                })
+
+              (right.output
+                // {
+                  position = "${mkPos (left.height + center.height)},0";
+                  transform = "270";
+                })
+            ];
+            exec = [
+              "${pkgs.sway}/bin/swaymsg \"focus output '${left.id}'\", workspace 1"
+              "${pkgs.sway}/bin/swaymsg \"focus output '${right.id}'\", workspace 3"
+              "${pkgs.sway}/bin/swaymsg \"focus output '${center.id}'\", workspace 2"
+            ];
+          };
+        }
+      ];
+    };
   };
 }
