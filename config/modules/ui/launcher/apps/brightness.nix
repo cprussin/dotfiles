@@ -19,7 +19,7 @@ writeShellScript "brightness" ''
     elif [ $level -ge 25 ]
     then
       icon=notification-display-brightness-medium
-    elif [ $level -ge 5 ]
+    elif [ $level -gt 0 ]
     then
       icon=notification-display-brightness-low
     else
@@ -34,12 +34,24 @@ writeShellScript "brightness" ''
   }
 
   raiseBrightness() {
-    $brightnessctl set 5%+
+    level=$((100 * $($brightnessctl get) / $($brightnessctl max)))
+    if [ $level -le 10 ]
+    then
+      $brightnessctl set 1%+
+    else
+      $brightnessctl set 5%+
+    fi
     showBrightness
   }
 
   lowerBrightness() {
-    $brightnessctl set 5%-
+    level=$((100 * $($brightnessctl get) / $($brightnessctl max)))
+    if [ $level -le 10 ]
+    then
+      $brightnessctl set 1%-
+    else
+      $brightnessctl set 5%-
+    fi
     showBrightness
   }
 
