@@ -1,6 +1,6 @@
 {config, ...}: let
   emacs-overlay = self: super: {
-    emacs = (self.emacsPackagesFor super.emacs29-pgtk).withPackages (epkgs: [epkgs.emacs-rc]);
+    emacs = (self.emacsPackagesFor super.emacs-pgtk).withPackages (epkgs: [epkgs.emacs-rc]);
   };
 in {
   nixpkgs.overlays = [

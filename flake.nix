@@ -1,15 +1,17 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    colmena.url = "github:zhaofengli/colmena";
 
     dircolors-solarized = {
       url = "github:seebi/dircolors-solarized";
@@ -42,6 +44,7 @@
     mkCli,
     home-manager,
     nixos-hardware,
+    colmena,
     ...
   } @ flake-inputs: let
     password-utils-overlay = final: _: {
@@ -75,6 +78,52 @@
       .iso_minimal;
 
     isos = mkMinimalIso "gpg-offline";
+
+    # See https://jade.fyi/blog/flakes-arent-real/ for why we do this and
+    # don't use `specialArgs`.
+    injectFlakeInputs = {lib, ...}: {
+      options.flake-inputs = lib.mkOption {
+        type = lib.types.attrsOf lib.types.unspecified;
+      };
+      config = {
+        inherit flake-inputs;
+      };
+    };
+
+    machineDir = ./config/machines;
+
+    mkMachine = {
+      targetHost,
+      extraModules ? [],
+    }: {
+      deployment = {inherit targetHost;};
+      imports =
+        extraModules
+        ++ [
+          home-manager.nixosModules.home-manager
+          injectFlakeInputs
+          "${toString machineDir}/${targetHost}"
+        ];
+    };
+
+    colmena-machines = {
+      meta = {
+        nixpkgs = import nixpkgs {
+          system = "x86_64-linux";
+        };
+      };
+
+      aries = mkMachine {
+        targetHost = "aries";
+        extraModules = [
+          nixos-hardware.nixosModules.framework-11th-gen-intel
+        ];
+      };
+
+      crux = mkMachine {
+        targetHost = "crux";
+      };
+    };
   in
     (
       flake-utils.lib.eachDefaultSystem
@@ -83,6 +132,7 @@
           pkgs = import nixpkgs {
             inherit system;
             overlays = [
+              colmena.overlays.default
               password-utils-overlay
               mkCli.overlays.default
               cli-overlay
@@ -109,52 +159,8 @@
       )
     )
     // {
-      colmena = let
-        # See https://jade.fyi/blog/flakes-arent-real/ for why we do this and
-        # don't use `specialArgs`.
-        injectFlakeInputs = {lib, ...}: {
-          options.flake-inputs = lib.mkOption {
-            type = lib.types.attrsOf lib.types.unspecified;
-          };
-          config = {
-            inherit flake-inputs;
-          };
-        };
-
-        machineDir = ./config/machines;
-
-        mkMachine = {
-          targetHost,
-          extraModules ? [],
-        }: {
-          deployment = {inherit targetHost;};
-          imports =
-            extraModules
-            ++ [
-              home-manager.nixosModules.home-manager
-              injectFlakeInputs
-              "${toString machineDir}/${targetHost}"
-            ];
-        };
-      in {
-        meta = {
-          nixpkgs = import nixpkgs {
-            system = "x86_64-linux";
-          };
-        };
-
-        aries = mkMachine {
-          targetHost = "aries";
-          extraModules = [
-            nixos-hardware.nixosModules.framework-11th-gen-intel
-          ];
-        };
-
-        crux = mkMachine {
-          targetHost = "crux";
-        };
-      };
-
+      colmena = colmena-machines;
+      colmenaHive = colmena.lib.makeHive colmena-machines;
       overlays.iot-devices = iot-overlay;
     };
 }

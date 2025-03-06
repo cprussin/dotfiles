@@ -4,7 +4,7 @@
   nixpkgs.overlays = [
     (_: super: {
       nushell = super.nushell.override {
-        additionalFeatures = base: base ++ ["dataframe" "sqlite"];
+        additionalFeatures = base: base ++ ["sqlite"];
       };
     })
   ];
