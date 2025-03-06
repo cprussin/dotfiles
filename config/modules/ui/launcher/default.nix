@@ -22,6 +22,11 @@
     ${telegram} &
     ${slack} &
   '';
+  mkGame = pkg: pkgs.writeShellScript "${pkg.name}-game" ''
+    ${pkgs.sway}/bin/swaymsg 'input * dwt off'
+    ${lib.getExe pkg}
+    ${pkgs.sway}/bin/swaymsg 'input * dwt on'
+  '';
 in {
   nixpkgs.overlays = [
     (import ../../../../pkgs/launcher/overlay.nix)
@@ -61,6 +66,7 @@ in {
           makemkv = "${pkgs.makemkv}/bin/makemkv";
           mic-volume = pkgs.callPackage ./apps/mic-volume.nix {};
           mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
+          minecraft = mkGame pkgs.prismlauncher;
           nix-shell = pkgs.writeShellScript "nix-shell" "exec nix-shell -p $1 --run \"$*\"";
           passwords = mkModal "passwords" "${pkgs.fzf-pass}/bin/fzf-pass";
           presentation = pkgs.callPackage ./apps/presentation.nix {};
