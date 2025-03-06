@@ -6,6 +6,13 @@
     refreshRate = 60;
   };
 
+  portablePanel = mkMonitor "Audio Processing Technology  Ltd Monitor demoset-1" {
+    scale = 1.4;
+    width = 3840;
+    height = 2160;
+    refreshRate = 60;
+  };
+
   left = mkMonitor "Dell Inc. DELL U3219Q H8KF413" externalMonitorDimensions;
   center = mkMonitor "Dell Inc. DELL U3219Q G3MS413" externalMonitorDimensions;
   right = mkMonitor "Dell Inc. DELL U3219Q 2ZLS413" externalMonitorDimensions;
@@ -62,6 +69,23 @@ in {
           profile = {
             name = "laptopOnly";
             outputs = [laptopPanel.output];
+          };
+        }
+        {
+          profile = {
+            name = "portablePanel";
+            outputs = [
+              (laptopPanel.output
+                // {
+                  position = "0,0";
+                })
+
+              (portablePanel.output
+                // {
+                  position = "${mkPos laptopPanel.width},0";
+                  transform = "normal";
+                })
+            ];
           };
         }
         {
