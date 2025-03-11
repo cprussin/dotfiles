@@ -26,8 +26,8 @@
     ../../modules/ui/less
     ../../modules/ui/nushell
     ../../modules/ui/readline
+    ../../modules/ui/starship
     ../../modules/ui/terminfo
     ../../modules/ui/theme
-    ../../modules/ui/zsh
   ];
 }

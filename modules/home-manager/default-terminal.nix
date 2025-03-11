@@ -44,13 +44,6 @@ in {
         then [cfg.pkg]
         else []
       );
-
-    programs.zsh.initExtra = ''
-      if [[ $TERM = ${cfg.termname} ]]; then
-        precmd_functions+=(__vte_prompt_command)
-      fi
-    '';
-
     wayland.windowManager.sway.config.terminal = cfg.bin;
   };
 }

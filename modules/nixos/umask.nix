@@ -33,7 +33,6 @@ in {
           programs = {
             bash.profileExtra = umaskCmd;
             bash.bashrcExtra = umaskCmd;
-            zsh.initExtra = umaskCmd;
           };
         }
       )
