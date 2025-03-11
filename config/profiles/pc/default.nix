@@ -27,6 +27,7 @@
     ../../modules/ui/direnv
     ../../modules/ui/emacs
     ../../modules/ui/fonts
+    ../../modules/ui/graphics
     ../../modules/ui/gtk
     ../../modules/ui/imv
     ../../modules/ui/launcher
@@ -34,7 +35,6 @@
     ../../modules/ui/lorri
     ../../modules/ui/mako
     ../../modules/ui/mpv
-    ../../modules/ui/opengl
     ../../modules/ui/plymouth
     ../../modules/ui/sway
     ../../modules/ui/swayidle
