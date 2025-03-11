@@ -22,11 +22,12 @@
     ${telegram} &
     ${slack} &
   '';
-  mkGame = pkg: pkgs.writeShellScript "${pkg.name}-game" ''
-    ${pkgs.sway}/bin/swaymsg 'input * dwt off'
-    ${lib.getExe pkg}
-    ${pkgs.sway}/bin/swaymsg 'input * dwt on'
-  '';
+  mkGame = pkg:
+    pkgs.writeShellScript "${pkg.name}-game" ''
+      ${pkgs.sway}/bin/swaymsg 'input * dwt off'
+      ${lib.getExe pkg}
+      ${pkgs.sway}/bin/swaymsg 'input * dwt on'
+    '';
 in {
   nixpkgs.overlays = [
     (import ../../../../pkgs/launcher/overlay.nix)
