@@ -94,12 +94,12 @@ in {
             outputs = [
               (laptopPanel.output
                 // {
-                  position = "0,${mkPos (center.height - laptopPanel.height)}";
+                  position = "${mkPos ((center.width - laptopPanel.width) / 2)},${mkPos center.height}";
                 })
 
               (center.output
                 // {
-                  position = "${mkPos laptopPanel.width},0";
+                  position = "0,0";
                   transform = "normal";
                 })
             ];
