@@ -6,14 +6,14 @@
 writeShellScript name ''
   test=${coreutils}/bin/test
 
-  if $test ! "$WAYLAND_DISPLAY" -o \( "$TERM" -a "$TERM" != "linux" \)
+  if $test "$WAYLAND_DISPLAY"
   then
-    exec ${bin}
-  else
     exec ${config.primary-user.home-manager.default-terminal.bin} \
       --title ${name} \
       --class ${terminalname} \
       --name ${terminalname} \
       ${bin}
+  else
+    exec ${bin}
   fi
 ''
