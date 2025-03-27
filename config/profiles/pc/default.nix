@@ -25,6 +25,7 @@
     ../../modules/system/podman
 
     ../../modules/ui/direnv
+    ../../modules/ui/display-manager
     ../../modules/ui/emacs
     ../../modules/ui/fonts
     ../../modules/ui/graphics

@@ -1,6 +1,5 @@
 {...}: {
   imports = [
-    ./autologin-graphical-session.nix
     ./backup.nix
     ./color-theme.nix
     ./detachedLuksWithNixopsKeys.nix
