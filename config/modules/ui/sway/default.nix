@@ -76,6 +76,7 @@ in {
                 "border pixel"
                 "floating enable"
                 "sticky enable"
+                "resize set 1000 750"
               ];
             }
             {
@@ -90,12 +91,14 @@ in {
               criteria.app_id = "pavucontrol";
               commands = [
                 "floating enable"
+                "resize set 1000 750"
               ];
             }
             {
               criteria.app_id = "bluetooth";
               commands = [
                 "floating enable"
+                "resize set 1000 750"
               ];
             }
             {
@@ -127,7 +130,7 @@ in {
               criteria.title = "(?:Open|Save) (?:File|Folder|As)";
               commands = [
                 "floating enable"
-                "resize set width 1030 height 710"
+                "resize set 1000 750"
               ];
             }
           ];
