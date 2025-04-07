@@ -59,7 +59,10 @@ in
     logger.baud_rate = 0;
     captive_portal = {};
     api.encryption.key.keyCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "Encryption Key";
-    ota.password.keyCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "OTA";
+    ota = {
+      password.keyCommand = passwords.getPasswordField "Connor/Infrastructure/IoT/${name}" "OTA";
+      platform = "esphome";
+    };
 
     sensor = [
       {
