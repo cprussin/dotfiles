@@ -85,6 +85,7 @@ in {
         "/srv/Library/Documents" *(rw,no_subtree_check,insecure,all_squash)
         "/srv/Library/Google Drive" *(rw,no_subtree_check,insecure,all_squash)
         "/srv/Library/TheJobFare" *(rw,no_subtree_check,insecure,all_squash)
+        "/srv/Library/Lego Instructions" *(rw,no_subtree_check,insecure,all_squash)
       '';
     };
   };
