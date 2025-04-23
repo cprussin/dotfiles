@@ -8,14 +8,9 @@
 
 (eval-when-compile (require 'use-package))
 
-(use-package emacs-rc-custom)
 (use-package emacs-rc-keybindings
   :demand
   :commands general-define-key)
-
-(defun emacs-rc--git-cmd (args)
-  "Return a string representing the git command ARGS."
-  (concat emacs-rc-git-path " " args))
 
 (use-package direnv
   :demand
@@ -30,17 +25,13 @@
   :commands editorconfig-mode
   :after delight
   :delight
-  :init (setq editorconfig-exec-path emacs-rc-editorconfig-path)
   :config (editorconfig-mode))
 
 ;; Enable projectile
 (use-package projectile
   :demand
   :commands projectile-mode
-  :init (setq projectile-completion-system 'ivy
-              projectile-git-command (emacs-rc--git-cmd "ls-files -zco --exclude-standard")
-              projectile-git-submodule-command (emacs-rc--git-cmd "submodule --quiet foreach 'echo $path' | tr '\\n' '\\0'")
-              projectile-git-ignored-command (emacs-rc--git-cmd "ls-files -zcoi --exclude-standard"))
+  :init (setq projectile-completion-system 'ivy)
   :config (projectile-mode)
   :general
   (project-menu-def

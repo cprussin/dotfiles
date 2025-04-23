@@ -1,4 +1,4 @@
-;;; emacs-rc.el --- Emacs configuration
+;;; emacs-rc.el --- Emacs configuration  -*- lexical-binding: t -*-
 ;;;
 ;;; Commentary:
 ;;;
@@ -16,6 +16,7 @@
 (use-package emacs-rc-git)
 (use-package emacs-rc-hass)
 (use-package emacs-rc-help)
+(use-package emacs-rc-hledger)
 (use-package emacs-rc-image)
 (use-package emacs-rc-keybindings)
 (use-package emacs-rc-lsp)

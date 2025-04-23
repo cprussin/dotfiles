@@ -22,6 +22,7 @@
   epkgs.evil-org
   epkgs.evil-smartparens
   epkgs.flycheck
+  epkgs.flycheck-hledger
   epkgs.flycheck-popup-tip
   epkgs.general
   epkgs.git-gutter
@@ -35,6 +36,7 @@
   epkgs.helpful
   epkgs.highlight-numbers
   epkgs.hl-todo
+  epkgs.hledger-mode
   epkgs.imenu-list
   epkgs.indent-guide
   epkgs.ivy

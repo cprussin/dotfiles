@@ -60,7 +60,8 @@
              js-mode
              scss-mode
              css-mode
-             nix-mode))
+             nix-mode
+             hledger-mode))
     (add-to-list 'aggressive-indent-excluded-modes excluded-mode)))
 
 ;; Show indentation guide
@@ -111,7 +112,6 @@
   :demand
   :commands global-emojify-mode global-emojify-mode-line-mode
   :config
-  (setq emojify-emojis-dir emacs-rc-emoji-sets-path)
   (global-emojify-mode)
   (global-emojify-mode-line-mode))
 

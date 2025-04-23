@@ -1,4 +1,4 @@
-;;; emacs-rc-modes.el --- Require in miscellaneous modes
+;;; emacs-rc-modes.el --- Require in miscellaneous modes  -*- lexical-binding: t -*-
 ;;;
 ;;; Commentary:
 ;;;

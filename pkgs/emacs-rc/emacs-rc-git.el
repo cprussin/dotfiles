@@ -8,19 +8,17 @@
 
 (eval-when-compile (require 'use-package))
 
-(use-package emacs-rc-custom)
 (use-package emacs-rc-keybindings
   :demand
   :commands general-define-key)
 
 (use-package magit
   :after general
-  :config (setq magit-git-executable emacs-rc-git-path)
   :general
   (git-menu-def "c" '(magit-clone :which-key "git clone")
-                "b" '(magit-blame :which-key "git blame")
-                "l" '(magit-log :which-key "git log")
-                "s" '(magit-status :which-key "git status")))
+    "b" '(magit-blame :which-key "git blame")
+    "l" '(magit-log :which-key "git log")
+    "s" '(magit-status :which-key "git status")))
 
 ;; Show git status in the gutter
 (use-package git-gutter

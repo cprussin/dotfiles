@@ -8,7 +8,6 @@
 
 (eval-when-compile (require 'use-package))
 
-(use-package emacs-rc-custom)
 (use-package emacs-rc-keybindings
   :demand
   :commands general-define-key)

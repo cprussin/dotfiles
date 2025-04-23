@@ -8,7 +8,6 @@
 
 (eval-when-compile (require 'use-package))
 
-(use-package emacs-rc-custom)
 (use-package emacs-rc-keybindings
   :demand
   :commands general-define-key)
@@ -68,8 +67,15 @@
   :delight
   :after general ivy delight
   :config
-  (setq counsel-rg-base-command (concat emacs-rc-rg-path
-                                        " -M 240 --hidden --with-filename --no-heading --line-number --color never %s"))
+  (setq counsel-rg-base-command
+        `("rg"
+          "--hidden" "--glob" "!.git"
+          "--max-columns" "240"
+          "--with-filename"
+          "--no-heading"
+          "--line-number"
+          "--color" "never"
+          "%s"))
   (ivy-configure 'counsel-M-x :display-transformer-fn #'emacs-rc--transform-func)
   (counsel-mode)
   :general

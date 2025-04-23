@@ -9,8 +9,6 @@
 
 (eval-when-compile (require 'use-package))
 
-(use-package emacs-rc-custom)
-
 ;; Enable flycheck for source code checks
 (use-package flycheck
   :demand
@@ -25,8 +23,7 @@
 
 ;; Turn on spell checking
 (use-package flyspell
-  :config (setq flyspell-issue-message-flag nil
-                ispell-program-name emacs-rc-ispell-path)
+  :config (setq flyspell-issue-message-flag nil)
   :hook ((prog-mode . flyspell-prog-mode)
          (text-mode . flyspell-mode)))
 
