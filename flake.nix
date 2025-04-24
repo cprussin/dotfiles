@@ -64,7 +64,6 @@
     isoDir = ./isos;
 
     mkMinimalIso = name:
-      builtins.mapAttrs (_: drv: {"${name}" = drv;})
       (release {
         nixpkgs = {
           inherit (nixpkgs) outPath;
@@ -77,7 +76,12 @@
       })
       .iso_minimal;
 
-    isos = mkMinimalIso "gpg-offline";
+    mkMinimalIsos = isos: builtins.listToAttrs (map (name: { inherit name; value = mkMinimalIso name; }) isos);
+
+    isos = mkMinimalIsos [
+      "gpg-offline"
+      "installer"
+    ];
 
     # See https://jade.fyi/blog/flakes-arent-real/ for why we do this and
     # don't use `specialArgs`.
@@ -142,7 +146,7 @@
           };
         in {
           packages =
-            (isos."${system}" or {})
+            (builtins.mapAttrs (_: value: value."${system}") isos)
             // {
               inherit (pkgs) iot-devices;
             };
