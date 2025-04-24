@@ -10,6 +10,7 @@
   wireguardListenPort = 45676;
 
   peer-public-keys = {
+    lyra = "YBmJgSv7PlVWIWf6jzH6UG1SH6Pobe8q2cJQU/65xis=";
     aries = "ptwFBYmwVMAAY9XJ5ZZazT8peTZ5feyx69bfZkiSOlo=";
     pegasus = "H/hoEAN8RieoOSuxPG3y35fPdhxjLS+iNJcD2CoGS1g=";
     andromeda = "8LO9GBh9oQMnx2MCBjButhXy7ikim7ziqnBPzEUNJxY=";

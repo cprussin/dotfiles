@@ -124,6 +124,10 @@
         ];
       };
 
+      lyra = mkMachine {
+        targetHost = "lyra";
+      };
+
       crux = mkMachine {
         targetHost = "crux";
       };
