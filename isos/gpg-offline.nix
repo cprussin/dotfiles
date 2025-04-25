@@ -52,16 +52,13 @@
     echo -e "phone, and github.\e[0m"
   '';
 in {
-  nixpkgs = {
-    config.allowBroken = true;
-    overlays = [
-      (
-        import ../pkgs/dircolors-solarized/overlay.nix {
-          src = config.flake-inputs.dircolors-solarized;
-        }
-      )
-    ];
-  };
+  nixpkgs.overlays = [
+    (
+      import ../pkgs/dircolors-solarized/overlay.nix {
+        src = config.flake-inputs.dircolors-solarized;
+      }
+    )
+  ];
 
   isoImage = {
     isoBaseName = lib.mkForce "gpg-offline";
