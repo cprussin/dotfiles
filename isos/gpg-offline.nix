@@ -1,10 +1,9 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: let
-  sources = import ../sources.nix;
-
   solarized-dark = pkgs.callPackage ../lib/color-themes/solarized/dark.nix {};
 
   update-key-expiry = pkgs.writeShellScriptBin "update-key-expiry" ''
@@ -58,7 +57,7 @@ in {
     overlays = [
       (
         import ../pkgs/dircolors-solarized/overlay.nix {
-          src = sources.dircolors-solarized;
+          src = config.flake-inputs.dircolors-solarized;
         }
       )
     ];
