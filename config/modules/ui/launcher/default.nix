@@ -73,7 +73,7 @@ in {
           presentation = pkgs.callPackage ./apps/presentation.nix {};
           printotron = mkWebApp "printotron" "https://printotron.internal.prussin.net";
           reauth-new-mail-counter = pkgs.callPackage ./apps/reauth-new-mail-counter.nix {};
-          reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot";
+          reboot = mkConfirmationDialog "reboot" "Yes, reboot" "No, remain on" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot -i";
           remacs = pkgs.callPackage ./apps/remacs.nix {};
           scan = "${pkgs.xsane}/bin/xsane";
           screen-record = pkgs.writeShellScript "screenshot" "${screen} record $*";
