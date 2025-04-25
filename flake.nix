@@ -76,7 +76,12 @@
       })
       .iso_minimal;
 
-    mkMinimalIsos = isos: builtins.listToAttrs (map (name: { inherit name; value = mkMinimalIso name; }) isos);
+    mkMinimalIsos = isos:
+      builtins.listToAttrs (map (name: {
+          inherit name;
+          value = mkMinimalIso name;
+        })
+        isos);
 
     isos = mkMinimalIsos [
       "gpg-offline"

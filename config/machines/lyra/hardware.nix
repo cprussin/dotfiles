@@ -25,7 +25,7 @@ in {
       '';
     };
     initrd = {
-      availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "uas" "sd_mod" "amdgpu" ];
+      availableKernelModules = ["nvme" "xhci_pci" "thunderbolt" "usb_storage" "uas" "sd_mod" "amdgpu"];
       kernelModules = ["dm-snapshot" "nls_cp437" "nls_iso8859_1"];
       luks = {
         gpgSupport = true;
@@ -56,7 +56,7 @@ in {
       "/boot" = {
         device = "/dev/disk/by-uuid/69FD-AA98";
         fsType = "vfat";
-        options = [ "fmask=0022" "dmask=0022" ];
+        options = ["fmask=0022" "dmask=0022"];
       };
     }
     // (
