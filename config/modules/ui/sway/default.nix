@@ -114,6 +114,12 @@ in {
               ];
             }
             {
+              criteria.title = "Bitwarden";
+              commands = [
+                "floating enable"
+              ];
+            }
+            {
               criteria.app_id = "^brave-.*";
               commands = [
                 "shortcuts_inhibitor disable"
