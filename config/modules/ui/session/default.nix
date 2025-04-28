@@ -13,6 +13,9 @@ in {
     home.packages = lib.mkForce [load-session];
     programs.tmux = {
       enable = true;
+      clock24 = true;
+      escapeTime = 0;
+      keyMode = "vi";
       extraConfig = "set -g mouse on";
     };
   };
