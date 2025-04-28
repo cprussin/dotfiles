@@ -1,4 +1,5 @@
 _: {
+  interfaces.wifi = "wlan0";
   networking = {
     wireless.iwd = {
       enable = true;

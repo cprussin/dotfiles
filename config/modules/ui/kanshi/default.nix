@@ -1,9 +1,9 @@
 {pkgs, ...}: let
-  laptopPanel = mkMonitor "eDP-1" {
-    scale = 1.2;
-    width = 2256;
-    height = 1504;
-    refreshRate = 60;
+  laptopPanel = mkMonitor "BOE NE135A1M-NY1 Unknown" {
+    scale = 1.5;
+    width = 2880;
+    height = 1920;
+    refreshRate = 120;
   };
 
   portablePanel = mkMonitor "Audio Processing Technology  Ltd Monitor demoset-1" {

@@ -27,7 +27,7 @@
     };
     mkCli.url = "github:cprussin/mkCli";
     gmail-new-mail-counter.url = "github:cprussin/gmail-new-mail-counter";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.url = "github:cprussin/nixos-hardware/master";
     notify-send = {
       url = "github:vlevit/notify-send.sh";
       flake = false;
@@ -131,6 +131,9 @@
 
       lyra = mkMachine {
         targetHost = "lyra";
+        extraModules = [
+          nixos-hardware.nixosModules.framework-amd-ai-300-series
+        ];
       };
 
       crux = mkMachine {
