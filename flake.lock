@@ -180,7 +180,7 @@
     "gpg-key": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-u0yr1RqHCmiy+PXfFkV2OMrpq2Qo2d4vNtZDjFOp4cw=",
+        "narHash": "sha256-hGcW12t/Os+thA3Ocq34OYmxEUMJu6BtqpOAjnrN8hg=",
         "type": "file",
         "url": "https://connor.prussin.net/pubkey.asc"
       },
@@ -303,11 +303,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1745589940,
-        "narHash": "sha256-rqQzOYSdZ9URkjwMGmkNk1Xb6HQ9lX3L5yMXsTf+/bs=",
+        "lastModified": 1745853197,
+        "narHash": "sha256-7McxJqykvRyFCsBpVzWC/0gDymrm4oIDbAqOLBl2KhY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5525a6aace0211d2873c9fb03109e399eecf71a7",
+        "rev": "d99c55d7c10924d671c4fd61f264c207ae75695f",
         "type": "github"
       },
       "original": {
@@ -318,11 +318,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1745391562,
-        "narHash": "sha256-sPwcCYuiEopaafePqlG826tBhctuJsLx/mhKKM5Fmjo=",
+        "lastModified": 1745526057,
+        "narHash": "sha256-ITSpPDwvLBZBnPRS2bUcHY3gZSwis/uTe255QgMtTLA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8a2f738d9d1f1d986b5a4cd2fd2061a7127237d7",
+        "rev": "f771eb401a46846c1aebd20552521b233dd7e18b",
         "type": "github"
       },
       "original": {
@@ -380,11 +380,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1745487689,
-        "narHash": "sha256-FQoi3R0NjQeBAsEOo49b5tbDPcJSMWc3QhhaIi9eddw=",
+        "lastModified": 1745742390,
+        "narHash": "sha256-1rqa/XPSJqJg21BKWjzJZC7yU0l/YTVtjRi0RJmipus=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5630cf13cceac06cefe9fc607e8dfa8fb342dde3",
+        "rev": "26245db0cb552047418cfcef9a25da91b222d6c7",
         "type": "github"
       },
       "original": {
