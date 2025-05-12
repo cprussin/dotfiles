@@ -13,6 +13,13 @@
     refreshRate = 60;
   };
 
+  curved = mkMonitor "LG Electronics LG ULTRAWIDE 0x0001E368" {
+    scale = 1.0;
+    width = 3440;
+    height = 1440;
+    refreshRate = 60;
+  };
+
   left = mkMonitor "Dell Inc. DELL U3219Q H8KF413" externalMonitorDimensions;
   center = mkMonitor "Dell Inc. DELL U3219Q G3MS413" externalMonitorDimensions;
   right = mkMonitor "Dell Inc. DELL U3219Q 2ZLS413" externalMonitorDimensions;
@@ -140,6 +147,27 @@ in {
               "${pkgs.sway}/bin/swaymsg \"focus output '${left.id}'\", workspace 1"
               "${pkgs.sway}/bin/swaymsg \"focus output '${right.id}'\", workspace 3"
               "${pkgs.sway}/bin/swaymsg \"focus output '${center.id}'\", workspace 2"
+            ];
+          };
+        }
+        {
+          profile = {
+            name = "homeOfficeCurved";
+            outputs = [
+              (laptopPanel.output
+                // {
+                  position = "${mkPos ((curved.width - laptopPanel.width) / 2)},${mkPos curved.height}";
+                })
+
+              (curved.output
+                // {
+                  position = "0,0";
+                  transform = "normal";
+                })
+            ];
+            exec = [
+              "${pkgs.sway}/bin/swaymsg \"workspace2, move workspace to '${laptopPanel.id}', focus output '${laptopPanel.id}'\", workspace 2"
+              "${pkgs.sway}/bin/swaymsg \"focus output '${curved.id}'\", workspace 1"
             ];
           };
         }
