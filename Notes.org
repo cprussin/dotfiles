@@ -6,9 +6,9 @@
 ** TODO Put home-assistant image in niv sources
 ** TODO Fix home-assistant blocking shutdown for way too long on crux
 ** TODO Fix search for special characters
-** TODO Fix publicly-visible keys on crux on /boot/crypt and aries on /boot/luks
-- [ ] Deploy aries boot keys with colmena (just copy encrypted header / key, will need to start decrypting header on boot)
-- [ ] Maybe put aries boot keys on another partition with a fs that supports permissions or something?
+** TODO Fix publicly-visible keys on crux on /boot/crypt and lyra on /boot/luks
+- [ ] Deploy lyra boot keys with colmena (just copy encrypted header / key, will need to start decrypting header on boot)
+- [ ] Maybe put lyra boot keys on another partition with a fs that supports permissions or something?
 - [ ] Run ssh server on early boot of crux to receive keys so we don't need to store them at rest
 ** TODO Add systemd-resolved / split dns :system:
 ** TODO Set up kerberos / ldap

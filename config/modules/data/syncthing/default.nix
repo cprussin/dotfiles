@@ -11,7 +11,6 @@
   # automatically rather than manually copied here
   syncthingMachineIds = {
     lyra = "LFXISO5-EXAHN36-VIQRVBB-JTX5MZO-CQG22QS-VIKCZ54-Z5LMM3N-Z3HKBQB";
-    aries = "EKTBGJJ-SH75ED7-Y2GAYCQ-W4O7G2X-P7Z6QT3-OE36JNW-PVTF3EE-GLZFUQ2";
     crux = "I4ZIHKH-5UQLYN3-I6TGPKJ-IXVKJYK-NTO6RQG-QPIFI4Y-NMC3IHO-4OPHDAM";
     pegasus = "2JXRBGP-OHUREJQ-YFNLX4T-7XW52VO-3N3IKBF-G3QZJ2C-4FBCGDW-BVMHFQD";
   };
@@ -70,19 +69,19 @@ in {
         folders = foldersForCurrentDevice {
           Notes = {
             path = "${config.primary-user.home}/Notes";
-            devices = ["crux" "aries" "lyra" "pegasus"];
+            devices = ["crux" "lyra" "pegasus"];
           };
           Projects = {
             path = "${config.primary-user.home}/Projects";
-            devices = ["crux" "aries" "lyra"];
+            devices = ["crux" "lyra"];
           };
           Scratch = {
             path = "${config.primary-user.home}/Scratch";
-            devices = ["crux" "aries" "lyra" "pegasus"];
+            devices = ["crux" "lyra" "pegasus"];
           };
           Passwords = {
             path = "${config.primary-user.home}/.password-store";
-            devices = ["crux" "aries" "lyra" "pegasus"];
+            devices = ["crux" "lyra" "pegasus"];
           };
           DCIM = {
             path = "${config.primary-user.home}/Phone/DCIM";
@@ -125,14 +124,14 @@ in {
               if config.networking.hostName == "crux"
               then "${config.primary-user.home}/Game Saves/Stardew Valley"
               else "${config.primary-user.home}/.config/StardewValley/Saves";
-            devices = ["crux" "aries" "lyra"];
+            devices = ["crux" "lyra"];
           };
           Factorio_Saves = {
             path =
               if config.networking.hostName == "crux"
               then "${config.primary-user.home}/Game Saves/Factorio"
               else "${config.primary-user.home}/.factorio/saves";
-            devices = ["crux" "aries" "lyra"];
+            devices = ["crux" "lyra"];
           };
         };
         extraOptions.options = {

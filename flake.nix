@@ -122,13 +122,6 @@
         };
       };
 
-      aries = mkMachine {
-        targetHost = "aries";
-        extraModules = [
-          nixos-hardware.nixosModules.framework-11th-gen-intel
-        ];
-      };
-
       lyra = mkMachine {
         targetHost = "lyra";
         extraModules = [
