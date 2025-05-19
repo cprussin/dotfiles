@@ -8,14 +8,8 @@
     config = import ./nixpkgs-config.nix;
     inherit (pkgs) system;
   };
-  pkgs-master = import config.flake-inputs.nixpkgs-master {
-    overlays = [];
-    config = import ./nixpkgs-config.nix;
-    inherit (pkgs) system;
-  };
   unstable-pkgs-overlay = _: _: {
     inherit (pkgs-unstable) syncthing bitwig-studio;
-    inherit (pkgs-master) makemkv;
   };
 in {
   primary-user.extraGroups = ["nix-access-tokens"];
@@ -50,7 +44,6 @@ in {
         src = config.flake-inputs.dircolors-solarized;
       })
       (import "${config.flake-inputs.fzf-pass}/overlay.nix")
-      (import ../../../../pkgs/makemkv/overlay.nix)
       (import ../../../../pkgs/mako/overlay.nix)
       (import ../../../../pkgs/notify-send/overlay.nix {
         src = config.flake-inputs.notify-send;

@@ -46,7 +46,7 @@ in {
       ];
       monospace = [
         {
-          package = pkgs.nerdfonts.override {fonts = ["DejaVuSansMono"];};
+          package = pkgs.nerd-fonts.dejavu-sans-mono;
           face = "DejaVuSansM Nerd Font Mono";
         }
       ];

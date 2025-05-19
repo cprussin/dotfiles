@@ -19,8 +19,6 @@ in {
     )
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
-
   isoImage = {
     isoBaseName = lib.mkForce "installer";
     appendToMenuLabel = " NixOS Installer";

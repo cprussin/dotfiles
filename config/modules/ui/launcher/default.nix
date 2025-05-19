@@ -64,7 +64,6 @@ in {
           journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
           library = mkWebApp "library" "https://library.internal.prussin.net";
           lock = pkgs.writeShellScript "lock" "${pkgs.systemd}/bin/loginctl lock-session";
-          makemkv = "${pkgs.makemkv}/bin/makemkv";
           mic-volume = pkgs.callPackage ./apps/mic-volume.nix {};
           mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
           minecraft = mkGame pkgs.prismlauncher;

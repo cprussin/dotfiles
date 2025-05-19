@@ -86,8 +86,6 @@ in {
     );
 
   boot = {
-    # TODO Remove when moving to nixos-25.05
-    kernelPackages = pkgs.linuxPackages_6_12;
     kernelModules = ["kvm-amd"];
     extraModulePackages = [];
     preLVMTempMount."/boot" = {

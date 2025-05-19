@@ -7,7 +7,6 @@
     ./backup.nix
     ./circinus.nix
     ./dns.nix
-    ./dvd-ripping.nix
     ./dynamic-dns.nix
     ./home-assistant.nix
     ./library.nix
