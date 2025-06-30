@@ -13,7 +13,7 @@ in {
         privateKeyFile = config.deployment.keys.wireguard-private-key.path;
         ips = [network.wireguard6."${config.networking.hostName}".cidr network.wireguard4."${config.networking.hostName}".cidr];
         postSetup = ''
-          echo -en 'nameserver ${network.wireguard4.crux.address}\nnameserver ${network.wireguard4.crux.address}\nsearch internal.prussin.net' |\
+          echo -en 'nameserver ${network.wireguard6.crux.address}\nnameserver ${network.wireguard4.crux.address}\nsearch internal.prussin.net' |\
             ${pkgs.openresolv}/bin/resolvconf -a prussinnet
         '';
         postShutdown = "${pkgs.openresolv}/bin/resolvconf -d prussinnet";
