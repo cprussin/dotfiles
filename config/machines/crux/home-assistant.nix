@@ -22,23 +22,44 @@ in {
     };
   };
 
-  networking.firewall.interfaces.prussinnet.allowedTCPPorts = [80 443];
-  users.users.nginx.extraGroups = ["keys"];
-  services.nginx = {
-    enable = true;
-    recommendedTlsSettings = true;
-    recommendedOptimisation = true;
-    recommendedGzipSettings = true;
-    recommendedProxySettings = true;
-    virtualHosts."home-assistant.internal.prussin.net" = {
-      listenAddresses = ["[${network.wireguard6.crux.address}]" "${network.wireguard4.crux.address}"];
-      sslCertificate = "/run/keys/home-assistant.internal.prussin.net.crt";
-      sslCertificateKey = "/run/keys/home-assistant.internal.prussin.net.key";
-      forceSSL = true;
-      extraConfig = "proxy_buffering off;";
-      locations."/" = {
-        proxyPass = "http://localhost:8123";
-        proxyWebsockets = true;
+  networking.firewall.interfaces = {
+    prussinnet.allowedTCPPorts = [80 443];
+    podman0.allowedTCPPorts = [3000];
+  };
+
+  users = {
+    groups.zwave-js = {};
+    users = {
+      nginx.extraGroups = ["keys"];
+      zwave-js = {
+        isSystemUser = true;
+        group = "zwave-js";
+      };
+    };
+  };
+
+  services = {
+    zwave-js = {
+      enable = true;
+      serialPort = "/dev/ttyACM1";
+      secretsConfigFile = "/secrets/zwave-js-keys.json";
+    };
+    nginx = {
+      enable = true;
+      recommendedTlsSettings = true;
+      recommendedOptimisation = true;
+      recommendedGzipSettings = true;
+      recommendedProxySettings = true;
+      virtualHosts."home-assistant.internal.prussin.net" = {
+        listenAddresses = ["[${network.wireguard6.crux.address}]" "${network.wireguard4.crux.address}"];
+        sslCertificate = "/run/keys/home-assistant.internal.prussin.net.crt";
+        sslCertificateKey = "/run/keys/home-assistant.internal.prussin.net.key";
+        forceSSL = true;
+        extraConfig = "proxy_buffering off;";
+        locations."/" = {
+          proxyPass = "http://localhost:8123";
+          proxyWebsockets = true;
+        };
       };
     };
   };
