@@ -23,7 +23,7 @@
       enable = true;
       enableSshSupport = true;
       sshKeys = ["B8B6B7089A55037230D37A2D303706E909665E80"];
-      pinentryPackage = pkgs.pinentry-qt;
+      pinentry.package = pkgs.pinentry-qt;
     };
   };
 }

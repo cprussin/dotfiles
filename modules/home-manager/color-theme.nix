@@ -146,11 +146,11 @@ in {
       imv.settings.options.background = removeOctothorpe cfg.background;
     };
 
-    services.mako = {
-      backgroundColor = "${cfg.foreground}E0";
-      textColor = cfg.background;
-      borderColor = cfg.highlightForeground;
-      progressColor = "source ${cfg.bright}";
+    services.mako.settings = {
+      background-color = "${cfg.foreground}E0";
+      text-color = cfg.background;
+      border-color = cfg.highlightForeground;
+      progress-color = "source ${cfg.bright}";
     };
 
     wayland.windowManager.sway.config.colors = {

@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  modulesPath,
   ...
 }: let
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
