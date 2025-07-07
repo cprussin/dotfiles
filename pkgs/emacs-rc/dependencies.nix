@@ -77,7 +77,7 @@
   epkgs.use-package
   epkgs.websocket
   epkgs.which-key
-  epkgs.ws-butler
+  epkgs.nongnuPackages.ws-butler
   epkgs.yaml-mode
   epkgs.zoom-frm
 ]
