@@ -16,26 +16,24 @@
 in {
   home = mkNetwork "10.42.0.0/16" {
     router = "10.42.0.1";
-    circinus = "10.42.1.1";
-    aidens-room-lights = "10.42.5.1";
-    bar-lights = "10.42.5.2";
-    bodhis-room-lights = "10.42.5.3";
-    dining-room-lights = "10.42.5.4";
-    entertainment-center-lights = "10.42.5.5";
-    family-room-lights = "10.42.5.6";
-    guest-room-lights = "10.42.5.7";
-    hall-lights = "10.42.5.8";
-    kitchen-lights = "10.42.5.9";
-    living-room-lights = "10.42.5.10";
-    master-bedroom-lights = "10.42.5.11";
-    garage-lights = "10.42.5.12";
-    aidens-room-fan = "10.42.5.50";
-    bodhis-room-fan = "10.42.5.51";
-    guest-room-fan = "10.42.5.52";
-    master-bedroom-fan = "10.42.5.53";
-    entry-light = "10.42.5.100";
-    front-porch-light = "10.42.5.101";
-    trash-light = "10.42.5.102";
+    switch = "10.42.0.2";
+    ap1 = "10.42.0.3";
+    ap2 = "10.42.0.4";
+    ap3 = "10.42.0.5";
+
+    crux = "10.42.1.1";
+
+    camera-backyard = "10.42.2.1";
+    camera-grill = "10.42.2.2";
+    camera-driveway = "10.42.2.3";
+    camera-front-steps = "10.42.2.4";
+    camera-garage = "10.42.2.5";
+    camera-side = "10.42.2.6";
+    camera-laundry-door = "10.42.2.7";
+    camera-front-door = "10.42.2.8";
+
+    circinus = "10.42.3.1";
+
     plug-1 = "10.42.5.150";
     plug-2 = "10.42.5.151";
     plug-3 = "10.42.5.152";
