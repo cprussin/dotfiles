@@ -6,8 +6,14 @@
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
 in {
   deployment.keys = {
-    route53-dynamic-dns-aws-access-key.keyCommand = passwords.getPasswordField "Connor/Computer Services/AWS/crux dynamic dns" "Access Key Id";
-    route53-dynamic-dns-aws-secret-access-key.keyCommand = passwords.getPasswordField "Connor/Computer Services/AWS/crux dynamic dns" "Secret Access Key";
+    route53-dynamic-dns-aws-access-key = {
+      keyCommand = passwords.getPasswordField "Connor/Computer Services/AWS/crux dynamic dns" "Access Key Id";
+      destDir = "/secrets";
+    };
+    route53-dynamic-dns-aws-secret-access-key = {
+      keyCommand = passwords.getPasswordField "Connor/Computer Services/AWS/crux dynamic dns" "Secret Access Key";
+      destDir = "/secrets";
+    };
   };
 
   services.route53DynamicDns = {
