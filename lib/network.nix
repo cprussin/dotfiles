@@ -52,6 +52,7 @@ in {
     andromeda = "fc42::1:0:f001";
     steam-deck = "fc42::1:1:0";
     printotron = "fc42::1:1:1";
+    "5428-la-forest-drive-ipad" = "fc42::1:1:2";
     shauna-computer = "fc42::2:0:0";
     shauna-phone = "fc42::2:0:1";
     reece-computer = "fc42::3:0:0";
@@ -65,6 +66,7 @@ in {
     andromeda = "10.43.1.100";
     steam-deck = "10.43.2.0";
     printotron = "10.43.2.1";
+    "5428-la-forest-drive-ipad" = "10.43.2.2";
     shauna-computer = "10.43.3.0";
     shauna-phone = "10.43.3.1";
     reece-computer = "10.43.4.0";
