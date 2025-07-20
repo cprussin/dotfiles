@@ -35,7 +35,7 @@ in {
 
   programs.gnupg.agent = {
     enable = true;
-    pinentry.package = pkgs.pinentry-curses;
+    pinentryPackage = pkgs.pinentry-curses;
     enableSSHSupport = true;
   };
 
