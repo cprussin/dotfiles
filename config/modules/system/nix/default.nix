@@ -12,10 +12,6 @@
     inherit (pkgs-unstable) syncthing bitwig-studio;
   };
 in {
-  primary-user.extraGroups = ["nix-access-tokens"];
-  ids.gids.nix-access-tokens = 500;
-  users.groups.nix-access-tokens.gid = config.ids.gids.nix-access-tokens;
-
   nix = {
     channel.enable = false;
     registry.nixpkgs.flake = config.flake-inputs.nixpkgs;
