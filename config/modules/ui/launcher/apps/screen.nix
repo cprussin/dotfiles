@@ -37,14 +37,14 @@ writeShellScript "screen" ''
     fi
   elif $test "$2" = 'output'
   then
-    geometry="$($swaymsg -t get_outputs | $jq -r '.[] | select(.active) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | $slurp)"
+    geometry="$($slurp -o)"
     if $test ! "$geometry"
     then
       exit
     fi
   elif $test "$2" != 'full'
   then
-    geometry="$($swaymsg -t get_tree | $jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | $slurp)"
+    geometry="$($swaymsg -t get_tree | $jq -r '.. | select(.pid? and .visible?) | "\(.rect.x+.window_rect.x),\(.rect.y+.window_rect.y) \(.window_rect.width)x\(.window_rect.height)"' | $slurp)"
     if $test ! "$geometry"
     then
       exit
