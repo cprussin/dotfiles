@@ -70,7 +70,6 @@
        theme-name
 
        ;; Make popups more visible
-       `(popup-tip-face ((t (:background ,base3 :foreground ,base01))))
        `(tooltip ((t (:background ,base3 :foreground ,base01))))
        `(company-tooltip ((t (:background ,base3 :foreground ,base01))))
        `(company-tooltip-selection ((t (:background ,base01 :foreground ,base3))))

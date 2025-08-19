@@ -23,7 +23,6 @@
   epkgs.evil-smartparens
   epkgs.flycheck
   epkgs.flycheck-hledger
-  epkgs.flycheck-popup-tip
   epkgs.general
   epkgs.git-gutter
   epkgs.git-timemachine

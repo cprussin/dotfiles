@@ -16,11 +16,6 @@
   :init (setq flycheck-emacs-lisp-load-path 'inherit)
   :config (global-flycheck-mode))
 
-(use-package flycheck-popup-tip
-  :demand
-  :commands flycheck-popup-tip-mode
-  :hook (flycheck-mode . flycheck-popup-tip-mode))
-
 ;; Turn on spell checking
 (use-package flyspell
   :config (setq flyspell-issue-message-flag nil)
