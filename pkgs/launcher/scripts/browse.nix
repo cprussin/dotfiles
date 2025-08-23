@@ -38,9 +38,9 @@ writeShellScriptBin "browse" ''
   done
 
   case $browser in
-    brave) exec $brave $chromeflags --app=$target >/dev/null 2>&1 ;;
-    chromium) exec $chromium $chromeflags --app=$target >/dev/null 2>&1 ;;
-    chrome) exec $chrome $chromeflags --app=$target >/dev/null 2>&1 ;;
+    brave) exec $brave $chromeflags $target >/dev/null 2>&1 ;;
+    chromium) exec $chromium $chromeflags $target >/dev/null 2>&1 ;;
+    chrome) exec $chrome $chromeflags $target >/dev/null 2>&1 ;;
     firefox) MOZ_ENABLE_WAYLAND=1 exec $firefox $target >/dev/null 2>&1 ;;
   esac
 ''
