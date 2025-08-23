@@ -9,7 +9,7 @@
     inherit (pkgs) system;
   };
   unstable-pkgs-overlay = _: _: {
-    inherit (pkgs-unstable) syncthing bitwig-studio;
+    inherit (pkgs-unstable) syncthing bitwig-studio zwave-js-server;
   };
 in {
   nix = {
