@@ -122,11 +122,6 @@ in {
         separator-color = removeOctothorpe cfg.highlightBackground;
       };
 
-      waybar-custom.styles.frame = {
-        inherit (cfg) background;
-        color = cfg.bright;
-      };
-
       fzf.colors = {
         fg = cfg.foreground;
         bg = cfg.background;

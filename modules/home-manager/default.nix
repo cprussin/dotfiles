@@ -8,6 +8,5 @@
     ./icon-theme.nix
     ./keymap.nix
     ./launcher.nix
-    ./waybar.nix
   ];
 }
