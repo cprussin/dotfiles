@@ -146,6 +146,8 @@ in {
           "${modifier}+space" = "exec ${config.primary-user.home-manager.wayland.windowManager.sway.config.menu}";
           "${modifier}+Shift+space" = "exec ${pkgs.launcher}/bin/run $(${pkgs.wl-clipboard}/bin/wl-paste)";
 
+          "${modifier}+Shift+F" = "fullscreen toggle global";
+
           "${modifier}+tab" = "focus mode_toggle";
           "${modifier}+Shift+tab" = "floating toggle";
 
