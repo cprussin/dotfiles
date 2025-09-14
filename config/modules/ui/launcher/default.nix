@@ -58,6 +58,7 @@ in {
           dvp = pkgs.writeShellScript "dvp" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant 'dvp'\"";
           emacs = pkgs.writeShellScript "emacs" "${pkgs.launcher}/bin/open \${1-*scratch*}";
           email = mkGoogleApp "gmail" "https://mail.google.com";
+          eyes = mkWebApp "eyes" "https://eyes.internal.prussin.net";
           firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
           gimp = "${pkgs.gimp}/bin/gimp";
           home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
