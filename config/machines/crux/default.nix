@@ -13,6 +13,7 @@
     ./libvirtd.nix
     ./matrix.nix
     ./nvr.nix
+    ./photos.nix
     ./powerpanel.nix
     ./syncthing.nix
     ./vaultwarden.nix

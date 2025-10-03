@@ -56,6 +56,11 @@
     fi
   '';
 
+  getImmichSecrets = pkgs.writeShellScriptBin "getImmichSecrets" ''
+    set -euo pipefail
+    echo "DB_PASSWORD=$(${getPassword}/bin/getPassword "$1")"
+  '';
+
   getGmailNewMailCounterEnvFile = pkgs.writeShellScriptBin "getGmailNewMailCounterEnvFile" ''
     set -euo pipefail
     echo "CLIENT_SECRET=$(${getPassword}/bin/getPassword "$1")"
@@ -74,6 +79,7 @@ in {
       getMatrixSynapseDatabaseConfigFile
       getVaultwardenSecrets
       getGmailNewMailCounterEnvFile
+      getImmichSecrets
     ];
   };
   getPassword = name: ["getPassword" name];
@@ -90,4 +96,5 @@ in {
       else [adminToken]
     );
   getGmailNewMailCounterEnvFile = name: ["getGmailNewMailCounterEnvFile" name];
+  getImmichSecrets = db: ["getImmichSecrets" db];
 }
