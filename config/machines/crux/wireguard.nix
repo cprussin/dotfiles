@@ -17,6 +17,7 @@
     printotron = "9T+j7wSMDyCliZ3Li4VCo+3VAY3S30OTQI3lhWnMiBA=";
     "5428-la-forest-drive-ipad" = "RxZKotpDLh5Rob0JK42hS/z+LDNnvWW+W5iGeZukxy4=";
     shauna-computer = "ybmQa6OWaSYBd/us+a4WHZDiAzUfTPyTtmamff3J42s=";
+    shauna-computer-2 = "aEPj3y9Z0XRk4NSQ8WY2tSVJoiCkxFcmV86Zr7L3bGo=";
     shauna-phone = "tifJWMO8/P4B5QDNpieB/CvLtCyvtuoXi5GnAQYywRU=";
     reece-computer = "BXzJ+WBs4QITPbliB84U7qkQsxVM6PaCJAyXy2pb0jA=";
     mom-vm = "ZycHSW5YU/++Csw73iLbZHo75QM4y38Q3kT3xADsFA0=";

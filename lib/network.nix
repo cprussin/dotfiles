@@ -55,6 +55,7 @@ in {
     "5428-la-forest-drive-ipad" = "fc42::1:1:2";
     shauna-computer = "fc42::2:0:0";
     shauna-phone = "fc42::2:0:1";
+    shauna-computer-2 = "fc42::2:0:2";
     reece-computer = "fc42::3:0:0";
     mom-vm = "fc42::3:0:1";
   };
@@ -69,6 +70,7 @@ in {
     "5428-la-forest-drive-ipad" = "10.43.2.2";
     shauna-computer = "10.43.3.0";
     shauna-phone = "10.43.3.1";
+    shauna-computer-2 = "10.43.3.2";
     reece-computer = "10.43.4.0";
     mom-vm = "10.43.4.1";
   };
