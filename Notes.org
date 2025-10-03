@@ -1,4 +1,13 @@
 * Tasks
+** TODO Fix keyboard key chatter
+** TODO Lyra fixes
+- [ ] Audio device priority
+- [ ] Built in audio default to 100%
+- [ ] Default to correct hdmi output
+- [ ] Gpg key not working instantly for git
+- [ ] Fix presentation mode to work with waybar idle inhibit
+** TODO Make Frigate use gpu for motion detection
+** TODO Upgrade cameras?
 ** TODO Configure lsp-ui keybindings
 ** TODO Configure rustic options
 ** TODO Set up yasnippet
