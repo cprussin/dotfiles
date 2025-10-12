@@ -66,10 +66,11 @@ in {
           library = mkWebApp "library" "https://library.internal.prussin.net";
           lock = pkgs.writeShellScript "lock" "${pkgs.systemd}/bin/loginctl lock-session";
           mic-volume = pkgs.callPackage ./apps/mic-volume.nix {};
-          mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
           minecraft = mkGame pkgs.prismlauncher;
+          mixer = pkgs.writeShellScript "mixer" "exec ${pkgs.pavucontrol}/bin/pavucontrol";
           nix-shell = pkgs.writeShellScript "nix-shell" "exec nix-shell -p $1 --run \"$*\"";
           passwords = mkModal "passwords" "${pkgs.fzf-pass}/bin/fzf-pass";
+          photos = mkWebApp "photos" "https://photos.internal.prussin.net";
           presentation = pkgs.callPackage ./apps/presentation.nix {};
           printotron = mkWebApp "printotron" "https://printotron.internal.prussin.net";
           reauth-new-mail-counter = pkgs.callPackage ./apps/reauth-new-mail-counter.nix {};

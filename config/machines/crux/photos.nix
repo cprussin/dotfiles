@@ -29,6 +29,7 @@ in {
     immich = {
       enable = true;
       secretsFile = config.deployment.keys."immich-secrets".path;
+      mediaLocation = "/srv/Library/Photos";
     };
 
     nginx = {
@@ -48,18 +49,18 @@ in {
   };
 
   systemd.services = {
-    immich = {
+    immich-server = {
       requires = ["import-tank.service"];
       after = ["import-tank.service"];
     };
     nginx = {
       after = [
-        "immich.internal.prussin.net.crt-key.service"
-        "immich.internal.prussin.net.key-key.service"
+        "photos.internal.prussin.net.crt-key.service"
+        "photos.internal.prussin.net.key-key.service"
       ];
       requires = [
-        "immich.internal.prussin.net.crt-key.service"
-        "immich.internal.prussin.net.key-key.service"
+        "photos.internal.prussin.net.crt-key.service"
+        "photos.internal.prussin.net.key-key.service"
       ];
     };
   };
