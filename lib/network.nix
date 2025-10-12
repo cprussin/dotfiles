@@ -33,6 +33,7 @@ in {
     camera-front-door = "10.42.2.8";
 
     circinus = "10.42.3.1";
+    bond-hub = "10.42.3.2";
 
     plug-1 = "10.42.5.150";
     plug-2 = "10.42.5.151";
