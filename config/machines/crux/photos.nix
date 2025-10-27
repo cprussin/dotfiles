@@ -43,7 +43,10 @@ in {
         sslCertificate = config.deployment.keys."photos.internal.prussin.net.crt".path;
         sslCertificateKey = config.deployment.keys."photos.internal.prussin.net.key".path;
         forceSSL = true;
-        locations."/".proxyPass = "http://localhost:${toString config.services.immich.port}";
+        locations."/" = {
+          proxyPass = "http://localhost:${toString config.services.immich.port}";
+          proxyWebsockets = true;
+        };
       };
     };
   };
