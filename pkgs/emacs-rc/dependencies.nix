@@ -51,7 +51,6 @@
   epkgs.mode-icons
   epkgs.nix-mode
   epkgs.nushell-mode
-  epkgs.org
   epkgs.org-bullets
   epkgs.org-roam
   epkgs.pdf-tools

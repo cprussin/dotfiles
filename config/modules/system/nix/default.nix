@@ -6,10 +6,10 @@
   pkgs-unstable = import config.flake-inputs.nixpkgs-unstable {
     overlays = [];
     config = import ./nixpkgs-config.nix;
-    inherit (pkgs) system;
+    inherit (pkgs.stdenv.hostPlatform) system;
   };
   unstable-pkgs-overlay = _: _: {
-    inherit (pkgs-unstable) syncthing bitwig-studio zwave-js-server;
+    inherit (pkgs-unstable) bitwig-studio zwave-js-server;
   };
 in {
   nix = {

@@ -10,15 +10,20 @@ in {
 
   primary-user.home-manager.programs.ssh = {
     enable = true;
-    userKnownHostsFile = "${./known_hosts}";
-    controlMaster = "auto";
-    controlPersist = "1m";
+    enableDefaultConfig = false;
     matchBlocks = {
       rsync = {
         user = "zh2593";
         hostname = "zh2593.rsync.net";
       };
-      "*".identityFile = config.deployment.keys.sshClientKey.path;
+      "*" = {
+        forwardAgent = false;
+        addKeysToAgent = "no";
+        identityFile = config.deployment.keys.sshClientKey.path;
+        controlMaster = "auto";
+        controlPersist = "1m";
+        userKnownHostsFile = "${./known_hosts}";
+      };
     };
   };
 }

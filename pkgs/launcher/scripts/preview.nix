@@ -7,7 +7,7 @@
   gnused,
   gnutar,
   python3Packages,
-  poppler_utils,
+  poppler-utils,
   kitty,
   ghostscript,
   ffmpeg,
@@ -20,8 +20,8 @@ writeShellScriptBin "preview" ''
   file=${file}/bin/file
   sed=${gnused}/bin/sed
   tar=${gnutar}/bin/tar
-  eyeD3=${python3Packages.eyeD3}/bin/eyeD3
-  pdftotext=${poppler_utils}/bin/pdftotext
+  eyeD3=${python3Packages.eyed3}/bin/eyeD3
+  pdftotext=${poppler-utils}/bin/pdftotext
   kitten=${kitty}/bin/kitten
   gs=${ghostscript}/bin/gs
   ffmpeg=${ffmpeg}/bin/ffmpeg
