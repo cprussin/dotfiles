@@ -88,6 +88,26 @@ in
         exit 1
     fi
 
+    echo -n "Checking if immich is running...  "
+    IMMICH_RES=$(curl -s https://photos.internal.prussin.net/api/server/ping)
+    if [ "$(echo "$IMMICH_RES")" == '{"res":"pong"}' ]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Immich is down!"
+        exit 1
+    fi
+
+    echo -n "Checking if vaultwarden is running...  "
+    VAULTWARDEN_RES=$(curl -s https://passwords.internal.prussin.net/api/alive)
+    if [[ "$(echo "$VAULTWARDEN_RES")" =~ $(date -I) ]]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Vaultwarden is down!"
+        exit 1
+    fi
+
     # TODO check syncthing connections
     # echo -n "Checking syncthing connections...  "
     # SYNCTHING_RES=$($syncthing cli --home=/var/lib/syncthing/.config/syncthing show connections)
@@ -97,9 +117,8 @@ in
     # TODO check that circinus is working (lpstat -h crux -tv circinus somehow?)
     # TODO check that backup is running
     # TODO check that dynamic-dns is running
-    # TODO check matrix bridges?
-    # TODO check libvirtd / andromeda?
     # TODO check powerpanel?
+    # TODO check eyes?
 
     echo
     echo
