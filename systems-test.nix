@@ -15,7 +15,6 @@ in
     else
         echo "❌"
         echo "Crux (ipv6) is down!"
-        exit 1
     fi
 
     echo -n "Checking if crux is up on wireguard ipv4...  "
@@ -24,7 +23,6 @@ in
     else
         echo "❌"
         echo "Crux (ipv4) is down!"
-        exit 1
     fi
 
     echo -n "Checking if dns is up...  "
@@ -34,7 +32,60 @@ in
     else
         echo "❌"
         echo "DNS is not working correctly!"
-        exit 1
+    fi
+
+    echo -n "Checking if library (http) is running...  "
+    LIBRARY_RES=$(curl -s https://library.internal.prussin.net)
+    if [ "$(echo "$LIBRARY_RES" | $xmllint --html --xpath 'string(/html/head/title)' -)" == "Index of /" ]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Library (http) is down!"
+    fi
+
+    echo -n "Checking if library (ftp) is running...  "
+    curl -s ftp://library.internal.prussin.net 2>&1 >/dev/null
+    if [ $? -eq 0 ]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Library (ftp) is down!"
+    fi
+
+    echo -n "Checking if matrix (client) is running...  "
+    MATRIX_CLIENT_RES=$(curl -s https://matrix.internal.prussin.net/health)
+    if [ "$(echo "$MATRIX_CLIENT_RES")" == "OK" ]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Matrix (client) is down!"
+    fi
+
+    echo -n "Checking if matrix (federation) is running...  "
+    MATRIX_FEDERATION_RES=$(curl -s https://matrix.prussin.net:8448/health)
+    if [ "$(echo "$MATRIX_FEDERATION_RES")" == "OK" ]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Matrix (federation) is down!"
+    fi
+
+    echo -n "Checking if immich is running...  "
+    IMMICH_RES=$(curl -s https://photos.internal.prussin.net/api/server/ping)
+    if [ "$(echo "$IMMICH_RES")" == '{"res":"pong"}' ]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Immich is down!"
+    fi
+
+    echo -n "Checking if vaultwarden is running...  "
+    VAULTWARDEN_RES=$(curl -s https://passwords.internal.prussin.net/api/alive)
+    if [[ "$(echo "$VAULTWARDEN_RES")" =~ $(date -uI) ]]; then
+        echo "✅"
+    else
+        echo "❌"
+        echo "Vaultwarden is down!"
     fi
 
     echo -n "Checking if home assistant is running...  "
@@ -45,67 +96,6 @@ in
     else
         echo "❌"
         echo "Home assistant is down!"
-        exit 1
-    fi
-
-    echo -n "Checking if library (http) is running...  "
-    LIBRARY_RES=$(curl -s https://library.internal.prussin.net)
-    if [ "$(echo "$LIBRARY_RES" | $xmllint --html --xpath 'string(/html/head/title)' -)" == "Index of /" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Library (http) is down!"
-        exit 1
-    fi
-
-    echo -n "Checking if library (ftp) is running...  "
-    curl -s ftp://library.internal.prussin.net 2>&1 >/dev/null
-    if [ $? -eq 0 ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Library (ftp) is down!"
-        exit 1
-    fi
-
-    echo -n "Checking if matrix (client) is running...  "
-    MATRIX_CLIENT_RES=$(curl -s https://matrix.internal.prussin.net/health)
-    if [ "$(echo "$MATRIX_CLIENT_RES")" == "OK" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Matrix (client) is down!"
-        exit 1
-    fi
-
-    echo -n "Checking if matrix (federation) is running...  "
-    MATRIX_FEDERATION_RES=$(curl -s https://matrix.prussin.net:8448/health)
-    if [ "$(echo "$MATRIX_FEDERATION_RES")" == "OK" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Matrix (federation) is down!"
-        exit 1
-    fi
-
-    echo -n "Checking if immich is running...  "
-    IMMICH_RES=$(curl -s https://photos.internal.prussin.net/api/server/ping)
-    if [ "$(echo "$IMMICH_RES")" == '{"res":"pong"}' ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Immich is down!"
-        exit 1
-    fi
-
-    echo -n "Checking if vaultwarden is running...  "
-    VAULTWARDEN_RES=$(curl -s https://passwords.internal.prussin.net/api/alive)
-    if [[ "$(echo "$VAULTWARDEN_RES")" =~ $(date -I) ]]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Vaultwarden is down!"
-        exit 1
     fi
 
     # TODO check syncthing connections
@@ -119,8 +109,4 @@ in
     # TODO check that dynamic-dns is running
     # TODO check powerpanel?
     # TODO check eyes?
-
-    echo
-    echo
-    echo "✅ All systems good!"
   ''
