@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  config,
   ...
 }: let
   network = pkgs.callPackage ../../../lib/network.nix {};

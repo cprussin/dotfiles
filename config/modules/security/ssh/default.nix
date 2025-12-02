@@ -1,12 +1,16 @@
-{ pkgs, config, ... }: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
 in {
- deployment.keys.sshClientKey = {
-   keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/cprussin";
-   user = config.primary-user.name;
-   group = "users";
-   destDir = "/secrets";
- };
+  deployment.keys.sshClientKey = {
+    keyCommand = passwords.getFullPassword "Connor/Infrastructure/ssh/cprussin";
+    user = config.primary-user.name;
+    group = "users";
+    destDir = "/secrets";
+  };
 
   primary-user.home-manager.programs.ssh = {
     enable = true;

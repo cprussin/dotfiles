@@ -1,4 +1,8 @@
-{ pkgs, config, ... }: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
   network = pkgs.callPackage ../../../lib/network.nix {};
 in {

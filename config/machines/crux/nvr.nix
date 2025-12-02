@@ -1,4 +1,8 @@
-{ pkgs, config, ... }: let
+{
+  pkgs,
+  config,
+  ...
+}: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
   network = pkgs.callPackage ../../../lib/network.nix {};
 in {
@@ -36,38 +40,54 @@ in {
           };
         };
 
-        cameras."backyard".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-backyard.address}:554/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."driveway".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-driveway.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."front-door".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-front-door.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."front-steps".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-front-steps.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."garage".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-garage.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."grill".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-grill.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."laundry-door".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-laundry-door.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
-        cameras."side".ffmpeg.inputs = [{
-          path = "rtsp://${network.home.camera-side.address}/h264Preview_01_sub";
-          roles = ["audio" "detect" "record"];
-        }];
+        cameras."backyard".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-backyard.address}:554/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."driveway".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-driveway.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."front-door".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-front-door.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."front-steps".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-front-steps.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."garage".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-garage.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."grill".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-grill.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."laundry-door".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-laundry-door.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
+        cameras."side".ffmpeg.inputs = [
+          {
+            path = "rtsp://${network.home.camera-side.address}/h264Preview_01_sub";
+            roles = ["audio" "detect" "record"];
+          }
+        ];
       };
     };
 
