@@ -21,8 +21,7 @@
   laptopOutput = "eDP-1";
 in {
   primary-user.home-manager = {
-    # slurp is required for xdg-desktop-portal-wlr to be able to select an output
-    home.packages = lib.mkForce [pkgs.sway pkgs.xdg-desktop-portal-wlr pkgs.slurp];
+    home.packages = lib.mkForce [pkgs.sway pkgs.xdg-desktop-portal-wlr];
 
     wayland.windowManager.sway = {
       enable = true;
