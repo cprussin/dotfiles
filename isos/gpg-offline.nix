@@ -140,7 +140,7 @@ in {
       pkgs.ent
       pkgs.gptfdisk
       pkgs.paperkey
-      pkgs.pcsctools
+      pkgs.pcsc-tools
       pkgs.pgpdump
       pkgs.pwgen
       pkgs.yubico-piv-tool
