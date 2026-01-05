@@ -60,10 +60,8 @@ in {
     )
   ];
 
-  isoImage = {
-    isoBaseName = lib.mkForce "gpg-offline";
-    appendToMenuLabel = " GPG Offline System";
-  };
+  image.baseName = lib.mkForce "gpg-offline";
+  isoImage.appendToMenuLabel = " GPG Offline System";
 
   boot = {
     kernelParams = ["copytoram"];

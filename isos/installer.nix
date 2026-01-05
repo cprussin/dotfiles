@@ -19,10 +19,8 @@ in {
     )
   ];
 
-  isoImage = {
-    isoBaseName = lib.mkForce "installer";
-    appendToMenuLabel = " NixOS Installer";
-  };
+  image.baseName = lib.mkForce "installer";
+  isoImage.appendToMenuLabel = " NixOS Installer";
 
   services = {
     pcscd.enable = true;
