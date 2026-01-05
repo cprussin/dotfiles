@@ -6,6 +6,8 @@
   base = common args;
 in
   lib.recursiveUpdate base {
+    esp8266.board = "esp01_1m";
+
     binary_sensor = [
       {
         platform = "gpio";

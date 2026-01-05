@@ -8,6 +8,8 @@
   plug2Name = args.plug2.name or "Plug 2";
 in
   lib.recursiveUpdate base {
+    esp8266.board = "esp01_1m";
+
     binary_sensor = [
       {
         platform = "gpio";

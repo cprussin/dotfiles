@@ -35,9 +35,8 @@ in
   }: {
     esphome = {
       name = id;
+      friendly_name = name;
       comment = name;
-      platform = "ESP8266";
-      board = "esp01_1m";
     };
 
     wifi = {
