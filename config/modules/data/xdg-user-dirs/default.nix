@@ -7,9 +7,9 @@ in {
     documents = "${home}/Scratch";
     download = "${home}/Scratch";
     music = "${home}/Scratch";
-    pictures = "${home}/Camera";
+    pictures = "${home}/Scratch";
     publicShare = "${home}/";
     templates = "${home}/Scratch";
-    videos = "${home}/Camera";
+    videos = "${home}/Scratch";
   };
 }
