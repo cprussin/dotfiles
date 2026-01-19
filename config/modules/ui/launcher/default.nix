@@ -80,7 +80,6 @@ in {
           screen-record = pkgs.writeShellScript "screenshot" "${screen} record $*";
           screenshot = pkgs.writeShellScript "screenshot" "${screen} shot $*";
           shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
-          socks-proxy = mkTerminalApp "socks-proxy" (pkgs.callPackage ./apps/socks-proxy.nix {});
           sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
           steam = "${pkgs.steam}/bin/steam";
           stop-screen-record = pkgs.writeShellScript "stop-screen-record" "pkill wf-recorder";
