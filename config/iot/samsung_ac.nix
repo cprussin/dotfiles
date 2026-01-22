@@ -29,11 +29,7 @@ in
     };
 
     external_components = {
-      source = {
-        type = "git";
-        url = "https://github.com/cprussin/esphome_samsung_hvac_bus";
-        ref = "handle-fahrenheit-temperature";
-      };
+      source = "github://omerfaruk-aran/esphome_samsung_hvac_bus@main";
       components = ["samsung_ac"];
     };
 
