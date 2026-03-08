@@ -13,10 +13,7 @@
     );
 
   mkId = name: builtins.replaceStrings [" " "'"] ["-" ""] (lib.toLower name);
-  fan = mkDevice ./fan.nix;
-  dimmer = mkDevice ./dimmer.nix;
   dual_plug = mkDevice ./dual_plug.nix;
-  switch = mkDevice ./switch.nix;
   plug = mkDevice ./plug.nix;
   samsung_ac = mkDevice ./samsung_ac.nix;
 

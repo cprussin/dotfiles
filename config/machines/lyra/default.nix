@@ -18,14 +18,14 @@ in {
   };
   environment = {
     etc."machine-id".text = "89e4f9d000c74a389a33b82baa7c2fb2\n";
-    environment.systemPackages = [ pkgs.displaylink ];
+    systemPackages = [pkgs.displaylink];
   };
   services = {
     getty.greetingLine = builtins.readFile ./greeting;
     fwupd.enable = true;
-    xserver.videoDrivers = [ "displaylink" "modesetting" ];
+    xserver.videoDrivers = ["displaylink" "modesetting"];
   };
-  systemd.services.dlm.wantedBy = [ "multi-user.target" ];
+  systemd.services.dlm.wantedBy = ["multi-user.target"];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
