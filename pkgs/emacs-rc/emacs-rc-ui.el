@@ -24,7 +24,8 @@
 (setq x-gtk-use-system-tooltips nil
       inhibit-startup-screen t
       inhibit-startup-message t
-      scroll-step 1)
+      scroll-conservatively 101
+      scroll-margin 6)
 
 (setq-default indicate-empty-lines t
               fringe-indicator-alist '((empty-line . tilde)))
