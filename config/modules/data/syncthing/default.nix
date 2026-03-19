@@ -64,7 +64,7 @@ in {
       settings = {
         devices = lib.genAttrs (otherMachineNames ++ ["pegasus"]) (machine: {
           id = syncthingMachineIds."${machine}";
-          addresses = ["quic://${machine}.internal.prussin.net:22000"];
+          addresses = ["tcp://${machine}.internal.prussin.net:22000"];
         });
         folders = foldersForCurrentDevice {
           Notes = {
@@ -134,10 +134,10 @@ in {
             devices = ["crux" "lyra"];
           };
         };
-        extraOptions.options = {
+        options = {
           listenAddresses = [
-            "quic://[${network.wireguard6."${config.networking.hostName}".address}]:22000"
-            "quic://${network.wireguard4."${config.networking.hostName}".address}:22000"
+            "tcp://[${network.wireguard6."${config.networking.hostName}".address}]:22000"
+            "tcp://${network.wireguard4."${config.networking.hostName}".address}:22000"
           ];
           globalAnnounceEnabled = false;
           localAnnounceEnabled = false;
