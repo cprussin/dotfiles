@@ -1,3 +1,6 @@
 _: {
-  services.avahi.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+  };
 }
