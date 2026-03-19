@@ -9,7 +9,7 @@
     lib.concatStringsSep "\n" (
       map
       (wgNet: ''
-        ${wgNet.crux.address} library.internal.prussin.net home-assistant.internal.prussin.net matrix.internal.prussin.net passwords.internal.prussin.net circinus.internal.prussin.net eyes.internal.prussin.net photos.internal.prussin.net
+        ${wgNet.crux.address} library.internal.prussin.net home-assistant.internal.prussin.net matrix.internal.prussin.net passwords.internal.prussin.net circinus.internal.prussin.net eyes.internal.prussin.net photos.internal.prussin.net private.internal.prussin.net
         ${
           lib.concatStringsSep "\n" (
             lib.mapAttrsToList

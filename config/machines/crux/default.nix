@@ -15,6 +15,7 @@
     ./nvr.nix
     ./photos.nix
     ./powerpanel.nix
+    ./private.nix
     ./syncthing.nix
     ./vaultwarden.nix
     ./wireguard.nix
