@@ -49,7 +49,7 @@
 
     echo
     echo -e "\e[1;37mSending incremental data...\e[0m"
-    zfs send -RI tank@external-backup-$LAST_SNAP_DATE tank@external-backup-$TODAY | zfs recv -Fdu tank-backup
+    zfs send -R -X tank/Cache,tank/Data/cprussin/Private,tank/Data/cprussin/Scratch,tank/Data/frigate -I tank@external-backup-$LAST_SNAP_DATE tank@external-backup-$TODAY | zfs recv -Fdu tank-backup
 
     echo
     echo -e "\e[1;37mScrubbing tank-backup...\e[0m"
