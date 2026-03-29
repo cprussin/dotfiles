@@ -52,7 +52,7 @@ in {
 
     Service = {
       Type = "simple";
-      ExecStart = "/bin/sh -c 'cd ~/Private/web && ${pkgs.nix}/bin/nix develop --command bun start:prod'";
+      ExecStart = "/bin/sh -c 'cd ~/Private && ${pkgs.nix}/bin/nix develop --command cli start-prod'";
       Restart = "on-failure";
     };
 
