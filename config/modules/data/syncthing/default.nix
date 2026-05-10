@@ -67,6 +67,10 @@ in {
           addresses = ["tcp://${machine}.internal.prussin.net:22000"];
         });
         folders = foldersForCurrentDevice {
+          Music = {
+            path = "/srv/Library/Media Library/Music";
+            devices = ["crux" "pegasus"];
+          };
           Notes = {
             path = "${config.primary-user.home}/Notes";
             devices = ["crux" "lyra" "pegasus"];
