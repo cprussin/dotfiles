@@ -5,18 +5,18 @@
   google-chrome,
   firefox,
   brave,
+  tor-browser,
 }:
 writeShellScriptBin "browse" ''
   chromium=${chromium}/bin/chromium
   chrome=${google-chrome}/bin/google-chrome-stable
   firefox=${firefox}/bin/firefox
   brave=${brave}/bin/brave
+  tor=${tor-browser}/bin/tor-browser
   test=${coreutils}/bin/test
 
   browser="brave"
   target=""
-
-  chromeflags="--ozone-platform-hint=auto"
 
   while $test $# -gt 0
   do
@@ -38,9 +38,10 @@ writeShellScriptBin "browse" ''
   done
 
   case $browser in
-    brave) exec $brave $chromeflags $target >/dev/null 2>&1 ;;
-    chromium) exec $chromium $chromeflags $target >/dev/null 2>&1 ;;
-    chrome) exec $chrome $chromeflags $target >/dev/null 2>&1 ;;
-    firefox) MOZ_ENABLE_WAYLAND=1 exec $firefox $target >/dev/null 2>&1 ;;
+    brave) exec $brave $target >/dev/null 2>&1 ;;
+    chromium) exec $chromium $target >/dev/null 2>&1 ;;
+    tor-browser) exec $tor $target >/dev/null 2>&1 ;;
+    chrome) exec $chrome $target >/dev/null 2>&1 ;;
+    firefox) exec $firefox $target >/dev/null 2>&1 ;;
   esac
 ''

@@ -85,6 +85,7 @@ in {
           stop-screen-record = pkgs.writeShellScript "stop-screen-record" "pkill wf-recorder";
           syncthing = mkWebApp "syncthing" "http://localhost:8384";
           systemctl = mkModal "systemctl" "${pkgs.sysz}/bin/sysz";
+          tor-browser = pkgs.writeShellScript "tor-browser" "${pkgs.launcher}/bin/browse --browser tor-browser $*";
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
           virt-manager = "${pkgs.virt-manager}/bin/virt-manager";
           volume = pkgs.callPackage ./apps/volume.nix {};
