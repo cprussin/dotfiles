@@ -73,6 +73,7 @@ in {
         "tank/persisted-state/TelegramDesktop".mountpoint = "/home/${config.primary-user.name}/.local/share/TelegramDesktop";
         "tank/persisted-state/Zulip".mountpoint = "/home/${config.primary-user.name}/.config/Zulip";
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
+        "tank/persisted-state/argo".mountpoint = "/home/${config.primary-user.name}/.config/argo";
         "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
         "tank/persisted-state/chromium".mountpoint = "/home/${config.primary-user.name}/.config/chromium";
         "tank/persisted-state/containers".mountpoint = "/home/${config.primary-user.name}/.local/share/containers";
