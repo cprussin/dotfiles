@@ -21,8 +21,6 @@
         use ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/rg/rg-completions.nu *
         use ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/rustup/rustup-completions.nu *
         use ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/tar/tar-completions.nu *
-        use ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/tcpdump/tcpdump-completions.nu *
-        use ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/yarn/yarn-v4-completions.nu *
       '';
       extraEnv = ''
         $env.config = {

@@ -12,15 +12,9 @@
         resumeCommand = "${pkgs.sway}/bin/swaymsg \"output * dpms on\"";
       }
     ];
-    events = [
-      {
-        event = "before-sleep";
-        command = "${pkgs.systemd}/bin/loginctl lock-session";
-      }
-      {
-        event = "lock";
-        command = "${pkgs.swaylock}/bin/swaylock";
-      }
-    ];
+    events = {
+      before-sleep = "${pkgs.systemd}/bin/loginctl lock-session";
+      lock = "${pkgs.swaylock}/bin/swaylock";
+    };
   };
 }

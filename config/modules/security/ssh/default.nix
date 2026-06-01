@@ -15,18 +15,18 @@ in {
   primary-user.home-manager.programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       rsync = {
-        user = "zh2593";
-        hostname = "zh2593.rsync.net";
+        User = "zh2593";
+        HostName = "zh2593.rsync.net";
       };
       "*" = {
-        forwardAgent = false;
-        addKeysToAgent = "no";
-        identityFile = config.deployment.keys.sshClientKey.path;
-        controlMaster = "auto";
-        controlPersist = "1m";
-        userKnownHostsFile = "${./known_hosts}";
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        IdentityFile = config.deployment.keys.sshClientKey.path;
+        ControlMaster = "auto";
+        ControlPersist = "1m";
+        UserKnownHostsFile = "${./known_hosts}";
       };
     };
   };

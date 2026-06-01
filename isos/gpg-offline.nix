@@ -68,6 +68,7 @@ in {
     tmp.cleanOnBoot = true;
     kernel.sysctl."kernel.unprivileged_bpf_disabled" = 1;
     initrd.network.enable = false;
+    zfs.forceImportRoot = false;
   };
 
   services = {
