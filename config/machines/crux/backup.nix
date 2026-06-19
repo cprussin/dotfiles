@@ -110,6 +110,16 @@ in {
       ${zfs} destroy -r tank@borgsnap
     '';
     extraArgs = "--remote-path=borg1";
+    exclude = [
+      "**/node_modules/**"
+      "**/target/**"
+      "**/.pnpm-store/**"
+      "**/.direnv/**"
+      "**/.turbo/**"
+      "**/dist/**"
+      "**/worktrees/**"
+      "**/.worktrees/**"
+    ];
   };
 
   deployment.keys = {
