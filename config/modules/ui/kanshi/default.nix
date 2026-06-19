@@ -111,7 +111,7 @@ in {
                 })
             ];
             exec = [
-              "${pkgs.sway}/bin/swaymsg \"workspace2, move workspace to '${laptopPanel.id}', focus output '${laptopPanel.id}'\", workspace 2"
+              "${pkgs.sway}/bin/swaymsg \"workspace 2, move workspace to '${laptopPanel.id}', focus output '${laptopPanel.id}'\", workspace 2"
               "${pkgs.sway}/bin/swaymsg \"focus output '${center.id}'\", workspace 1"
             ];
           };
