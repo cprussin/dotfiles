@@ -57,7 +57,7 @@
     set -e
 
     sudo umount /home/cprussin/.bak
-    rmdir ~/.bak
+    rmdir /home/cprussin/.bak
     sudo zpool export tank-backup
     sudo cryptsetup close crypt-${config.backupDisk.filenameBase}
   '';
