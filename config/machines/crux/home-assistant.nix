@@ -91,6 +91,10 @@ in {
         "home-assistant.internal.prussin.net.key-key.service"
       ];
     };
+    zwave-js = {
+      requires = ["import-tank.service"];
+      after = ["import-tank.service"];
+    };
     podman-home-assistant = {
       requires = ["import-tank.service"];
       after = ["import-tank.service"];
