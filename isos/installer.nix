@@ -22,6 +22,8 @@ in {
   image.baseName = lib.mkForce "installer";
   isoImage.appendToMenuLabel = " NixOS Installer";
 
+  boot.zfs.forceImportRoot = false;
+
   services = {
     pcscd.enable = true;
     gpm.enable = true;
