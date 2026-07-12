@@ -89,4 +89,15 @@ in {
   swapDevices = [];
 
   nix.settings.max-jobs = lib.mkDefault 16;
+
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware = {
+    graphics.enable = true;
+    nvidia = {
+      open = false;
+      modesetting.enable = true;
+      nvidiaSettings = false;
+      package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+    };
+  };
 }

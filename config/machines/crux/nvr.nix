@@ -30,6 +30,7 @@ in {
       hostname = "eyes.internal.prussin.net";
 
       settings = {
+        ffmpeg.hwaccel_args = "preset-nvidia";
         mqtt.enabled = true;
 
         record = {
