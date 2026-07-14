@@ -71,6 +71,10 @@ in {
             path = "/srv/Library/Media Library/Music";
             devices = ["crux" "pegasus"];
           };
+          ROMs = {
+            path = "/srv/Library/ROMs";
+            devices = ["crux" "pegasus"];
+          };
           Notes = {
             path = "${config.primary-user.home}/Notes";
             devices = ["crux" "lyra" "pegasus"];
