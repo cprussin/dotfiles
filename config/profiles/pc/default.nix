@@ -24,6 +24,7 @@
     ../../modules/system/devices/scanners
     ../../modules/system/podman
 
+    ../../modules/ui/card-offers
     ../../modules/ui/direnv
     ../../modules/ui/display-manager
     ../../modules/ui/emacs

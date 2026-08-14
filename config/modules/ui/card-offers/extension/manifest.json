@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Card Offers Adder",
+  "version": "1.0.0",
+  "description": "Adds all available Amex/Chase card-linked offers with one click (or automatically) on the offers pages.",
+  "content_scripts": [
+    {
+      "matches": ["https://global.americanexpress.com/offers/*"],
+      "js": ["match.js", "add-offers.js", "ui.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://secure.chase.com/*"],
+      "js": ["match.js", "add-offers.js", "ui.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

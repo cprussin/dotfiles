@@ -155,6 +155,16 @@
               inherit (pkgs) iot-devices;
             };
 
+          # Unit tests for the card-offers extension's pure label matcher.
+          checks.card-offers = pkgs.runCommand "card-offers-tests" {
+            nativeBuildInputs = [pkgs.nodejs];
+          } ''
+            cp ${./config/modules/ui/card-offers/extension/match.js} match.js
+            cp ${./config/modules/ui/card-offers/match.test.js} match.test.js
+            node match.test.js
+            touch $out
+          '';
+
           devShells.default = pkgs.mkShell {
             buildInputs = [
               pkgs.git
