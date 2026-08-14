@@ -27,6 +27,12 @@ in {
   };
   systemd.services.dlm.wantedBy = ["multi-user.target"];
 
+  # DisplayLink outputs on the dock do not survive a suspend/resume cycle:
+  # evdi/dlm does not re-establish them on wake, so the dock monitors stay
+  # dark until dlm is restarted (or the dock is replugged) by hand.  Restart
+  # dlm automatically on resume so the outputs come back.
+  powerManagement.resumeCommands = "${pkgs.systemd}/bin/systemctl restart dlm.service";
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
     cpu.amd.updateMicrocode = true;
