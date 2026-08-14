@@ -27,6 +27,15 @@ in {
   };
   systemd.services.dlm.wantedBy = ["multi-user.target"];
 
+  # DisplayLink monitors on the dock do not wake back up when the screen
+  # returns from DPMS off (a regression that showed up with the kernel 6.18
+  # bump in nixos-26.05; the evdi outputs never re-initialize on resume).
+  # Restarting the DisplayLink manager re-creates the evdi outputs, which is
+  # what the manual `unplug/replug` or `systemctl restart dlm` workaround does
+  # by hand -- so do it automatically whenever the screen wakes.
+  screen-idle.dpmsResumeCommand = "/run/wrappers/bin/sudo ${pkgs.systemd}/bin/systemctl restart dlm.service";
+  primary-user.sudo-cmds = ["${pkgs.systemd}/bin/systemctl restart dlm.service"];
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
     cpu.amd.updateMicrocode = true;
