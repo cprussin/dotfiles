@@ -7,6 +7,8 @@
 }: let
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
 
+  root-disk-id = "nvme-WDS500G3X0C-00SJG0_2017A3806951";
+
   zfsDrives = [
     "ata-ST10000VN0008-2JJ101_ZHZ06Y2A"
     "ata-ST10000VN0008-2JJ101_ZHZ08V0G"
@@ -49,17 +51,16 @@ in {
   boot = {
     kernelModules = ["kvm-intel"];
     extraModulePackages = [];
-    preLVMTempMount."/key" = {
-      inherit (config.fileSystems."/boot") device fsType;
-    };
     initrd = {
-      systemd.enable = false;
       availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "e1000e" "igb"];
       kernelModules = ["dm-snapshot" "nls_cp437" "nls_iso8859_1"];
-      luks.devices.crypt-nvme-WDS500G3X0C-00SJG0_2017A3806951 = {
-        device = "/dev/disk/by-id/nvme-WDS500G3X0C-00SJG0_2017A3806951";
-        keyFile = "/key/crypt/nvme-WDS500G3X0C-00SJG0_2017A3806951/key";
-        header = "/key/crypt/nvme-WDS500G3X0C-00SJG0_2017A3806951/header";
+      luksWithKeyDrive."crypt-${root-disk-id}" = {
+        device = "/dev/disk/by-id/${root-disk-id}";
+        key = {
+          drive = {inherit (config.fileSystems."/boot") device fsType;};
+          file = "crypt/${root-disk-id}/key";
+          header = "crypt/${root-disk-id}/header";
+        };
       };
     };
   };
