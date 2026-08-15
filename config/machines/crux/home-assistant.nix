@@ -6,7 +6,6 @@
 }: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
   network = pkgs.callPackage ../../../lib/network.nix {};
-  homeAssistantPort = "8123";
 in {
   deployment.keys = {
     "home-assistant.internal.prussin.net.crt" = {
@@ -25,6 +24,10 @@ in {
   networking.firewall.interfaces = {
     prussinnet.allowedTCPPorts = [80 443];
     podman0.allowedTCPPorts = [3000];
+    # Govee LAN API (used by the govee_light_local HA integration): multicast
+    # discovery/status on 4001, discovery replies on 4002, device commands on
+    # 4003. See https://www.home-assistant.io/integrations/govee_light_local/
+    "${config.interfaces.eth}".allowedUDPPorts = [4001 4002 4003];
   };
 
   users = {
@@ -67,10 +70,13 @@ in {
   virtualisation.oci-containers.containers.home-assistant = {
     image = "ghcr.io/home-assistant/home-assistant:stable";
     environment.TZ = "America/Los_Angeles";
-    ports = ["127.0.0.1:${homeAssistantPort}:${homeAssistantPort}"];
     extraOptions =
       [
         "--device=/dev/ttyACM0:/dev/ttyACM0"
+        # Host networking so the Govee LAN API's UDP multicast discovery
+        # (239.255.255.250:4001) and unicast replies (4002/4003) can reach
+        # the container; podman's default NAT bridge blocks multicast.
+        "--network=host"
       ]
       ++ (
         lib.mapAttrsToList
