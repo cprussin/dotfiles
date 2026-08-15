@@ -50,7 +50,7 @@ in {
       workspaceOutputAssign = [
         {
           workspace = "1";
-          output = [left.id center.id laptopPanel.id];
+          output = [left.id laptopPanel.id center.id];
         }
         {
           workspace = "2";
@@ -113,6 +113,34 @@ in {
             exec = [
               "${pkgs.sway}/bin/swaymsg \"workspace 2, move workspace to '${laptopPanel.id}', focus output '${laptopPanel.id}'\", workspace 2"
               "${pkgs.sway}/bin/swaymsg \"focus output '${center.id}'\", workspace 1"
+            ];
+          };
+        }
+        {
+          profile = {
+            name = "homeOfficeRightTwoOnly";
+            outputs = [
+              (laptopPanel.output
+                // {
+                  position = "0,${mkPos (center.width - laptopPanel.height)}";
+                })
+
+              (center.output
+                // {
+                  position = "${mkPos laptopPanel.width},0";
+                  transform = "270";
+                })
+
+              (right.output
+                // {
+                  position = "${mkPos (laptopPanel.width + center.height)},0";
+                  transform = "270";
+                })
+            ];
+            exec = [
+              "${pkgs.sway}/bin/swaymsg \"focus output '${laptopPanel.id}'\", workspace 1"
+              "${pkgs.sway}/bin/swaymsg \"focus output '${right.id}'\", workspace 3"
+              "${pkgs.sway}/bin/swaymsg \"focus output '${center.id}'\", workspace 2"
             ];
           };
         }
