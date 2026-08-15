@@ -101,32 +101,16 @@ in {
   boot = {
     kernelModules = ["kvm-amd"];
     extraModulePackages = [];
-    preLVMTempMount."/boot" = {
-      inherit (config.fileSystems."/boot") device fsType;
-      # TODO Could I, or should I, use colmena keys here?
-      afterMount = ''
-        cp /boot/luks/${disk-id}/key /gpg-keys/dev/disk/by-id/${disk-id}/cryptkey.gpg
-      '';
-    };
     initrd = {
-      systemd.enable = false;
       availableKernelModules = [];
       kernelModules = ["dm-snapshot" "nls_cp437" "nls_iso8859_1" "nvme" "xhci_pci" "thunderbolt" "usb_storage" "uas" "sd_mod" "amdgpu"];
-      luks = {
-        gpgSupport = true;
-        devices."crypt-${disk-id}" = {
-          device = "/dev/disk/by-id/${disk-id}";
-          header = "/boot/luks/${disk-id}/header";
-          gpgCard = {
-            publicKey = config.flake-inputs.gpg-key;
-            gracePeriod = 99999;
-
-            # I don't want this in the store.  However due to how the module is
-            # written, I have to put something here, and I have to copy the
-            # encrypted key into a specific path, which is done in the
-            # preLVMTempMount afterMount command above.
-            encryptedPass = pkgs.writeText "dummy" "";
-          };
+      luksWithKeyDrive."crypt-${disk-id}" = {
+        device = "/dev/disk/by-id/${disk-id}";
+        key = {
+          drive = {inherit (config.fileSystems."/boot") device fsType;};
+          file = "luks/${disk-id}/key";
+          header = "luks/${disk-id}/header";
+          gpgPublicKey = config.flake-inputs.gpg-key;
         };
       };
     };
