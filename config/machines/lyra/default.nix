@@ -109,6 +109,7 @@ in {
       '';
     };
     initrd = {
+      systemd.enable = false;
       availableKernelModules = [];
       kernelModules = ["dm-snapshot" "nls_cp437" "nls_iso8859_1" "nvme" "xhci_pci" "thunderbolt" "usb_storage" "uas" "sd_mod" "amdgpu"];
       luks = {
