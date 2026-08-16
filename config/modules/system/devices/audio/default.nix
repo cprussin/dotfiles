@@ -16,7 +16,9 @@ _: let
   # Bluetooth in particular makes a poor driver.
   #
   # The bands are chosen to sit around the priorities we leave alone, which on
-  # lyra are 1009 for the internal speakers and ~584 for the Radeon HDMI output.
+  # lyra are 1500 for the enhanced internal speaker sink from
+  # `hardware.framework.laptop13.audioEnhancement` (1009 for the raw sink behind
+  # it) and ~584 for the Radeon HDMI output.
   bluetoothSinks = [{"node.name" = "~bluez_output..*";}];
 
   usbSinks = [{"node.name" = "~alsa_output.usb-.*";}];
