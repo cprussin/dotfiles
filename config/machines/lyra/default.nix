@@ -24,6 +24,25 @@ in {
     getty.greetingLine = builtins.readFile ./greeting;
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
+
+    # The audio enhancement filter chain above feeds the raw speaker sink and
+    # the two volumes compound, so the raw sink has to sit at 100% for the
+    # enhanced sink to reach full loudness.  `/` is tmpfs and we deliberately
+    # don't persist WirePlumber's state, so every boot would otherwise start it
+    # at WirePlumber's 0.064 default.  `apply-routes.lua` reads this per-device
+    # property only when there is no restored volume for the route, so adjusting
+    # the volume by hand still works for the rest of the session.
+    #
+    # This applies to every output route on the card, the 3.5mm jack included,
+    # so headphones plugged into the laptop itself also start at full volume.
+    pipewire.wireplumber.extraConfig."51-speaker-default-volume" = {
+      "monitor.alsa.rules" = [
+        {
+          matches = [{"device.name" = "alsa_card.pci-0000_c1_00.6";}];
+          actions.update-props."device.routes.default-sink-volume" = 1.0;
+        }
+      ];
+    };
   };
   systemd.services.dlm.wantedBy = ["multi-user.target"];
 
@@ -42,6 +61,14 @@ in {
       laptop13.audioEnhancement = {
         enable = true;
         hideRawDevice = false;
+
+        # WirePlumber's `node.software-dsp` rule builds the filter chain by
+        # matching this string against `node.name` exactly, so a wrong value
+        # means the enhanced sink is never created and the option silently does
+        # nothing.  nixos-hardware defaults this to the UCM name
+        # (`alsa_output.pci-0000_c1_00.6.HiFi__Speaker__sink`), but the speaker
+        # card comes up on the generic ALSA card profile here, not under UCM.
+        rawDeviceName = "alsa_output.pci-0000_c1_00.6.analog-stereo";
       };
     };
   };
