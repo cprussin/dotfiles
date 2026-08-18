@@ -16,4 +16,5 @@ writeShellScript "reauth-new-mail-counter" ''
 
   reauth connor@dourolabs.xyz
   reauth connor@prussin.net
+  reauth connor@ac-zeitgeist.com
 ''
