@@ -1,112 +1,367 @@
 {pkgs, ...}: let
+  inherit (pkgs) lib;
+
   network = pkgs.callPackage ./lib/network.nix {};
+
+  # Internal hosts that serve https with a cert from the password store.
+  tlsHosts = [
+    "library.internal.prussin.net"
+    "home-assistant.internal.prussin.net"
+    "matrix.internal.prussin.net"
+    "passwords.internal.prussin.net"
+    "eyes.internal.prussin.net"
+    "photos.internal.prussin.net"
+    "private.internal.prussin.net"
+  ];
 in
   pkgs.writeShellScript "systems-test" ''
     pass="${pkgs.pass}/bin/pass"
     curl="${pkgs.curl}/bin/curl"
     jq="${pkgs.jq}/bin/jq"
     dig="${pkgs.dnsutils}/bin/dig"
-    syncthing="${pkgs.syncthing}/bin/syncthing"
+    lpstat="${pkgs.cups}/bin/lpstat"
+    openssl="${pkgs.openssl}/bin/openssl"
+    ssh="${pkgs.openssh}/bin/ssh"
+    timeout="${pkgs.coreutils}/bin/timeout"
+    bash="${pkgs.bash}/bin/bash"
     xmllint="${pkgs.libxml2}/bin/xmllint"
 
-    echo -n "Checking if crux is up on wireguard ipv6...  "
-    if ping -q -c 1 -W 1 ${network.wireguard6.crux.address} >/dev/null; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Crux (ipv6) is down!"
-    fi
+    FAILURES=0
 
-    echo -n "Checking if crux is up on wireguard ipv4...  "
-    if ping -q -c 1 -W 1 ${network.wireguard4.crux.address} >/dev/null; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Crux (ipv4) is down!"
-    fi
+    # Run a check, printing its output only when it fails.  A check is any
+    # command that exits nonzero and explains itself on stdout or stderr when
+    # whatever it's testing is broken.
+    check() {
+        local description="$1"
+        shift
+        echo -n "Checking $description...  "
+        local output
+        if output=$("$@" 2>&1); then
+            echo "✅"
+        else
+            echo "❌"
+            if [ -n "$output" ]; then
+                echo "$output"
+            fi
+            FAILURES=$((FAILURES + 1))
+        fi
+    }
 
-    echo -n "Checking if dns is up...  "
-    DIG_RES="$($dig +short AAAA ${network.wireguard6.crux.address} crux.internal.prussin.net)"
-    if [ "$DIG_RES" == "${network.wireguard6.crux.address}" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "DNS is not working correctly!"
-    fi
+    fetch() {
+        $curl -s --max-time 10 "$@"
+    }
 
-    echo -n "Checking if library (http) is running...  "
-    LIBRARY_RES=$(curl -s https://library.internal.prussin.net)
-    if [ "$(echo "$LIBRARY_RES" | $xmllint --html --xpath 'string(/html/head/title)' -)" == "Index of /" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Library (http) is down!"
-    fi
+    # Fetch a url and compare the response body against an expected value.
+    expect_body() {
+        local url="$1"
+        local expected="$2"
+        local body
+        if ! body=$(fetch "$url"); then
+            echo "Could not connect to $url!"
+            return 1
+        elif [ "$body" != "$expected" ]; then
+            echo "Unexpected response from $url: $body"
+            return 1
+        fi
+    }
 
-    echo -n "Checking if library (ftp) is running...  "
-    curl -s ftp://library.internal.prussin.net 2>&1 >/dev/null
-    if [ $? -eq 0 ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Library (ftp) is down!"
-    fi
+    # Fetch a url and compare the response status against an expected value.
+    expect_status() {
+        local url="$1"
+        shift
+        local status
+        if ! status=$(fetch -o /dev/null -w '%{http_code}' "$url"); then
+            echo "Could not connect to $url!"
+            return 1
+        fi
+        local expected
+        for expected in "$@"; do
+            if [ "$status" == "$expected" ]; then
+                return 0
+            fi
+        done
+        echo "$url returned http $status!"
+        return 1
+    }
 
-    echo -n "Checking if matrix (client) is running...  "
-    MATRIX_CLIENT_RES=$(curl -s https://matrix.internal.prussin.net/health)
-    if [ "$(echo "$MATRIX_CLIENT_RES")" == "OK" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Matrix (client) is down!"
-    fi
+    ping_host() {
+        if ! ping -q -c 1 -W 1 "$1" >/dev/null 2>&1; then
+            echo "$2 is down!"
+            return 1
+        fi
+    }
 
-    echo -n "Checking if matrix (federation) is running...  "
-    MATRIX_FEDERATION_RES=$(curl -s https://matrix.prussin.net:8448/health)
-    if [ "$(echo "$MATRIX_FEDERATION_RES")" == "OK" ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Matrix (federation) is down!"
-    fi
+    on_crux() {
+        $ssh -o BatchMode=yes -o ConnectTimeout=10 root@crux "$@"
+    }
 
-    echo -n "Checking if immich is running...  "
-    IMMICH_RES=$(curl -s https://photos.internal.prussin.net/api/server/ping)
-    if [ "$(echo "$IMMICH_RES")" == '{"res":"pong"}' ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Immich is down!"
-    fi
+    # Check that a systemd unit on crux is running.
+    expect_active_unit() {
+        local unit="$1"
+        local state
+        state=$(on_crux "systemctl is-active $unit" 2>&1)
+        if [ "$state" != "active" ]; then
+            echo "$unit on crux is $state!"
+            return 1
+        fi
+    }
 
-    echo -n "Checking if vaultwarden is running...  "
-    VAULTWARDEN_RES=$(curl -s https://passwords.internal.prussin.net/api/alive)
-    if [[ "$(echo "$VAULTWARDEN_RES")" =~ $(date -uI) ]]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Vaultwarden is down!"
-    fi
+    # Check that a periodically scheduled job on crux is both scheduled and
+    # succeeding.
+    expect_healthy_timer() {
+        local unit="$1"
+        local res
+        if ! res=$(on_crux "systemctl is-active $unit.timer; systemctl show -p Result --value $unit.service" 2>&1); then
+            echo "Could not query $unit on crux: $res"
+            return 1
+        fi
+        local timer result
+        timer=$(echo "$res" | sed -n 1p)
+        result=$(echo "$res" | sed -n 2p)
+        if [ "$timer" != "active" ]; then
+            echo "The $unit timer is $timer!"
+            return 1
+        elif [ "$result" != "success" ]; then
+            echo "The last $unit run finished with result \"$result\"!"
+            return 1
+        fi
+    }
 
-    echo -n "Checking if home assistant is running...  "
-    HASS_KEY="$($pass show "Connor/Home/Home Assistant" | grep "^API Key: " | sed "s/^API Key: //")"
-    HASS_RES=$($curl -s -H "Authorization: Bearer $HASS_KEY" -H "Content-Type: application/json" https://home-assistant.internal.prussin.net/api/)
-    if [ "$(echo "$HASS_RES" | $jq -r '.message' 2>/dev/null)" == "API running." ]; then
-        echo "✅"
-    else
-        echo "❌"
-        echo "Home assistant is down!"
-    fi
+    check "if crux is up on wireguard ipv6" \
+        ping_host ${network.wireguard6.crux.address} "Crux (ipv6)"
 
-    # TODO check syncthing connections
-    # echo -n "Checking syncthing connections...  "
-    # SYNCTHING_RES=$($syncthing cli --home=/var/lib/syncthing/.config/syncthing show connections)
-    # for host in $(ls ''${PASSWORD_STORE_DIR-~/.password-store}/Connor/Infrastructure/syncthing | sed "/$(hostname)/d"); do pass show Connor/Infrastructure/syncthing/$host/cert; done
+    check "if crux is up on wireguard ipv4" \
+        ping_host ${network.wireguard4.crux.address} "Crux (ipv4)"
 
-    # TODO check that library (nfs) is reachable
-    # TODO check that circinus is working (lpstat -h crux -tv circinus somehow?)
-    # TODO check that backup is running
-    # TODO check that dynamic-dns is running
+    check_internal_dns() {
+        local res
+        res=$($dig +short AAAA crux.internal.prussin.net)
+        if [ "$res" != "${network.wireguard6.crux.address}" ]; then
+            echo "Expected crux.internal.prussin.net to resolve to ${network.wireguard6.crux.address}, got: $res"
+            return 1
+        fi
+    }
+    check "if internal dns is up" check_internal_dns
+
+    check_forwarded_dns() {
+        local res
+        res=$($dig +short A one.one.one.one)
+        if ! echo "$res" | grep -qE '^[0-9]+(\.[0-9]+){3}$'; then
+            echo "Could not resolve an external name through crux, got: $res"
+            return 1
+        fi
+    }
+    check "if dns forwarding is working" check_forwarded_dns
+
+    check_dynamic_dns() {
+        expect_healthy_timer route53-dynamic-dns-update || return 1
+        local a aaaa
+        a=$($dig +short A crux.prussin.net)
+        aaaa=$($dig +short AAAA crux.prussin.net)
+        if ! echo "$a" | grep -qE '^[0-9]+(\.[0-9]+){3}$'; then
+            echo "crux.prussin.net has no valid A record, got: $a"
+            return 1
+        elif ! echo "$aaaa" | grep -q ':'; then
+            echo "crux.prussin.net has no valid AAAA record, got: $aaaa"
+            return 1
+        fi
+    }
+    check "if dynamic dns is running" check_dynamic_dns
+
+    check_library_http() {
+        local body
+        if ! body=$(fetch https://library.internal.prussin.net); then
+            echo "Could not connect to library (http)!"
+            return 1
+        fi
+        local title
+        title=$(echo "$body" | $xmllint --html --xpath 'string(/html/head/title)' - 2>/dev/null)
+        if [ "$title" != "Index of /" ]; then
+            echo "Unexpected page served by library (http): $title"
+            return 1
+        fi
+    }
+    check "if library (http) is running" check_library_http
+
+    check_library_ftp() {
+        if ! fetch ftp://library.internal.prussin.net >/dev/null; then
+            echo "Library (ftp) is down!"
+            return 1
+        fi
+    }
+    check "if library (ftp) is running" check_library_ftp
+
+    # Only nfsv4 (port 2049) is exposed, so the mount protocol that showmount
+    # uses isn't reachable and all we can do without root is check that the
+    # server accepts connections.
+    check_library_nfs() {
+        if ! $timeout 5 $bash -c 'echo > /dev/tcp/library.internal.prussin.net/2049' 2>/dev/null; then
+            echo "Library (nfs) is not accepting connections on port 2049!"
+            return 1
+        fi
+    }
+    check "if library (nfs) is reachable" check_library_nfs
+
+    check "if matrix (client) is running" \
+        expect_body https://matrix.internal.prussin.net/health OK
+
+    check "if matrix (federation) is running" \
+        expect_body https://matrix.prussin.net:8448/health OK
+
+    check "if immich is running" \
+        expect_body https://photos.internal.prussin.net/api/server/ping '{"res":"pong"}'
+
+    check_vaultwarden() {
+        local body
+        if ! body=$(fetch https://passwords.internal.prussin.net/api/alive); then
+            echo "Could not connect to vaultwarden!"
+            return 1
+        elif [[ ! "$body" =~ $(date -uI) ]]; then
+            echo "Unexpected response from vaultwarden: $body"
+            return 1
+        fi
+    }
+    check "if vaultwarden is running" check_vaultwarden
+
+    check_home_assistant() {
+        local key body
+        key="$($pass show "Connor/Home/Home Assistant" 2>/dev/null | grep "^API Key: " | sed "s/^API Key: //")"
+        if [ -z "$key" ]; then
+            echo "Could not read the home assistant api key from the password store!"
+            return 1
+        fi
+        body=$(fetch -H "Authorization: Bearer $key" -H "Content-Type: application/json" https://home-assistant.internal.prussin.net/api/)
+        if [ "$(echo "$body" | $jq -r '.message' 2>/dev/null)" != "API running." ]; then
+            echo "Unexpected response from home assistant: $body"
+            return 1
+        fi
+    }
+    check "if home assistant is running" check_home_assistant
+
+    check "if zwave-js is running" expect_active_unit zwave-js
+
+    # Frigate requires authentication, so an unauthenticated request gets a 401
+    # from the backend when it's healthy.  If the backend is down nginx can't
+    # run its auth subrequest and returns a 5xx instead.
+    check "if eyes is running" \
+        expect_status https://eyes.internal.prussin.net/api/version 200 401
+
+    # The stats api is behind frigate's auth on the public vhost, so read it
+    # from crux directly.  The port is the api upstream that the nixpkgs
+    # frigate module points nginx at.
+    check_cameras() {
+        local stats down
+        if ! stats=$(on_crux 'curl -sf --max-time 10 http://127.0.0.1:5001/stats' 2>&1); then
+            echo "Could not read frigate stats from crux: $stats"
+            return 1
+        fi
+        if ! down=$(echo "$stats" | $jq -er '.cameras | to_entries | map(select(.value.camera_fps == 0)) | map(.key) | join(", ")' 2>&1); then
+            echo "Could not parse frigate stats: $stats"
+            return 1
+        elif [ -n "$down" ]; then
+            echo "Cameras not capturing: $down"
+            return 1
+        fi
+    }
+    check "if all cameras are capturing" check_cameras
+
+    check "if private is running" expect_status https://private.internal.prussin.net 200
+
+    check_circinus() {
+        local res
+        if ! res=$($lpstat -h circinus.internal.prussin.net -p circinus 2>&1); then
+            echo "Could not query cups on crux: $res"
+            return 1
+        elif ! echo "$res" | grep -q "enabled since"; then
+            echo "Circinus is not enabled: $res"
+            return 1
+        fi
+    }
+    check "if circinus is running" check_circinus
+
+    syncthing_api() {
+        local config="''${XDG_CONFIG_HOME:-$HOME/.config}/syncthing/config.xml"
+        if [ ! -f "$config" ]; then
+            echo "There is no syncthing config at $config!"
+            return 1
+        fi
+        local key address
+        key=$($xmllint --xpath 'string(/configuration/gui/apikey)' "$config")
+        address=$($xmllint --xpath 'string(/configuration/gui/address)' "$config")
+        $curl -sf --max-time 10 -H "X-API-Key: $key" "http://$address/rest/$1"
+    }
+
+    check_syncthing() {
+        local status devices connections disconnected
+        if ! status=$(syncthing_api system/status 2>&1); then
+            echo "Could not query the local syncthing instance: $status"
+            return 1
+        elif ! devices=$(syncthing_api config/devices 2>&1); then
+            echo "Could not read the syncthing device list: $devices"
+            return 1
+        elif ! connections=$(syncthing_api system/connections 2>&1); then
+            echo "Could not read the syncthing connection list: $connections"
+            return 1
+        fi
+        if ! disconnected=$(
+            echo "$devices" | $jq -er \
+                --arg myId "$(echo "$status" | $jq -r '.myID')" \
+                --argjson connections "$connections" \
+                'map(
+                    select(.deviceID != $myId)
+                    | select($connections.connections[.deviceID].connected != true)
+                    | .name
+                 )
+                 | join(", ")' 2>&1
+        ); then
+            echo "Could not read syncthing connections: $disconnected"
+            return 1
+        elif [ -n "$disconnected" ]; then
+            echo "Syncthing is not connected to: $disconnected"
+            return 1
+        fi
+    }
+    check "syncthing connections" check_syncthing
+
+    check "if backup is running" expect_healthy_timer borgbackup-job-rsync.net
+
+    check_pools() {
+        local res
+        if ! res=$(on_crux 'zpool status -x' 2>&1); then
+            echo "Could not query zpool status on crux: $res"
+            return 1
+        elif [ "$res" != "all pools are healthy" ]; then
+            echo "$res"
+            return 1
+        fi
+    }
+    check "if crux's zpools are healthy" check_pools
+
+    # Certs for internal hosts are self-signed and rotated by hand, so warn well
+    # before they expire.
+    check_cert() {
+        local host="$1"
+        local cert
+        if ! cert=$(echo | $timeout 10 $openssl s_client -connect "$host:443" -servername "$host" 2>/dev/null); then
+            echo "Could not fetch the certificate for $host!"
+            return 1
+        elif ! echo "$cert" | $openssl x509 -checkend $((30 * 24 * 60 * 60)) >/dev/null 2>&1; then
+            echo "The certificate for $host expires $(echo "$cert" | $openssl x509 -noout -enddate | sed 's/^notAfter=//')!"
+            return 1
+        fi
+    }
+
+    for host in ${lib.concatStringsSep " " tlsHosts}; do
+        check "the certificate for $host" check_cert "$host"
+    done
+
     # TODO check powerpanel?
-    # TODO check eyes?
+
+    echo
+    if [ "$FAILURES" -eq 0 ]; then
+        echo "All checks passed! ✅"
+    else
+        echo "$FAILURES check(s) failed! ❌"
+        exit 1
+    fi
   ''
