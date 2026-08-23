@@ -26,7 +26,25 @@ in
     bash="${pkgs.bash}/bin/bash"
     xmllint="${pkgs.libxml2}/bin/xmllint"
 
-    FAILURES=0
+    if [ -t 1 ]; then
+        bold=$'\e[1m'
+        dim=$'\e[2m'
+        red=$'\e[31m'
+        green=$'\e[32m'
+        reset=$'\e[0m'
+    else
+        bold=""
+        dim=""
+        red=""
+        green=""
+        reset=""
+    fi
+
+    # Column that check statuses are padded out to, so they line up.
+    STATUS_COLUMN=72
+
+    TOTAL=0
+    FAILURES=()
 
     # Run a check, printing its output only when it fails.  A check is any
     # command that exits nonzero and explains itself on stdout or stderr when
@@ -34,16 +52,30 @@ in
     check() {
         local description="$1"
         shift
-        echo -n "Checking $description...  "
+        TOTAL=$((TOTAL + 1))
+
+        # Pad the description out with dots so that the status column lines up
+        # and a failure is easy to spot while scanning down the output.
+        local label="Checking $description "
+        local width=$((STATUS_COLUMN - ''${#label}))
+        local dots=""
+        if [ "$width" -gt 0 ]; then
+            dots=$(printf "%''${width}s" "" | tr " " ".")
+        fi
+        printf "%s%s%s%s " "$label" "$dim" "$dots" "$reset"
+
         local output
         if output=$("$@" 2>&1); then
-            echo "✅"
+            printf "%sok%s\n" "$green" "$reset"
         else
-            echo "❌"
-            if [ -n "$output" ]; then
-                echo "$output"
-            fi
-            FAILURES=$((FAILURES + 1))
+            printf "%s%sFAILED%s\n" "$bold" "$red" "$reset"
+            FAILURES+=("$description")
+            # Indent the failure behind a rule so it reads as belonging to the
+            # check above it rather than to the checks that follow.
+            local line
+            while IFS= read -r line; do
+                printf "  %s│%s %s\n" "$red" "$reset" "$line"
+            done <<<"''${output:-(the check failed without explaining itself)}"
         fi
     }
 
@@ -127,10 +159,10 @@ in
         fi
     }
 
-    check "if crux is up on wireguard ipv6" \
+    check "crux is up on wireguard ipv6" \
         ping_host ${network.wireguard6.crux.address} "Crux (ipv6)"
 
-    check "if crux is up on wireguard ipv4" \
+    check "crux is up on wireguard ipv4" \
         ping_host ${network.wireguard4.crux.address} "Crux (ipv4)"
 
     check_internal_dns() {
@@ -141,7 +173,7 @@ in
             return 1
         fi
     }
-    check "if internal dns is up" check_internal_dns
+    check "internal dns is up" check_internal_dns
 
     check_forwarded_dns() {
         local res
@@ -151,7 +183,7 @@ in
             return 1
         fi
     }
-    check "if dns forwarding is working" check_forwarded_dns
+    check "dns forwarding is working" check_forwarded_dns
 
     check_dynamic_dns() {
         expect_healthy_timer route53-dynamic-dns-update || return 1
@@ -166,7 +198,7 @@ in
             return 1
         fi
     }
-    check "if dynamic dns is running" check_dynamic_dns
+    check "dynamic dns is running" check_dynamic_dns
 
     check_library_http() {
         local body
@@ -181,7 +213,7 @@ in
             return 1
         fi
     }
-    check "if library (http) is running" check_library_http
+    check "library (http) is running" check_library_http
 
     check_library_ftp() {
         if ! fetch ftp://library.internal.prussin.net >/dev/null; then
@@ -189,7 +221,7 @@ in
             return 1
         fi
     }
-    check "if library (ftp) is running" check_library_ftp
+    check "library (ftp) is running" check_library_ftp
 
     # Only nfsv4 (port 2049) is exposed, so the mount protocol that showmount
     # uses isn't reachable and all we can do without root is check that the
@@ -200,15 +232,15 @@ in
             return 1
         fi
     }
-    check "if library (nfs) is reachable" check_library_nfs
+    check "library (nfs) is reachable" check_library_nfs
 
-    check "if matrix (client) is running" \
+    check "matrix (client) is running" \
         expect_body https://matrix.internal.prussin.net/health OK
 
-    check "if matrix (federation) is running" \
+    check "matrix (federation) is running" \
         expect_body https://matrix.prussin.net:8448/health OK
 
-    check "if immich is running" \
+    check "immich is running" \
         expect_body https://photos.internal.prussin.net/api/server/ping '{"res":"pong"}'
 
     check_vaultwarden() {
@@ -221,7 +253,7 @@ in
             return 1
         fi
     }
-    check "if vaultwarden is running" check_vaultwarden
+    check "vaultwarden is running" check_vaultwarden
 
     check_home_assistant() {
         local key body
@@ -236,22 +268,24 @@ in
             return 1
         fi
     }
-    check "if home assistant is running" check_home_assistant
+    check "home assistant is running" check_home_assistant
 
-    check "if zwave-js is running" expect_active_unit zwave-js
+    check "zwave-js is running" expect_active_unit zwave-js
 
     # Frigate requires authentication, so an unauthenticated request gets a 401
     # from the backend when it's healthy.  If the backend is down nginx can't
     # run its auth subrequest and returns a 5xx instead.
-    check "if eyes is running" \
+    check "eyes is running" \
         expect_status https://eyes.internal.prussin.net/api/version 200 401
 
-    # The stats api is behind frigate's auth on the public vhost, so read it
-    # from crux directly.  The port is the api upstream that the nixpkgs
-    # frigate module points nginx at.
+    # The stats api is behind frigate's auth, so read it from crux rather than
+    # over the public vhost.  Frigate rejects requests that didn't come through
+    # nginx's auth subrequest, so the api port (5001) answers 401 -- nginx
+    # listens on 127.0.0.1:5000 for exactly this, and frigate treats requests
+    # arriving on that port as an authenticated admin.
     check_cameras() {
         local stats down
-        if ! stats=$(on_crux 'curl -sf --max-time 10 http://127.0.0.1:5001/stats' 2>&1); then
+        if ! stats=$(on_crux 'curl -sS --fail-with-body --max-time 10 http://127.0.0.1:5000/api/stats' 2>&1); then
             echo "Could not read frigate stats from crux: $stats"
             return 1
         fi
@@ -263,9 +297,9 @@ in
             return 1
         fi
     }
-    check "if all cameras are capturing" check_cameras
+    check "all cameras are capturing" check_cameras
 
-    check "if private is running" expect_status https://private.internal.prussin.net 200
+    check "private is running" expect_status https://private.internal.prussin.net 200
 
     check_circinus() {
         local res
@@ -277,7 +311,7 @@ in
             return 1
         fi
     }
-    check "if circinus is running" check_circinus
+    check "circinus is running" check_circinus
 
     syncthing_api() {
         local config="''${XDG_CONFIG_HOME:-$HOME/.config}/syncthing/config.xml"
@@ -323,7 +357,7 @@ in
     }
     check "syncthing connections" check_syncthing
 
-    check "if backup is running" expect_healthy_timer borgbackup-job-rsync.net
+    check "backup is running" expect_healthy_timer borgbackup-job-rsync.net
 
     check_pools() {
         local res
@@ -335,7 +369,7 @@ in
             return 1
         fi
     }
-    check "if crux's zpools are healthy" check_pools
+    check "crux's zpools are healthy" check_pools
 
     # Certs for internal hosts are self-signed and rotated by hand, so warn well
     # before they expire.
@@ -358,10 +392,14 @@ in
     # TODO check powerpanel?
 
     echo
-    if [ "$FAILURES" -eq 0 ]; then
-        echo "All checks passed! ✅"
+    if [ ''${#FAILURES[@]} -eq 0 ]; then
+        printf "%s%sAll %d checks passed!%s ✅\n" "$bold" "$green" "$TOTAL" "$reset"
     else
-        echo "$FAILURES check(s) failed! ❌"
+        printf "%s%s%d of %d checks failed!%s ❌\n" \
+            "$bold" "$red" "''${#FAILURES[@]}" "$TOTAL" "$reset"
+        for failure in "''${FAILURES[@]}"; do
+            printf "  %s✘%s %s\n" "$red" "$reset" "$failure"
+        done
         exit 1
     fi
   ''
