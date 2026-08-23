@@ -118,6 +118,7 @@ in {
         "tank/persisted-state/root-containers".mountpoint = "/var/lib/containers";
         "tank/persisted-state/syncthing".mountpoint = "/home/${config.primary-user.name}/.cache/syncthing";
         "tank/persisted-state/syncthing-config".mountpoint = "/home/${config.primary-user.name}/.config/syncthing";
+        "tank/persisted-state/wluma".mountpoint = "/home/${config.primary-user.name}/.local/share/wluma";
         "tank/persisted-state/secrets" = {
           mountpoint = "/secrets";
           neededForBoot = true;
