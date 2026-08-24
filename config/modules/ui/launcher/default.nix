@@ -14,13 +14,11 @@
 
   sms = mkWebApp "sms" "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
   matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
-  slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   telegram = pkgs.writeShellScript "telegram" "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
   comms = pkgs.writeShellScript "" ''
     ${sms} &
     ${matrix} &
     ${telegram} &
-    ${slack} &
   '';
   mkGame = pkg:
     pkgs.writeShellScript "${pkg.name}-game" ''
@@ -40,7 +38,7 @@ in {
       launcher = {
         enable = true;
         apps = {
-          inherit sms matrix slack telegram comms;
+          inherit sms matrix telegram comms;
 
           agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
           bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
@@ -80,6 +78,7 @@ in {
           screen-record = pkgs.writeShellScript "screenshot" "${screen} record $*";
           screenshot = pkgs.writeShellScript "screenshot" "${screen} shot $*";
           shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
+          slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
           sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
           steam = "${pkgs.steam}/bin/steam";
           stop-screen-record = pkgs.writeShellScript "stop-screen-record" "pkill wf-recorder";
