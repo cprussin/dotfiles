@@ -53,11 +53,33 @@
 
     echo
     echo -e "\e[1;37mScrubbing tank-backup...\e[0m"
-    watch -n1 zpool status tank-backup &
-    PID=$!
-    zpool scrub -w tank-backup
-    kill -INT $PID
-    zpool status tank-backup
+    zpool scrub tank-backup
+    exec 3>&1
+    DRAWN=0
+    clearProgress() {
+      if [ -t 1 ] && [ "$DRAWN" -gt 0 ]
+      then
+        printf '\033[%dA\033[J' "$DRAWN" || true
+        DRAWN=0
+      fi
+    }
+    while true
+    do
+      NEXT=$(zpool status tank-backup 2>&1) || { clearProgress; echo "$NEXT" >&2; break; }
+      STATUS=$NEXT
+      clearProgress
+      echo "$STATUS" | grep -q 'scrub in progress' || break
+      if [ -t 1 ]
+      then
+        WIDTH=$(tput cols <&3 2>/dev/null || echo 80)
+        PROGRESS=$(echo "$STATUS" | sed -n '/scan:/,/^config:/{/^config:/!p}' | expand | cut -c "1-$WIDTH")
+        echo "$PROGRESS"
+        DRAWN=$(echo "$PROGRESS" | wc -l)
+      fi
+      sleep 1
+    done
+    exec 3>&-
+    echo "$STATUS"
 
     echo
     echo -e "\e[1;37mCleaning up...\e[0m"
