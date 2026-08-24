@@ -14,7 +14,7 @@ lib.mkCli "cli" {
 
   test = {
     lint = "${statix}/bin/statix check .";
-    dead-code = "${deadnix}/bin/deadnix .";
+    dead-code = "${deadnix}/bin/deadnix --fail .";
     format = "${alejandra}/bin/alejandra --check .";
   };
 
