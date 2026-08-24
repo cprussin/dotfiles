@@ -53,10 +53,30 @@
 
     echo
     echo -e "\e[1;37mScrubbing tank-backup...\e[0m"
-    watch -n1 zpool status tank-backup &
-    PID=$!
-    zpool scrub -w tank-backup
-    kill -INT $PID
+
+    # Prints a one-line summary of the running scrub, or exits nonzero when no
+    # scrub is in progress (so it doubles as the poll loop's condition).
+    scrubProgress() {
+      zpool status tank-backup | awk '
+        /scrub in progress/ { active = 1 }
+        active && match($0, /[0-9.]+% done/) { pct = substr($0, RSTART, RLENGTH) }
+        active && match($0, /[0-9:]+ to go/) { eta = substr($0, RSTART, RLENGTH) }
+        END {
+          if (!active) exit 1
+          if (pct == "") pct = "starting"
+          if (eta == "") printf "%s", pct
+          else printf "%s, %s", pct, eta
+        }
+      '
+    }
+
+    zpool scrub tank-backup
+    while progress=$(scrubProgress)
+    do
+      printf '\r\e[2K  %s' "$progress"
+      sleep 1
+    done
+    printf '\r\e[2K'
     zpool status tank-backup
 
     echo
