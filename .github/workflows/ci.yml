@@ -1,0 +1,148 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Only pull requests cancel: a superseded PR run is wasted work, but a run on
+  # `main` is the record of whether that commit is good.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  cli-test:
+    name: cli test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - name: Build the dev shell
+        run: nix develop --print-build-logs --command true
+      - name: cli test lint
+        if: ${{ !cancelled() }}
+        run: nix develop --command cli test lint
+      - name: cli test dead-code
+        if: ${{ !cancelled() }}
+        run: nix develop --command cli test dead-code
+      - name: cli test format
+        if: ${{ !cancelled() }}
+        run: nix develop --command cli test format
+
+  build:
+    name: build ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - iot-devices
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - name: Build ${{ matrix.package }}
+        run: nix build --print-build-logs ".#${{ matrix.package }}"
+
+  # Machine configurations can't be realized here: `lyra` pulls in `displaylink`,
+  # whose source is a `requireFile` that has to be fetched by hand, and a full
+  # `crux` closure is far bigger than a runner's disk.  Instantiating the
+  # toplevel derivation still evaluates every module, option and overlay, which
+  # is what actually breaks when this repo changes.
+  eval-machines:
+    name: eval ${{ matrix.machine }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        machine:
+          - lyra
+          - crux
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - name: Instantiate ${{ matrix.machine }}
+        # Pure, like `colmena apply`, which evaluates flake hives with
+        # `--pure-eval`.  `allowUnfree` and `permittedInsecurePackages` come
+        # from the `nixpkgs.config` both machines get via `profiles/base`.
+        run: |
+          nix eval --raw \
+            ".#colmenaHive.nodes.${{ matrix.machine }}.config.system.build.toplevel.drvPath"
+          echo
+
+  eval-isos:
+    name: eval ${{ matrix.iso }} iso
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        iso:
+          - installer
+          - gpg-offline
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - name: Instantiate the ${{ matrix.iso }} iso
+        run: |
+          nix eval --raw ".#packages.x86_64-linux.${{ matrix.iso }}.drvPath"
+          echo
+
+  # The derivations in `pkgs/` are only reached through the machines' overlays,
+  # and instantiating a machine runs no build phase -- a broken install phase or
+  # a stale `src` hash evaluates clean and first breaks on deploy.  Build them
+  # through `lyra`'s package set, which has every overlay in this repo applied.
+  # `emacs`, `google-fonts` and `launcher` are left out: each realizes a
+  # multi-gigabyte closure (`launcher` interpolates every browser, `freecad`,
+  # `prusa-slicer`...) to check a handful of scripts, and took 3x the rest of
+  # the workflow combined.  Their interpolations are still checked by eval.
+  build-pkgs:
+    name: build pkgs.${{ matrix.package }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - dircolors-solarized
+          - emojione-png
+          - mako
+          - notify-send
+          - pass
+          - powerpanel
+          - sudo
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - name: Build ${{ matrix.package }}
+        run: |
+          nix build --print-build-logs \
+            ".#colmenaHive.nodes.lyra.pkgs.${{ matrix.package }}"
+
+  # Actually realizing an iso takes tens of minutes and most of a runner's disk,
+  # so it runs on demand only -- from the Actions tab or `gh workflow run
+  # ci.yml` -- rather than on every change.
+  build-isos:
+    name: build ${{ matrix.iso }} iso
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        iso:
+          - installer
+          - gpg-offline
+    steps:
+      - uses: actions/checkout@v5
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /usr/local/share/boost /usr/local/share/powershell \
+            "${AGENT_TOOLSDIRECTORY:-/opt/hostedtoolcache}"
+          df -h /
+      - uses: cachix/install-nix-action@v31
+      - name: Build the ${{ matrix.iso }} iso
+        run: nix build --print-build-logs ".#${{ matrix.iso }}"
