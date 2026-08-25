@@ -148,9 +148,16 @@
             ];
             config = {};
           };
+
+          # The isos are only built for the systems in `supportedSystems`
+          # above, so drop the ones this system has no build for rather than
+          # leaving `packages` with attributes that throw on access.
+          isoPackages =
+            builtins.mapAttrs (_: value: value."${system}")
+            (nixpkgs.lib.filterAttrs (_: builtins.hasAttr system) isos);
         in {
           packages =
-            (builtins.mapAttrs (_: value: value."${system}") isos)
+            isoPackages
             // {
               inherit (pkgs) iot-devices;
             };
