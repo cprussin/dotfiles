@@ -46,7 +46,6 @@ in {
           "sway/mode"
           "custom/email-connor-prussin-net"
           "custom/email-connor-ac-zeitgeist-com"
-          "custom/email-connor-dourolabs-xyz"
         ];
         modules-center = ["clock"];
         modules-right = [
@@ -161,12 +160,6 @@ in {
           };
         };
 
-        "custom/email-connor-dourolabs-xyz" = {
-          exec = get-mail "Douro Labs" "connor@dourolabs.xyz";
-          interval = 20;
-          on-click = "${pkgs.launcher}/bin/browse https://mail.google.com?authuser=connor@dourolabs.xyz";
-          return-type = "json";
-        };
         "custom/email-connor-ac-zeitgeist-com" = {
           exec = get-mail "Zeitgeist" "connor@ac-zeitgeist.com";
           interval = 20;
