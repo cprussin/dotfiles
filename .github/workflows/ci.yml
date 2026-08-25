@@ -35,6 +35,30 @@ jobs:
         if: ${{ !cancelled() }}
         run: nix develop --command cli test format
 
+  # `--all-systems` is the point: without it both commands only look at the
+  # runner's own system, which is the one that always worked.  It was the other
+  # three that carried outputs which threw when forced.
+  #
+  # `check` subsumes `show` for coverage -- it forces each `packages.<system>.*`
+  # to its `drvPath`, where `show` forces only far enough to print a name -- so
+  # the `show` step is here for its readable tree, not to catch anything `check`
+  # would miss.
+  flake-check:
+    name: flake check
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - name: nix flake show
+        run: nix flake show --all-systems
+      - name: nix flake check
+        if: ${{ !cancelled() }}
+        # No `checks` outputs today, so this only evaluates.  Keep the build
+        # logs on rather than passing `--no-build`: if `checks` are ever added,
+        # they should actually run here, and say why when they fail.
+        run: nix flake check --print-build-logs --all-systems
+
   build:
     name: build ${{ matrix.package }}
     runs-on: ubuntu-latest
