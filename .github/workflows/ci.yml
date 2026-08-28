@@ -117,6 +117,8 @@ jobs:
       fail-fast: false
       matrix:
         package:
+          - chatgpt-desktop
+          - claude-desktop
           - dircolors-solarized
           - emojione-png
           - mako

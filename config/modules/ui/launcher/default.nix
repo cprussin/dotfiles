@@ -28,8 +28,15 @@
     '';
 in {
   nixpkgs.overlays = [
+    (import ../../../../pkgs/chatgpt-desktop/overlay.nix)
+    (import ../../../../pkgs/claude-desktop/overlay.nix)
     (import ../../../../pkgs/launcher/overlay.nix)
   ];
+
+  # Cowork runs its sandbox VM through KVM, and it opens /dev/vhost-vsock,
+  # which only members of this group can, whatever /dev/kvm's own permissions
+  # are.  See https://code.claude.com/docs/en/desktop-linux
+  primary-user.extraGroups = ["kvm"];
 
   primary-user.home-manager = {
     home.packages = lib.mkForce [pkgs.launcher];
@@ -47,8 +54,10 @@ in {
           brightness = pkgs.callPackage ./apps/brightness.nix {};
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
           calendar = mkGoogleApp "calendar" "https://calendar.google.com";
+          chatgpt = "${pkgs.chatgpt-desktop}/bin/chatgpt";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
+          claude = "${pkgs.claude-desktop}/bin/claude-desktop";
           credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
           cups = mkWebApp "cups" "http://localhost:631";
