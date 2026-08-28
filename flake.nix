@@ -165,6 +165,8 @@
           devShells.default = pkgs.mkShell {
             buildInputs = [
               pkgs.git
+              # The .claude/ PR-review hook shells out to it.
+              pkgs.jq
               pkgs.passwordUtils
               pkgs.colmena
               pkgs.cli
