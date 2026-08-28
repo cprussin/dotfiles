@@ -201,9 +201,16 @@ in {
       '';
     };
 
+    # wlr implements Screenshot and ScreenCast; everything else a portal is
+    # asked for comes from gtk, which ui/xdg-portal contributes.  Naming the
+    # package in `home.packages` above as well is what actually installs it --
+    # see the comment there for why `extraPortals` on its own doesn't.
+    #
+    # `configPackages` goes the same way and is left off deliberately: the
+    # config below is set explicitly rather than read out of sway's own
+    # portals.conf, so nothing depends on that package reaching the profile.
     xdg.portal = {
-      extraPortals = [pkgs.xdg-desktop-portal-wlr pkgs.xdg-desktop-portal-gtk];
-      configPackages = [pkgs.sway];
+      extraPortals = [pkgs.xdg-desktop-portal-wlr];
       config.sway.default = ["wlr" "gtk"];
     };
   };
