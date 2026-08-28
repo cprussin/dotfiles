@@ -28,6 +28,7 @@
     '';
 in {
   nixpkgs.overlays = [
+    (import ../../../../pkgs/chatgpt-desktop/overlay.nix)
     (import ../../../../pkgs/claude-desktop/overlay.nix)
     (import ../../../../pkgs/launcher/overlay.nix)
   ];
@@ -53,6 +54,7 @@ in {
           brightness = pkgs.callPackage ./apps/brightness.nix {};
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
           calendar = mkGoogleApp "calendar" "https://calendar.google.com";
+          chatgpt = "${pkgs.chatgpt-desktop}/bin/chatgpt";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
           claude = "${pkgs.claude-desktop}/bin/claude-desktop";
