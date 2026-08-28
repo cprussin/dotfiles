@@ -108,7 +108,9 @@ in {
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
         "tank/persisted-state/argo".mountpoint = "/home/${config.primary-user.name}/.config/argo";
         "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
+        "tank/persisted-state/chatgpt".mountpoint = "/home/${config.primary-user.name}/.config/chatgpt";
         "tank/persisted-state/chromium".mountpoint = "/home/${config.primary-user.name}/.config/chromium";
+        "tank/persisted-state/claude".mountpoint = "/home/${config.primary-user.name}/.config/claude";
         "tank/persisted-state/containers".mountpoint = "/home/${config.primary-user.name}/.local/share/containers";
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";

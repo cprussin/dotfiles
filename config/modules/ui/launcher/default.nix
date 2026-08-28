@@ -6,6 +6,7 @@
 }: let
   mkWebApp = pkgs.callPackage ./utils/mkWebApp.nix {};
   mkGoogleApp = pkgs.callPackage ./utils/mkGoogleApp.nix {};
+  mkDesktopApp = pkgs.callPackage ./utils/mkDesktopApp.nix {};
   mkTerminalApp' = pkgs.callPackage ./utils/mkTerminalApp.nix {inherit config;};
   mkTerminalApp = name: mkTerminalApp' name name;
   mkModal = pkgs.callPackage ./utils/mkModal.nix {inherit config;};
@@ -47,8 +48,10 @@ in {
           brightness = pkgs.callPackage ./apps/brightness.nix {};
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
           calendar = mkGoogleApp "calendar" "https://calendar.google.com";
+          chatgpt = mkDesktopApp "chatgpt" "https://chatgpt.com";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
+          claude = mkDesktopApp "claude" "https://claude.ai";
           credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
           cups = mkWebApp "cups" "http://localhost:631";
