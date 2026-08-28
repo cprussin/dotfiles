@@ -2,3 +2,4 @@
 /iso-build
 .direnv/
 result
+.claude/settings.local.json
