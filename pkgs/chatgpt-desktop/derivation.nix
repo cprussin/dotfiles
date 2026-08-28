@@ -14,6 +14,7 @@
   at-spi2-core,
   autoPatchelfHook,
   cairo,
+  coreutils,
   cups,
   dbus,
   dpkg,
@@ -50,6 +51,7 @@
   nspr,
   nss,
   pango,
+  python3,
   systemd,
   vulkan-loader,
   wayland,
@@ -72,6 +74,13 @@
   source =
     sources.${stdenv.hostPlatform.system}
     or (throw "chatgpt-desktop is not packaged for ${stdenv.hostPlatform.system}");
+
+  # coreutils is load-bearing: the asar patch below makes the app copy its
+  # bundled plugins with `cp` and `chmod` rather than node's fs.cp.
+  runtimeBins = [
+    coreutils
+    xdg-utils
+  ];
 
   runtimeLibs = [
     alsa-lib
@@ -130,6 +139,7 @@ in
       autoPatchelfHook
       dpkg
       makeWrapper
+      python3
       wrapGAppsHook3
     ];
 
@@ -187,6 +197,14 @@ in
           --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt"
       done
 
+      # Two things the app does that only break on NixOS: it materializes its
+      # bundled plugins into ~/.codex with node's fs.cp, which preserves the
+      # store's read-only modes and then can't write the manifests it rewrites
+      # (EACCES on every launch), and @parcel/watcher probes `process.report`,
+      # which trips a CFI guard in the bundled Electron runtime.  Both patches
+      # fail the build if the code they match has moved.
+      python3 ${./patch-asar.py} "$out/lib/chatgpt/resources/app.asar"
+
       # `codex-launcher` is upstream's entry point, not the ChatGPT binary
       # beside it: it reads ~/.config/chatgpt-flags.conf and prepends those
       # flags before exec'ing its sibling.  It resolves that sibling from its
@@ -201,7 +219,7 @@ in
 
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
+        --prefix PATH : ${lib.makeBinPath runtimeBins}
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeLibs}
         --set-default ELECTRON_OZONE_PLATFORM_HINT auto
       )
