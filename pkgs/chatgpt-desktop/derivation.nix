@@ -212,10 +212,17 @@ in
         fi
       done
 
+      # The app claims x-scheme-handler/http and https because it has an
+      # in-app browser.  On a machine with no default browser set that makes it
+      # the handler for every web link, and the app resolves the login URL that
+      # way -- so clicking "sign in" re-execs the app, which hands off to the
+      # running instance ("Opening in existing browser session.") and exits,
+      # and no browser ever opens.  It should not be a general web browser.
       for desktop in "$out"/share/applications/*.desktop
       do
         substituteInPlace "$desktop" \
-          --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt"
+          --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt" \
+          --replace-fail "x-scheme-handler/http;x-scheme-handler/https;" ""
       done
 
       # Two things the app does that only break on NixOS: it materializes its
