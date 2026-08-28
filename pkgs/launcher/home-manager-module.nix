@@ -47,6 +47,9 @@ in {
       #
       # %u, not %U: `browse` keeps one target and drops the rest, so claiming
       # to accept a list would silently lose all but the last URL.
+      configFile."mimeapps.list".force = true;
+      dataFile."applications/mimeapps.list".force = true;
+
       dataFile."applications/browse.desktop".source = "${pkgs.makeDesktopItem {
         name = "browse";
         desktopName = "Browse";
@@ -61,10 +64,16 @@ in {
         ];
       }}/share/applications/browse.desktop";
 
-      # This makes ~/.config/mimeapps.list a read-only store symlink, so
-      # `xdg-mime default`, `xdg-settings set default-web-browser` and a
-      # browser's own "make me the default" prompt all stop working.  Defaults
-      # get set here and redeployed, not set at runtime.
+      # This makes ~/.config/mimeapps.list a read-only store symlink (and the
+      # deprecated copy under ~/.local/share/applications too).  Defaults get
+      # set here and redeployed, not set at runtime.  `xdg-mime default`,
+      # `xdg-settings set` and Electron's `setAsDefaultProtocolClient` are
+      # shell writes that tmp-and-rename, so they replace the symlink and
+      # appear to work -- it is the *next* activation that would then fail, on
+      # an existing plain file it did not create, and `force` makes it
+      # overwrite instead.  (GIO's `g_app_info_set_as_default_for_type`, which
+      # is what Firefox's prompt uses, resolves the symlink first and so just
+      # fails against the read-only store.)
       mimeApps = {
         enable = true;
         defaultApplications = {

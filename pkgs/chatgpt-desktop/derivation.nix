@@ -218,6 +218,13 @@ in
       # way -- so clicking "sign in" re-execs the app, which hands off to the
       # running instance ("Opening in existing browser session.") and exits,
       # and no browser ever opens.  It should not be a general web browser.
+      #
+      # This package is in no profile, so the entry here never reaches the MIME
+      # database directly: the app self-installs a copy into
+      # ~/.local/share/applications, which is what was answering.  Patching the
+      # source of that copy governs future ones only -- a copy already there
+      # keeps its claim until the app rewrites it -- so the registered default
+      # in the launcher module is what actually settles the handler.
       for desktop in "$out"/share/applications/*.desktop
       do
         substituteInPlace "$desktop" \
