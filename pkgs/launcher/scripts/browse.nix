@@ -37,11 +37,15 @@ writeShellScriptBin "browse" ''
     shift
   done
 
+  # Quoted, because this is the registered http/https handler now: a file://
+  # URL for a path with a space arrives as one argument and would otherwise
+  # split into two.  The :+ keeps an empty target from becoming an empty
+  # argument, which is what opens the browser on its homepage.
   case $browser in
-    brave) exec $brave $target >/dev/null 2>&1 ;;
-    chromium) exec $chromium $target >/dev/null 2>&1 ;;
-    tor-browser) exec $tor $target >/dev/null 2>&1 ;;
-    chrome) exec $chrome $target >/dev/null 2>&1 ;;
-    firefox) exec $firefox $target >/dev/null 2>&1 ;;
+    brave) exec $brave ''${target:+"$target"} >/dev/null 2>&1 ;;
+    chromium) exec $chromium ''${target:+"$target"} >/dev/null 2>&1 ;;
+    tor-browser) exec $tor ''${target:+"$target"} >/dev/null 2>&1 ;;
+    chrome) exec $chrome ''${target:+"$target"} >/dev/null 2>&1 ;;
+    firefox) exec $firefox ''${target:+"$target"} >/dev/null 2>&1 ;;
   esac
 ''
