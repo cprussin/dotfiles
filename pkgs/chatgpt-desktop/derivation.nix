@@ -14,6 +14,7 @@
   at-spi2-core,
   autoPatchelfHook,
   cairo,
+  coreutils,
   cups,
   dbus,
   dpkg,
@@ -50,6 +51,8 @@
   nspr,
   nss,
   pango,
+  pipewire,
+  python3,
   systemd,
   vulkan-loader,
   wayland,
@@ -72,6 +75,13 @@
   source =
     sources.${stdenv.hostPlatform.system}
     or (throw "chatgpt-desktop is not packaged for ${stdenv.hostPlatform.system}");
+
+  # coreutils is load-bearing: the asar patch below makes the app copy its
+  # bundled plugins with `cp` and `chmod` rather than node's fs.cp.
+  runtimeBins = [
+    coreutils
+    xdg-utils
+  ];
 
   runtimeLibs = [
     alsa-lib
@@ -130,10 +140,31 @@ in
       autoPatchelfHook
       dpkg
       makeWrapper
+      python3
       wrapGAppsHook3
     ];
 
     buildInputs = runtimeLibs;
+
+    # Electron dlopens these rather than linking them, so autoPatchelf has to
+    # be told: they go on each executable's RPATH.  What they must not do is
+    # arrive as an LD_LIBRARY_PATH on the app's environment -- see the wrapper
+    # below.
+    runtimeDependencies = [
+      libGL
+      libgbm
+      libnotify
+      libpulseaudio
+      libsecret
+      pipewire
+      vulkan-loader
+      wayland
+      # systemd has no `lib` output at this nixpkgs rev, so this resolves to
+      # the same path as bare `systemd` and is only here to stay correct if one
+      # is ever added.  libudev.so.1 does live in its $out/lib, which is where
+      # the hook looks: it appends /lib to whatever path it is given.
+      (lib.getLib systemd)
+    ];
 
     # Libraries the .deb ships that nothing here will load: the Qt shims
     # Electron picks at runtime to match a Qt desktop's theme (this one is
@@ -187,11 +218,20 @@ in
           --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt"
       done
 
+      # Two things the app does that only break on NixOS: it materializes its
+      # bundled plugins into ~/.codex with node's fs.cp, which preserves the
+      # store's read-only modes and then can't write the manifests it rewrites
+      # (EACCES on every launch), and @parcel/watcher probes `process.report`,
+      # which trips a CFI guard in the bundled Electron runtime.  Both patches
+      # fail the build if the code they match has moved.
+      python3 ${./patch-asar.py} "$out/lib/chatgpt/resources/app.asar"
+
       # `codex-launcher` is upstream's entry point, not the ChatGPT binary
-      # beside it: it reads ~/.config/chatgpt-flags.conf and prepends those
-      # flags before exec'ing its sibling.  It resolves that sibling from its
-      # own path, so wrapping the sibling in place below is what gets the
-      # environment onto it.
+      # beside it: a two-line script that resolves its sibling from its own
+      # path and execs it.  The wrapper goes on that sibling because ChatGPT is
+      # the process that needs the flags and the environment, and wrapping it
+      # also covers anything that runs it directly rather than via the
+      # launcher.
       test -e "$out/lib/chatgpt/codex-launcher" \
         || (echo "no codex-launcher in this .deb -- wrap ChatGPT directly" >&2; exit 1)
       ln -s ../lib/chatgpt/codex-launcher "$out/bin/chatgpt"
@@ -199,16 +239,29 @@ in
       runHook postInstall
     '';
 
+    # The ozone flag rather than ELECTRON_OZONE_PLATFORM_HINT, which this
+    # Electron fork ignores; guarded on WAYLAND_DISPLAY so an X11 session is
+    # unaffected.  Being flagsBefore, a `--ozone-platform=` passed on the
+    # command line still wins, which is the way back to XWayland.
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeLibs}
-        --set-default ELECTRON_OZONE_PLATFORM_HINT auto
+        # --suffix, not --prefix (which is what claude-desktop uses): every
+        # child inherits this, including the codex agent shelling out in a
+        # project of mine, and it should get my coreutils rather than the
+        # app's.  The store copy is only the fallback that makes the asar
+        # patch's `cp`/`chmod` work when PATH has neither.
+        --suffix PATH : ${lib.makeBinPath runtimeBins}
+        --add-flags "\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}"
       )
     '';
 
+    # `wrapProgramShell`, not `wrapProgram`: wrapGAppsHook3 propagates
+    # makeBinaryWrapper, which redefines `wrapProgram` to emit a C wrapper that
+    # passes --add-flags through verbatim -- the `${WAYLAND_DISPLAY:+...}` above
+    # would reach Electron as a literal argument instead of expanding.  The
+    # shell flavour stays available because makeWrapper is in nativeBuildInputs.
     postFixup = ''
-      wrapProgram "$out/lib/chatgpt/ChatGPT" "''${gappsWrapperArgs[@]}"
+      wrapProgramShell "$out/lib/chatgpt/ChatGPT" "''${gappsWrapperArgs[@]}"
     '';
 
     meta = {
