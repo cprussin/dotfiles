@@ -1,10 +1,14 @@
-{pkgs}: let
+{
+  pkgs,
+  lib,
+}: let
   pass = "${pkgs.pass}/bin/pass";
   head = "${pkgs.coreutils}/bin/head";
   base64 = "${pkgs.coreutils}/bin/base64";
   grep = "${pkgs.gnugrep}/bin/grep";
   sed = "${pkgs.gnused}/bin/sed";
   mkpasswd = "${pkgs.mkpasswd}/bin/mkpasswd";
+  jq = "${pkgs.jq}/bin/jq";
 
   getFullPassword = pkgs.writeShellScriptBin "getFullPassword" ''
     set -euo pipefail
@@ -56,6 +60,95 @@
     fi
   '';
 
+  # The offer adder wants one JSON document holding every bank login, so this
+  # walks `<account id> <pass path>` pairs and assembles it. Each entry's first
+  # line is the password; `Username` and the optional `TOTP Secret` are fields.
+  # Nothing secret is ever passed in argv -- `ps` is world-readable -- so the
+  # values reach jq through the environment instead.
+  getOfferAdderCredentials = pkgs.writeShellScriptBin "getOfferAdderCredentials" ''
+    set -euo pipefail
+    # A plain assignment, and ahead of the loop: `VAR="$(...)" prog` is the one
+    # construct `set -e` cannot see, so a lookup that fails in an assignment
+    # prefix would hand jq an empty token and exit 0.  Doing it first also
+    # fails a bad ntfy entry before any bank password is read.
+    ntfyToken="$(${getPasswordField}/bin/getPasswordField "$1" "Token")"
+    shift
+    # Assembled into a variable rather than straight to stdout: `jq -s` on the
+    # right of the pipe would otherwise emit a partial document before the
+    # non-zero status of a failed lookup could stop it.
+    document="$(
+      {
+        while [ "$#" -gt 0 ]; do
+          if [ "$#" -lt 2 ]; then
+            echo "getOfferAdderCredentials: account \"$1\" has no pass path" >&2
+            exit 1
+          fi
+          entry="$(${pass} show "$2")"
+          # `TOTP Secret` is absent on every account today -- neither issuer
+          # offers authenticator-app enrollment -- and the credentials schema
+          # makes it optional, so it is emitted only when present.  An absent
+          # `Username` is always a malformed entry, though, and `sed` would
+          # otherwise hand over an empty string that deploys clean and fails
+          # at the bank sign-in twelve hours later.
+          username="$(printf '%s\n' "$entry" | ${sed} -n 's/^Username: //p')"
+          if [ -z "$username" ]; then
+            echo "getOfferAdderCredentials: no Username field in \"$2\"" >&2
+            exit 1
+          fi
+          OFFER_ADDER_PASSWORD="$(printf '%s\n' "$entry" | ${head} -n 1)" \
+          OFFER_ADDER_USERNAME="$username" \
+          OFFER_ADDER_TOTP="$(printf '%s\n' "$entry" | ${sed} -n 's/^TOTP Secret: //p')" \
+            ${jq} -cn --arg id "$1" '{
+              key: $id,
+              value: (
+                {
+                  username: $ENV.OFFER_ADDER_USERNAME,
+                  password: $ENV.OFFER_ADDER_PASSWORD,
+                }
+                + (
+                  if $ENV.OFFER_ADDER_TOTP == "" then {}
+                  else {totpSecret: $ENV.OFFER_ADDER_TOTP}
+                  end
+                )
+              ),
+            }'
+          shift 2
+        done
+      } | OFFER_ADDER_NTFY_TOKEN="$ntfyToken" \
+        ${jq} -s '{ntfyToken: $ENV.OFFER_ADDER_NTFY_TOKEN, accounts: from_entries}'
+    )"
+    printf '%s\n' "$document"
+  '';
+
+  # ntfy provisions its users, their ACLs and their access tokens from the
+  # environment at startup, so the whole auth database is derivable from pass.
+  # Each entry's first line is the password and `Username` names the ntfy user;
+  # the first path is the service account, whose `Token` field the offer adder
+  # authenticates with. That field must be `ntfy token generate` output --
+  # `tk_` and 29 more characters -- because ntfy validates provisioned tokens
+  # at startup and refuses to serve at all when one is malformed.
+  getNtfySecrets = pkgs.writeShellScriptBin "getNtfySecrets" ''
+    set -euo pipefail
+    topic="$1"
+    servicePath="$2"
+    # Drop only the topic: the service account is a user like any other, it
+    # just also carries the token.
+    shift
+    users=""
+    access=""
+    for path in "$@"; do
+      username="$(${getPasswordField}/bin/getPasswordField "$path" "Username")"
+      hash="$(${pass} show "$path" | ${mkpasswd} -m bcrypt -R 10 -s)"
+      users="''${users:+$users,}$username:$hash:user"
+      access="''${access:+$access,}$username:$topic:rw"
+    done
+    # Single quotes: systemd reads them literally, and a bcrypt hash is full of
+    # dollar signs.
+    echo "NTFY_AUTH_USERS='$users'"
+    echo "NTFY_AUTH_ACCESS='$access'"
+    echo "NTFY_AUTH_TOKENS='$(${getPasswordField}/bin/getPasswordField "$servicePath" "Username"):$(${getPasswordField}/bin/getPasswordField "$servicePath" "Token")'"
+  '';
+
   getImmichSecrets = pkgs.writeShellScriptBin "getImmichSecrets" ''
     set -euo pipefail
     echo "DB_PASSWORD=$(${getPassword}/bin/getPassword "$1")"
@@ -80,6 +173,8 @@ in {
       getVaultwardenSecrets
       getGmailNewMailCounterEnvFile
       getImmichSecrets
+      getNtfySecrets
+      getOfferAdderCredentials
     ];
   };
   getPassword = name: ["getPassword" name];
@@ -97,4 +192,9 @@ in {
     );
   getGmailNewMailCounterEnvFile = name: ["getGmailNewMailCounterEnvFile" name];
   getImmichSecrets = db: ["getImmichSecrets" db];
+  getNtfySecrets = topic: servicePath: humanPaths:
+    ["getNtfySecrets" topic servicePath] ++ humanPaths;
+  getOfferAdderCredentials = ntfyPath: accounts:
+    ["getOfferAdderCredentials" ntfyPath]
+    ++ lib.concatLists (lib.mapAttrsToList (id: path: [id path]) accounts);
 }

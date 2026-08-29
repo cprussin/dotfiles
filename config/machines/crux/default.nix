@@ -13,7 +13,9 @@
     ./library.nix
     ./libvirtd.nix
     ./matrix.nix
+    ./ntfy.nix
     ./nvr.nix
+    ./offer-adder.nix
     ./photos.nix
     ./powerpanel.nix
     ./private.nix
