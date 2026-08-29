@@ -4,6 +4,7 @@
       lib.nameValuePair options.mountpoint {
         inherit device;
         neededForBoot = options.neededForBoot or false;
+        options = options.options or ["defaults"];
         fsType = "zfs";
       }
   );

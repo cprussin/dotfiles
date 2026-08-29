@@ -5,6 +5,7 @@
     ../../profiles/server
 
     ./backup.nix
+    ./chromium-build.nix
     ./circinus.nix
     ./dns.nix
     ./dynamic-dns.nix
