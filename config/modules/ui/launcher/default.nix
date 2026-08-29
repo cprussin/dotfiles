@@ -57,7 +57,7 @@ in {
           chatgpt = "${pkgs.chatgpt-desktop}/bin/chatgpt";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
-          claude = "${pkgs.claude-desktop}/bin/claude-desktop";
+          claude = pkgs.callPackage ./apps/claude.nix {};
           credit-cards = mkWebApp "credit-cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
           crux = mkTerminalApp "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
           cups = mkWebApp "cups" "http://localhost:631";
