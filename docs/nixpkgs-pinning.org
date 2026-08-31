@@ -17,5 +17,5 @@ To update dependencies:
 
 #+BEGIN_SRC bash
   nix flake update            # everything
-  nix flake lock --update-input nixpkgs   # just nixpkgs
+  nix flake update nixpkgs    # just nixpkgs
 #+END_SRC

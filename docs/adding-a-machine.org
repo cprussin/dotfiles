@@ -22,9 +22,10 @@ To initialize a new machine into the network:
      nix build .#installer
    #+END_SRC
 
-2. Create a new directory under [[../config/machines][config/machines]] named
-   after the machine's hostname, with a ~default.nix~ that imports the
-   appropriate [[../config/profiles][profiles]].
+2. Create a new directory under [[../config/machines][config/machines]] whose
+   name matches the ~targetHost~ you will register in step 3 (conventionally
+   the machine's hostname), with a ~default.nix~ that imports the appropriate
+   [[../config/profiles][profiles]].
 
 3. Register the machine in the colmena hive in [[../flake.nix][flake.nix]] by
    adding an entry to ~colmena-machines~:
