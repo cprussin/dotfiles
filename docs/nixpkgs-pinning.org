@@ -1,0 +1,21 @@
+* How nixpkgs is pinned
+
+This repository is a flake; nixpkgs (and all other dependencies) are pinned in
+[[../flake.lock][flake.lock]].  Nix channels are not used anywhere:
+
+- Channels are disabled on managed systems via ~nix.channel.enable = false~ in
+  [[../config/modules/system/nix/default.nix][config/modules/system/nix]].
+
+- The flake registry on managed systems points ~nixpkgs~ at the pinned flake
+  input (~nix.registry.nixpkgs.flake~), so commands like ~nix run nixpkgs#foo~
+  use the same nixpkgs that was deployed to the system.
+
+- Deployments evaluate against the pinned inputs by construction, since the
+  colmena hive is a flake output.
+
+To update dependencies:
+
+#+BEGIN_SRC bash
+  nix flake update            # everything
+  nix flake update nixpkgs    # just nixpkgs
+#+END_SRC

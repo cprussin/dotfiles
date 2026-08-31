@@ -1,99 +1,52 @@
 * Dotfiles
 
-This repository contains all of my personal configurations.  You are welcome to
-use my configurations!
+My personal NixOS configurations, managed as a flake and deployed with
+[[https://github.com/zhaofengli/colmena][colmena]].  You are welcome to use anything here.
 
-** Structure
+** Layout
 
-The way things are structured here is:
-
-- [[./config][config]]: This folder contains all configurations.  It is organized
-  into the following subdirectories:
-  - [[./config/machines][machines/<name>]]: These folders contain
-    machine-specific configurations.  Each folder should contain a
-    ~default.nix~, which is the entry point to the nixos configuration (this
-    file is used as ~/etc/nixos/configuration.nix~).
-  - [[./config/modules][modules]]: The meat of the configuration, this directory
-    contains all the different configs for the OS, services, and applications.
-    For the most part, modules in here are not actually loaded directly but
-    instead collected into profiles, which are consumed by machine
-    configurations (see below).
-  - [[./config/profiles][profiles]]: This directory contains collections of
-    modules packaged into common configuration sets.  For the most part, machine
-    configs import profiles, which then import modules.
-- [[./lib][lib]]: This folder contains various utility functions that are used
-  throughout the codebase.
-- [[./modules][modules]]: This folder contains custom abstract configuration
-  modules.  They provide configuration for programs and systems that are missing
-  in nixos or home-manager.  In some cases, things in here are things I'd
-  eventually like to polish off and send as pull requests to nixos or
-  home-manager.  In other cases they are experimental ideas that likely don't
-  actually belong upstream, like [[./modules/home-manager/color-theme.nix][configuring the whole system's color theme in
-  one place]].
-- [[./overlays][overlays]]: This directory contains nixpkgs overlays.
-- [[./pkgs][pkgs]]: This directory contains custom packages.
+- [[./flake.nix][flake.nix]] :: Flake inputs, the colmena hive, the dev shell, and
+  the installer ISOs.
+- [[./cli.nix][cli.nix]] :: The ~cli~ command available in the dev shell
+  (deployments, tests, etc).
+- [[./config][config/]] :: The system configurations.
+  - [[./config/machines][config/machines/<hostname>]] :: Machine-specific
+    configuration, one directory per host.
+  - [[./config/profiles][config/profiles]] :: Collections of modules packaged
+    into common configuration sets.  Machine configs import profiles, which
+    import modules.
+  - [[./config/modules][config/modules]] :: The bulk of the configuration:
+    modules for the OS, services, and applications.
+  - [[./config/iot][config/iot]] :: ESPHome device configurations.
+- [[./modules][modules/]] :: Custom NixOS and home-manager modules for things
+  that don't exist upstream (e.g. configuring the whole system's color theme in
+  one place).
+- [[./lib][lib/]] :: Utility functions used throughout the codebase.
+- [[./pkgs][pkgs/]] :: Custom packages and overlays.
+- [[./isos][isos/]] :: Installer ISO configurations.
 
 ** Usage
 
-*** Adding a new machine
-
-To initialize a new machine into the network, follow these steps:
-
-1. Follow the [[https://nixos.org/manual/nixos/stable/index.html#ch-installation][NixOS installation guide]] to install & boot into a minimal bootable
-   NixOS on the new machine.  Make sure to set the hostname, and make sure to
-   enable sshd.  Also make sure your ssh key is authorized to login as root.
-   For example, the ~configuration.nix~ may look like:
-
-   #+BEGIN_SRC nix
-     { config, pkgs, ... }: {
-       imports = [ ./hardware-configuration.nix ];
-       networking.hostName = "foobar";
-       services.sshd.enable = true;
-       users.users.root.openssh.authorizedKeys.keys = [ "..." ];
-     }
-   #+END_SRC
-
-2. Create a new [[./config/machines][machine configuration]] in this repository for the new machine
-   (make sure the folder name for the machine configuration matches the hostname
-   of the new machine).
-
-3. Deploy the configuration to the new machine:
-
-   #+BEGIN_SRC bash
-     nix-shell --run 'deploy --on <new machine>'
-   #+END_SRC
-
-*** Deploying changes
-
-This one is pretty simple:
+Enter the dev shell (this happens automatically with direnv):
 
 #+BEGIN_SRC bash
-  nix-shell --run deploy
+  nix develop
 #+END_SRC
 
-You can also deploy to only the machines you want to touch:
+Then use ~cli~:
 
 #+BEGIN_SRC bash
-  nix-shell --run 'deploy --on crux'
+  cli deploy                    # deploy all machines
+  cli deploy --on lyra          # deploy one machine
+  cli test lint                 # statix
+  cli test dead-code            # deadnix
+  cli test format               # alejandra
+  cli fix format                # auto-format the repo
+  nix build .#installer         # build a NixOS installer ISO
 #+END_SRC
 
-** Channels
+** More documentation
 
-While this isn't strictly necessary, with this configuration you can remove your
-nixpkgs channels--this configuration manages nixpkgs versions (and other
-dependencies) via niv.  To remove the channels that NixOS installs by default,
-run:
-
-   #+BEGIN_SRC bash
-     nix-channel remove nixpkgs
-   #+END_SRC
-
-The way this repository is able to work without channels has two parts:
-
-1. ~NIX_PATH~ is overridden when deploying in [[./shell.nix][shell.nix]].  This ensures that,
-   when deploying, the version of nixpkgs pinned by niv is used.
-
-2. The system nix path is set in [[./config/modules/system/nix/default.nix][nix/default.nix]].  This enables using things
-   like ~nix-shell -p foo~ or ~<nixpkgs>~ on a deployed machine, with a
-   guarantee that the version of ~nixpkgs~ used for those tools is the same as
-   the version that was deployed to the system.
+- [[./docs/adding-a-machine.org][Adding a new machine]]
+- [[./docs/nixpkgs-pinning.org][How nixpkgs is pinned (no channels)]]
+- [[./docs/secrets.org][How secrets are deployed]]

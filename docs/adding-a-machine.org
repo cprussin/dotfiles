@@ -1,0 +1,46 @@
+* Adding a new machine
+
+To initialize a new machine into the network:
+
+1. Install & boot into a minimal NixOS on the new machine, following the
+   [[https://nixos.org/manual/nixos/stable/index.html#ch-installation][NixOS installation guide]].  Set the hostname, enable sshd, and authorize
+   your ssh key to log in as root.  For example, the ~configuration.nix~ may
+   look like:
+
+   #+BEGIN_SRC nix
+     { config, pkgs, ... }: {
+       imports = [ ./hardware-configuration.nix ];
+       networking.hostName = "foobar";
+       services.openssh.enable = true;
+       users.users.root.openssh.authorizedKeys.keys = [ "..." ];
+     }
+   #+END_SRC
+
+   Alternatively, build and boot the installer ISO in this repo:
+
+   #+BEGIN_SRC bash
+     nix build .#installer
+   #+END_SRC
+
+2. Create a new directory under [[../config/machines][config/machines]] whose
+   name matches the ~targetHost~ you will register in step 3 (conventionally
+   the machine's hostname), with a ~default.nix~ that imports the appropriate
+   [[../config/profiles][profiles]].
+
+3. Register the machine in the colmena hive in [[../flake.nix][flake.nix]] by
+   adding an entry to ~colmena-machines~:
+
+   #+BEGIN_SRC nix
+     foobar = mkMachine {
+       targetHost = "foobar";
+     };
+   #+END_SRC
+
+4. Deploy:
+
+   #+BEGIN_SRC bash
+     cli deploy --on foobar
+   #+END_SRC
+
+   Secrets declared with ~deployment.keys~ are uploaded automatically on
+   deploy; see [[./secrets.org][secrets]] for how that works.
