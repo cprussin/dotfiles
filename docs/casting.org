@@ -1,0 +1,111 @@
+* Casting the screen to a TV
+
+Screen casting is [[https://github.com/LizardByte/Sunshine][Sunshine]] on the
+laptop and [[https://moonlight-stream.org/][Moonlight]] on the TV.  Moonlight is
+a normal Fire TV app, so this works on a Fire TV without sideloading anything.
+
+Miracast is deliberately not used.  Fire TV's built-in "Display Mirroring" is
+Miracast, but every Linux implementation of the sending side needs Wi-Fi Direct
+through NetworkManager or wpa_supplicant, and this repo runs [[../config/modules/system/devices/wifi/default.nix][iwd]] with neither.
+Sunshine also gets hardware encoding, audio, and remote input, none of which
+Miracast would give us.
+
+** One-time setup
+
+*** 1. Create the state dataset, before deploying
+
+Sunshine keeps its web UI credentials and its paired client certificates in
+~~/.config/sunshine~.  ~/~ is a tmpfs on lyra, so that is a ZFS dataset.  Like
+every other dataset here it is mounted from ~fileSystems~ rather than by ZFS
+itself, so it needs a legacy mountpoint:
+
+#+BEGIN_SRC bash
+  sudo zfs create -o mountpoint=legacy tank/persisted-state/sunshine
+#+END_SRC
+
+This has to come first: [[../config/machines/lyra/default.nix][lyra's config]] declares the mount, so once that is
+deployed a boot with no dataset behind it fails.
+
+*** 2. Deploy
+
+#+BEGIN_SRC bash
+  cli deploy --on lyra
+#+END_SRC
+
+*** 3. Give the dataset to the user
+
+A new dataset's root is owned by root, and ~install-user-mountpoints~ runs
+before the ZFS mounts, so nothing else fixes it.  Without this Sunshine cannot
+create its ~credentials/~ directory and exits immediately on every start:
+
+#+BEGIN_SRC bash
+  sudo chown cprussin:users /home/cprussin/.config/sunshine
+#+END_SRC
+
+*** 4. On the TV
+
+Install "Moonlight Game Streaming" from the Amazon Appstore.
+
+*** 5. Pair
+
+Start Sunshine with ~cast~ in the launcher, then open its web UI with
+~sunshine~ in the launcher ([[https://localhost:47990]]).  That port is not
+opened in the firewall, so the web UI is reachable from this machine only.  It
+is served over HTTPS with a self-signed certificate, so the browser warning is
+expected.  Create the web UI username and password when it asks.
+
+Now open Moonlight on the TV.  It finds the laptop over mDNS if they are on the
+same network; otherwise add the laptop's IP by hand.  Select it, and Moonlight
+shows a PIN.  Enter that PIN under "PIN" in the Sunshine web UI.  Pairing
+survives reboots.
+
+** Casting
+
+Run ~cast~ in the launcher to start Sunshine, then pick "Desktop" in Moonlight.
+Run ~cast~ again to stop.
+
+Run ~presentation~ alongside it.  KMS capture reads a live output's framebuffer,
+so the stream drops once the screen blanks, and driving the laptop from the Fire
+TV remote does not keep the session awake: Moonlight sends the remote as a
+gamepad, Sunshine injects it as a virtual joystick, and libinput does not count
+joystick events as activity.  Only a mouse or keyboard on either end resets the
+idle timer.
+
+~cast~ deliberately does not do this itself.  ~presentation~ stops [[../config/modules/ui/swayidle/default.nix][swayidle]]
+outright, and swayidle owns the ~lock~ and ~before-sleep~ handlers as well as
+the idle timeouts -- so while it is off, ~loginctl lock-session~ does nothing
+and suspending no longer locks.  That is a deliberate thing to turn on, not
+something starting a cast should do quietly.
+
+** Notes
+
+- Sunshine streams the default display.  With several outputs connected that may
+  not be the one you want.  ~journalctl --user -u sunshine~ has a block like
+
+  #+BEGIN_EXAMPLE
+    -------- Start of KMS monitor list --------
+    Monitor 0 is eDP-1: BOE NE135A1M-NY1
+    --------- End of KMS monitor list ---------
+  #+END_EXAMPLE
+
+  and that monitor number goes in ~output_name~ in [[../config/modules/ui/sunshine/default.nix][config/modules/ui/sunshine]].
+  It is an index into Sunshine's own enumeration, assigned while walking
+  ~/dev/dri/card*~ and their active planes -- not a connector name.  So it can
+  move on a reboot, on plugging the dock in, or when a DisplayLink output shows
+  up, quite apart from a Sunshine version bump.  Check the log again rather than
+  trusting a number that worked last time.
+
+- The web UI's "Configuration" page cannot save anything.  Because
+  ~services.sunshine.settings~ is set, Sunshine runs against a config file in
+  the nix store -- change [[../config/modules/ui/sunshine/default.nix][config/modules/ui/sunshine]] and redeploy instead.  The
+  other pages do write: credentials, pairings, and the application list all live
+  in the dataset.  The "Desktop" entry Moonlight offers comes from the stock
+  ~apps.json~ Sunshine copies there on first start, and edits to it stick.
+
+- Moonlight sends keyboard, mouse, and gamepad input back, so the Fire TV remote
+  drives the laptop.  Nothing else on the network can: clients have to pair
+  first.
+
+- Capture is DRM/KMS rather than wlroots screencopy.  Sunshine's ~wlr~ backend
+  fails on sway 1.12: frame capture errors out on EGL image creation and the
+  stream arrives black with horizontal lines (LizardByte/Sunshine#5258).

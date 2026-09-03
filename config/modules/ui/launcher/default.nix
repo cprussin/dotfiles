@@ -54,6 +54,7 @@ in {
           brightness = pkgs.callPackage ./apps/brightness.nix {};
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
           calendar = mkGoogleApp "calendar" "https://calendar.google.com";
+          cast = pkgs.callPackage ./apps/cast.nix {};
           chatgpt = "${pkgs.chatgpt-desktop}/bin/chatgpt";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
@@ -91,6 +92,7 @@ in {
           sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
           steam = "${pkgs.steam}/bin/steam";
           stop-screen-record = pkgs.writeShellScript "stop-screen-record" "pkill wf-recorder";
+          sunshine = mkWebApp "sunshine" "https://localhost:47990";
           syncthing = mkWebApp "syncthing" "http://localhost:8384";
           systemctl = mkModal "systemctl" "${pkgs.sysz}/bin/sysz";
           tor-browser = pkgs.writeShellScript "tor-browser" "${pkgs.launcher}/bin/browse --browser tor-browser $*";
