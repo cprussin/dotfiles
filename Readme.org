@@ -48,5 +48,6 @@ Then use ~cli~:
 ** More documentation
 
 - [[./docs/adding-a-machine.org][Adding a new machine]]
+- [[./docs/casting.org][Casting the screen to a TV]]
 - [[./docs/nixpkgs-pinning.org][How nixpkgs is pinned (no channels)]]
 - [[./docs/secrets.org][How secrets are deployed]]

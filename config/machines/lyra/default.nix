@@ -120,6 +120,7 @@ in {
         "tank/persisted-state/iwd".mountpoint = "/var/lib/iwd";
         "tank/persisted-state/log".mountpoint = "/var/log";
         "tank/persisted-state/root-containers".mountpoint = "/var/lib/containers";
+        "tank/persisted-state/sunshine".mountpoint = "/home/${config.primary-user.name}/.config/sunshine";
         "tank/persisted-state/syncthing".mountpoint = "/home/${config.primary-user.name}/.cache/syncthing";
         "tank/persisted-state/syncthing-config".mountpoint = "/home/${config.primary-user.name}/.config/syncthing";
         "tank/persisted-state/wluma".mountpoint = "/home/${config.primary-user.name}/.local/share/wluma";

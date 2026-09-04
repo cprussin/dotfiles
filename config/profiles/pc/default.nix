@@ -37,6 +37,7 @@
     ../../modules/ui/mako
     ../../modules/ui/mpv
     ../../modules/ui/plymouth
+    ../../modules/ui/sunshine
     ../../modules/ui/sway
     ../../modules/ui/swayidle
     ../../modules/ui/swaylock
