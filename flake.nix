@@ -12,6 +12,10 @@
 
     colmena.url = "github:zhaofengli/colmena";
 
+    # Deliberately not `nixpkgs.follows`: it pins playwright to the exact
+    # chromium its own nixpkgs ships, and a mismatched pair refuses to launch.
+    credit-card-offer-adder.url = "github:cprussin/credit-card-offer-adder";
+
     dircolors-solarized = {
       url = "github:seebi/dircolors-solarized";
       flake = false;
@@ -44,6 +48,7 @@
     home-manager,
     nixos-hardware,
     colmena,
+    credit-card-offer-adder,
     ...
   } @ flake-inputs: let
     password-utils-overlay = final: _: {
@@ -130,6 +135,9 @@
 
       crux = mkMachine {
         targetHost = "crux";
+        extraModules = [
+          credit-card-offer-adder.nixosModules.default
+        ];
       };
     };
   in
