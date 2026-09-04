@@ -1,0 +1,84 @@
+* Casting: design notes
+
+Background for [[./casting.org][casting]].  Read this before changing
+[[../config/modules/ui/sunshine/default.nix][config/modules/ui/sunshine]] or [[../config/modules/ui/launcher/apps/cast.nix][the cast app]].
+
+** Why not Miracast
+
+Fire TV's "Display Mirroring" is Miracast, and every Linux sender needs Wi-Fi
+Direct through NetworkManager or wpa_supplicant.  This repo runs [[../config/modules/system/devices/wifi/default.nix][iwd]], which
+neither supports.  Sunshine also gets hardware encoding, audio and remote input.
+
+** Why a headless output, not a mirror
+
+The panel is 2880x1920 (3:2) and the TV is 16:9.  Sunshine never stretches --
+it pads to preserve aspect -- so mirroring can only letterbox.
+
+** Why wlr capture, and how to go back
+
+DRM/KMS capture reads planes off real hardware and cannot see a headless output.
+
+[[https://github.com/LizardByte/Sunshine/issues/5258][Sunshine#5258]] reports ~wlr~ failing on sway 1.12 for *physical* outputs: black
+with horizontal lines.  It does not reproduce on a headless output (checked
+against moonlight-qt).  If a version bump brings it back, that is the symptom.
+
+Reverting to mirroring means all three together: ~capture = "kms"~ with
+~capSysAdmin = true~, dropping the ~ExecStart~ override, and cutting ~cast~ back
+to starting and stopping the service.  The override alone refuses to start
+Sunshine once ~cast~ stops recording an output.
+
+** Sway's headless outputs are undocumented
+
+~create_output~ and ~output ... unplug~ appear nowhere in sway(5); both carry an
+"intended for developer use only" comment in sway's source.  A sway bump is the
+likeliest thing to break casting.
+
+~create_output~ takes no arguments and always adds a fresh ~HEADLESS-N~ at
+1920x1080, N counting up for the session.  So ~cast~ reads the name back from
+~swaymsg~, records it in ~$XDG_RUNTIME_DIR/cast-output~, and the unit's
+~ExecStart~ passes it to Sunshine as ~output_name=~, which overrides the config
+file.
+
+** Where the output is placed
+
+At the top of the focused output's column, so the pointer crosses onto it off
+the top edge.  Where a monitor is stacked above the laptop, the TV goes above
+that monitor.  Only outputs sharing that column set the height: taking the top
+of the whole layout instead leaves the TV touching a monitor at one corner in
+the profiles where the monitors sit beside the laptop, and sway will not cross
+a corner.
+
+** Why cast places workspace 10, not kanshi
+
+kanshi matches a profile only when its output count equals the number of
+connected heads, so it does nothing at all while the headless output exists.
+Covering it there would mean a second copy of every profile, keyed to a name
+that changes every cast.
+
+Two traps in the placement, both hit once already:
+
+- ~workspace 10~ fails under fullscreen-global, and a comma-chained command list
+  ignores that failure -- so the move must be gated on the switch succeeding, or
+  it throws whatever *is* focused onto the TV.
+- ~move workspace to output~ takes focus and the pointer with it, so both have
+  to be put back.
+
+** Why the firewall list is written out
+
+~openFirewall~ would also open the web UI (offset +1).  That port is the one
+thing ~origin_web_ui_allowed~ does not cover: ~savePassword~ skips
+~authenticate~ entirely while no admin password is set, so before setup
+anything that reaches it can claim the account.
+
+The remaining ports are open on *every* interface, tailnet included -- the only
+global rule written here, the rest being interface-scoped.  That is deliberate:
+the laptop casts from wifi or the dock's ethernet depending on the day.  Of
+what they expose, ~/serverinfo~ answers anyone and ~/pair~ is gated on the PIN;
+the rest needs a paired client certificate.
+
+** Side effect: mDNS
+
+Enabling Sunshine turns on Avahi publishing system-wide, which is what lets
+Moonlight find the laptop by name.  lyra then advertises itself on every network
+it joins.  ~publish.enable = false~ in the avahi module turns it off, at the
+cost of adding the laptop to Moonlight by IP.
