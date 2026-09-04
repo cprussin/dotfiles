@@ -40,10 +40,10 @@ capture fails.
 likeliest thing to break casting.
 
 ~create_output~ takes no arguments and always adds a fresh ~HEADLESS-N~ at
-1920x1080, N counting up for the session.  So ~cast~ reads the name back from
-~swaymsg~, records it in ~$XDG_RUNTIME_DIR/cast-output~, and the unit's
-~ExecStart~ passes it to Sunshine as ~output_name=~, which overrides the config
-file.
+1920x1080 (~cast~ then sets the mode; see below), N counting up for the
+session.  So ~cast~ reads the name back from ~swaymsg~, records it in
+~$XDG_RUNTIME_DIR/cast-output~, and the unit's ~ExecStart~ passes it to
+Sunshine as ~output_name=~, which overrides the config file.
 
 ** Where the output is placed
 
@@ -53,6 +53,23 @@ that monitor.  Only outputs sharing that column set the height: taking the top
 of the whole layout instead leaves the TV touching a monitor at one corner in
 the profiles where the monitors sit beside the laptop, and sway will not cross
 a corner.
+
+** Why the output is 3840x2160 at scale 2
+
+Sunshine captures the mode, not the logical size, so the mode sets the stream's
+ceiling -- left at ~create_output~'s 1920x1080 a 4K client just upscales.  Scale
+2 keeps the desktop readable from a couch and holds the logical size at
+1920x1080, which is what the placement arithmetic works in.
+
+Sway composites that continuously and Sunshine encodes it, so a cast costs
+roughly four times the GPU of the 1080p path.  If the stream falls apart, check
+Sunshine's log for the encoder it picked: the software fallback cannot hold
+4K60.
+
+~cast~ waits for the mode rather than assuming it: the modeset is deferred, so
+~swaymsg~ returns success before it happens, and one that cannot be allocated
+drops the mode while keeping the scale -- a quarter-size desktop the client
+upscales, which looks exactly like the bug the mode is here to fix.
 
 ** Why cast places workspace 10, not kanshi
 

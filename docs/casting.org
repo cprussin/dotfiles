@@ -34,8 +34,13 @@ when it breaks.
 ** Use
 
 - ~cast~ starts and stops it.  Pick "Desktop" in Moonlight.
-- The TV is a second display, not a mirror: ~cast~ adds a 1920x1080 headless
-  output and Sunshine streams that.
+- The TV is a second display, not a mirror: ~cast~ adds a headless output and
+  Sunshine streams that.
+- It is 3840x2160 at scale 2 -- Sunshine captures the output's *mode*, so that
+  is the ceiling on the stream; what actually goes out is whatever Moonlight
+  asks for.  Set Moonlight to 4K and HEVC, with the bitrate raised to match.
+  If it stutters, drop Moonlight back to 1080p: the capture stays 4K and
+  downscales, so nothing else has to change.
 - It sits above your column, so the pointer reaches it off the top edge --
   crossing any monitor stacked above the laptop on the way.
 - Workspace 10 moves onto it: ~Mod+asterisk~ focuses the TV,

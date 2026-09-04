@@ -12,6 +12,8 @@ writeShellScript "cast" ''
   comm=${coreutils}/bin/comm
   head=${coreutils}/bin/head
   rm=${coreutils}/bin/rm
+  seq=${coreutils}/bin/seq
+  sleep=${coreutils}/bin/sleep
   sort=${coreutils}/bin/sort
   test=${coreutils}/bin/test
   grep=${gnugrep}/bin/grep
@@ -20,6 +22,14 @@ writeShellScript "cast" ''
   jq=${jq}/bin/jq
 
   outputFile="$XDG_RUNTIME_DIR/cast-output"
+
+  # The TV.  `create_output` hardcodes 1920x1080, and Sunshine captures the
+  # output's mode rather than its logical size, so this is what gets encoded --
+  # leave it at the default and a 4K client just upscales 1080p.  Scale 2 keeps
+  # the desktop readable from a couch and leaves the logical size at 1920x1080,
+  # which is what the positioning below works in.
+  mode=3840x2160
+  scale=2
 
   # Headless only: a monitor plugged in between the two samples below would
   # otherwise land in the diff, and everything downstream takes a single name.
@@ -62,23 +72,50 @@ writeShellScript "cast" ''
       # Record before anything else can fail.
       echo "$output" > "$outputFile"
 
-      # 1:1 on a 1080p TV.
-      $swaymsg "output $output scale 1" > /dev/null
+      # swaymsg reports command errors on stdout, and as JSON rather than prose
+      # when it is not a tty.  Keep them: the failure below otherwise points at
+      # a sway log that has nothing in it.
+      if ! error="$($swaymsg "output $output mode --custom $mode scale $scale" 2>&1)"
+      then
+        echo "cast: $(echo "$error" | $jq -r '.[].error? // .' 2> /dev/null || echo "$error")" >&2
+        exit 1
+      fi
 
-      # At the top of the focused output's column, so the pointer reaches the TV
-      # off the top edge.  Only that column counts -- see the design notes.
-      outputs="$($swaymsg -t get_outputs)"
+      # The modeset runs behind a timer, and one that cannot be allocated drops
+      # back to the old mode while keeping the new scale -- a quarter-size
+      # desktop the client then upscales, which is the bug this is fixing
+      # wearing a disguise.  Wait for the mode, which also settles the rect the
+      # positioning below reads.
+      for _ in $($seq 50)
+      do
+        outputs="$($swaymsg -t get_outputs)"
+        current="$(echo "$outputs" | $jq -r --arg o "$output" \
+          'first(.[] | select(.name == $o) | "\(.current_mode.width)x\(.current_mode.height)")')"
+        $test "$current" = "$mode" && break
+        $sleep 0.02
+      done
+
+      if $test "$current" != "$mode"
+      then
+        echo "cast: $output came up ''${current:-nothing}, not $mode" >&2
+        exit 1
+      fi
+
       read -r width height < <(echo "$outputs" | $jq -r --arg o "$output" \
         'first(.[] | select(.name == $o) | .rect | "\(.width) \(.height)")')
 
-      # Not just empty: sway reports a disabled output with a zeroed rect, and
-      # a zero width collapses the column below to match nothing, which lands
-      # the TV on top of a real output.
+      # Belt and braces: the mode check above should already have caught every
+      # way this can come back empty, `0` or `null`.  Any of them would abort
+      # jq at `--argjson w` or collapse the column below to match nothing,
+      # landing the TV on a real output.
       if ! $test "$width" -gt 0 2> /dev/null
       then
-        echo 'cast: could not read the new output back from sway' >&2
+        echo "cast: $output reports no size; is it still enabled?" >&2
         exit 1
       fi
+
+      # At the top of the focused output's column, so the pointer reaches the TV
+      # off the top edge.  Only that column counts -- see the design notes.
       anchorX="$(echo "$outputs" | $jq -r --arg o "$output" \
         'map(select(.active and .focused and .name != $o)) | .[0].rect.x // 0')"
       topY="$(echo "$outputs" | $jq -r --arg o "$output" --argjson x "$anchorX" --argjson w "$width" \
