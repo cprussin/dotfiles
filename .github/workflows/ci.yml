@@ -68,6 +68,7 @@ jobs:
       matrix:
         package:
           - iot-devices
+          - read-dmarc
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31

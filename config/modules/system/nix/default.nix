@@ -46,6 +46,7 @@ in {
       })
       (import ../../../../pkgs/pass-with-otp/overlay.nix)
       (import ../../../../pkgs/powerpanel/overlay.nix)
+      (import ../../../../pkgs/read-dmarc/overlay.nix)
       (import ../../../../pkgs/sudo-with-insults/overlay.nix)
     ];
   };

@@ -25,6 +25,7 @@
     ../../modules/ui/kitty
     ../../modules/ui/less
     ../../modules/ui/nushell
+    ../../modules/ui/read-dmarc
     ../../modules/ui/readline
     ../../modules/ui/starship
     ../../modules/ui/terminfo

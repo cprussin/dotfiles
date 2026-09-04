@@ -3,3 +3,4 @@
 .direnv/
 result
 .claude/settings.local.json
+__pycache__/
