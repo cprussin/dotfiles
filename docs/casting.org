@@ -42,10 +42,9 @@ when it breaks.
   ~Mod+Shift+asterisk~ throws a window there.
 - Moonlight sends keyboard, mouse and gamepad back, so the Fire TV remote drives
   the laptop.  Only paired clients can.
-- Run ~presentation~ too.  Nothing else keeps the session awake -- the Fire TV
-  remote arrives as a gamepad, which libinput ignores -- and blanking kills the
-  stream.  ~cast~ leaves that to you: ~presentation~ also stops locking, on
-  suspend as well as on idle.
+- Blanking *and* the idle auto-lock are suppressed for the duration -- nothing
+  about a cast counts as activity, so an idle inhibitor is held.  Locking by
+  hand and on suspend still work.
 
 ** Quirks
 
@@ -58,5 +57,9 @@ when it breaks.
   the screens.
 - A cast can end without ~cast~ (Sunshine fails, or ~systemctl~ stops it),
   leaving the output behind.  The next ~cast~ clears it.
+- Quitting Moonlight does not stop Sunshine, so the screen keeps not blanking
+  and not auto-locking until you run ~cast~ again.
+- waybar's Presentation Mode indicator still reads off during a cast; it tracks
+  a Wayland inhibitor, and this is a logind one.
 - The web UI's "Configuration" page cannot save -- the config comes from the nix
   store.  Credentials, pairings and the app list do save.

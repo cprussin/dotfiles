@@ -25,7 +25,15 @@
       exit 1
     fi
 
-    exec ${config.services.sunshine.package}/bin/sunshine ${configFile} output_name="$output"
+    # Blanking takes the headless output down and nothing about a cast counts
+    # as activity -- Moonlight sends the Fire TV remote as a gamepad, which
+    # libinput ignores.  swayidle drops *both* its timeouts while logind
+    # reports an idle inhibitor -- the idle auto-lock as well as blanking --
+    # but keeps running, so the `lock` and `before-sleep` handlers still fire.
+    # Holding it here ties it to the process, so no exit path leaks it.
+    exec ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=cast \
+      --why='Casting the screen to a TV' \
+      ${config.services.sunshine.package}/bin/sunshine ${configFile} output_name="$output"
   '';
 in {
   services.sunshine = {

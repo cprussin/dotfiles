@@ -22,10 +22,16 @@ DRM/KMS capture reads planes off real hardware and cannot see a headless output.
 with horizontal lines.  It does not reproduce on a headless output (checked
 against moonlight-qt).  If a version bump brings it back, that is the symptom.
 
-Reverting to mirroring means all three together: ~capture = "kms"~ with
-~capSysAdmin = true~, dropping the ~ExecStart~ override, and cutting ~cast~ back
-to starting and stopping the service.  The override alone refuses to start
-Sunshine once ~cast~ stops recording an output.
+Reverting to mirroring means all of: ~capture = "kms"~ with ~capSysAdmin =
+true~, dropping the ~output_name~ half of the ~ExecStart~ override, and cutting
+~cast~ back to starting and stopping the service.  That half alone refuses to
+start Sunshine once ~cast~ stops recording an output.
+
+Keep the ~systemd-inhibit~ wrapper -- blanking kills a mirrored stream too --
+but point it at ~${config.security.wrapperDir}/sunshine~.  ~capSysAdmin~ works
+by building a setcap wrapper and aiming the upstream ~ExecStart~ at it, so a
+wrapper that execs the store path directly leaves the option a no-op and KMS
+capture fails.
 
 ** Sway's headless outputs are undocumented
 
@@ -62,6 +68,30 @@ Two traps in the placement, both hit once already:
   it throws whatever *is* focused onto the TV.
 - ~move workspace to output~ takes focus and the pointer with it, so both have
   to be put back.
+
+** How blanking and the idle lock are suppressed
+
+Blanking kills the stream, and nothing about a cast counts as activity --
+Moonlight sends the Fire TV remote as a gamepad, and libinput ignores joystick
+events.
+
+Sunshine runs under ~systemd-inhibit --what=idle~.  swayidle watches logind's
+~BlockInhibited~ and drops its timeouts while an idle inhibitor is held, so
+blanking and the idle lock stop but the process stays up -- ~events.lock~ and
+~events.before-sleep~ keep working, which stopping the unit (what
+~presentation~ does) would not.  Tying it to Sunshine's own process means no
+exit path can leak it.
+
+A Wayland idle inhibitor would work too -- sway honours one on a mapped layer
+surface, which is how waybar's Presentation Mode module does it -- but it would
+need a client to own, and its lifetime would be that client's rather than
+Sunshine's.
+
+Casting therefore needs logind reachable, and ~systemd-inhibit~ refuses to run
+the command at all if ~Inhibit~ fails, so Sunshine would not start.  polkit
+allows ~inhibit-block-idle~ to anyone but must be running, and nothing here
+enables it directly: it comes in via ~security.rtkit.enable~ in [[../config/modules/system/devices/audio/default.nix][the audio
+module]] and via ~services.fwupd.enable~ (which also pulls in udisks2).
 
 ** Why the firewall list is written out
 
