@@ -145,6 +145,7 @@
               mkCli.overlays.default
               cli-overlay
               iot-overlay
+              (import ./pkgs/read-dmarc/overlay.nix)
             ];
             config = {};
           };
@@ -159,7 +160,7 @@
           packages =
             isoPackages
             // {
-              inherit (pkgs) iot-devices;
+              inherit (pkgs) iot-devices read-dmarc;
             };
 
           devShells.default = pkgs.mkShell {
