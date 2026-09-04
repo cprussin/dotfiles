@@ -45,6 +45,19 @@ session.  So ~cast~ reads the name back from ~swaymsg~, records it in
 ~$XDG_RUNTIME_DIR/cast-output~, and the unit's ~ExecStart~ passes it to
 Sunshine as ~output_name=~, which overrides the config file.
 
+** Only failing to get an output is fatal
+
+Everything after that -- the mode, the placement, workspace 10 -- warns where it
+can and carries on: casting at the wrong size, or with the TV somewhere
+unhelpful, beats not casting.  Warnings go through ~notify-send~, since the
+launcher discards stderr.
+
+Two are skipped rather than attempted.  Positioning, when the output reports no
+size to position by.  And the workspace move, when ~cast~ cannot read what is
+focused: it takes focus to name an empty workspace, and with nowhere to hand
+focus back it would strand it on an output that by then may have neither size
+nor position.
+
 ** Where the output is placed
 
 At the top of the focused output's column, so the pointer crosses onto it off

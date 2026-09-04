@@ -6,6 +6,7 @@
   systemd,
   sway,
   jq,
+  notify-send,
 }:
 writeShellScript "cast" ''
   cat=${coreutils}/bin/cat
@@ -20,8 +21,18 @@ writeShellScript "cast" ''
   systemctl=${systemd}/bin/systemctl
   swaymsg=${sway}/bin/swaymsg
   jq=${jq}/bin/jq
+  notifySend=${notify-send}/bin/notify-send
 
   outputFile="$XDG_RUNTIME_DIR/cast-output"
+
+  # The launcher discards stderr, so a warning only reaches the user as a
+  # notification.  `--` because swaymsg's errors come through here: notify-send
+  # rejects a message starting with `-` and says so on stdout, which the
+  # launcher discards too.
+  warn() {
+    echo "cast: $1" >&2
+    $notifySend -i video-display -- Cast "$1"
+  }
 
   # The TV.  `create_output` hardcodes 1920x1080, and Sunshine captures the
   # output's mode rather than its logical size, so this is what gets encoded --
@@ -65,62 +76,64 @@ writeShellScript "cast" ''
 
       if $test -z "$output"
       then
-        echo 'cast: sway added no output; check the sway log' >&2
+        warn 'sway added no output; check the sway log'
         exit 1
       fi
 
       # Record before anything else can fail.
       echo "$output" > "$outputFile"
 
+      # From here to `start sunshine` nothing is fatal: casting at the wrong
+      # resolution, or with the TV in the wrong place, beats not casting.
+
       # swaymsg reports command errors on stdout, and as JSON rather than prose
-      # when it is not a tty.  Keep them: the failure below otherwise points at
-      # a sway log that has nothing in it.
+      # when it is not a tty.
+      modeset=yes
       if ! error="$($swaymsg "output $output mode --custom $mode scale $scale" 2>&1)"
       then
-        echo "cast: $(echo "$error" | $jq -r '.[].error? // .' 2> /dev/null || echo "$error")" >&2
-        exit 1
+        modeset=no
+        warn "$(echo "$error" | $jq -r '.[].error? // .' 2> /dev/null || echo "$error")"
       fi
 
       # The modeset runs behind a timer, and one that cannot be allocated drops
       # back to the old mode while keeping the new scale -- a quarter-size
       # desktop the client then upscales, which is the bug this is fixing
       # wearing a disguise.  Wait for the mode, which also settles the rect the
-      # positioning below reads.
+      # positioning below reads.  A single pass when the command itself failed:
+      # nothing is on its way, and it has already been reported.
       for _ in $($seq 50)
       do
         outputs="$($swaymsg -t get_outputs)"
         current="$(echo "$outputs" | $jq -r --arg o "$output" \
           'first(.[] | select(.name == $o) | "\(.current_mode.width)x\(.current_mode.height)")')"
         $test "$current" = "$mode" && break
+        $test "$modeset" = no && break
         $sleep 0.02
       done
 
-      if $test "$current" != "$mode"
+      if $test "$modeset" = yes && $test "$current" != "$mode"
       then
-        echo "cast: $output came up ''${current:-nothing}, not $mode" >&2
-        exit 1
+        warn "$output came up ''${current:-nothing}, not $mode"
       fi
 
       read -r width height < <(echo "$outputs" | $jq -r --arg o "$output" \
         'first(.[] | select(.name == $o) | .rect | "\(.width) \(.height)")')
 
-      # Belt and braces: the mode check above should already have caught every
-      # way this can come back empty, `0` or `null`.  Any of them would abort
-      # jq at `--argjson w` or collapse the column below to match nothing,
-      # landing the TV on a real output.
-      if ! $test "$width" -gt 0 2> /dev/null
+      # Positioning needs a size; without one, jq would abort at `--argjson w`
+      # or match nothing and land the TV on a real output.  Leave it where sway
+      # put it instead -- off to the right, reachable, just not overhead.
+      if $test "$width" -gt 0 2> /dev/null
       then
-        echo "cast: $output reports no size; is it still enabled?" >&2
-        exit 1
+        # At the top of the focused output's column, so the pointer reaches the
+        # TV off the top edge.  Only that column counts -- see the design notes.
+        anchorX="$(echo "$outputs" | $jq -r --arg o "$output" \
+          'map(select(.active and .focused and .name != $o)) | .[0].rect.x // 0')"
+        topY="$(echo "$outputs" | $jq -r --arg o "$output" --argjson x "$anchorX" --argjson w "$width" \
+          'map(select(.active and .name != $o and .rect.x < ($x + $w) and (.rect.x + .rect.width) > $x) | .rect.y) | min // 0')"
+        $swaymsg "output $output position $anchorX $((topY - height))" > /dev/null
+      else
+        warn "$output reports no size; leaving it where sway put it"
       fi
-
-      # At the top of the focused output's column, so the pointer reaches the TV
-      # off the top edge.  Only that column counts -- see the design notes.
-      anchorX="$(echo "$outputs" | $jq -r --arg o "$output" \
-        'map(select(.active and .focused and .name != $o)) | .[0].rect.x // 0')"
-      topY="$(echo "$outputs" | $jq -r --arg o "$output" --argjson x "$anchorX" --argjson w "$width" \
-        'map(select(.active and .name != $o and .rect.x < ($x + $w) and (.rect.x + .rect.width) > $x) | .rect.y) | min // 0')"
-      $swaymsg "output $output position $anchorX $((topY - height))" > /dev/null
 
       # Covers workspace 10's next creation only, so an existing one still has
       # to be moved below.  Appends rather than replaces; sway skips names that
@@ -132,21 +145,23 @@ writeShellScript "cast" ''
       # list ignores that, and the move would take whatever is focused instead.
       #
       # Restoring by output, not by workspace: if the user was already on
-      # workspace 10, that name now resolves to the TV.
+      # workspace 10, that name now resolves to the TV.  Nowhere to restore to
+      # means not taking focus at all -- by here the TV may have no size and no
+      # position, and focus would be stranded somewhere unseen.
       focusedOutput="$(echo "$outputs" | $jq -r --arg o "$output" \
         'map(select(.active and .focused and .name != $o))[0].name // empty')"
 
-      if $swaymsg "workspace --no-auto-back-and-forth 10" > /dev/null
+      if $test -z "$focusedOutput"
+      then
+        warn 'cannot tell what is focused; leaving workspace 10 where it is'
+      elif $swaymsg "workspace --no-auto-back-and-forth 10" > /dev/null
       then
         $swaymsg "move workspace to output $output" > /dev/null
 
         # The move takes focus and the pointer with it.
-        if $test -n "$focusedOutput"
-        then
-          $swaymsg "focus output \"$focusedOutput\"" > /dev/null
-        fi
+        $swaymsg "focus output \"$focusedOutput\"" > /dev/null
       else
-        echo 'cast: could not move workspace 10 to the TV (fullscreen global?)' >&2
+        warn 'could not move workspace 10 to the TV (fullscreen global?)'
       fi
 
       $systemctl --user start sunshine
