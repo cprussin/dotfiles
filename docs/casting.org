@@ -60,6 +60,11 @@ when it breaks.
   away when the cast stops.
 - kanshi does nothing while a cast runs, so docking mid-cast will not rearrange
   the screens.
+- Once the output exists, nothing stops a cast: the TV can come up the wrong
+  size, sit off to the right instead of overhead, or not take workspace 10.
+  ~cast~ warns about the mode and the workspace switch; the commands that place
+  the TV and hand it workspace 10 discard their status, so those failures pass
+  silently.
 - A cast can end without ~cast~ (Sunshine fails, or ~systemctl~ stops it),
   leaving the output behind.  The next ~cast~ clears it.
 - Quitting Moonlight does not stop Sunshine, so the screen keeps not blanking
