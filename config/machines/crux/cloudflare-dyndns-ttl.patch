@@ -1,0 +1,30 @@
+Pin the record TTL to 60s instead of Cloudflare's "Auto".
+
+cloudflare-dyndns hardcodes `"ttl": 1` -- Cloudflare's sentinel for "Auto",
+which is 300s for a non-proxied record -- and omits `ttl` entirely from the
+update PUT.  Since Cloudflare treats that PUT as a full replacement, a record
+created at any other TTL is reset to Auto on the next update, so both payloads
+have to be pinned, not just the create.
+
+Upstream exposes no option for this, so there is nothing to configure our way
+out of; 60s is Cloudflare's floor for an explicit TTL.
+
+--- a/cloudflare_dyndns/cloudflare.py
++++ b/cloudflare_dyndns/cloudflare.py
+@@ -92,7 +92,7 @@
+             "name": domain,
+             "type": record_type,
+             "content": str(ip),
+-            "ttl": 1,
++            "ttl": 60,
+             "proxied": proxied,
+         }
+         try:
+@@ -120,6 +120,7 @@
+             "name": domain,
+             "type": record_type,
+             "content": str(ip),
++            "ttl": 60,
+             "proxied": proxied,
+         }
+         try:
