@@ -186,7 +186,7 @@ in
     check "dns forwarding is working" check_forwarded_dns
 
     check_dynamic_dns() {
-        expect_healthy_timer route53-dynamic-dns-update || return 1
+        expect_healthy_timer cloudflare-dyndns || return 1
         local a aaaa
         a=$($dig +short A crux.prussin.net)
         aaaa=$($dig +short AAAA crux.prussin.net)
