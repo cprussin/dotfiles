@@ -5,33 +5,20 @@
 }: let
   passwords = pkgs.callPackage ../../../lib/passwords.nix {};
 in {
-  deployment.keys = {
-    route53-dynamic-dns-aws-access-key = {
-      keyCommand = passwords.getPasswordField "Connor/Computer Services/AWS/crux dynamic dns" "Access Key Id";
-      destDir = "/secrets";
-    };
-    route53-dynamic-dns-aws-secret-access-key = {
-      keyCommand = passwords.getPasswordField "Connor/Computer Services/AWS/crux dynamic dns" "Secret Access Key";
-      destDir = "/secrets";
-    };
+  deployment.keys.cloudflare-dyndns-api-token = {
+    keyCommand = passwords.getPassword "Connor/Infrastructure/cloudflare/dynamic-dns";
+    destDir = "/secrets";
   };
 
-  services.route53DynamicDns = {
+  services.cloudflare-dyndns = {
     enable = true;
-    zoneId = "ZPN01N69TQ4DV";
-    cname = "crux.prussin.net";
-    accessKeyFile = config.deployment.keys.route53-dynamic-dns-aws-access-key.path;
-    secretAccessKeyFile = config.deployment.keys.route53-dynamic-dns-aws-secret-access-key.path;
+    domains = ["crux.prussin.net"];
+    apiTokenFile = config.deployment.keys.cloudflare-dyndns-api-token.path;
+    ipv6 = true;
   };
 
-  systemd.services.route53-dynamic-dns-update = {
-    after = [
-      "route53-dynamic-dns-aws-access-key-key.service"
-      "route53-dynamic-dns-aws-secret-access-key-key.service"
-    ];
-    requires = [
-      "route53-dynamic-dns-aws-access-key-key.service"
-      "route53-dynamic-dns-aws-secret-access-key-key.service"
-    ];
+  systemd.services.cloudflare-dyndns = {
+    after = ["cloudflare-dyndns-api-token-key.service"];
+    requires = ["cloudflare-dyndns-api-token-key.service"];
   };
 }

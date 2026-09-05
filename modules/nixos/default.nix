@@ -8,7 +8,6 @@
     ./network-interfaces.nix
     ./powerpanel.nix
     ./primary-user.nix
-    ./route53DynamicDns.nix
     ./sudo-cmds.nix
     ./umask.nix
   ];
