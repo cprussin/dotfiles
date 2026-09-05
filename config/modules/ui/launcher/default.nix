@@ -68,6 +68,7 @@ in {
           email = mkGoogleApp "gmail" "https://mail.google.com";
           eyes = mkWebApp "eyes" "https://eyes.internal.prussin.net";
           firefox = pkgs.writeShellScript "firefox" "${pkgs.launcher}/bin/browse --browser firefox $*";
+          gdrive = mkGoogleApp "gdrive" "https://drive.google.com";
           gimp = "${pkgs.gimp}/bin/gimp";
           home = mkWebApp "home" "https://home-assistant.internal.prussin.net";
           journal = mkTerminalApp "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
