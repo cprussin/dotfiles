@@ -67,6 +67,11 @@
     echo "CLIENT_ID=$(${getPasswordField}/bin/getPasswordField "$1" "Client ID")"
     echo "PROJECT_ID=$(${getPasswordField}/bin/getPasswordField "$1" "Project ID")"
   '';
+
+  getInadynSecrets = pkgs.writeShellScriptBin "getInadynSecrets" ''
+    set -euo pipefail
+    echo "password = \"$(${getPassword}/bin/getPassword "$1")\""
+  '';
 in {
   passwordUtils = pkgs.symlinkJoin {
     name = "passwordUtils";
@@ -80,6 +85,7 @@ in {
       getVaultwardenSecrets
       getGmailNewMailCounterEnvFile
       getImmichSecrets
+      getInadynSecrets
     ];
   };
   getPassword = name: ["getPassword" name];
@@ -97,4 +103,5 @@ in {
     );
   getGmailNewMailCounterEnvFile = name: ["getGmailNewMailCounterEnvFile" name];
   getImmichSecrets = db: ["getImmichSecrets" db];
+  getInadynSecrets = name: ["getInadynSecrets" name];
 }
