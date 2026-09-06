@@ -44,13 +44,57 @@ in {
       ];
     };
   };
-  systemd.services.dlm.wantedBy = ["multi-user.target"];
+  systemd.services = {
+    dlm.wantedBy = ["multi-user.target"];
 
-  # DisplayLink outputs on the dock do not survive a suspend/resume cycle:
-  # evdi/dlm does not re-establish them on wake, so the dock monitors stay
-  # dark until dlm is restarted (or the dock is replugged) by hand.  Restart
-  # dlm automatically on resume so the outputs come back.
-  powerManagement.resumeCommands = "${pkgs.systemd}/bin/systemctl restart dlm.service";
+    # DisplayLink outputs on the dock do not survive a sleep/resume cycle:
+    # evdi/dlm does not re-establish them on wake, so the monitors stay dark
+    # until dlm is restarted (or the dock is replugged) by hand.
+    #
+    # That restart used to hang off `powerManagement.resumeCommands`, where
+    # whether it ran turned on the state of the daemon it was meant to
+    # restart.  The option is not a hook of its own: every module's lines are
+    # concatenated into the `ExecStop=` of one shared `sleep-actions.service`,
+    # and nixpkgs' displaylink module contributes
+    # `echo "R" > /tmp/PmMessagesPort_in` to that block ahead of ours.  That
+    # path is DisplayLinkManager's FIFO, and opening a FIFO for writing blocks
+    # until something opens the read end, so a DisplayLinkManager that came
+    # back with that end closed blocked the write, `ExecStop=` was killed at
+    # its 90s `TimeoutStopSec`, and the restart behind it never dispatched.
+    #
+    # A unit of our own sits behind none of that.  It follows
+    # systemd.special(7)'s pattern for running something after resume -- pulled
+    # in by and ordered before `sleep.target`, with the work in `ExecStop=`,
+    # which fires when the resume leaves the unit unneeded -- and its
+    # `ExecStart=` is `true`, so nothing can fail and cancel the stop.
+    #
+    # Resist serialising this against `sleep-actions` to tidy up the overlap.
+    # Stop ordering is the reverse of start ordering, so the tempting
+    # `before = ["sleep-actions.service"]` would put this unit's `ExecStop=`
+    # last -- behind the very write that used to eat the restart.  The two
+    # running together cuts both ways: the restart can release an `echo "R"`
+    # still waiting for a reader, but it can also close the read end under one
+    # that already opened, and the `EPIPE` that follows aborts the rest of that
+    # script under the `set -e` NixOS puts in every job script (services run
+    # with `IgnoreSIGPIPE=yes` by default, so it arrives as an error rather
+    # than a signal).  Today that remainder is dhcpcd's `systemctl reload`, on
+    # a window of one 2-byte write.
+    dlm-restore = {
+      description = "Restore DisplayLink outputs after sleep";
+      wantedBy = ["sleep.target"];
+      before = ["sleep.target"];
+      unitConfig.StopWhenUnneeded = true;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.coreutils}/bin/true";
+
+        # Nothing here needs the restart to have finished, so queue it and let
+        # the resume carry on.
+        ExecStop = "${pkgs.systemd}/bin/systemctl --no-block restart dlm.service";
+      };
+    };
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
