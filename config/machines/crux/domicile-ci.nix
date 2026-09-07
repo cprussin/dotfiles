@@ -51,10 +51,17 @@
   # the repository and then runs cargo and bun in it, and that scratch belongs
   # on the NVMe beside the rest of the build rather than on the root pool.
   #
-  # It counts against the same 200G quota the Chromium tree does.  The
-  # checkout is small -- the repository is a few megabytes -- but its target/
-  # and node_modules are not, so this is worth remembering if a build starts
-  # failing on space rather than on code.
+  # **Nothing here survives a start.**  The module's root ExecStartPre ends in
+  # an unconditional `find -H "$WORK_DIRECTORY" -mindepth 1 -delete` -- "always
+  # clean workDir" -- so target/ and node_modules are destroyed on every start,
+  # restart and deploy.  Not on every job: this runner is not ephemeral, so
+  # the second and later jobs of a session reuse the workspace and only the
+  # first after each start pays a cold cargo and bun build.  That split is why
+  # the Chromium tree lives in /build/chromium and not in here -- this
+  # directory is the disposable half and that one is the whole point.
+  #
+  # It counts against the same 200G quota the Chromium tree does, and holds
+  # its space until the next start rather than until the job ends.
   workDir = "/build/github-runner";
 in {
   deployment.keys.domicile-github-runner-token = {
@@ -80,8 +87,14 @@ in {
   # root ExecStartPre runs `find -H "$WORK_DIRECTORY" -mindepth 1 -delete`
   # under `set -euo pipefail`, and BindPaths names the directory unprefixed,
   # which systemd treats as fatal when the source is missing.
+  # 0750 rather than 0755, and it is paired with the UMask below.  Relaxing
+  # the unit's umask to 0022 makes everything the runner writes here readable
+  # to everyone -- and actions/checkout persists credentials by default, so
+  # _work/<repo>/.git/config carries a live token header for the length of a
+  # job.  The umask change is wanted for /build/chromium, which is shared;
+  # this directory is not, so the directory bit takes back what it gave away.
   systemd.tmpfiles.rules = [
-    "d ${workDir} 0755 ${config.primary-user.name} users -"
+    "d ${workDir} 0750 ${config.primary-user.name} users -"
   ];
 
   systemd.services.github-runner-domicile = {
@@ -188,17 +201,53 @@ in {
       # mounts cover non-empty directories under it, and unsharing a user
       # namespace locks everything inherited.  ProtectKernelTunables read-only
       # binds /proc/sys, /proc/bus, /proc/fs, /proc/irq and /proc/acpi -- all
-      # directories -- and ProtectProc=invisible remounts /proc with hidepid.
-      # Either alone is enough for `bwrap: Can't mount proc on /newroot/proc:
-      # Permission denied`, in the same shellHook and looking identical to the
+      # directories -- and that alone is enough for `bwrap: Can't mount proc on
+      # /newroot/proc`, in the same shellHook and looking identical to the
       # namespace failure above.
       #
-      # ProtectKernelLogs stays: it covers /proc/kmsg, which is a file rather
-      # than a directory, so it does not trip the check.  ProtectControlGroups
-      # stays too -- it touches sysfs, which bwrap bind-mounts rather than
-      # remounting.
-      ProtectProc = lib.mkForce "default";
+      # ProtectProc is not part of that, though an earlier version of this
+      # comment said it was.  mnt_already_visible() compares filesystem type,
+      # mnt_root, the locked mount flags and locked children; hidepid is not
+      # among them, and a fresh procfs with hidepid=invisible mounts fine.  It
+      # is off anyway because it costs nothing and this family has now been
+      # wrong twice.
+      #
+      # ProtectHostname is the least discoverable member of it.  systemd.exec
+      # documents it as a UTS namespace and says nothing about /proc, but
+      # namespace.c's protect_hostname_yes_table read-only binds
+      # /proc/sys/kernel/hostname and /proc/sys/kernel/domainname -- two
+      # regular files, so the same shape as /proc/kmsg below, and measured to
+      # fail the check on its own.  `"private"` keeps the UTS namespace and
+      # skips the table, which is gated on PROTECT_HOSTNAME_YES.
+      #
+      # ProtectKernelLogs goes for the same reason, and the first version of
+      # this comment had it backwards.  It covers /proc/kmsg with an
+      # inaccessible node, and mnt_already_visible() rejects a locked child
+      # mount over anything that is not a permanently-empty *directory* -- a
+      # regular file is not one.  Measured, with bwrap 0.11.2 under a locked
+      # /proc/kmsg cover: `Can't mount proc on /newroot/proc: Operation not
+      # permitted`, identical to the ProtectKernelTunables failure.  There is
+      # no configuration in which one of the two matters and the other does
+      # not.
+      #
+      # ProtectControlGroups stays -- it touches sysfs, and the FHS env's
+      # auto-mount loop binds /sys rather than mounting a fresh sysfs, so the
+      # visibility check never applies to it.
+      #
+      # NONE OF THIS BITES TODAY, and that is worth knowing before the next
+      # person deletes it.  buildFHSEnvBubblewrap defaults `unsharePid ?
+      # false`, so bwrap recursively binds the host /proc rather than mounting
+      # a fresh one, and the visibility check is never reached -- which is why
+      # the engine build passed on this runner with these still on.  They are
+      # off so that the day upstream's shell asks for a pid namespace is not
+      # another round of chasing one error message through five directives.
+      ProtectProc = "default";
       ProtectKernelTunables = false;
+      ProtectHostname = "private";
+      # Also uncovers /dev/kmsg and gives back CAP_SYSLOG and syslog(2), all
+      # moot: CapabilityBoundingSet is already empty and SystemCallFilter is
+      # already cleared.
+      ProtectKernelLogs = false;
 
       # THE GPU.  The pixel assertion drives a real client against a real
       # render node.  PrivateDevices=false is necessary and not sufficient:
@@ -213,7 +262,7 @@ in {
       # "no EGL renderer", which reads as a broken change rather than a missing
       # device.  Narrow it once something has confirmed which nodes are opened.
       PrivateDevices = false;
-      ProtectClock = lib.mkForce false;
+      ProtectClock = false;
       DeviceAllow = lib.mkForce [];
 
       # /dev/dri's own nodes are group-owned, so these are still needed.
@@ -226,10 +275,32 @@ in {
 
       # A non-ephemeral runner is Restart=no upstream, which is right for a
       # runner whose failure means its token is gone.  Here the likelier cause
-      # is that /build was not ready yet, and a unit that stays dead until
-      # somebody notices is worse than one that tries again.
+      # is a dropped connection to GitHub or a listener that exited on its own,
+      # and a unit that stays dead until somebody notices is worse than one
+      # that tries again.
+      #
+      # It deliberately does not cover the /build case.  `Requires=` above
+      # cancels the start job when setup-build-mount.service fails, so the
+      # service never enters activating and Restart= never applies -- which is
+      # what we want, because "/build is not the dataset" is not a condition
+      # that fixes itself, and retrying into it every 30s with TMPDIR pointing
+      # at RAM is the failure this whole file is written around.
       Restart = lib.mkForce "on-failure";
       RestartSec = 30;
+
+      # The module leaves UMask at 0066, so files this unit writes come out
+      # 0600 and directories 0711.  Same user either way, so a build still
+      # works -- but /build/chromium is a tree the runner and the person share,
+      # and half of it being unreadable to everything else is a surprise
+      # waiting for the first `sudo` or the first `rsync`.  0022 is what an
+      # interactive build already writes.
+      #
+      # It loosens the work directory too, which is where a checkout's
+      # persisted git credentials live -- hence the 0750 on that directory
+      # above.  The state directory is unaffected: StateDirectoryMode is 0700
+      # and the runner's token files are written with explicit modes by an
+      # ExecStartPre that ignores the umask.
+      UMask = "0022";
 
       # RemoveIPC deletes every System V and POSIX IPC object owned by the
       # unit's user when it stops.  That is right for a service user who owns
