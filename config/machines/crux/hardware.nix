@@ -7,6 +7,11 @@
 }: let
   zfs = pkgs.callPackage ../../../lib/zfs.nix {};
 
+  # The userland the rest of the ZFS module is wired to, and so the one matched
+  # to the kernel module actually loaded.  `pkgs.zfs` is the same derivation
+  # only for as long as nobody sets this option.
+  zfsPackage = config.boot.zfs.package;
+
   root-disk-id = "nvme-WDS500G3X0C-00SJG0_2017A3806951";
 
   zfsDrives = [
@@ -34,18 +39,81 @@ in {
     after = map (drive: "unlock-${drive}.service") zfsDrives;
     bindsTo = map (drive: "unlock-${drive}.service") zfsDrives;
     script = ''
-      if [ "$(${pkgs.zfs}/bin/zpool get -H health tank | cut -f 3)" = "ONLINE" ]; then
+      if [ "$(${zfsPackage}/bin/zpool get -H health tank | cut -f 3)" = "ONLINE" ]; then
         echo "Already imported: tank"
       else
-        ${pkgs.zfs}/bin/zpool import tank
+        ${zfsPackage}/bin/zpool import tank
       fi
-      ${pkgs.zfs}/bin/zfs mount -a
+      ${zfsPackage}/bin/zfs mount -a
     '';
-    preStop = "${pkgs.zfs}/bin/zpool export tank";
     serviceConfig = {
       RemainAfterExit = true;
       Type = "oneshot";
     };
+  };
+
+  # The teardown deliberately does not live in an `ExecStop` on import-tank.  A
+  # service's stop job runs in the reverse of its start order, and that unit
+  # starts after `local-fs.target` -- so it stops *before* the mounts sitting on
+  # the pool come down.  The `zpool export tank` that used to be there therefore
+  # ran against a live system: it spent a minute pulling datasets out from under
+  # services systemd still believed were mounted, failed with "pool is busy"
+  # anyway, and handed the final shutdown phase a pool that was still imported
+  # over three dm-crypt mappings that then could not be closed either.
+  #
+  # A shutdown-ramfs hook is the one place this can succeed, because the copy of
+  # it that matters runs after systemd-shutdown has pivoted into the ramfs and
+  # unmounted everything.  systemd-shutdown walks that directory in both passes
+  # -- once from the real root before the pivot, once from the ramfs after it --
+  # and only the second one has anything in it, because nothing populates
+  # /etc/systemd/system-shutdown on the real root and the `mkForce` below
+  # reaches only the ramfs.  Do not assume single execution if that changes.
+  #
+  # It replaces the hook the nixpkgs ZFS module installs at this same path
+  # rather than sitting beside it: systemd runs everything in that directory in
+  # *parallel*, so a second script racing `zpool sync` for the pool namespace
+  # would be worse than superseding it -- and an export syncs on its way out.
+  # systemd caps the whole directory at 90s, so a wedge in here cannot cost more
+  # than that.
+  #
+  # The upshot is that there is now no supported way to put tank away short of a
+  # reboot: `systemctl stop import-tank` leaves the pool imported while systemd
+  # believes the unit is inactive.  Use `zpool export tank` by hand.
+  systemd.shutdownRamfs = {
+    contents."/etc/systemd/system-shutdown/zpool".source = lib.mkForce (
+      pkgs.writeShellScript "export-pools-shutdown" ''
+        # There is no udevd here -- systemd-shutdown SIGKILLed it long before
+        # this runs -- but `switch_root` carries the old /run across with a
+        # stale /run/udev/control still in it, which is what libdevmapper reads
+        # to decide whether to synchronise.  If it reads that as "udev is up",
+        # the cookie wait below has no timeout of its own and eats the whole
+        # 90s budget.
+        export DM_DISABLE_UDEV=1
+
+        ${zfsPackage}/bin/zpool export -a || true
+
+        # Anything that could not be exported -- tank-backup left imported by
+        # hand, say -- still wants its transaction group on disk, which is all
+        # the hook this replaces ever did.
+        ${zfsPackage}/bin/zpool sync || true
+
+        ${lib.concatMapStringsSep "\n" (
+          opts: "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase} || true"
+        ) (builtins.attrValues config.detachedLuksWithNixopsKeys)}
+      ''
+    );
+
+    # Both of these have to be named.  make-initrd-ng follows ELF dependencies,
+    # symlinks and directory entries, but it never reads a script for store
+    # references -- so a binary a hook only mentions in its text is simply
+    # absent at shutdown, and the line fails `command not found`.
+    # `zpool` would otherwise ride along on the ZFS module's own storePaths,
+    # which the `mkForce` above does not displace, but depending on that is
+    # depending on a line of nixpkgs one below the thing being overridden.
+    storePaths = [
+      "${zfsPackage}/bin/zpool"
+      "${pkgs.cryptsetup}/bin/cryptsetup"
+    ];
   };
 
   boot = {
