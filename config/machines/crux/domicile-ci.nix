@@ -41,6 +41,7 @@
 # group so queued runs collapse rather than pile up.
 {
   config,
+  lib,
   pkgs,
   ...
 }: let
@@ -67,7 +68,37 @@ in {
     # whole of what it needs.
     keyCommand = passwords.getPassword "Connor/Infrastructure/github/domicile-runner-token";
     destDir = "/secrets";
-    user = config.primary-user.name;
+  };
+
+  # /build is chromium-build.nix's, and its rules are redone after the mount by
+  # setup-build-mount.service -- a rule laid down at sysinit lands on the tmpfs
+  # root and is then hidden by build.mount.  That service runs
+  # `systemd-tmpfiles --create --prefix=/build`, so a rule added here is picked
+  # up by it and needs nothing of its own.
+  #
+  # Without this the unit fails twice on a first deploy and stays failed: its
+  # root ExecStartPre runs `find -H "$WORK_DIRECTORY" -mindepth 1 -delete`
+  # under `set -euo pipefail`, and BindPaths names the directory unprefixed,
+  # which systemd treats as fatal when the source is missing.
+  systemd.tmpfiles.rules = [
+    "d ${workDir} 0755 ${config.primary-user.name} users -"
+  ];
+
+  systemd.services.github-runner-domicile = {
+    # Colmena writes the token asynchronously and generates a -key.service as
+    # the gate on it; every other key consumer in this repository pairs both,
+    # and this one has to as well.  Without it a start before the key lands
+    # fails on `install ... ${tokenFile}` and, since a non-ephemeral runner is
+    # Restart=no by default, never comes back.
+    requires = ["domicile-github-runner-token-key.service"];
+
+    # /build is a nofail mount, so nothing waits for it on its own, and
+    # setup-build-mount.service is what checks that what is mounted there is
+    # actually the dataset.  chromium-build.nix wrote that check because
+    # TMPDIR pointing at a tmpfs root is what takes this machine out -- and
+    # this unit sets exactly that TMPDIR.
+    after = ["domicile-github-runner-token-key.service" "setup-build-mount.service"];
+    unitConfig.RequiresMountsFor = "/build";
   };
 
   services.github-runners.domicile = {
@@ -75,10 +106,10 @@ in {
     url = "https://github.com/cprussin/domicile";
     tokenFile = config.deployment.keys.domicile-github-runner-token.path;
 
-    # The name the workflow selects on, via `runs-on`.  Named for the machine
-    # rather than for the job, because what makes it special is this machine's
-    # warm tree and its GPU, and a second workflow wanting either should say
-    # the same word.
+    # `runs-on` matches *labels*, not this -- the name is what identifies the
+    # runner in the repository's settings.  It is spelled the same as the label
+    # below on purpose, so that what a workflow asks for and what shows up in
+    # that list read alike.
     name = "crux";
     extraLabels = ["crux" "chromium" "gpu"];
 
@@ -95,16 +126,14 @@ in {
     # (`nix develop "path:./tools/nix"`); the rest are what depot_tools and
     # the repository's own checks reach for.  A service's PATH is not a login
     # shell's, so anything the workflow runs by bare name has to be here.
+    # Only what the module does not already put on PATH -- it supplies bash,
+    # coreutils, git, tar, gzip and nix itself, and naming them again just puts
+    # them there twice.  `cacert` would be worse than redundant: it is a
+    # package with no binaries, so it adds a PATH entry and no trust, and TLS
+    # trust here comes from /etc/ssl.
     extraPackages = with pkgs; [
-      bash
-      cacert
-      coreutils
       curl
-      git
-      gnutar
-      gzip
-      lsb-release
-      nix
+      lsb-release # depot_tools probes it
       python3
       which
     ];
@@ -119,19 +148,55 @@ in {
       TMPDIR = "/build/tmp";
     };
 
+    # The upstream unit is hardened for a runner that compiles ordinary code.
+    # This one drives Chromium's own build sandbox and a GPU, and six of those
+    # defaults forbid exactly that.  Each is turned off with its reason;
+    # everything else the module sets still applies.
+    #
+    # mkForce throughout because serviceOverrides goes through the module
+    # system: a plain value conflicts with the module's own rather than
+    # replacing it.
     serviceOverrides = {
-      # The engine's pixel assertion drives a real GPU client against a real
-      # render node -- that is what it is for -- so the service needs the
-      # groups /dev/dri is owned by.  Without these the guard fails with no
-      # EGL renderer, which reads as a broken change rather than a broken
-      # runner.
+      # THE BUILD SANDBOX.  Chromium is built inside upstream's own nix shell,
+      # which is a buildFHSEnv -- and in nixpkgs that is buildFHSEnvBubblewrap,
+      # whose shellHook execs bwrap.  bwrap unshares a mount namespace and a
+      # user namespace and then mounts inside them, so RestrictNamespaces,
+      # ~@mount and PrivateUsers each kill it in the shellHook, before anything
+      # it was asked to run.  That is the one thing this runner exists to do.
+      RestrictNamespaces = lib.mkForce false;
+      PrivateUsers = lib.mkForce false;
+      SystemCallFilter = lib.mkForce [];
+
+      # THE GPU.  The pixel assertion drives a real client against a real
+      # render node.  PrivateDevices=false is necessary and not sufficient:
+      # ProtectClock implies DeviceAllow=char-rtc, and any explicit DeviceAllow
+      # turns the policy from "everything" to "only what is listed", so the
+      # module's own empty reset plus that implication is a closed policy.
+      #
+      # Cleared rather than enumerated.  crux runs the proprietary NVIDIA
+      # driver, whose EGL path opens /dev/nvidia0, /dev/nvidiactl and
+      # /dev/nvidia-uvm besides /dev/dri -- those are root:root 0666, so the
+      # groups below do nothing for them -- and a list that misses one fails as
+      # "no EGL renderer", which reads as a broken change rather than a missing
+      # device.  Narrow it once something has confirmed which nodes are opened.
+      PrivateDevices = false;
+      ProtectClock = lib.mkForce false;
+      DeviceAllow = lib.mkForce [];
+
+      # /dev/dri's own nodes are group-owned, so these are still needed.
       SupplementaryGroups = ["render" "video"];
 
-      # The upstream unit is hardened, and two of those defaults would take
-      # the GPU and the build tree away.  Turned off with the reason rather
-      # than wholesale: everything else the module sets still applies.
-      PrivateDevices = false;
+      # ProtectSystem=strict with no ReadWritePaths of the module's own, so
+      # /build/chromium and /build/tmp would be read-only.  HOME is the
+      # workDir, which the module already bind-mounts read-write.
       ReadWritePaths = ["/build"];
+
+      # A non-ephemeral runner is Restart=no upstream, which is right for a
+      # runner whose failure means its token is gone.  Here the likelier cause
+      # is that /build was not ready yet, and a unit that stays dead until
+      # somebody notices is worse than one that tries again.
+      Restart = lib.mkForce "on-failure";
+      RestartSec = 30;
     };
   };
 }
