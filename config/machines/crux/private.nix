@@ -57,10 +57,13 @@ in {
     wantedBy = ["multi-user.target"];
 
     # `/` is a tmpfs and `/home` comes from tank, so the checkout doesn't exist
-    # until `import-tank` has run `zfs mount -a`.  `requires` propagates that
-    # unit's stop to this one; `after` is what orders this unit's stop ahead of
-    # the `zpool export` in its `preStop`, which nothing released the pool for
-    # before.
+    # until `import-tank` has mounted tank's datasets.  `requires` pulls that
+    # unit in and propagates its stop to this one; `after` is what makes this
+    # start wait for it -- `requires` alone would start the two in parallel,
+    # against a oneshot that has not finished mounting -- and orders the stop
+    # in reverse.  Only that reverse half is idle now: stopping `import-tank`
+    # takes no mounts down, and the pool stays up until the shutdown hook in
+    # hardware.nix or a hand-run `zpool export tank`.
     #
     # `network-online.target` isn't for the server, which needs no address to
     # exist before it binds -- nginx doesn't wait on it either.  It's for `nix

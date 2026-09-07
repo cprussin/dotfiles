@@ -39,10 +39,10 @@
   # the 500G that holds /nix, so the dataset is created with `-o quota=200G`:
   # an overrun then fails the build rather than the machine.  Moving to tank is
   # not a one-line change here -- tank is LUKS with detached keys and is
-  # imported by import-tank.service, so its datasets mount natively under
-  # `zfs mount -a` rather than through fileSystems, and run-backup's
-  # `zfs send -R` would replicate the tree to the external disk unless it is
-  # added to that command's -X list.
+  # imported by import-tank.service, so its datasets are mounted by that unit
+  # rather than through fileSystems, and run-backup's `zfs send -R` would
+  # replicate the tree to the external disk unless it is added to that
+  # command's -X list.
   pool = "tank-fast";
 
   buildRoot = "/build";
