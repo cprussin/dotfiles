@@ -12,7 +12,6 @@
     ./dynamic-dns.nix
     ./home-assistant.nix
     ./library.nix
-    ./libvirtd.nix
     ./matrix.nix
     ./nvr.nix
     ./photos.nix
