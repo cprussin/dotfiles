@@ -12,21 +12,26 @@
 # this is for *writing* the change in the first place.
 #
 #
-# WHY THERE IS NO SERVICE HERE.
+# WHY THERE IS NO SERVICE HERE, AND NO TERMINAL MULTIPLEXER EITHER.
 #
 # `claude --remote-control` starts an *interactive* session -- the flag's own
 # help says so -- so there is nothing to run under systemd.  A unit with no
 # terminal would either fail or sit there being useless, and a unit that
 # pretended otherwise would be a lie in a file people trust.
 #
-# tmux is what makes an interactive session outlive an ssh disconnect, and the
-# server profile already brings it in (config/modules/ui/session).  So the whole
-# of this module is: put the CLI on the machine, and write down the two things
-# that are easy to get wrong.
+# Something has to make that session outlive an ssh disconnect, but it is not
+# this module: whoever connects to this machine already lands in tmux, and a
+# wrapper that started its own would nest one inside it -- two prefix keys deep
+# for no gain.  So `claude-agent` is a `cd` and an `exec`, and the session it
+# starts belongs to whatever the caller is already running under.
 #
-# `claude-agent` starts or reattaches to it.  Reattaching matters more than it
-# sounds: a second `--remote-control` session is a second agent on the same
-# build tree, which is the collision below.
+# THE ONE THING THAT COSTS.  It used to be `tmux new-session -A`, which
+# reattached rather than starting a second agent, and a second
+# `--remote-control` session is a second agent on the same build tree -- the
+# collision the next section is about.  That is documented now rather than
+# enforced: run `claude-agent` twice and you get two.  Enforcing it without a
+# multiplexer would take a lock file, which is machinery this module has not
+# been asked for.
 #
 #
 # IT SHARES /build WITH THE CI RUNNER, AND THAT IS THE SHARP EDGE.
@@ -75,14 +80,17 @@
   # go with it.
   workDir = "/build/claude-agent";
 
+  # `cd` and `exec`, and that is deliberately all of it.  What this buys over
+  # typing the command is the working directory and the session name, both of
+  # which are easy to get wrong and neither of which is worth a wrapper that
+  # does anything else.
+  #
+  # `exec` so the shell is replaced rather than left waiting: a signal reaches
+  # the agent, and the exit status is the agent's.
   claude-agent = pkgs.writeShellScriptBin "claude-agent" ''
     set -eu
-
-    # Reattach rather than start a second one.  Two agents on one build tree is
-    # the collision this module's header is about, and `new-session -A` is the
-    # cheapest way to make the mistake impossible rather than documented.
-    exec ${pkgs.tmux}/bin/tmux new-session -A -s claude-agent \
-      "cd ${workDir} && exec ${pkgs.claude-code}/bin/claude --remote-control crux"
+    cd "${workDir}"
+    exec ${pkgs.claude-code}/bin/claude --remote-control crux
   '';
 in {
   environment = {
