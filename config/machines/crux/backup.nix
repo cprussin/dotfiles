@@ -8,7 +8,11 @@
   rsyncUser = "zh2593";
   rsyncHost = "zh2593.rsync.net";
   userAtHost = "${rsyncUser}@${rsyncHost}";
-  zfs = "${pkgs.zfs}/bin/zfs";
+  # The userland the rest of the ZFS module is wired to, and so the one matched
+  # to the kernel module actually loaded, as import-tank uses -- see
+  # hardware.nix.  A store path rather than bare `zfs` because the borgbackup
+  # unit's PATH carries only borg and openssh.
+  zfs = "${config.boot.zfs.package}/bin/zfs";
   awk = "${pkgs.gawk}/bin/awk";
   sed = "${pkgs.gnused}/bin/sed";
   grep = "${pkgs.gnugrep}/bin/grep";
