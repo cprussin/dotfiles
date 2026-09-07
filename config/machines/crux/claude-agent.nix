@@ -25,13 +25,24 @@
 # for no gain.  So `claude-agent` is a `cd` and an `exec`, and the session it
 # starts belongs to whatever the caller is already running under.
 #
-# THE ONE THING THAT COSTS.  It used to be `tmux new-session -A`, which
-# reattached rather than starting a second agent, and a second
+# WHAT TOOK OVER FROM `new-session -A`.  Reattaching had a second job besides
+# convenience: it made a second agent impossible, and a second
 # `--remote-control` session is a second agent on the same build tree -- the
-# collision the next section is about.  That is documented now rather than
-# enforced: run `claude-agent` twice and you get two.  Enforcing it without a
-# multiplexer would take a lock file, which is machinery this module has not
-# been asked for.
+# collision the next section is about.  Without a multiplexer that has to be a
+# lock, so it is one.
+#
+# `flock -n` takes an exclusive lock and fails immediately rather than waiting,
+# so the second `claude-agent` refuses and says where the first one is instead
+# of quietly becoming a second writer.  The lock lives on an open file
+# descriptor, and descriptors survive `exec` -- so the agent process holds it
+# for its whole life and the kernel drops it when that process dies.  There is
+# no stale lock to clean up after a crash, which is the failure mode a pid file
+# would have had.
+#
+# IT GUARDS AGENT AGAINST AGENT, AND NOTHING ELSE.  The CI runner does not take
+# this lock and cannot be made to from here, so it is `DOMICILE_AGENT_OUT` that
+# keeps the two apart -- see below.  Saying which half a guard covers is worth
+# more than the guard.
 #
 #
 # IT SHARES /build WITH THE CI RUNNER, AND THAT IS THE SHARP EDGE.
@@ -80,15 +91,30 @@
   # go with it.
   workDir = "/build/claude-agent";
 
-  # `cd` and `exec`, and that is deliberately all of it.  What this buys over
-  # typing the command is the working directory and the session name, both of
-  # which are easy to get wrong and neither of which is worth a wrapper that
-  # does anything else.
+  # The lock, in the per-user runtime directory: a tmpfs the system clears
+  # between logins, so nothing accumulates.  `/tmp` only as a fallback, since
+  # XDG_RUNTIME_DIR is not guaranteed to be set over ssh, and named by uid
+  # there because /tmp is shared and a fixed name in it is another user's to
+  # take.
   #
-  # `exec` so the shell is replaced rather than left waiting: a signal reaches
-  # the agent, and the exit status is the agent's.
+  # `exec` so the shell is replaced rather than left waiting on a child: a
+  # signal reaches the agent, and the exit status is the agent's.
   claude-agent = pkgs.writeShellScriptBin "claude-agent" ''
     set -eu
+
+    lock="''${XDG_RUNTIME_DIR:-/tmp}/claude-agent.$(${pkgs.coreutils}/bin/id -u).lock"
+    # Held on the descriptor, not by the file existing, so this survives the
+    # `exec` below and is released by the kernel when the agent exits --
+    # crash included.
+    exec 9>"$lock"
+    ${pkgs.util-linux}/bin/flock -n 9 || {
+      echo "claude-agent: one is already running on this machine." >&2
+      echo "  A second would be a second agent on ${workDir} and on the" >&2
+      echo "  Chromium tree beside it, which is the collision this refuses." >&2
+      echo "  Attach to the session you already have, or stop it first." >&2
+      exit 1
+    }
+
     cd "${workDir}"
     exec ${pkgs.claude-code}/bin/claude --remote-control crux
   '';
