@@ -8,6 +8,7 @@
     ./chromium-build.nix
     ./circinus.nix
     ./dns.nix
+    ./domicile-ci.nix
     ./dynamic-dns.nix
     ./home-assistant.nix
     ./library.nix
