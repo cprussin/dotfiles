@@ -7,6 +7,7 @@
     ./backup.nix
     ./chromium-build.nix
     ./circinus.nix
+    ./claude-agent.nix
     ./dns.nix
     ./domicile-ci.nix
     ./dynamic-dns.nix
