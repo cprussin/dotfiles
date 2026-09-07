@@ -39,12 +39,66 @@ in {
     after = map (drive: "unlock-${drive}.service") zfsDrives;
     bindsTo = map (drive: "unlock-${drive}.service") zfsDrives;
     script = ''
-      if [ "$(${zfsPackage}/bin/zpool get -H health tank | cut -f 3)" = "ONLINE" ]; then
+      # pipefail so that a failing `zfs list` below cannot be masked by the
+      # `sort` that reads its output.  The `zpool get` pipeline is an `if`
+      # condition, which `set -e` exempts either way.
+      set -o pipefail
+
+      # `LC_ALL=C` because the state name is translated, and under a locale
+      # that renders it as anything else this runs `zpool import` against an
+      # already-imported pool and fails the unit.
+      if [ "$(LC_ALL=C ${zfsPackage}/bin/zpool get -H health tank | cut -f 3)" = "ONLINE" ]; then
         echo "Already imported: tank"
       else
         ${zfsPackage}/bin/zpool import tank
       fi
-      ${zfsPackage}/bin/zfs mount -a
+
+      # Deliberately not `zfs mount -a`, which mounts every mountable dataset
+      # on every imported pool, not just the one this unit imports.
+      # `run-backup` holds tank-backup imported while it replicates, and the
+      # datasets it receives are copies of tank's -- mountpoints included, so
+      # /home/cprussin and friends resolve to the same paths on both pools.  A
+      # deploy restarts this unit, `zfs mount -a` then mounted the external
+      # disk over the internal one, and every write after that silently landed
+      # on the backup drive.  `run-backup` now imports under an altroot so
+      # those mountpoints cannot name an internal path at all; this loop is
+      # the other half, so nothing here can mount a pool it does not own.
+      #
+      # The filter covers what applies to this pool: skip canmount=off and
+      # canmount=noauto, skip what is already mounted, and skip legacy and
+      # mountpoint=none datasets, neither of which starts with a `/`.
+      #
+      # `zfs mount -a` additionally skips, silently, three states a per-dataset
+      # `zfs mount` treats as an error: zoned datasets, encrypted ones whose
+      # key is unavailable, and ones holding a receive-resume token.  None can
+      # arise from anything in this repo -- tank is LUKS rather than ZFS-native
+      # encryption, there are no zones, and nothing here receives into tank --
+      # so the divergence is deliberate: a hand-run `zfs recv -s` into tank
+      # that got interrupted would leave a resume token, and this unit should
+      # say so rather than skip past it.
+      #
+      # Sorted on the mountpoint rather than the dataset name because a dataset
+      # whose mountpoint is a parent path has to be mounted before anything
+      # nested under it, or it hides what is already there, and the two orders
+      # diverge wherever a mountpoint is not a mirror of the name it hangs off.
+      # `LC_ALL=C` for byte order, which is all that invariant needs; ZFS's own
+      # comparator differs in ways that do not bear on it.
+      datasets=$(${zfsPackage}/bin/zfs list -Hro name,canmount,mounted,mountpoint -t filesystem tank | LC_ALL=C sort -t "$(printf '\t')" -k 4)
+
+      # Failures are collected rather than fatal, again as `zfs mount -a` does.
+      # `/` on this machine is a tmpfs, so one dataset that cannot mount must
+      # not abort the loop and leave every later one unmounted -- writes to
+      # those paths would go to RAM.  A herestring rather than a pipe so the
+      # loop is not a subshell and `failed` survives it.
+      failed=0
+      while IFS=$'\t' read -r name canmount mounted mountpoint
+      do
+        [ "$canmount" = on ] && [ "$mounted" = no ] || continue
+        case "$mountpoint" in
+          /*) ${zfsPackage}/bin/zfs mount "$name" || failed=1 ;;
+        esac
+      done <<< "$datasets"
+      [ "$failed" -eq 0 ]
     '';
     serviceConfig = {
       RemainAfterExit = true;
