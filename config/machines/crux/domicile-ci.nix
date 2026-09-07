@@ -90,7 +90,15 @@ in {
     # and this one has to as well.  Without it a start before the key lands
     # fails on `install ... ${tokenFile}` and, since a non-ephemeral runner is
     # Restart=no by default, never comes back.
-    requires = ["domicile-github-runner-token-key.service"];
+    requires = [
+      "domicile-github-runner-token-key.service"
+
+      # Not just `after`.  setup-build-mount.service's failure case is "/build
+      # is mounted but it is not the dataset", and ordering alone would let the
+      # runner start anyway with TMPDIR pointing at whatever is there -- which
+      # is the exact case that check was written to catch.
+      "setup-build-mount.service"
+    ];
 
     # /build is a nofail mount, so nothing waits for it on its own, and
     # setup-build-mount.service is what checks that what is mounted there is
@@ -133,9 +141,13 @@ in {
     # trust here comes from /etc/ssl.
     extraPackages = with pkgs; [
       curl
+      gawk # `awk` in a `run:` step is otherwise not there
+      jq
       lsb-release # depot_tools probes it
       python3
       which
+      xz
+      zstd # actions/cache silently falls back to gzip without it
     ];
 
     extraEnvironment = {
@@ -153,9 +165,11 @@ in {
     # defaults forbid exactly that.  Each is turned off with its reason;
     # everything else the module sets still applies.
     #
-    # mkForce throughout because serviceOverrides goes through the module
-    # system: a plain value conflicts with the module's own rather than
-    # replacing it.
+    # mkForce only where it is needed, which is not everywhere: the module sets
+    # most of these with mkDefault, so a plain value replaces them.  It is
+    # required for SystemCallFilter and DeviceAllow, which the module sets with
+    # mkBefore so a plain list would *concatenate* rather than replace, and for
+    # Restart, which it sets plainly.
     serviceOverrides = {
       # THE BUILD SANDBOX.  Chromium is built inside upstream's own nix shell,
       # which is a buildFHSEnv -- and in nixpkgs that is buildFHSEnvBubblewrap,
@@ -163,9 +177,28 @@ in {
       # user namespace and then mounts inside them, so RestrictNamespaces,
       # ~@mount and PrivateUsers each kill it in the shellHook, before anything
       # it was asked to run.  That is the one thing this runner exists to do.
-      RestrictNamespaces = lib.mkForce false;
-      PrivateUsers = lib.mkForce false;
+      RestrictNamespaces = false;
+      PrivateUsers = false;
       SystemCallFilter = lib.mkForce [];
+
+      # And the procfs half, which is subtler and was missed the first time.
+      # bwrap runs `--proc /proc`, mounting a fresh procfs inside the new user
+      # namespace.  The kernel refuses that unless the procfs it inherits is
+      # *fully visible*: mount_too_revealing() rejects the mount when locked
+      # mounts cover non-empty directories under it, and unsharing a user
+      # namespace locks everything inherited.  ProtectKernelTunables read-only
+      # binds /proc/sys, /proc/bus, /proc/fs, /proc/irq and /proc/acpi -- all
+      # directories -- and ProtectProc=invisible remounts /proc with hidepid.
+      # Either alone is enough for `bwrap: Can't mount proc on /newroot/proc:
+      # Permission denied`, in the same shellHook and looking identical to the
+      # namespace failure above.
+      #
+      # ProtectKernelLogs stays: it covers /proc/kmsg, which is a file rather
+      # than a directory, so it does not trip the check.  ProtectControlGroups
+      # stays too -- it touches sysfs, which bwrap bind-mounts rather than
+      # remounting.
+      ProtectProc = lib.mkForce "default";
+      ProtectKernelTunables = false;
 
       # THE GPU.  The pixel assertion drives a real client against a real
       # render node.  PrivateDevices=false is necessary and not sufficient:
@@ -197,6 +230,14 @@ in {
       # somebody notices is worse than one that tries again.
       Restart = lib.mkForce "on-failure";
       RestartSec = 30;
+
+      # RemoveIPC deletes every System V and POSIX IPC object owned by the
+      # unit's user when it stops.  That is right for a service user who owns
+      # nothing else and wrong here, where the whole premise of this file is
+      # that the same person also builds and works interactively: a restart
+      # would take out IPC belonging to their live ssh sessions, and
+      # Restart=on-failure means it fires on a loop rather than once.
+      RemoveIPC = false;
     };
   };
 }
