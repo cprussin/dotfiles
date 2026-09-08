@@ -124,7 +124,7 @@
     }
 
     cd "${workDir}"
-    exec ${pkgs.claude-code}/bin/claude rc
+    exec ${pkgs.claude-code}/bin/claude rc --no-create-session-in-dir
   '';
 in {
   environment = {
