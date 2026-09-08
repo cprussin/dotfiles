@@ -104,7 +104,30 @@
       targetHost,
       extraModules ? [],
     }: {
-      deployment = {inherit targetHost;};
+      deployment = {
+        inherit targetHost;
+
+        # Colmena opens a fresh ssh connection for every key it uploads, and
+        # there are dozens of keys.  Multiplex them onto one connection so a
+        # deploy pays for a single handshake rather than one per key.  The
+        # socket goes under `~/.ssh` rather than `/tmp`, where anyone could
+        # pre-create the path `%C` hashes to.  The keepalives are so that a
+        # master left over from a dropped tunnel dies rather than being
+        # attached to and waited on -- generous ones, since they also cap how
+        # long a deploy will ride out a tunnel that went away under it.
+        sshOptions = [
+          "-o"
+          "ControlMaster=auto"
+          "-o"
+          "ControlPath=%d/.ssh/colmena-%C"
+          "-o"
+          "ControlPersist=60s"
+          "-o"
+          "ServerAliveInterval=30"
+          "-o"
+          "ServerAliveCountMax=10"
+        ];
+      };
       imports =
         extraModules
         ++ [
