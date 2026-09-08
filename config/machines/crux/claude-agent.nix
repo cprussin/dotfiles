@@ -12,21 +12,37 @@
 # this is for *writing* the change in the first place.
 #
 #
-# WHY THERE IS NO SERVICE HERE.
+# WHY THERE IS NO SERVICE HERE, AND NO TERMINAL MULTIPLEXER EITHER.
 #
 # `claude --remote-control` starts an *interactive* session -- the flag's own
 # help says so -- so there is nothing to run under systemd.  A unit with no
 # terminal would either fail or sit there being useless, and a unit that
 # pretended otherwise would be a lie in a file people trust.
 #
-# tmux is what makes an interactive session outlive an ssh disconnect, and the
-# server profile already brings it in (config/modules/ui/session).  So the whole
-# of this module is: put the CLI on the machine, and write down the two things
-# that are easy to get wrong.
+# Something has to make that session outlive an ssh disconnect, but it is not
+# this module: whoever connects to this machine already lands in tmux, and a
+# wrapper that started its own would nest one inside it -- two prefix keys deep
+# for no gain.  So `claude-agent` is a `cd` and an `exec`, and the session it
+# starts belongs to whatever the caller is already running under.
 #
-# `claude-agent` starts or reattaches to it.  Reattaching matters more than it
-# sounds: a second `--remote-control` session is a second agent on the same
-# build tree, which is the collision below.
+# WHAT TOOK OVER FROM `new-session -A`.  Reattaching had a second job besides
+# convenience: it made a second agent impossible, and a second
+# `--remote-control` session is a second agent on the same build tree -- the
+# collision the next section is about.  Without a multiplexer that has to be a
+# lock, so it is one.
+#
+# `flock -n` takes an exclusive lock and fails immediately rather than waiting,
+# so the second `claude-agent` refuses and says where the first one is instead
+# of quietly becoming a second writer.  The lock lives on an open file
+# descriptor, and descriptors survive `exec` -- so the agent process holds it
+# for its whole life and the kernel drops it when that process dies.  There is
+# no stale lock to clean up after a crash, which is the failure mode a pid file
+# would have had.
+#
+# IT GUARDS AGENT AGAINST AGENT, AND NOTHING ELSE.  The CI runner does not take
+# this lock and cannot be made to from here, so it is `DOMICILE_AGENT_OUT` that
+# keeps the two apart -- see below.  Saying which half a guard covers is worth
+# more than the guard.
 #
 #
 # IT SHARES /build WITH THE CI RUNNER, AND THAT IS THE SHARP EDGE.
@@ -75,14 +91,32 @@
   # go with it.
   workDir = "/build/claude-agent";
 
+  # The lock, in the per-user runtime directory: a tmpfs the system clears
+  # between logins, so nothing accumulates.  `/tmp` only as a fallback, since
+  # XDG_RUNTIME_DIR is not guaranteed to be set over ssh, and named by uid
+  # there because /tmp is shared and a fixed name in it is another user's to
+  # take.
+  #
+  # `exec` so the shell is replaced rather than left waiting on a child: a
+  # signal reaches the agent, and the exit status is the agent's.
   claude-agent = pkgs.writeShellScriptBin "claude-agent" ''
     set -eu
 
-    # Reattach rather than start a second one.  Two agents on one build tree is
-    # the collision this module's header is about, and `new-session -A` is the
-    # cheapest way to make the mistake impossible rather than documented.
-    exec ${pkgs.tmux}/bin/tmux new-session -A -s claude-agent \
-      "cd ${workDir} && exec ${pkgs.claude-code}/bin/claude --remote-control crux"
+    lock="''${XDG_RUNTIME_DIR:-/tmp}/claude-agent.$(${pkgs.coreutils}/bin/id -u).lock"
+    # Held on the descriptor, not by the file existing, so this survives the
+    # `exec` below and is released by the kernel when the agent exits --
+    # crash included.
+    exec 9>"$lock"
+    ${pkgs.util-linux}/bin/flock -n 9 || {
+      echo "claude-agent: one is already running on this machine." >&2
+      echo "  A second would be a second agent on ${workDir} and on the" >&2
+      echo "  Chromium tree beside it, which is the collision this refuses." >&2
+      echo "  Attach to the session you already have, or stop it first." >&2
+      exit 1
+    }
+
+    cd "${workDir}"
+    exec ${pkgs.claude-code}/bin/claude --remote-control crux
   '';
 in {
   environment = {
