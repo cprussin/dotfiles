@@ -14,10 +14,18 @@
 #
 # WHY THERE IS NO SERVICE HERE, AND NO TERMINAL MULTIPLEXER EITHER.
 #
-# `claude --remote-control` starts an *interactive* session -- the flag's own
-# help says so -- so there is nothing to run under systemd.  A unit with no
-# terminal would either fail or sit there being useless, and a unit that
-# pretended otherwise would be a lie in a file people trust.
+# `claude rc` starts an *interactive* Remote Control session, so there is
+# nothing to run under systemd.  A unit with no terminal would either fail or
+# sit there being useless, and a unit that pretended otherwise would be a lie
+# in a file people trust.
+#
+# `rc` rather than the `--remote-control crux` this used to pass: it is the
+# subcommand for the same thing, and it takes the session name from the
+# hostname (see `--remote-control-session-name-prefix`, whose default is the
+# hostname), which on this machine is the name that was being passed by hand.
+# Worth a line because `rc` does not appear in `claude --help` -- it resolves,
+# and an unknown subcommand there says so, but nobody will find it by reading
+# the help.
 #
 # Something has to make that session outlive an ssh disconnect, but it is not
 # this module: whoever connects to this machine already lands in tmux, and a
@@ -27,7 +35,7 @@
 #
 # WHAT TOOK OVER FROM `new-session -A`.  Reattaching had a second job besides
 # convenience: it made a second agent impossible, and a second
-# `--remote-control` session is a second agent on the same build tree -- the
+# Remote Control session is a second agent on the same build tree -- the
 # collision the next section is about.  Without a multiplexer that has to be a
 # lock, so it is one.
 #
@@ -116,7 +124,7 @@
     }
 
     cd "${workDir}"
-    exec ${pkgs.claude-code}/bin/claude --remote-control crux
+    exec ${pkgs.claude-code}/bin/claude rc
   '';
 in {
   environment = {
