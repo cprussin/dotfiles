@@ -58,7 +58,50 @@
 
     sudo umount /home/cprussin/.bak
     rmdir /home/cprussin/.bak
-    sudo zpool export tank-backup
+
+    # `umount` only detaches the mount from the namespace and returns.  bindfs,
+    # the FUSE daemon serving it, is asked to shut down asynchronously and keeps
+    # /tank-backup as its working directory until it actually exits -- a live
+    # cwd on the dataset is exactly what keeps it from being unmounted.
+    # Exporting into that window is what failed with "pool is busy", so wait
+    # the daemon out rather than racing it.
+    EXPORTED=no
+    WAITING=no
+    for _ in {1..30}
+    do
+      if ERROR=$(sudo zpool export tank-backup 2>&1)
+      then
+        EXPORTED=yes
+        break
+      elif [ "$WAITING" = no ]
+      then
+        WAITING=yes
+        echo -n "Waiting for the pool to be released..."
+      fi
+      echo -n '.'
+      sleep 0.5
+    done
+
+    if [ "$WAITING" = yes ]
+    then
+      echo
+    fi
+
+    # Say what is left up rather than suggesting a re-run: the umount above has
+    # already happened, so running this again just dies on the missing
+    # mountpoint.  The pool matters more than the mapping -- run-backup
+    # refuses to run at all while tank-backup is imported.
+    if [ "$EXPORTED" = no ]
+    then
+      echo "$ERROR" >&2
+      echo "WARNING: tank-backup is still imported." >&2
+      echo "WARNING: leaving crypt-${config.backupDisk.filenameBase} open." >&2
+      echo "Once the pool is free, finish with:" >&2
+      echo "  sudo zpool export tank-backup &&" >&2
+      echo "    sudo cryptsetup close crypt-${config.backupDisk.filenameBase}" >&2
+      exit 1
+    fi
+
     sudo cryptsetup close crypt-${config.backupDisk.filenameBase}
   '';
 in {
