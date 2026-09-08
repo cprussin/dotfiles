@@ -14,7 +14,6 @@ writeShellScript "reauth-new-mail-counter" ''
     done < <(${gmail-new-mail-counter}/bin/gmail_new_mail_counter --auth "$1" --auth-format "{{{url}}}")
   }
 
-  reauth connor@dourolabs.xyz
   reauth connor@prussin.net
   reauth connor@ac-zeitgeist.com
 ''
