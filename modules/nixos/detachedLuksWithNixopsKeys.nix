@@ -95,14 +95,17 @@ in {
             script = mkUnlockScript drive opts.filenameBase;
 
             # This closes the mapping for a deliberate `systemctl stop`, which
-            # is how `run-backup` puts the external disk away, and it is the
-            # only thing that does -- but it cannot be the shutdown story.  A
-            # stop job runs in the reverse of the start order, so at shutdown
-            # this unit stops while the pool stacked on the mapping is still
-            # imported and its datasets still mounted, and the close can only
-            # fail there with "Device is still in use".  Whoever knows what is
-            # stacked on the drive owns closing it that late, from a
-            # `systemd.shutdownRamfs` hook; see crux's hardware.nix.
+            # is how `run-backup` puts the external disk away.  It is also
+            # reached by a restart propagated from the key units above, which
+            # is what a rotated key or header arrives as -- and there the close
+            # fails, since the pool is imported.  Neither can be the shutdown
+            # story, though.  A stop job runs in the reverse of the start
+            # order, so at shutdown this unit stops while the pool stacked on
+            # the mapping is still imported and its datasets still mounted, and
+            # the close can only fail there with "Device is still in use".
+            # Whoever knows what is stacked on the drive owns closing it that
+            # late, from a `systemd.shutdownRamfs` hook; see crux's
+            # hardware.nix.
             preStop = "${pkgs.cryptsetup}/bin/cryptsetup close crypt-${opts.filenameBase}";
             serviceConfig = {
               RemainAfterExit = true;

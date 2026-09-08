@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./backup.nix
+    ./batched-deployment-keys.nix
     ./color-theme.nix
     ./detachedLuksWithNixopsKeys.nix
     ./keymap.nix
