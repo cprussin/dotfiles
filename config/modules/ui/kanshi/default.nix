@@ -20,9 +20,9 @@
     refreshRate = 60;
   };
 
-  left = mkMonitor "Dell Inc. DELL U3219Q H8KF413" externalMonitorDimensions;
+  left = mkMonitor "Dell Inc. DELL U3219Q 2ZLS413" externalMonitorDimensions;
   center = mkMonitor "Dell Inc. DELL U3219Q G3MS413" externalMonitorDimensions;
-  right = mkMonitor "Dell Inc. DELL U3219Q 2ZLS413" externalMonitorDimensions;
+  right = mkMonitor "Dell Inc. DELL U3219Q H8KF413" externalMonitorDimensions;
 
   externalMonitorDimensions = {
     scale = 1.2;
