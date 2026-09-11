@@ -52,6 +52,13 @@ in {
       # requests; it does not change what Sunshine binds, so the port stays
       # closed below too.
       origin_web_ui_allowed = "pc";
+
+      # Kbps, and a ceiling rather than a target: 0 -- the default -- encodes
+      # at whatever Moonlight asks for, and Moonlight's 4K presets ask for more
+      # than the Wi-Fi hop to the TV carries, which arrives as artifacts and
+      # stutter.  Capping here rather than in Moonlight keeps it with the rest
+      # of the cast config, and covers any client that pairs later.
+      max_bitrate = 40000;
     };
   };
 

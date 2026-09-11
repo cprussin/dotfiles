@@ -38,9 +38,13 @@ when it breaks.
   Sunshine streams that.
 - It is 3840x2160 at scale 2 -- Sunshine captures the output's *mode*, so that
   is the ceiling on the stream; what actually goes out is whatever Moonlight
-  asks for.  Set Moonlight to 4K and HEVC, with the bitrate raised to match.
-  If it stutters, drop Moonlight back to 1080p: the capture stays 4K and
-  downscales, so nothing else has to change.
+  asks for, up to ~max_bitrate~.  Set Moonlight to 4K and HEVC, with the
+  bitrate raised to match.  If it stutters, drop Moonlight back to 1080p: the
+  capture stays 4K and downscales, so nothing else has to change.
+- The stream is capped at 40 Mbps in ~max_bitrate~, below what Moonlight's 4K
+  presets ask for.  Artifacts and stutter mean it is still too high for the
+  link; a sharper picture that holds means it can go up.  Either way it is
+  ~max_bitrate~ in [[../config/modules/ui/sunshine/default.nix][config/modules/ui/sunshine]], not a Moonlight setting.
 - It sits above your column, so the pointer reaches it off the top edge --
   crossing any monitor stacked above the laptop on the way.
 - Workspace 10 moves onto it: ~Mod+asterisk~ focuses the TV,

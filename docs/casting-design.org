@@ -84,6 +84,21 @@ Sunshine's log for the encoder it picked: the software fallback cannot hold
 drops the mode while keeping the scale -- a quarter-size desktop the client
 upscales, which looks exactly like the bug the mode is here to fix.
 
+** Why the bitrate is capped on the host
+
+Moonlight's 4K presets ask for more than the Wi-Fi hop to the TV carries, and
+Sunshine encodes whatever is asked for: the excess shows up as artifacts and
+stutter, not as a dropped resolution.  ~max_bitrate~ is a ceiling, so the cap
+is inert whenever the client asks for less.
+
+On the host rather than in Moonlight because it lives with the rest of the cast
+config and applies to any client that pairs later; the TV's Moonlight settings
+are not in this repo and cannot be reviewed from it.
+
+40 Mbps is a starting point, not a measurement.  It is the one number to move
+if the stream misbehaves -- before touching the mode, which the placement
+arithmetic above depends on.
+
 ** Why cast places workspace 10, not kanshi
 
 kanshi matches a profile only when its output count equals the number of
