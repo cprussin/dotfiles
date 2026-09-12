@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - name: Build the dev shell
         run: nix develop --print-build-logs --command true
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - name: nix flake show
         run: nix flake show --all-systems
@@ -70,7 +70,7 @@ jobs:
           - iot-devices
           - read-dmarc
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - name: Build ${{ matrix.package }}
         run: nix build --print-build-logs ".#${{ matrix.package }}"
@@ -91,7 +91,7 @@ jobs:
           - lyra
           - crux
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - name: Instantiate ${{ matrix.machine }}
         # Pure, like `colmena apply`, which evaluates flake hives with
@@ -128,7 +128,7 @@ jobs:
           - powerpanel
           - sudo
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - name: Build ${{ matrix.package }}
         run: |
@@ -150,7 +150,7 @@ jobs:
           - installer
           - gpg-offline
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
       - name: Build the ${{ matrix.iso }} iso
         run: nix build --print-build-logs ".#${{ matrix.iso }}"
