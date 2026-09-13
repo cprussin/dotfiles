@@ -95,8 +95,8 @@ jobs:
       - uses: cachix/install-nix-action@v31
       - name: Instantiate ${{ matrix.machine }}
         # Pure, like `colmena apply`, which evaluates flake hives with
-        # `--pure-eval`.  `allowUnfree` and `permittedInsecurePackages` come
-        # from the `nixpkgs.config` both machines get via `profiles/base`.
+        # `--pure-eval`.  `allowUnfree` comes from the `nixpkgs.config` both
+        # machines get via `profiles/base`.
         run: |
           nix eval --raw \
             ".#colmenaHive.nodes.${{ matrix.machine }}.config.system.build.toplevel.drvPath"
