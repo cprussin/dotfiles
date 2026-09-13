@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   config,
   ...
 }: let
@@ -24,6 +25,25 @@ in {
       user = config.users.users.nginx.name;
     };
   };
+
+  # immich comes from nixpkgs-unstable rather than 26.05, which stopped at a
+  # 2.x that upstream abandoned -- see modules/system/nix.  That input floats,
+  # so an `[flake] update sources` can carry immich across a major version
+  # with nobody deciding to, and the next deploy would restart the server into
+  # a forward-only database migration that upstream gives no way back out of.
+  # Refuse to evaluate instead: the bump is fine, it just has to be somebody's
+  # decision, made with a dump in hand.
+  assertions = [
+    {
+      assertion = lib.versions.major config.services.immich.package.version == "3";
+      message = ''
+        immich is no longer 3.x (nixpkgs-unstable now has ${config.services.immich.package.version}).
+        Dump the database before deploying it -- `pg_dumpall` as the postgres
+        user on crux -- and check upstream's release notes for whatever this
+        major changes.  Then raise the version in machines/crux/photos.nix.
+      '';
+    }
+  ];
 
   networking.firewall.interfaces = {
     prussinnet.allowedTCPPorts = [80 443];
