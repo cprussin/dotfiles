@@ -10,6 +10,30 @@
   };
   unstable-pkgs-overlay = _: _: {
     inherit (pkgs-unstable) bitwig-studio zwave-js-server;
+
+    # 26.05 is stuck on immich 2.7.5, which upstream stopped updating and
+    # nixpkgs marks insecure (CVE-2026-59258, CVE-2026-82272), so crux no
+    # longer evaluates at all with it.  immich 3 only reaches nixpkgs with
+    # 26.11, and the honest fix is to run 3 rather than to write an exemption
+    # for a server nobody is fixing anymore.
+    #
+    # Only the package moves, not the module.  26.05's `services.immich` and
+    # unstable's differ by a `database.package` option nothing here sets, a
+    # description, and one env var dropped from the machine-learning worker
+    # -- nothing that tracks the major version -- so 26.05's module drives
+    # 3.x as it stands.  The two channels also agree on vectorchord 1.1.1, so
+    # the postgresql extensions that module installs are the ones this immich
+    # asks for.
+    #
+    # The worker is named here as well as reached through the server's
+    # `passthru.machine-learning`.  The unit uses the passthru, so it would
+    # follow the server either way; taking the attribute too keeps a
+    # `pkgs.immich-machine-learning` built from 26.05's recipe -- patches and
+    # all -- from being handed 3.x's source, since it takes both its version
+    # and its `src` from whatever `immich` is.
+    #
+    # Drop all of this when crux moves to 26.11 and stable carries immich 3.
+    inherit (pkgs-unstable) immich immich-machine-learning;
   };
 in {
   nix = {
