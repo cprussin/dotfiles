@@ -10,6 +10,7 @@
     ./claude-agent.nix
     ./dns.nix
     ./domicile-ci.nix
+    ./domicile-tty.nix
     ./dynamic-dns.nix
     ./home-assistant.nix
     ./library.nix
