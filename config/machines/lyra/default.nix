@@ -94,6 +94,27 @@
       exit "$restart"
     fi
   '';
+
+  # The BRIO's mic returns silence after a suspend until the camera is
+  # replugged.  Toggling `authorized` unconfigures and reconfigures it, which
+  # re-probes snd-usb-audio; RESET_RESUME -- which usbcore already applies to
+  # every Logitech UVC camera -- restores the driver in place instead, and the
+  # mic stays dead.
+  #
+  # `set -e` earns its place: `usb_authorize_device` sets `authorized` before
+  # the calls that can fail and never rolls it back, so a silent failure leaves
+  # the camera unconfigured with `authorized` reading 1.
+  reset-brio = pkgs.writeShellScript "reset-brio" ''
+    set -eu
+    for dev in /sys/bus/usb/devices/*
+    do
+      [ "$(${pkgs.coreutils}/bin/cat "$dev/idVendor" 2>/dev/null)" = 046d ] || continue
+      [ "$(${pkgs.coreutils}/bin/cat "$dev/idProduct" 2>/dev/null)" = 085e ] || continue
+      echo 0 > "$dev/authorized"
+      ${pkgs.coreutils}/bin/sleep 1
+      echo 1 > "$dev/authorized"
+    done
+  '';
 in {
   imports = [
     ../../profiles/laptop
@@ -176,6 +197,22 @@ in {
         RemainAfterExit = true;
         ExecStart = "${pkgs.coreutils}/bin/true";
         ExecStop = restore-dlm;
+      };
+    };
+
+    # Same shape as `dlm-restore`, and for the same reason: `ExecStop=` on a
+    # unit of our own runs after the resume without queueing behind
+    # `sleep-actions.service`.
+    brio-restore = {
+      description = "Re-probe the BRIO's drivers after sleep";
+      wantedBy = ["sleep.target"];
+      before = ["sleep.target"];
+      unitConfig.StopWhenUnneeded = true;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.coreutils}/bin/true";
+        ExecStop = reset-brio;
       };
     };
   };
