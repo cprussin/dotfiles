@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "UTC",
+  "minimumReleaseAge": "7 days",
+  "nix": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    { "matchUpdateTypes": ["minor", "patch", "pin", "digest"], "automerge": true },
+    { "matchUpdateTypes": ["major"], "automerge": false },
+    {
+      "matchManagers": ["nix"],
+      "automerge": false,
+      "description": "minimumReleaseAge gates on releaseTimestamp, which nix's git-commit/digest-based flake.lock updates generally lack, so the 7-day cooling-off period above cannot be trusted to apply here -- require manual review instead."
+    }
+  ]
+}
