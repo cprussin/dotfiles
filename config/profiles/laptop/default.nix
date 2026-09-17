@@ -8,6 +8,7 @@ _: {
     ../../modules/system/devices/powerKey
     ../../modules/system/devices/wifi
 
+    ../../modules/ui/domicile
     ../../modules/ui/kanshi
   ];
 }
