@@ -68,13 +68,20 @@
 # there would be nothing here to correct it with.
 #
 #
-# NOTHING PASSES THIS FILE TO ANYTHING YET.
+# WHAT PASSES THIS FILE TO DOMICILE, AND WHAT STILL DOES NOT.
 #
-# `domicile` starts its compositor without a `--config`, so the file is
-# written and read by nobody -- docs/WRITING-A-SHELL.md in the domicile repo
-# calls that a gap rather than a decision.  It is written anyway because the
-# layout is the part that takes a desk to work out, and it should be ready and
-# reviewed before the wiring lands rather than after.
+# The flag exists now.  `domicile --config <path> <shell>` hands the file to
+# the compositor, which reads it at startup and re-reads it whenever it
+# changes, so this is no longer written for nobody:
+#
+#     domicile --config ~/.config/domicile/domicile.json <shell>
+#
+# What this module does NOT do is run that command.  It writes the file and
+# installs nothing -- there is no domicile package here, no session and no
+# unit -- because making domicile this machine's login session is a decision
+# about how the desk boots rather than about where the monitors are, and it is
+# not one this file should make on the way past.  So the desk is described
+# here and started by hand.
 {
   config,
   lib,
