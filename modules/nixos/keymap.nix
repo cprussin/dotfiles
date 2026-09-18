@@ -16,7 +16,7 @@ in {
     console.keyMap = pkgs.runCommand "console-keymap" {} ''
       ${pkgs.ckbcomp}/bin/ckbcomp \
         -layout '${cfg.layout}' \
-        -option '${cfg.options}' \
+        -option '${lib.concatStringsSep "," cfg.options}' \
         -variant '${cfg.variant}' > "$out"
     '';
   };

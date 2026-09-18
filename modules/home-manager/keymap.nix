@@ -16,7 +16,8 @@ in {
     wayland.windowManager.sway.config.input."*" = {
       xkb_layout = cfg.layout;
       xkb_variant = cfg.variant;
-      xkb_options = cfg.options;
+      # sway's config is a line; the option is the list xkb states.
+      xkb_options = lib.concatStringsSep "," cfg.options;
     };
   };
 }

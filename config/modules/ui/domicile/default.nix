@@ -199,6 +199,10 @@
     portablePanel = "APT Monitor demoset-1";
   };
 
+  # This desk's keyboard, as the option sway reads states it.  See where it is
+  # written out below for why it is that option and not the NixOS one.
+  keyboard = config.primary-user.home-manager.keymap;
+
   # What this desk knows a monitor as: what the machine said, else what was
   # derived, else nothing.
   #
@@ -369,9 +373,38 @@ in {
     ];
 
     primary-user.home-manager.xdg.configFile."domicile/domicile.json".source = settings.generate "domicile.json" {
-      # `output` and nothing else: the keyboard, the nested size and the rest
-      # take domicile's own defaults, which already carry the dvp layout and
-      # the caps/escape swap this desk uses.
+      # THE SAME KEYBOARD SWAY GETS -- the same option, not a copy of it.
+      #
+      # `primary-user.home-manager.keymap` is what
+      # modules/home-manager/keymap.nix turns into sway's `input * xkb_*`, and
+      # `mkAliasOptionModule` makes reading it here read THAT one.  The NixOS
+      # `config.keymap` would also work today, and only because ui/dvp assigns
+      # one to the other; a host that set just the home-manager side would give
+      # sway one layout and domicile another, with nothing to say so.
+      #
+      # IT WAS DOMICILE'S DEFAULT UNTIL NOW, which was the wrong place for it:
+      # `dvp` and a remapped caps lock are this desk's, not what anybody else
+      # should get for saying nothing.  Domicile defaults to a plain `us` now
+      # and this is where the desk states otherwise.
+      #
+      # `options` is carried across as it is: it is the list xkb states, and
+      # sway and ckbcomp join it into the line each of them wants where they
+      # are written.  This is the reader that wanted the list all along.
+      #
+      # A desk with no keymap leaves this an empty table rather than no key at
+      # all -- `lib.optionalAttrs` yields `{}` where it is written, not an
+      # absence.  Domicile reads `input = {}` as its own defaults, which is the
+      # same desktop either way; it is the file that is a shade less honest.
+      input = lib.optionalAttrs (keyboard != null) {
+        keyboard = {
+          xkb_layout = keyboard.layout;
+          xkb_variant = keyboard.variant;
+          xkb_options = keyboard.options;
+        };
+      };
+
+      # The nested size and the rest take domicile's own defaults, which are
+      # general rather than anybody's.
       output.profiles =
         # The lid open and nothing plugged in.
         (profile "laptop-only" {

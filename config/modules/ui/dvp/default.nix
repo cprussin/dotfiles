@@ -2,7 +2,7 @@
   keymap = {
     layout = "us";
     variant = "dvp";
-    options = "caps:escape";
+    options = ["caps:escape"];
   };
   primary-user.home-manager.keymap = config.keymap;
 }
