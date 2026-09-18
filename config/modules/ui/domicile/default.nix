@@ -1,105 +1,50 @@
 # The same desk as kanshi, written for domicile.
 #
-# config/modules/ui/kanshi/default.nix is this desk under sway, and the two
-# are deliberately the same arithmetic from the same monitor records: a
-# profile is chosen by which monitors are plugged in, each one gets a scale, a
-# turn and a corner, and the compositor re-matches on every hotplug.  What
-# differs is the file format and two things that are not cosmetic: what a
-# profile matches on, and that it cannot pin a mode.  Both below.
+# config/modules/ui/kanshi/default.nix is this desk under sway: same
+# arithmetic, same monitor records, a profile chosen by what is plugged in and
+# re-matched on every hotplug.  domicile differs in two ways that are not
+# cosmetic -- it matches on a slightly different string, and it cannot pin a
+# mode -- and lacks sway's workspace assignment, which it has no concept to
+# assign.
 #
-# The sway half of that file does two more things this cannot yet: it assigns
-# workspaces to outputs and runs `swaymsg` on a profile change to move them.
-# Domicile has no workspace concept to assign, so there is nothing here that
-# corresponds and nothing missing.
-#
-#
-# WHAT DOMICILE MATCHES ON, WHICH IS NOW NEARLY WHAT KANSHI MATCHES ON.
-#
-# kanshi matches `"Dell Inc. DELL U3219Q 2ZLS413"` -- make, model and serial
-# off the EDID.  Domicile carries the same three now, so a profile names a
-# monitor the way it is labelled rather than by `drm-<id>`, the opaque int64
-# ozone derives from the same EDID.  Either still works; the id is what a
-# monitor with nothing to say about itself has to be named.
-#
-# TWO DIFFERENCES FROM THE STRING IN THE KANSHI FILE NEXT DOOR, and both bite
-# silently -- a name that matches nothing is not an error to domicile.  It
-# leaves the monitors where the engine put them and logs nothing wrong, so the
-# desk comes up unplaced and looks like this file was never read.
+# TWO WAYS THE NAMES DIFFER FROM THE KANSHI STRINGS, and both bite silently: a
+# name that matches nothing is not an error to domicile, so the desk comes up
+# unplaced and looks like this file was never read.
 #
 #   The make is the three-letter PNP id, not the vendor name.  "DEL", not
-#   "Dell Inc.".  An EDID holds the id; the vendor name behind it is hwdata's
-#   pnp.ids, which libdisplay-info carries and Chromium does not.
+#   "Dell Inc.".
 #
-#   A missing serial is left out, not spelled "Unknown".  sway writes that
-#   word where it found none; domicile writes nothing and the name is the two
-#   parts that are left.
+#   A missing serial is left out, not spelled "Unknown" the way sway spells it.
 #
-# What does NOT differ is the numeric serial.  The LG below is named
-# `0x0001E368` by sway because libdisplay-info fell back to the base block's
-# 32-bit field, and domicile formats that identically -- which is checkable
-# from this desk's own kanshi config, and is why the fallback is there.
+# So every name in `derived` below was worked out from the kanshi string next
+# door through hwdata's pnp.ids, not read off a running desktop.
 #
-# So every name below is a derivation rather than a guess, and the vendor
-# name is what each derivation turns back into three letters: hwdata's
-# pnp.ids is the table libdisplay-info read them out of, and it answers in
-# both directions.  Dell Inc. is DEL, LG Electronics is GSM, Audio Processing
-# Technology  Ltd is APT -- each the only entry with that name -- and BOE is
-# its own vendor name.  Nothing here was read off a running desktop.
+# EVERY POSITION ASSUMES A MODE NOTHING PINS.  kanshi sets one per output; a
+# domicile profile has no mode field, so the mode arrives with the monitor and
+# the compositor divides it by the scale.  Fine while the driver lights every
+# connector at its native mode, which is the mode kanshi pins anyway -- and
+# nothing here could correct a monitor that negotiated something else.
 #
-# So nothing here is unnamed out of the box.  A monitor only ends up without
-# a name when somebody sets it to `null` -- how a derived name that turns out
-# wrong is taken back out -- and even then the answer is not a guess: a
-# profile naming an unnamed monitor is not written out, so an incomplete
-# answer costs arrangements rather than producing wrong ones.
+# THE TURN AND THE SCALE REACH THE GLASS, which they did not until recently:
+# `rotate-270` was advertised and laid out but not drawn, and a 1.2 panel drew
+# its desktop in the corner of a black screen.  Both need an engine carrying
+# the fix -- `engine-release.nix` in domicile is where that pin lives -- and
+# on an older pin they read as the old behaviour rather than as an error.
+# Which way round the quarter turns are is the one thing only these monitors
+# can settle; if they come up upside down the fix is in domicile's
+# `cover-the-window.ts`, not here.
 #
+# `domicile <shell>` reads this file where home-manager puts it, so nothing
+# has to pass it along; `--config` still overrides.  The two sides reach that
+# path differently -- home-manager from `xdg.configHome` at build time,
+# domicile from `XDG_CONFIG_HOME` at start -- so exporting one into the
+# session without moving the other writes this where domicile does not look.
+# It is re-read on change, so a rebuild reaches a running desk, and domicile
+# prints which file it chose before it starts anything.
 #
-# EVERY POSITION HERE ASSUMES A MODE NOTHING PINS.
-#
-# kanshi sets one per output -- `mode = "3840x2160@60Hz"` and so on.  A
-# domicile profile has no mode field at all: the mode arrives with the monitor
-# and the compositor divides it by the scale to get the logical size, so the
-# sizes the positions below are sums of are the hardware's rather than the
-# config's.
-#
-# Not a bug today, because the modeset driver lights every connector that
-# reports a mode at its native mode, which is the mode kanshi pins anyway --
-# one that reports none is skipped rather than lit.  It is what would make
-# this desk come up wrong if a monitor ever negotiated something else, and
-# there would be nothing here to correct it with.
-#
-#
-# WHAT PASSES THIS FILE TO DOMICILE, AND WHAT STILL DOES NOT.
-#
-# Nothing has to.  `domicile <shell>` reads
-# `$XDG_CONFIG_HOME/domicile/domicile.toml` when that variable is set to an
-# absolute path, and `~/.config/domicile/domicile.toml` otherwise -- which is
-# where home-manager puts this file, so the path below is the arrangement
-# rather than a coincidence worth a flag.  `domicile --config <path> <shell>`
-# still overrides it, which is how a second arrangement gets tried without
-# moving this one aside.
-#
-# THE TWO SIDES RESOLVE THAT PATH AT DIFFERENT TIMES, which is the one way
-# they can part.  home-manager takes it from `xdg.configHome` when this is
-# built; domicile takes it from the environment when the desk starts.  Both
-# come out at `~/.config` here because nothing sets either for the session --
-# the only `XDG_CONFIG_HOME` this repo SETS is inside a wluma unit and reaches
-# nothing else.  Export one into the session without moving `xdg.configHome`
-# to match and the file is written somewhere domicile does not look.
-#
-# That one domicile says out loud rather than swallowing: it prints the file
-# it chose before it starts anything, including the path it looked in and did
-# not find.  What stays silent is the desk itself, which comes up unplaced --
-# so the sentence is on the terminal and the symptom is on the monitors.
-#
-# The compositor reads it at startup and re-reads it whenever it changes, so a
-# rebuild reaches a running desk.
-#
-# What this module does NOT do is run that command.  It writes the file and
-# installs nothing -- there is no domicile package here, no session and no
-# unit -- because making domicile this machine's login session is a decision
-# about how the desk boots rather than about where the monitors are, and it is
-# not one this file should make on the way past.  So the desk is described
-# here and started by hand.
+# What this module does NOT do is run that command: it writes the file and
+# installs nothing, because making domicile the login session is a decision
+# about how the desk boots rather than about where the monitors are.
 {
   config,
   lib,
@@ -108,25 +53,15 @@
 }: let
   cfg = config.ui.domicile;
 
-  # TOML because that is what domicile parses, and it parses TOML for the
-  # reason this file has always reached past `builtins.toJSON`: nobody writes
-  # this file, but somebody reads it the first time a monitor lands in the
-  # wrong place, and a wall of braces is a poor place to find one
-  # `transform`.  A generator either way -- `ui/sunshine` reaches for one too
-  # -- because a writer that cannot get the escaping wrong is the whole point
-  # of not hand-rolling the file.
+  # TOML because that is what domicile parses.  A generator rather than
+  # `builtins.toJSON` so the escaping is somebody else's problem.
   settings = pkgs.formats.toml {};
 
-  # The panels themselves, in physical pixels and at the density each is
-  # readable at.  The same six records kanshi's file opens with; `logical` is
-  # what the desktop is laid out in, which is what every position below is
-  # measured in.
-  #
-  # Kept as floats rather than rounded here, exactly as the kanshi module
-  # keeps them: the positions are sums of these and rounding each one first
-  # would drift a pixel per monitor across the desk.  Domicile does its own
-  # rounding of the logical size, from the mode and the scale, so what is
-  # written out is a position and a scale and never a size.
+  # The panels, in physical pixels at the density each is readable at.
+  # `logical` is what the desktop is laid out in and what every position below
+  # is measured in -- kept as floats, because the positions are sums of these
+  # and rounding each one first would drift a pixel per monitor across the
+  # desk.
   panel = scale: width: height: {
     inherit scale;
     logical = {
@@ -146,11 +81,8 @@
   center = external;
   right = external;
 
-  # What a monitor measures once it is stood on its side, which is the one
-  # thing a transform changes about the arithmetic -- everything else it
-  # changes is pixels.  Both halves are used: the rows below step sideways
-  # past turned monitors by the first, and bottom-align the laptop against one
-  # by the second.
+  # What a monitor measures once stood on its side: the one thing a transform
+  # changes about the arithmetic.
   widthOnItsSide = monitor: monitor.logical.height;
   heightOnItsSide = monitor: monitor.logical.width;
 
@@ -159,24 +91,18 @@
     position = [(outward position.x) (outward position.y)];
   };
 
+  # The turn the CONTENT takes to come out upright, which is the same `270`
+  # the kanshi file writes for these three.  Drawn, not just described -- see
+  # the header.
   sideways = position: monitor:
     (at position monitor) // {transform = "rotate-270";};
 
   off = _: {enabled = false;};
 
-  # Whole pixels, because a position is an integer in the config, and rounded
-  # outward for the reason the kanshi module rounds the same sums that way: a
-  # monitor placed a pixel further out leaves a one-pixel gap, which the page
-  # spans and nobody sees, while one placed a pixel short overlaps its
-  # neighbour -- and domicile has no mirroring, so an overlap is two screens
-  # claiming one patch of desktop.
-  #
-  # No sum on this desk actually lands between two pixels, and not because
-  # the scales are kind: portablePanel's 1.4 gives it 2742.857 by 1542.857,
-  # and it is the one monitor here nothing is ever placed relative to.  Every
-  # size that IS a term in somebody's position -- 1.5 and 1.2 and 1.0 into
-  # their modes -- happens to come out whole.  Add a monitor to the right of
-  # the travel panel and this stops being true on the first sum.
+  # Whole pixels, rounded outward like the kanshi module: a monitor a pixel
+  # further out leaves a gap the page spans and nobody sees, where one a pixel
+  # short overlaps its neighbour -- and domicile has no mirroring, so an
+  # overlap is two screens claiming one patch of desktop.
   outward = builtins.ceil;
 
   # Every monitor this desk has, so that a key which is not one of them is
@@ -185,61 +111,34 @@
     inherit laptopPanel portablePanel curved left center right;
   };
 
-  # What each monitor is called, where it could be worked out from the kanshi
-  # string next door rather than read off hardware.  The header says what
-  # each part of that derivation rests on.
+  # What each monitor is called, worked out from the kanshi string next door.
   #
-  # NOT the option's `default`, and that is the whole reason this attrset
-  # exists.  An `attrsOf` option that is set REPLACES its default rather than
-  # merging into it, so a machine correcting one of these names would silently
-  # lose the other five -- which is exactly the trap `named` below was written
-  # to avoid on the other side.  Overridden per monitor instead.
+  # NOT the option's `default`, which is the whole reason this attrset exists:
+  # an `attrsOf` that is set REPLACES its default rather than merging, so a
+  # machine correcting one name would silently lose the other five.
   derived = {
-    # sway calls this "BOE NE135A1M-NY1 Unknown".  The make survives the
-    # round trip unchanged because pnp.ids gives BOE the vendor name "BOE" --
-    # the same three letters, not a missing entry -- and "Unknown" is the word
-    # sway writes where libdisplay-info found no serial at all, neither a
-    # descriptor nor a non-zero number.  Domicile writes nothing there.
     laptopPanel = "BOE NE135A1M-NY1";
-
-    # "Dell Inc." is hwdata's name for the maker whose EDIDs say DEL.
     left = "DEL DELL U3219Q 2ZLS413";
     center = "DEL DELL U3219Q G3MS413";
     right = "DEL DELL U3219Q H8KF413";
-
-    # "LG Electronics" is GSM, which is the only pnp.ids entry carrying that
-    # name.  `0x0001E368` is the base block's 32-bit serial, which sway prints
-    # because there was no descriptor to prefer and which domicile formats the
-    # same way.
     curved = "GSM LG ULTRAWIDE 0x0001E368";
-
-    # "Audio Processing Technology  Ltd" is APT, likewise the only entry with
-    # that name -- and its double space is pnp.ids' own, which is what says
-    # the make ends where it does and the model is "Monitor".
+    # kanshi says "Audio Processing Technology  Ltd Monitor demoset-1": the
+    # double space is pnp.ids' own, which is what says the model is "Monitor".
     portablePanel = "APT Monitor demoset-1";
   };
 
-  # This desk's keyboard, as the option sway reads states it.  See where it is
-  # written out below for why it is that option and not the NixOS one.
+  # The option sway reads, not the NixOS one -- see where it is written out.
   keyboard = config.primary-user.home-manager.keymap;
 
-  # What this desk knows a monitor as: what the machine said, else what was
-  # derived, else nothing.
-  #
-  # `or` catches a MISSING key, not a null one, and the difference is the
-  # point: a monitor set explicitly to `null` stops at the first rung rather
-  # than falling through to `derived`, which is how a derived name that turns
-  # out to be wrong is taken back out without having to know the right one.
-  #
-  # `or` rather than reading the attrs directly because neither is obliged to
-  # hold every key, and reading a missing one is an eval error on the one file
-  # that is supposed to be filled in gradually.
+  # What the machine said, else what was derived, else nothing.  `or` catches
+  # a MISSING key rather than a null one, which is the point: setting a
+  # monitor to `null` stops at the first rung instead of falling through to
+  # `derived`, and that is how a wrong derived name is taken back out.
   named = key: cfg.displays.${key} or derived.${key} or null;
 
-  # One profile, or nothing at all when a monitor it names has no id yet.
-  # Dropping it whole is the point: a profile that quietly left out the
-  # monitor it could not name would match a smaller desk and put the whole
-  # arrangement up on it.
+  # One profile, or nothing when a monitor it names has no id yet.  Dropped
+  # whole, because one quietly missing a monitor would match a smaller desk
+  # and put the whole arrangement up on it.
   profile = name: displays: let
     entries =
       lib.mapAttrsToList (key: placement: {
@@ -254,41 +153,18 @@
     };
 in {
   options.ui.domicile.displays = lib.mkOption {
-    # Either name domicile knows a monitor by: the panel's, which is what
-    # `derived` above holds and what a person can write, or the output's
-    # `drm-<id>`, which is what a monitor stating no make, model or serial has
-    # to be called.
+    # The panel's own name, or the output's `drm-<id>` for a monitor that
+    # states no make, model or serial.  Shaped rather than any string because
+    # a name matching nothing is not an error to domicile -- it just leaves
+    # the monitors where the engine put them.
     #
-    # Shaped rather than any string, because the failure it prevents is the
-    # silent one.  A name that matches nothing is not an error to domicile --
-    # it leaves the monitors where the engine put them -- so the desk comes up
-    # unplaced and looks like this file was never read.
-    #
-    # A PANEL NAME IS NOT ALWAYS THREE PARTS, which is the whole constraint on
-    # how strict this can be.  `DisplayNameFrom` joins the make, the model and
-    # the serial that are there and no more, and it drops the make outright
-    # when the product code is not a PNP id -- so `DELL U3219Q 2ZLS413` and
-    # `DEL DELL U3219Q` and a bare `DEL` are all names the compositor
-    # advertises.  Hence: three capitals on their own, or two or more words
-    # separated by single spaces.
-    #
-    # SO IT DOES NOT CATCH EITHER MISTAKE THE HEADER IS ABOUT.  A kanshi
-    # string pasted from the file next door is words separated by spaces too,
-    # and no shape tells a vendor name from a model when a name may
-    # legitimately begin with either.  Three of this desk's four kanshi
-    # strings pass here: both Dells and the LG on their vendor names, and the
-    # laptop panel on its trailing `Unknown`, which no shape ever caught
-    # because a serial is a word like any other.  Only the APT one fails, and
-    # only on the double space in its vendor name, which is an accident
-    # rather than a check.  What the shape does catch is the two
-    # single-word mistakes -- the bare id with no `drm-` in front of it, and
-    # sway's connector name (`DP-1`) -- and any stray whitespace, which is how
-    # a name copied out of a log arrives.  The cost of the first clause is a
-    # one-word name that is not a PNP id: a panel stating only a model has to
-    # be named `drm-<id>`, because nothing tells it apart from `DP-1`.
-    #
-    # The id is signed: `DrmScreen` hands out `kDefaultDisplayId` for a machine
-    # with nothing plugged in, so the sign is not assumed away here.
+    # A panel name is not always three parts: the compositor joins whatever
+    # the EDID has, so `DEL DELL U3219Q` and a bare `DEL` are both names it
+    # advertises.  Hence three capitals, or two or more words.  That catches
+    # the single-word mistakes -- a bare id with no `drm-`, sway's `DP-1` --
+    # and not a kanshi string, which is words separated by spaces too.  The
+    # id is signed because `DrmScreen` hands out `kDefaultDisplayId` for a
+    # machine with nothing plugged in, so the sign is not assumed away.
     type = lib.types.attrsOf (lib.types.nullOr (lib.types.strMatching "(drm--?[0-9]+)|([A-Z]{3})|([^[:space:]]+( [^[:space:]]+)+)"));
 
     default = {};
@@ -320,46 +196,34 @@ in {
   config = {
     assertions = let
       unknown = lib.subtractLists (lib.attrNames monitors) (lib.attrNames cfg.displays);
-      # The RESOLVED names, not `cfg.displays`.  Most of these names come
-      # from `derived` now, so a check that read only what was written here
-      # would miss the shape the mistake actually takes: one line corrected by
-      # hand, to a name three identical panels share, colliding with a name
-      # nobody wrote down because it was already right.
-      #
-      # Unset monitors dropped, and not as tidying: `nullOr` is the point of
-      # this option, so stubbing an unknown one as `null` is the natural way
-      # to write a partly-answered desk.  Two of those are not two monitors
-      # sharing a name -- and left in, they would be reported as one, in a
-      # message that dies coercing `null` to a string somewhere the user
-      # cannot see their own config in the trace.
+      # The RESOLVED names, not `cfg.displays`: the mistake is one line
+      # corrected by hand colliding with a name nobody wrote down because it
+      # was already right.  Unset monitors dropped -- two nulls are not two
+      # monitors sharing a name.
       ids = lib.filter (id: id != null) (map named (lib.attrNames monitors));
       repeated = lib.unique (lib.filter (id: lib.count (other: other == id) ids > 1) ids);
-      # One line, because `''` keeps the source's own line breaks and this is
-      # the one string somebody reads when they have mistyped something.
+      # One line: `''` would keep the source's own line breaks.
       sentence = lib.concatStringsSep " ";
       list = lib.concatStringsSep ", ";
       places = "It places ${list (lib.attrNames monitors)}.";
-      # Which monitors a name resolved to.  Named rather than left to the
-      # reader, because grepping for the name finds at most one of them: the
-      # other is one this file derived and nobody wrote down.
+      # Which monitors a name resolved to.  Named, because grepping for it
+      # finds at most one -- the other was derived and never written down.
       sharing = id: lib.attrNames (lib.filterAttrs (key: _: named key == id) monitors);
-      # "left and center", or "center, left and right".  Not `list`: this goes
-      # in the middle of a sentence, and a bare comma there reads as the end
-      # of a clause rather than as another monitor.
+      # "left and center".  Not `list`: mid-sentence a bare comma reads as
+      # the end of a clause rather than as another monitor.
       andList = keys:
         if lib.length keys < 2
         then list keys
         else "${list (lib.init keys)} and ${lib.last keys}";
-      # "both" only when there are two of them.  Pasting one corrected serial
-      # into two of the three identical Dell lines gets you three.
+      # "both" only when there are two; one pasted serial can give you three.
       shared = keys:
         if lib.length keys == 2
         then "both ${andList keys}"
         else "all of ${andList keys}";
     in [
-      # A key that is not a monitor is a typo, and a silent one: it would name
-      # no profile, so the profiles it was meant for would never be written
-      # and the desk would come up unplaced with nothing to say why.
+      # A key that is not a monitor is a silent typo: it names no profile, so
+      # the ones it was meant for are never written and the desk comes up
+      # unplaced with nothing to say why.
       {
         assertion = unknown == [];
         message = sentence [
@@ -373,11 +237,9 @@ in {
           places
         ];
       }
-      # Two monitors on one name is easy to write here -- left, center and
-      # right are the same panel three times and the lines are a copy each --
-      # and expensive to get wrong there: domicile refuses a profile that
-      # places one display twice, and refusing a profile refuses the whole
-      # file, so every profile that was fine goes with it.
+      # Easy to write -- left, center and right are the same panel three times
+      # -- and expensive: domicile refuses a profile placing one display
+      # twice, and that refuses the whole file.
       {
         assertion = repeated == [];
         message = sentence (
@@ -392,35 +254,16 @@ in {
       }
     ];
 
-    # THE PATH IS THE INTERFACE.  `domicile` with no `--config` looks exactly
-    # here, so renaming this file or moving it is a desk that comes up
-    # unplaced -- and domicile prints the file it CHOSE on the way up, which is
-    # where that turns back into a sentence.  Chose rather than read: the
-    # launcher hands the path on without opening it, so the complaint about
-    # what is inside comes from the compositor and names it separately.
+    # THE PATH IS THE INTERFACE: `domicile` with no `--config` looks exactly
+    # here, so moving this file is a desk that comes up unplaced.
     primary-user.home-manager.xdg.configFile."domicile/domicile.toml".source = settings.generate "domicile.toml" {
-      # THE SAME KEYBOARD SWAY GETS -- the same option, not a copy of it.
+      # THE SAME OPTION SWAY READS, not a copy of it.  The NixOS
+      # `config.keymap` would work today only because ui/dvp assigns one to
+      # the other; a host setting just the home-manager side would give sway
+      # one layout and domicile another with nothing to say so.
       #
-      # `primary-user.home-manager.keymap` is what
-      # modules/home-manager/keymap.nix turns into sway's `input * xkb_*`, and
-      # `mkAliasOptionModule` makes reading it here read THAT one.  The NixOS
-      # `config.keymap` would also work today, and only because ui/dvp assigns
-      # one to the other; a host that set just the home-manager side would give
-      # sway one layout and domicile another, with nothing to say so.
-      #
-      # IT WAS DOMICILE'S DEFAULT UNTIL NOW, which was the wrong place for it:
-      # `dvp` and a remapped caps lock are this desk's, not what anybody else
-      # should get for saying nothing.  Domicile defaults to a plain `us` now
-      # and this is where the desk states otherwise.
-      #
-      # `options` is carried across as it is: it is the list xkb states, and
-      # sway and ckbcomp join it into the line each of them wants where they
-      # are written.  This is the reader that wanted the list all along.
-      #
-      # A desk with no keymap leaves this an empty table rather than no key at
-      # all -- `lib.optionalAttrs` yields `{}` where it is written, not an
-      # absence.  Domicile reads `input = {}` as its own defaults, which is the
-      # same desktop either way; it is the file that is a shade less honest.
+      # `options` goes across as the list it is -- sway and ckbcomp each join
+      # it where they are written, and this is the reader that wanted a list.
       input = lib.optionalAttrs (keyboard != null) {
         keyboard = {
           xkb_layout = keyboard.layout;
@@ -429,8 +272,7 @@ in {
         };
       };
 
-      # The nested size and the rest take domicile's own defaults, which are
-      # general rather than anybody's.
+      # Everything else takes domicile's own defaults.
       output.profiles =
         # The lid open and nothing plugged in.
         (profile "laptop-only" {
@@ -471,9 +313,8 @@ in {
             }
             center;
         })
-        # Two of the three on their sides, the laptop to their left and
-        # bottom-aligned against them: the panel's top edge is how tall they
-        # are once turned, less its own height.
+        # Two of the three on their sides, the laptop bottom-aligned to their
+        # left: its top edge is how tall they are turned, less its own height.
         ++ (profile "home-office-right-two" {
           laptopPanel =
             at {
@@ -494,10 +335,9 @@ in {
             }
             right;
         })
-        # The full desk: three on their sides in a row, and the laptop dark
-        # because the lid is shut.  It is still named, because a profile
-        # applies only to the exact set of monitors it names and the panel is
-        # connected whether or not anyone can see it.
+        # The full desk, lid shut.  The panel is still named: a profile
+        # applies only to the exact set it names, and a shut panel is still
+        # connected.
         ++ (profile "home-office-full" {
           laptopPanel = off laptopPanel;
           left =
