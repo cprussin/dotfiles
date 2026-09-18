@@ -70,11 +70,29 @@
 #
 # WHAT PASSES THIS FILE TO DOMICILE, AND WHAT STILL DOES NOT.
 #
-# The flag exists now.  `domicile --config <path> <shell>` hands the file to
-# the compositor, which reads it at startup and re-reads it whenever it
-# changes, so this is no longer written for nobody:
+# Nothing has to.  `domicile <shell>` reads
+# `$XDG_CONFIG_HOME/domicile/domicile.toml` when that variable is set to an
+# absolute path, and `~/.config/domicile/domicile.toml` otherwise -- which is
+# where home-manager puts this file, so the path below is the arrangement
+# rather than a coincidence worth a flag.  `domicile --config <path> <shell>`
+# still overrides it, which is how a second arrangement gets tried without
+# moving this one aside.
 #
-#     domicile --config ~/.config/domicile/domicile.json <shell>
+# THE TWO SIDES RESOLVE THAT PATH AT DIFFERENT TIMES, which is the one way
+# they can part.  home-manager takes it from `xdg.configHome` when this is
+# built; domicile takes it from the environment when the desk starts.  Both
+# come out at `~/.config` here because nothing sets either for the session --
+# the only `XDG_CONFIG_HOME` this repo SETS is inside a wluma unit and reaches
+# nothing else.  Export one into the session without moving `xdg.configHome`
+# to match and the file is written somewhere domicile does not look.
+#
+# That one domicile says out loud rather than swallowing: it prints the file
+# it chose before it starts anything, including the path it looked in and did
+# not find.  What stays silent is the desk itself, which comes up unplaced --
+# so the sentence is on the terminal and the symptom is on the monitors.
+#
+# The compositor reads it at startup and re-reads it whenever it changes, so a
+# rebuild reaches a running desk.
 #
 # What this module does NOT do is run that command.  It writes the file and
 # installs nothing -- there is no domicile package here, no session and no
@@ -90,12 +108,14 @@
 }: let
   cfg = config.ui.domicile;
 
-  # Generated rather than `builtins.toJSON`, which writes the whole desk as
-  # one line.  Domicile says outright that this is not a file a person edits,
-  # but it is one somebody has to read the first time a monitor lands in the
-  # wrong place, and `ui/sunshine` already reaches for a `formats` generator
-  # for the same reason.
-  settings = pkgs.formats.json {};
+  # TOML because that is what domicile parses, and it parses TOML for the
+  # reason this file has always reached past `builtins.toJSON`: nobody writes
+  # this file, but somebody reads it the first time a monitor lands in the
+  # wrong place, and a wall of braces is a poor place to find one
+  # `transform`.  A generator either way -- `ui/sunshine` reaches for one too
+  # -- because a writer that cannot get the escaping wrong is the whole point
+  # of not hand-rolling the file.
+  settings = pkgs.formats.toml {};
 
   # The panels themselves, in physical pixels and at the density each is
   # readable at.  The same six records kanshi's file opens with; `logical` is
@@ -372,7 +392,13 @@ in {
       }
     ];
 
-    primary-user.home-manager.xdg.configFile."domicile/domicile.json".source = settings.generate "domicile.json" {
+    # THE PATH IS THE INTERFACE.  `domicile` with no `--config` looks exactly
+    # here, so renaming this file or moving it is a desk that comes up
+    # unplaced -- and domicile prints the file it CHOSE on the way up, which is
+    # where that turns back into a sentence.  Chose rather than read: the
+    # launcher hands the path on without opening it, so the complaint about
+    # what is inside comes from the compositor and names it separately.
+    primary-user.home-manager.xdg.configFile."domicile/domicile.toml".source = settings.generate "domicile.toml" {
       # THE SAME KEYBOARD SWAY GETS -- the same option, not a copy of it.
       #
       # `primary-user.home-manager.keymap` is what
