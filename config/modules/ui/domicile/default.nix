@@ -13,32 +13,44 @@
 # corresponds and nothing missing.
 #
 #
-# WHAT DOMICILE MATCHES ON, AND WHY IT IS NOT THE EDID STRING.
+# WHAT DOMICILE MATCHES ON, WHICH IS NOW NEARLY WHAT KANSHI MATCHES ON.
 #
-# kanshi matches `"Dell Inc. DELL U3219Q 2ZLS413"` -- make, model and serial,
-# straight off the EDID.  Domicile cannot: on a tty the engine holds DRM
-# master and is the only thing that reads the connectors, and what it sends
-# the compositor is `display::Display::id()` -- an opaque int64 ozone derives
-# from the EDID.  The compositor names the output `drm-<that id>` and that is
-# the whole identity a profile has to match on.
+# kanshi matches `"Dell Inc. DELL U3219Q 2ZLS413"` -- make, model and serial
+# off the EDID.  Domicile carries the same three now, so a profile names a
+# monitor the way it is labelled rather than by `drm-<id>`, the opaque int64
+# ozone derives from the same EDID.  Either still works; the id is what a
+# monitor with nothing to say about itself has to be named.
 #
-# It is stable across a hotplug and it does tell the three identical U3219Qs
-# apart, because the id carries the serial.  What it does not do is say WHICH
-# IS WHICH: that has to be read off a running desktop once and written down
-# here.  The compositor logs the display list it takes up, one `drm-<id>` per
-# monitor with its mode; nothing in this repository starts domicile as a
-# service yet, so where that log goes depends on how it was started.
+# TWO DIFFERENCES FROM THE STRING IN THE KANSHI FILE NEXT DOOR, and both bite
+# silently -- a name that matches nothing is not an error to domicile.  It
+# leaves the monitors where the engine put them and logs nothing wrong, so the
+# desk comes up unplaced and looks like this file was never read.
 #
-# So the ids live in `ui.domicile.displays` and default to null, and a profile
-# is emitted only when every monitor it names has one.  Set none and this
-# writes a config with no profiles, which is valid and leaves the monitors
-# wherever the engine put them.  Fill them in per machine as they are
-# discovered.
+#   The make is the three-letter PNP id, not the vendor name.  "DEL", not
+#   "Dell Inc.".  An EDID holds the id; the vendor name behind it is hwdata's
+#   pnp.ids, which libdisplay-info carries and Chromium does not.
 #
-# This is temporary.  `DisplaySnapshot::display_name()` has the EDID string
-# and `display::Display` has a `label` field to carry it in, which is the same
-# route the panel's millimetres already take across the C ABI; once that
-# lands, a profile matches what kanshi matches and this option goes away.
+#   A missing serial is left out, not spelled "Unknown".  sway writes that
+#   word where it found none; domicile writes nothing and the name is the two
+#   parts that are left.
+#
+# What does NOT differ is the numeric serial.  The LG below is named
+# `0x0001E368` by sway because libdisplay-info fell back to the base block's
+# 32-bit field, and domicile formats that identically -- which is checkable
+# from this desk's own kanshi config, and is why the fallback is there.
+#
+# So every name below is a derivation rather than a guess, and the vendor
+# name is what each derivation turns back into three letters: hwdata's
+# pnp.ids is the table libdisplay-info read them out of, and it answers in
+# both directions.  Dell Inc. is DEL, LG Electronics is GSM, Audio Processing
+# Technology  Ltd is APT -- each the only entry with that name -- and BOE is
+# its own vendor name.  Nothing here was read off a running desktop.
+#
+# So nothing here is unnamed out of the box.  A monitor only ends up without
+# a name when somebody sets it to `null` -- how a derived name that turns out
+# wrong is taken back out -- and even then the answer is not a guess: a
+# profile naming an unnamed monitor is not written out, so an incomplete
+# answer costs arrangements rather than producing wrong ones.
 #
 #
 # EVERY POSITION HERE ASSUMES A MODE NOTHING PINS.
@@ -146,13 +158,52 @@
     inherit laptopPanel portablePanel curved left center right;
   };
 
-  # What the compositor calls a monitor, or null where nobody has said yet.
+  # What each monitor is called, where it could be worked out from the kanshi
+  # string next door rather than read off hardware.  The header says what
+  # each part of that derivation rests on.
   #
-  # `or null` rather than a default attrset of nulls: an `attrsOf` option that
-  # is set REPLACES its default, so a machine that names two of the six leaves
-  # the other four absent rather than null, and reading them directly is an
-  # eval error on the one file that is supposed to be filled in gradually.
-  named = key: cfg.displays.${key} or null;
+  # NOT the option's `default`, and that is the whole reason this attrset
+  # exists.  An `attrsOf` option that is set REPLACES its default rather than
+  # merging into it, so a machine correcting one of these names would silently
+  # lose the other five -- which is exactly the trap `named` below was written
+  # to avoid on the other side.  Overridden per monitor instead.
+  derived = {
+    # sway calls this "BOE NE135A1M-NY1 Unknown".  The make survives the
+    # round trip unchanged because pnp.ids gives BOE the vendor name "BOE" --
+    # the same three letters, not a missing entry -- and "Unknown" is the word
+    # sway writes where libdisplay-info found no serial at all, neither a
+    # descriptor nor a non-zero number.  Domicile writes nothing there.
+    laptopPanel = "BOE NE135A1M-NY1";
+
+    # "Dell Inc." is hwdata's name for the maker whose EDIDs say DEL.
+    left = "DEL DELL U3219Q 2ZLS413";
+    center = "DEL DELL U3219Q G3MS413";
+    right = "DEL DELL U3219Q H8KF413";
+
+    # "LG Electronics" is GSM, which is the only pnp.ids entry carrying that
+    # name.  `0x0001E368` is the base block's 32-bit serial, which sway prints
+    # because there was no descriptor to prefer and which domicile formats the
+    # same way.
+    curved = "GSM LG ULTRAWIDE 0x0001E368";
+
+    # "Audio Processing Technology  Ltd" is APT, likewise the only entry with
+    # that name -- and its double space is pnp.ids' own, which is what says
+    # the make ends where it does and the model is "Monitor".
+    portablePanel = "APT Monitor demoset-1";
+  };
+
+  # What this desk knows a monitor as: what the machine said, else what was
+  # derived, else nothing.
+  #
+  # `or` catches a MISSING key, not a null one, and the difference is the
+  # point: a monitor set explicitly to `null` stops at the first rung rather
+  # than falling through to `derived`, which is how a derived name that turns
+  # out to be wrong is taken back out without having to know the right one.
+  #
+  # `or` rather than reading the attrs directly because neither is obliged to
+  # hold every key, and reading a missing one is an eval error on the one file
+  # that is supposed to be filled in gradually.
+  named = key: cfg.displays.${key} or derived.${key} or null;
 
   # One profile, or nothing at all when a monitor it names has no id yet.
   # Dropping it whole is the point: a profile that quietly left out the
@@ -172,50 +223,108 @@
     };
 in {
   options.ui.domicile.displays = lib.mkOption {
-    # Shaped rather than any string, because the failure it prevents is the
-    # silent one.  A wrong-but-well-formed name -- the bare id with no prefix,
-    # or sway's `DP-1` -- simply matches no monitor, and no profile matching
-    # is not an error to domicile: it leaves the monitors where the engine put
-    # them and logs nothing wrong.  The desk comes up unplaced and looks like
-    # this file was never read.
+    # Either name domicile knows a monitor by: the panel's, which is what
+    # `derived` above holds and what a person can write, or the output's
+    # `drm-<id>`, which is what a monitor stating no make, model or serial has
+    # to be called.
     #
-    # The id is signed, and `DrmScreen` hands out `kDefaultDisplayId` for a
-    # machine with nothing plugged in, so the sign is not assumed away here.
-    type = lib.types.attrsOf (lib.types.nullOr (lib.types.strMatching "drm--?[0-9]+"));
+    # Shaped rather than any string, because the failure it prevents is the
+    # silent one.  A name that matches nothing is not an error to domicile --
+    # it leaves the monitors where the engine put them -- so the desk comes up
+    # unplaced and looks like this file was never read.
+    #
+    # A PANEL NAME IS NOT ALWAYS THREE PARTS, which is the whole constraint on
+    # how strict this can be.  `DisplayNameFrom` joins the make, the model and
+    # the serial that are there and no more, and it drops the make outright
+    # when the product code is not a PNP id -- so `DELL U3219Q 2ZLS413` and
+    # `DEL DELL U3219Q` and a bare `DEL` are all names the compositor
+    # advertises.  Hence: three capitals on their own, or two or more words
+    # separated by single spaces.
+    #
+    # SO IT DOES NOT CATCH EITHER MISTAKE THE HEADER IS ABOUT.  A kanshi
+    # string pasted from the file next door is words separated by spaces too,
+    # and no shape tells a vendor name from a model when a name may
+    # legitimately begin with either.  Three of this desk's four kanshi
+    # strings pass here: both Dells and the LG on their vendor names, and the
+    # laptop panel on its trailing `Unknown`, which no shape ever caught
+    # because a serial is a word like any other.  Only the APT one fails, and
+    # only on the double space in its vendor name, which is an accident
+    # rather than a check.  What the shape does catch is the two
+    # single-word mistakes -- the bare id with no `drm-` in front of it, and
+    # sway's connector name (`DP-1`) -- and any stray whitespace, which is how
+    # a name copied out of a log arrives.  The cost of the first clause is a
+    # one-word name that is not a PNP id: a panel stating only a model has to
+    # be named `drm-<id>`, because nothing tells it apart from `DP-1`.
+    #
+    # The id is signed: `DrmScreen` hands out `kDefaultDisplayId` for a machine
+    # with nothing plugged in, so the sign is not assumed away here.
+    type = lib.types.attrsOf (lib.types.nullOr (lib.types.strMatching "(drm--?[0-9]+)|([A-Z]{3})|([^[:space:]]+( [^[:space:]]+)+)"));
+
     default = {};
     example = {
-      laptopPanel = "drm-1";
+      # A derived name corrected, and a derived name taken back out: the two
+      # things anybody writes here.
+      left = "DEL DELL U3219Q 4XYZ123";
       center = "drm-92";
+      portablePanel = null;
     };
     description = ''
-      What the compositor calls each monitor this desk's profiles place.  One
-      of ${lib.concatStringsSep ", " (lib.attrNames monitors)}; a monitor left
-      out is one whose name nobody has said yet.
+      What domicile knows each monitor of this desk as.  One of
+      ${lib.concatStringsSep ", " (lib.attrNames monitors)}.
 
-      The name is `drm-<id>`, where the id is what ozone derives from the
-      panel's EDID -- stable across a hotplug, and readable off the display
-      list the compositor logs.  A profile naming a monitor that is still
-      unset is not written out at all, so an incomplete answer here costs
-      profiles rather than producing wrong ones.
+      Either the panel's own name -- the make, model and serial its EDID
+      states, which is what kanshi matches on give or take the vendor name --
+      or the output's, which is `drm-<id>` for an id ozone derives from the
+      same EDID.  Both survive a hotplug.
+
+      A monitor left out keeps the name this file already derived for it, so
+      nothing needs writing here unless one of those turns out wrong.  Set one
+      to null to take a derived name back out: a monitor with no name is one
+      nobody has established, and the profiles naming it are not written out
+      at all, so an incomplete answer costs arrangements rather than producing
+      wrong ones.
     '';
   };
 
   config = {
     assertions = let
       unknown = lib.subtractLists (lib.attrNames monitors) (lib.attrNames cfg.displays);
-      # Unset monitors dropped first, and not as tidying: `nullOr` is the
-      # point of this option, so stubbing the four unknown ones as `null` is
-      # the natural way to write a partly-answered desk.  Two of those are not
-      # two monitors sharing a name -- and left in, they would be reported as
-      # one, in a message that dies coercing `null` to a string somewhere the
-      # user cannot see their own config in the trace.
-      ids = lib.filter (id: id != null) (lib.attrValues cfg.displays);
+      # The RESOLVED names, not `cfg.displays`.  Most of these names come
+      # from `derived` now, so a check that read only what was written here
+      # would miss the shape the mistake actually takes: one line corrected by
+      # hand, to a name three identical panels share, colliding with a name
+      # nobody wrote down because it was already right.
+      #
+      # Unset monitors dropped, and not as tidying: `nullOr` is the point of
+      # this option, so stubbing an unknown one as `null` is the natural way
+      # to write a partly-answered desk.  Two of those are not two monitors
+      # sharing a name -- and left in, they would be reported as one, in a
+      # message that dies coercing `null` to a string somewhere the user
+      # cannot see their own config in the trace.
+      ids = lib.filter (id: id != null) (map named (lib.attrNames monitors));
       repeated = lib.unique (lib.filter (id: lib.count (other: other == id) ids > 1) ids);
       # One line, because `''` keeps the source's own line breaks and this is
       # the one string somebody reads when they have mistyped something.
       sentence = lib.concatStringsSep " ";
       list = lib.concatStringsSep ", ";
       places = "It places ${list (lib.attrNames monitors)}.";
+      # Which monitors a name resolved to.  Named rather than left to the
+      # reader, because grepping for the name finds at most one of them: the
+      # other is one this file derived and nobody wrote down.
+      sharing = id: lib.attrNames (lib.filterAttrs (key: _: named key == id) monitors);
+      # "left and center", or "center, left and right".  Not `list`: this goes
+      # in the middle of a sentence, and a bare comma there reads as the end
+      # of a clause rather than as another monitor.
+      andList = keys:
+        if lib.length keys < 2
+        then list keys
+        else "${list (lib.init keys)} and ${lib.last keys}";
+      # "both" only when there are two of them.  Pasting one corrected serial
+      # into two of the three identical Dell lines gets you three.
+      shared = keys:
+        if lib.length keys == 2
+        then "both ${andList keys}"
+        else "all of ${andList keys}";
     in [
       # A key that is not a monitor is a typo, and a silent one: it would name
       # no profile, so the profiles it was meant for would never be written
@@ -237,20 +346,18 @@ in {
       # right are the same panel three times and the lines are a copy each --
       # and expensive to get wrong there: domicile refuses a profile that
       # places one display twice, and refusing a profile refuses the whole
-      # file, so the four profiles that were fine go with it.
+      # file, so every profile that was fine goes with it.
       {
         assertion = repeated == [];
-        message = sentence [
-          "ui.domicile.displays gives"
-          (
-            if lib.length repeated == 1
-            then "${list repeated} to more than one monitor."
-            else "each of ${list repeated} to more than one monitor."
-          )
-          "Each one is a different panel, and domicile refuses the whole"
-          "config file over a profile that places one display twice."
-          places
-        ];
+        message = sentence (
+          map (id: "This desk knows ${id} as ${shared (sharing id)}.") repeated
+          ++ [
+            "Those are different panels, and domicile refuses the whole config"
+            "file over a profile that places one display twice."
+            "A name not written in ui.domicile.displays is one this file"
+            "derived."
+          ]
+        );
       }
     ];
 
