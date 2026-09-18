@@ -16,6 +16,22 @@
       url = "github:seebi/dircolors-solarized";
       flake = false;
     };
+    # NO `follows` ON ITS nixpkgs, unlike home-manager above.  The engine is a
+    # prebuilt Chromium fork fetched as a tarball, and it is bound to whatever
+    # nixpkgs this input carries twice over: `autoPatchelfHook` writes in the
+    # libraries it LINKS, and a wrapper puts the GL stack it `dlopen`s on
+    # `LD_LIBRARY_PATH`.  The pin it ships is the one that combination is
+    # tested against.
+    #
+    # Pointing it at either of the two nixpkgs here would be this repository
+    # deciding that, and the two halves fail in different places: a linked
+    # library that moved fails the BUILD, which is deliberate over there, and
+    # the GL it opens at run time going missing costs the DESKTOP instead.
+    #
+    # The home-manager module itself is nixpkgs-agnostic -- it reads `pkgs`
+    # from the configuration importing it -- so this binds the package and
+    # nothing else.
+    domicile.url = "github:cprussin/domicile";
     fzf-pass = {
       url = "github:cprussin/fzf-pass";
       flake = false;

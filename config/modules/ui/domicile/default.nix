@@ -34,28 +34,37 @@
 # can settle; if they come up upside down the fix is in domicile's
 # `cover-the-window.ts`, not here.
 #
-# `domicile <shell>` reads this file where home-manager puts it, so nothing
-# has to pass it along; `--config` still overrides.  The two sides reach that
-# path differently -- home-manager from `xdg.configHome` at build time,
-# domicile from `XDG_CONFIG_HOME` at start -- so exporting one into the
-# session without moving the other writes this where domicile does not look.
-# It is re-read on change, so a rebuild reaches a running desk, and domicile
-# prints which file it chose before it starts anything.
+# THE FILE IS `programs.domicile`'S TO WRITE, not this one's.  domicile ships
+# a home-manager module with an option per field, and this is that module's
+# `settings` -- so where the file goes, and that it goes where `domicile` with
+# no `--config` looks, are no longer facts this repository has to know.  What
+# is left here is the desk: which monitors, where, and which way up.
 #
-# What this module does NOT do is run that command: it writes the file and
-# installs nothing, because making domicile the login session is a decision
-# about how the desk boots rather than about where the monitors are.
+# The two sides still reach that path differently -- home-manager from
+# `xdg.configHome` at build time, domicile from `XDG_CONFIG_HOME` at start --
+# so exporting one into the session without moving the other writes this where
+# domicile does not look.  It is re-read on change, so a rebuild reaches a
+# running desk, and domicile prints which file it chose before it starts
+# anything.
+#
+# `enable` IS BOTH HALVES: it writes the file AND installs the package, which
+# this module did not do before.  So `domicile` is on PATH on the one machine
+# that imports this -- lyra -- and turning it off writes nothing at all.
+# `mkDefault`, so a host can say so without `mkForce`: `enable` is a plain
+# bool, and a bare `true` here would make a host's `false` a conflict rather
+# than an override.  (Two bare `true`s would merge quietly -- it is the
+# disagreement that is the error, not the second definition.)
+#
+# No shell is named, so `domicile` still takes one as an argument.  That is
+# not the same as a login session: a session is a unit and a greeter, which is
+# a NixOS-level decision about how this machine boots, and neither this file
+# nor `programs.domicile` is where it would go.
 {
   config,
   lib,
-  pkgs,
   ...
 }: let
   cfg = config.ui.domicile;
-
-  # TOML because that is what domicile parses.  A generator rather than
-  # `builtins.toJSON` so the escaping is somebody else's problem.
-  settings = pkgs.formats.toml {};
 
   # The panels, in physical pixels at the density each is readable at.
   # `logical` is what the desktop is laid out in and what every position below
@@ -194,6 +203,11 @@ in {
   };
 
   config = {
+    # The module that writes the file, taken from the flake whose compositor
+    # reads it: the schema is kept in step over there now rather than by hand
+    # over here.
+    primary-user.home-manager.imports = [config.flake-inputs.domicile.homeManagerModules.default];
+
     assertions = let
       unknown = lib.subtractLists (lib.attrNames monitors) (lib.attrNames cfg.displays);
       # The RESOLVED names, not `cfg.displays`: the mistake is one line
@@ -254,126 +268,133 @@ in {
       }
     ];
 
-    # THE PATH IS THE INTERFACE: `domicile` with no `--config` looks exactly
-    # here, so moving this file is a desk that comes up unplaced.
-    primary-user.home-manager.xdg.configFile."domicile/domicile.toml".source = settings.generate "domicile.toml" {
-      # THE SAME OPTION SWAY READS, not a copy of it.  The NixOS
-      # `config.keymap` would work today only because ui/dvp assigns one to
-      # the other; a host setting just the home-manager side would give sway
-      # one layout and domicile another with nothing to say so.
-      #
-      # `options` goes across as the list it is -- sway and ckbcomp each join
-      # it where they are written, and this is the reader that wanted a list.
-      input = lib.optionalAttrs (keyboard != null) {
-        keyboard = {
-          xkb_layout = keyboard.layout;
-          xkb_variant = keyboard.variant;
-          xkb_options = keyboard.options;
+    primary-user.home-manager.programs.domicile = {
+      enable = lib.mkDefault true;
+      settings = {
+        # THE SAME OPTION SWAY READS, not a copy of it.  The NixOS
+        # `config.keymap` would work today only because ui/dvp assigns one to
+        # the other; a host setting just the home-manager side would give sway
+        # one layout and domicile another with nothing to say so.
+        #
+        # `options` goes across as the list it is -- sway and ckbcomp each join
+        # it where they are written, and this is the reader that wanted a list.
+        input = lib.optionalAttrs (keyboard != null) {
+          keyboard = {
+            xkb_layout = keyboard.layout;
+            xkb_variant = keyboard.variant;
+            xkb_options = keyboard.options;
+          };
         };
-      };
 
-      # Everything else takes domicile's own defaults.
-      output.profiles =
-        # The lid open and nothing plugged in.
-        (profile "laptop-only" {
-          laptopPanel =
-            at {
-              x = 0;
-              y = 0;
-            }
-            laptopPanel;
-        })
-        # The travel monitor, to the right of the laptop.
-        ++ (profile "portable-panel" {
-          laptopPanel =
-            at {
-              x = 0;
-              y = 0;
-            }
-            laptopPanel;
-          portablePanel =
-            at {
-              x = laptopPanel.logical.width;
-              y = 0;
-            }
-            portablePanel;
-        })
-        # One monitor on the desk, the laptop centered underneath it.
-        ++ (profile "home-office-center" {
-          laptopPanel =
-            at {
-              x = (center.logical.width - laptopPanel.logical.width) / 2;
-              y = center.logical.height;
-            }
-            laptopPanel;
-          center =
-            at {
-              x = 0;
-              y = 0;
-            }
-            center;
-        })
-        # Two of the three on their sides, the laptop bottom-aligned to their
-        # left: its top edge is how tall they are turned, less its own height.
-        ++ (profile "home-office-right-two" {
-          laptopPanel =
-            at {
-              x = 0;
-              y = (heightOnItsSide center) - laptopPanel.logical.height;
-            }
-            laptopPanel;
-          center =
-            sideways {
-              x = laptopPanel.logical.width;
-              y = 0;
-            }
-            center;
-          right =
-            sideways {
-              x = laptopPanel.logical.width + (widthOnItsSide center);
-              y = 0;
-            }
-            right;
-        })
-        # The full desk, lid shut.  The panel is still named: a profile
-        # applies only to the exact set it names, and a shut panel is still
-        # connected.
-        ++ (profile "home-office-full" {
-          laptopPanel = off laptopPanel;
-          left =
-            sideways {
-              x = 0;
-              y = 0;
-            }
-            left;
-          center =
-            sideways {
-              x = widthOnItsSide left;
-              y = 0;
-            }
-            center;
-          right =
-            sideways {
-              x = (widthOnItsSide left) + (widthOnItsSide center);
-              y = 0;
-            }
-            right;
-        })
-        # The ultrawide, with the laptop centered underneath it.
-        ++ (profile "home-office-curved" {
-          laptopPanel =
-            at {
-              x = (curved.logical.width - laptopPanel.logical.width) / 2;
-              y = curved.logical.height;
-            }
-            laptopPanel;
-          curved =
-            at {
-              x = 0;
-              y = 0;
-            }
-            curved;
-        });
+        # Everything else is left to the module's declared defaults, which it
+        # writes into the file rather than leaving out.  They are domicile's
+        # own today -- checked field by field against `domicile-config` --
+        # and they come from the same flake input as the compositor that
+        # reads them, so there is no version skew for them to drift across.
+        # Nothing compares them, though: the guard next door in domicile
+        # compares option NAMES and says so.
+        output.profiles =
+          # The lid open and nothing plugged in.
+          (profile "laptop-only" {
+            laptopPanel =
+              at {
+                x = 0;
+                y = 0;
+              }
+              laptopPanel;
+          })
+          # The travel monitor, to the right of the laptop.
+          ++ (profile "portable-panel" {
+            laptopPanel =
+              at {
+                x = 0;
+                y = 0;
+              }
+              laptopPanel;
+            portablePanel =
+              at {
+                x = laptopPanel.logical.width;
+                y = 0;
+              }
+              portablePanel;
+          })
+          # One monitor on the desk, the laptop centered underneath it.
+          ++ (profile "home-office-center" {
+            laptopPanel =
+              at {
+                x = (center.logical.width - laptopPanel.logical.width) / 2;
+                y = center.logical.height;
+              }
+              laptopPanel;
+            center =
+              at {
+                x = 0;
+                y = 0;
+              }
+              center;
+          })
+          # Two of the three on their sides, the laptop bottom-aligned to their
+          # left: its top edge is how tall they are turned, less its own height.
+          ++ (profile "home-office-right-two" {
+            laptopPanel =
+              at {
+                x = 0;
+                y = (heightOnItsSide center) - laptopPanel.logical.height;
+              }
+              laptopPanel;
+            center =
+              sideways {
+                x = laptopPanel.logical.width;
+                y = 0;
+              }
+              center;
+            right =
+              sideways {
+                x = laptopPanel.logical.width + (widthOnItsSide center);
+                y = 0;
+              }
+              right;
+          })
+          # The full desk, lid shut.  The panel is still named: a profile
+          # applies only to the exact set it names, and a shut panel is still
+          # connected.
+          ++ (profile "home-office-full" {
+            laptopPanel = off laptopPanel;
+            left =
+              sideways {
+                x = 0;
+                y = 0;
+              }
+              left;
+            center =
+              sideways {
+                x = widthOnItsSide left;
+                y = 0;
+              }
+              center;
+            right =
+              sideways {
+                x = (widthOnItsSide left) + (widthOnItsSide center);
+                y = 0;
+              }
+              right;
+          })
+          # The ultrawide, with the laptop centered underneath it.
+          ++ (profile "home-office-curved" {
+            laptopPanel =
+              at {
+                x = (curved.logical.width - laptopPanel.logical.width) / 2;
+                y = curved.logical.height;
+              }
+              laptopPanel;
+            curved =
+              at {
+                x = 0;
+                y = 0;
+              }
+              curved;
+          });
+      };
     };
   };
 }
