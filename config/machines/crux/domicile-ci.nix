@@ -16,12 +16,12 @@
 # THESE RUN AS THE PRIMARY USER, AND THAT IS A REAL TRADE.
 #
 # /build is the primary user's and the warm tree in it is the whole point.  A
-# dedicated service user would need either its own 97G tree -- the dataset's
-# quota is 200G, so two do not fit -- or group-write on that one, which does
-# not survive the default umask: files one user creates come out
-# group-readable and not group-writable, and the next incremental build by the
-# other user fails on them.  So the runners are the same user that builds
-# interactively.
+# dedicated service user would need either its own 97G tree -- and the trees
+# the dataset does hold are budgeted for in chromium-build.nix, with no spare
+# one in that arithmetic -- or group-write on that one, which does not survive
+# the default umask: files one user creates come out group-readable and not
+# group-writable, and the next incremental build by the other user fails on
+# them.  So the runners are the same user that builds interactively.
 #
 # The consequence is that anything they execute runs as that user, and that is
 # now true of two runners rather than one.  **The compensating control is not
@@ -135,12 +135,14 @@
   # is why the Chromium tree lives in /build/chromium and not in one of these
   # -- they are the disposable half and that one is the whole point.
   #
-  # BOTH COUNT AGAINST THE SAME 200G QUOTA the Chromium tree does, and each
-  # holds its space until the next start rather than until its job ends.  The
-  # light one is a checkout and a cargo target/ -- a few gigabytes beside the
-  # tree's 97G and the release build's 40G.  The number that actually has to
-  # stay true is engine-release.yml's own check: 60G free on /build or it
-  # refuses to start.
+  # BOTH COUNT AGAINST THE SAME QUOTA the Chromium trees do -- and
+  # chromium-build.nix owns that number, with a unit there that refuses a
+  # deploy which would not fit -- and each holds its space until the next
+  # start rather than until its job ends.  The light one is a checkout and a
+  # cargo target/, a few gigabytes beside the tree's 97G and the release
+  # build's 40G.  The number that actually has to stay true is the one
+  # engine-release.yml checks for itself: 60G free on /build, or it refuses
+  # to start.
   workDirs = {
     heavy = "/build/github-runner";
     light = "/build/github-runner-light";
@@ -374,6 +376,7 @@
   };
 
   # What every one of these units needs before it can start, applied to both.
+  # The heavy runner adds the tree pool to this below; see the comment there.
   wiring = {
     # Colmena writes the token asynchronously and generates a -key.service as
     # the gate on it; every other key consumer in this repository pairs both,
@@ -439,7 +442,29 @@ in {
   ];
 
   systemd.services = {
-    github-runner-domicile = wiring;
+    # THE HEAVY ONE ALSO WAITS FOR THE TREE POOL, AND THE LIGHT ONE MUST NOT.
+    #
+    # setup-chromium-trees.service is what makes /build/chromium a symlink into
+    # /build/trees, including the one-time move of the 97G checkout into the
+    # first slot.  A heavy runner that started before it finished would hand a
+    # job a path that is still a directory -- which engine-tree-pool.sh refuses
+    # by design -- and would be the window in which a job is inside the tree
+    # while the move wants to happen, which is what that unit's lock check is
+    # about.  `Requires=` and not just `After=`, for setup-build-mount's
+    # reason: a half-made pool is not a thing to start a job into.
+    #
+    # The light runner is the whole argument of this file: it exists BECAUSE it
+    # never opens that tree.  Making it require the pool would mean a refusal
+    # up there -- a stale lock, which by design nothing clears automatically --
+    # takes out all of CI rather than the half that touches Chromium, and the
+    # jobs it would take out are the ones that were already waiting hours
+    # behind the tree for no part of it.
+    github-runner-domicile =
+      wiring
+      // {
+        requires = wiring.requires ++ ["setup-chromium-trees.service"];
+        after = wiring.after ++ ["setup-chromium-trees.service"];
+      };
     github-runner-domicile-light = wiring;
   };
 
