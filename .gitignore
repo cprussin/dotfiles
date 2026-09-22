@@ -3,4 +3,9 @@
 .direnv/
 result
 .claude/settings.local.json
+
+# Agent tooling checks a second copy of this repo out under here to work in
+# isolation.  It is a registered git worktree, not content, and it is removed
+# when the agent finishes.
+.claude/worktrees/
 __pycache__/
