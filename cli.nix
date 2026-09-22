@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   statix,
   deadnix,
   alejandra,
@@ -16,6 +17,11 @@ lib.mkCli "cli" {
     lint = "${statix}/bin/statix check .";
     dead-code = "${deadnix}/bin/deadnix --fail .";
     format = "${alejandra}/bin/alejandra --check .";
+
+    # The one shell script on this fleet that is not a few lines inside a unit:
+    # it runs unattended for hours and fills 97G, so its decisions are checked
+    # rather than read.  statix and deadnix see Nix and nothing else.
+    crux-tree-bootstrap = "${bash}/bin/bash ${./config/machines/crux/test-bootstrap-chromium-tree.sh} ${./config/machines/crux/bootstrap-chromium-tree.sh}";
   };
 
   fix = {
