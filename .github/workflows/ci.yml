@@ -34,6 +34,9 @@ jobs:
       - name: cli test format
         if: ${{ !cancelled() }}
         run: nix develop --command cli test format
+      - name: cli test crux-tree-bootstrap
+        if: ${{ !cancelled() }}
+        run: nix develop --command cli test crux-tree-bootstrap
 
   # `--all-systems` is the point: without it both commands only look at the
   # runner's own system, which is the one that always worked.  It was the other
