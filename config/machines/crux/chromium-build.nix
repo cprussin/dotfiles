@@ -192,7 +192,11 @@ in {
       "d ${buildRoot}/bootstrap 0755 ${config.primary-user.name} users -"
 
       "d ${ccacheDir} 0755 ${config.primary-user.name} users -"
-      "d ${buildRoot}/bin 0755 root root -"
+      # The same owner as ${buildRoot} itself: systemd-tmpfiles refuses to
+      # descend from a user-owned directory into a root-owned one ("unsafe path
+      # transition") and exits CANTCREAT, which SuccessExitStatus below turns
+      # into a unit that reports success having created nothing.
+      "d ${buildRoot}/bin 0755 ${config.primary-user.name} users -"
 
       # `L+` replaces; plain `L` would leave a stale symlink on a ccache bump.
       # This is also what keeps ccache in the system closure.
