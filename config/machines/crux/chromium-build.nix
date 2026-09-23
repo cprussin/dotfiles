@@ -71,16 +71,20 @@
   #
   # THE ARITHMETIC, because it is what stops at two.  A tree is 97G (the
   # measurement above), `engine-release.yml`'s out/Release is ~40G in whichever
-  # tree it lands in, and the two runner work directories and /build/tmp are a
-  # few more.  Two trees is 194 + 40 = 234G before those, so the dataset's
-  # quota goes from 200G to **250G**, which is the next round number with room
-  # left over.  The unit below checks the 234 and asks for the 250.
+  # tree it lands in, the compiler cache below is 40G, and the two runner work
+  # directories and /build/tmp are a few more.  Two trees is 194 + 40 + 40 =
+  # 274G before those, so the dataset's quota is **300G**, which is the next
+  # round number with room left over.  The unit below checks the 274 and asks
+  # for the 300.
+  #
+  # The unit computes the floor from `treeCount` and `ccacheGiB`, not from
+  # these sentences; keep them in step.
   #
   # THAT QUOTA IS NOT SET HERE, AND THE UNIT BELOW REFUSES UNTIL IT IS.  The
   # dataset was created by hand with `-o quota=200G` and nothing in this file
   # declares it, so raising it is a command on the machine:
   #
-  #     zfs set quota=250G tank-fast/chromium
+  #     zfs set quota=300G tank-fast/chromium
   #
   # Spelled literally rather than with ${pool}, because this is a comment: Nix
   # does not interpolate one, so in a shell that name expands to nothing and
@@ -93,15 +97,50 @@
   # never pass again.  A deploy that stops with the command to run is the
   # cheap version of finding that out.
   #
-  # Three trees would be 291 + 40 on a 500G NVMe that also holds /nix, which is
-  # why it is not three.  A third is worth having only once something has
-  # measured what is actually left on that disk.
+  # Three trees would be 291 + 40 + 40 on a 500G NVMe that also holds /nix,
+  # which is why it is not three.  A third is worth having only once something
+  # has measured what is actually left on that disk.
   #
   # AT LEAST ONE, and it is a literal here rather than an option, so this is a
   # note and not an assertion: the unit below adopts the existing checkout into
   # `tree-0` and points the link at it, so a zero would reach an `rmdir` and an
   # `ln -s` against a slot nothing made.
   treeCount = 2;
+
+  # A COMPILER CACHE.  The engine job's Build step is 78 minutes when the tree
+  # pool hands a run a tree that last carried a different series, and 17s when
+  # it does not (runs 35713850226 and 35722156309).  The work in between is
+  # recompiling what this machine has already compiled.
+  #
+  # 40G is a guess; `ccache --show-stats` replaces it.  Raising it raises the
+  # quota the unit below demands.
+  ccacheGiB = 40;
+
+  # On the NVMe with the trees rather than ~/.cache on tank.
+  ccacheDir = "${buildRoot}/ccache";
+
+  # A SYMLINK, NOT THE STORE PATH.  `gn` bakes `cc_wrapper` into every compile
+  # command, so a ccache bump would rewrite all of them in both trees.
+  ccacheBin = "${buildRoot}/bin/ccache";
+
+  # One set for the runner and for login sessions, so both fill one cache.
+  #
+  # `time_macros` is upstream Chromium's recommendation and is the whole list.
+  # `include_file_mtime`/`include_file_ctime` are NOT set: they disable the
+  # guard against an input changing mid-compile, whose failure is an entry
+  # under the wrong key, and the mtime churn from `engine-reset.sh` does not
+  # need them -- ccache compares contents.  `locale` and `hash_dir` are not set
+  # because neither changes anything here.
+  ccacheEnvironment = {
+    CCACHE_DIR = ccacheDir;
+    # `Gi`: a bare `G` is decimal, and the binding above is GiB.
+    CCACHE_MAXSIZE = "${toString ccacheGiB}Gi";
+    CCACHE_SLOPPINESS = "time_macros";
+
+    # Read by cprussin/domicile#548, which is not merged: until it is, this is
+    # set and unread.  Safe in either order.
+    DOMICILE_CC_WRAPPER = ccacheBin;
+  };
 
   # Its own file because it is testable and is tested:
   # test-bootstrap-chromium-tree.sh drives every decision in it against a
@@ -151,6 +190,13 @@ in {
       # No age: the unit clears staging at the start of every firing, and a
       # sweep on a timer could take one mid-sync.
       "d ${buildRoot}/bootstrap 0755 ${config.primary-user.name} users -"
+
+      "d ${ccacheDir} 0755 ${config.primary-user.name} users -"
+      "d ${buildRoot}/bin 0755 root root -"
+
+      # `L+` replaces; plain `L` would leave a stale symlink on a ccache bump.
+      # This is also what keeps ccache in the system closure.
+      "L+ ${ccacheBin} - - - - ${pkgs.ccache}/bin/ccache"
     ];
 
     # x-systemd.before fixes the boot ordering, but not the deploy: on the
@@ -262,13 +308,14 @@ in {
             # order that has to hold: nothing should be made in a dataset that
             # cannot hold it.
             #
-            # A tree is 97G and engine-release.yml's out/Release is ~40G in
-            # whichever one it lands in, so the FLOOR is treeCount of the first
-            # plus one of the second.
+            # A tree is 97G, engine-release.yml's out/Release is ~40G in
+            # whichever one it lands in, and the compiler cache is ccacheGiB, so
+            # the FLOOR is treeCount of the first plus one of the second plus
+            # the third.
             #
             # The floor is what is checked and not what is recommended, and the
-            # gap is deliberate: it counts the trees and nothing else, while the
-            # dataset also carries the two runner work directories and
+            # gap is deliberate: it counts those three and nothing else, while
+            # the dataset also carries the two runner work directories and
             # /build/tmp.  A quota set exactly at the floor passes here and then
             # runs out somewhere less legible.  So the command below asks for
             # the next round number above it.
@@ -290,13 +337,14 @@ in {
             # swallow the substitution's status, so `export quota=$(zfs ...)`
             # would not stop anything even here at the top level, while a bare
             # assignment inside a function still would.  This one is bare.
-            floor=$(( ${toString treeCount} * 97 + 40 ))
+            floor=$(( ${toString treeCount} * 97 + 40 + ${toString ccacheGiB} ))
             want=$(( (floor / 50 + 1) * 50 ))
             quota=$(zfs get -Hp -o value quota ${pool}/chromium)
             if [ "$quota" != "0" ] && [ "$quota" -lt $((floor * 1024 * 1024 * 1024)) ]; then
               echo "${pool}/chromium has a $((quota / 1024 / 1024 / 1024))G quota." >&2
-              echo "${toString treeCount} Chromium trees plus a release build need ''${floor}G of it," >&2
-              echo "before the runner work directories and /build/tmp." >&2
+              echo "${toString treeCount} Chromium trees at 97G, a release build at 40G and a" >&2
+              echo "${toString ccacheGiB}G compiler cache need ''${floor}G of it, before the runner work" >&2
+              echo "directories and /build/tmp." >&2
               echo >&2
               echo "  zfs set quota=''${want}G ${pool}/chromium" >&2
               echo >&2
@@ -541,6 +589,12 @@ in {
           ExecStart = bootstrapTree;
         };
       };
+
+      # Set here because /build and its quota are this file's.  Merges with
+      # what domicile-ci.nix puts on the same unit: the keys are disjoint, and
+      # keeping TMPDIR out of `ccacheEnvironment` is what keeps them so.  Not
+      # the light runner, which never opens the tree.
+      github-runner-domicile.environment = ccacheEnvironment;
     };
 
     timers.bootstrap-chromium-tree = {
@@ -582,6 +636,8 @@ in {
       pkgs.git
       pkgs.lsb-release # depot_tools probes it
       pkgs.python3
+
+      pkgs.ccache # so `ccache --show-stats` is a thing a person can run
     ];
 
     # sessionVariables rather than variables: the primary user's shell is
@@ -589,6 +645,12 @@ in {
     # hm-session-vars.sh, so the host-wide option is the only one that reaches
     # the shell that needs it.  This covers every PAM session, including
     # `ssh crux <cmd>`, but no system service.
-    sessionVariables.TMPDIR = "${buildRoot}/tmp";
+    #
+    # The cache settings ride along so a hand-run build fills the same cache.
+    sessionVariables =
+      {
+        TMPDIR = "${buildRoot}/tmp";
+      }
+      // ccacheEnvironment;
   };
 }
