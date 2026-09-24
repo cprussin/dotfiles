@@ -125,7 +125,7 @@
 
   # One set for the runner and for login sessions, so both fill one cache.
   #
-  # `time_macros` is upstream Chromium's recommendation and is the whole list.
+  # `time_macros` is upstream Chromium's recommendation.
   # `include_file_mtime`/`include_file_ctime` are NOT set: they disable the
   # guard against an input changing mid-compile, whose failure is an entry
   # under the wrong key, and the mtime churn from `engine-reset.sh` does not
@@ -135,10 +135,11 @@
     CCACHE_DIR = ccacheDir;
     # `Gi`: a bare `G` is decimal, and the binding above is GiB.
     CCACHE_MAXSIZE = "${toString ccacheGiB}Gi";
-    CCACHE_SLOPPINESS = "time_macros";
+    # ccache refuses `-fmodules` (Chromium's libc++) without both.  Module
+    # headers go unhashed; `CR_LIBCXX_REVISION` catches a libc++ roll.
+    CCACHE_SLOPPINESS = "time_macros,modules";
+    CCACHE_DEPEND = "true";
 
-    # Read by cprussin/domicile#548, which is not merged: until it is, this is
-    # set and unread.  Safe in either order.
     DOMICILE_CC_WRAPPER = ccacheBin;
   };
 
