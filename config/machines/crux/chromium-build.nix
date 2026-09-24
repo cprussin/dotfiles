@@ -69,13 +69,11 @@
   # number -- it uses whatever slots it finds here -- so this can be raised
   # later without touching that repository.
   #
-  # THE ARITHMETIC, because it is what stops at two.  A tree is 97G (the
-  # measurement above), `engine-release.yml`'s out/Release is ~40G in whichever
-  # tree it lands in, the compiler cache below is 40G, and the two runner work
-  # directories and /build/tmp are a few more.  Two trees is 194 + 40 + 40 =
-  # 274G before those, so the dataset's quota is **300G**, which is the next
-  # round number with room left over.  The unit below checks the 274 and asks
-  # for the 300.
+  # THE ARITHMETIC, because it is what stops at two.  Per tree: 97G (the
+  # measurement above) plus a ~40G out/Release, since the pool builds a
+  # release in any tree; plus the 40G compiler cache.  2 * 137 + 40 = 314G
+  # before the runner work directories and /build/tmp, so the dataset's quota
+  # is **350G**.  The unit below checks the 314 and asks for the 350.
   #
   # The unit computes the floor from `treeCount` and `ccacheGiB`, not from
   # these sentences; keep them in step.
@@ -84,7 +82,7 @@
   # dataset was created by hand with `-o quota=200G` and nothing in this file
   # declares it, so raising it is a command on the machine:
   #
-  #     zfs set quota=300G tank-fast/chromium
+  #     zfs set quota=350G tank-fast/chromium
   #
   # Spelled literally rather than with ${pool}, because this is a comment: Nix
   # does not interpolate one, so in a shell that name expands to nothing and
@@ -139,6 +137,10 @@
     # headers go unhashed; `CR_LIBCXX_REVISION` catches a libc++ roll.
     CCACHE_SLOPPINESS = "time_macros,modules";
     CCACHE_DEPEND = "true";
+
+    # Two trees, one cache: compile commands and depfiles carry tree paths.
+    # Safe while `symbol_level = 0`; no debug info records a directory.
+    CCACHE_BASEDIR = buildRoot;
 
     DOMICILE_CC_WRAPPER = ccacheBin;
   };
@@ -313,10 +315,8 @@ in {
             # order that has to hold: nothing should be made in a dataset that
             # cannot hold it.
             #
-            # A tree is 97G, engine-release.yml's out/Release is ~40G in
-            # whichever one it lands in, and the compiler cache is ccacheGiB, so
-            # the FLOOR is treeCount of the first plus one of the second plus
-            # the third.
+            # Per tree: a tree is 97G plus a ~40G out/Release (the pool builds
+            # a release in any tree), plus the compiler cache.
             #
             # The floor is what is checked and not what is recommended, and the
             # gap is deliberate: it counts those three and nothing else, while
@@ -342,14 +342,14 @@ in {
             # swallow the substitution's status, so `export quota=$(zfs ...)`
             # would not stop anything even here at the top level, while a bare
             # assignment inside a function still would.  This one is bare.
-            floor=$(( ${toString treeCount} * 97 + 40 + ${toString ccacheGiB} ))
+            floor=$(( ${toString treeCount} * (97 + 40) + ${toString ccacheGiB} ))
             want=$(( (floor / 50 + 1) * 50 ))
             quota=$(zfs get -Hp -o value quota ${pool}/chromium)
             if [ "$quota" != "0" ] && [ "$quota" -lt $((floor * 1024 * 1024 * 1024)) ]; then
               echo "${pool}/chromium has a $((quota / 1024 / 1024 / 1024))G quota." >&2
-              echo "${toString treeCount} Chromium trees at 97G, a release build at 40G and a" >&2
-              echo "${toString ccacheGiB}G compiler cache need ''${floor}G of it, before the runner work" >&2
-              echo "directories and /build/tmp." >&2
+              echo "${toString treeCount} Chromium trees at 97G, a release build of 40G in each" >&2
+              echo "and a ${toString ccacheGiB}G compiler cache need ''${floor}G of it, before the runner" >&2
+              echo "work directories and /build/tmp." >&2
               echo >&2
               echo "  zfs set quota=''${want}G ${pool}/chromium" >&2
               echo >&2
@@ -596,10 +596,11 @@ in {
       };
 
       # Set here because /build and its quota are this file's.  Merges with
-      # what domicile-ci.nix puts on the same unit: the keys are disjoint, and
-      # keeping TMPDIR out of `ccacheEnvironment` is what keeps them so.  Not
-      # the light runner, which never opens the tree.
+      # what domicile-ci.nix puts on the same units: the keys are disjoint, and
+      # keeping TMPDIR out of `ccacheEnvironment` is what keeps them so.  Both
+      # heavy runners; not the light one, which never opens a tree.
       github-runner-domicile.environment = ccacheEnvironment;
+      github-runner-domicile-two.environment = ccacheEnvironment;
     };
 
     timers.bootstrap-chromium-tree = {

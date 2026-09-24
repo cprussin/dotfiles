@@ -32,12 +32,15 @@
 # can enforce it, which is exactly why it is written down here.
 #
 #
-# TWO RUNNERS, AND WHAT SEPARATES THEM IS THE CHROMIUM TREE.
+# THREE RUNNERS, AND WHAT SEPARATES THEM IS THE CHROMIUM TREE.
 #
 # This was one runner, deliberately, and the reasoning was that a second
 # instance would share /build/chromium with the first -- two concurrent
 # `autoninja` runs against one out/ directory corrupt each other, and one
 # runner is one job at a time, which is that serialisation for free.
+#
+# There is more than one tree now, so there are two heavy runners below; the
+# light one's argument that follows is unchanged.
 #
 # The hazard is real and this file still respects it.  But it is an argument
 # about the tree rather than about the machine, and the jobs paying for it
@@ -75,9 +78,12 @@
 # number is in the data and looks like a fast run: anyone re-deriving these
 # figures will meet it.)
 #
-# So: two runners, one tree.  `crux` carries the `chromium` label and is what
-# every workflow that resets /build/chromium/src asks for.  `crux-light`
-# carries no such label and exists for the jobs that do not.
+# So: three runners over a pool of trees.  `crux` and `crux-two` both carry
+# the `chromium` label and are what every workflow that resets a Chromium tree
+# asks for -- two of them, so a repin no longer blocks every other engine
+# branch; which tree each run gets is `engine-tree-pool.sh`'s, over in
+# cprussin/domicile.  `crux-light` carries no such label and exists for the
+# jobs that do not open a tree at all.
 #
 # NOTHING HERE ENFORCES THAT SPLIT.  A workflow is free to ask for
 # `crux-light` and then run `autoninja` in the shared tree, and no NixOS
@@ -93,15 +99,12 @@
 # landed, and it is not fine for `guard-latency.sh`, which times sixty
 # keystroke-to-pixel rounds and would read a concurrent job as a regression.
 #
-# **The single slot was that lock, and this file removes it.**  The thing that
+# **The single slot was that lock, and this file removed it.**  The thing that
 # replaces it is `.github/scripts/engine-render-node-lock.sh` in
-# cprussin/domicile.  This file alone cannot open the exposure -- no workflow
-# over there asks for `crux-light` yet, so the second runner sits idle -- and
-# the change that does ask for it is the same change that carries the lock.
-# That is why the two have to land together, and why the ordering is stated in
-# both.  The lock belongs over there for the reason the tree lock does: it has
-# to be taken by the steps that care, and systemd cannot know which those
-# are.
+# cprussin/domicile, and `engine-compile-slot.sh` beside it is the same
+# argument about the machine's memory rather than its card.  Both belong over
+# there for the reason the tree lock does: they have to be taken by the steps
+# that care, and systemd cannot know which those are.
 #
 # `gpu` IS NOW ON BOTH, so `runs-on: [self-hosted, gpu]` would match either.
 # No workflow asks that today.  One that wants a specific machine should name
@@ -145,6 +148,7 @@
   # to start.
   workDirs = {
     heavy = "/build/github-runner";
+    heavy2 = "/build/github-runner-2";
     light = "/build/github-runner-light";
   };
 
@@ -375,8 +379,9 @@
     serviceOverrides = hardening;
   };
 
-  # What every one of these units needs before it can start, applied to both.
-  # The heavy runner adds the tree pool to this below; see the comment there.
+  # What every one of these units needs before it can start, applied to all
+  # three.  The heavy ones add the tree pool to it below; see the comment
+  # there.
   wiring = {
     # Colmena writes the token asynchronously and generates a -key.service as
     # the gate on it; every other key consumer in this repository pairs both,
@@ -438,11 +443,12 @@ in {
   # away.
   systemd.tmpfiles.rules = [
     "d ${workDirs.heavy} 0750 ${config.primary-user.name} users -"
+    "d ${workDirs.heavy2} 0750 ${config.primary-user.name} users -"
     "d ${workDirs.light} 0750 ${config.primary-user.name} users -"
   ];
 
   systemd.services = {
-    # THE HEAVY ONE ALSO WAITS FOR THE TREE POOL, AND THE LIGHT ONE MUST NOT.
+    # THE HEAVY ONES ALSO WAIT FOR THE TREE POOL, AND THE LIGHT ONE MUST NOT.
     #
     # setup-chromium-trees.service is what makes /build/chromium a symlink into
     # /build/trees, including the one-time move of the 97G checkout into the
@@ -465,6 +471,12 @@ in {
         requires = wiring.requires ++ ["setup-chromium-trees.service"];
         after = wiring.after ++ ["setup-chromium-trees.service"];
       };
+    github-runner-domicile-two =
+      wiring
+      // {
+        requires = wiring.requires ++ ["setup-chromium-trees.service"];
+        after = wiring.after ++ ["setup-chromium-trees.service"];
+      };
     github-runner-domicile-light = wiring;
   };
 
@@ -480,13 +492,17 @@ in {
       labels = ["crux" "chromium" "gpu"];
     };
 
-    # Everything that does not.  One job is waiting for this -- and waiting is
-    # the word: `pinned-engine.yml` still says `runs-on: [self-hosted, crux]`
-    # on domicile's main, and the change that points it here is the companion
-    # named up top, the same one that carries the render node lock.  Until it
-    # lands this runner has no customer and does nothing.
-    #
-    # Why that job is worth a whole second registration: it fetches the
+    # Same labels: the pool (`engine-tree-pool.sh`) arbitrates trees, and
+    # `engine-compile-slot.sh` keeps cold builds to one at a time (62G, no
+    # swap).  Both live in cprussin/domicile.
+    domicile-two = runner {
+      name = "crux-two";
+      workDir = workDirs.heavy2;
+      labels = ["crux" "chromium" "gpu"];
+    };
+
+    # Everything that does not.  One job uses it, `pinned-engine.yml`, and it
+    # is worth a whole registration of its own: it fetches the
     # published engine rather than building one, it runs on every pull request
     # because the pair it guards can be broken by three different files, it is
     # under two minutes of work, and it was spending hours in front of the tree
