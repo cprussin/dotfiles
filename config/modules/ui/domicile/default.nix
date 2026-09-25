@@ -70,16 +70,52 @@
       displays;
   };
 
-  keyboard = config.primary-user.home-manager.keymap;
+  hm = config.primary-user.home-manager;
+
+  keyboard = hm.keymap;
+
+  # domicile's theme, out of the same `colorTheme` everything else here reads.
+  # Names are `<family>/<variant>` and the variants are exactly domicile's two.
+  # Both the attrset and its `name` are nullable; either null leaves domicile's
+  # own `theme.mode` option at its default (`dark`).
+  themeMode =
+    if hm.colorTheme == null || hm.colorTheme.name == null
+    then null
+    else lib.last (lib.splitString "/" hm.colorTheme.name);
 in {
   primary-user.home-manager = {
     imports = [config.flake-inputs.domicile.homeManagerModules.default];
+
+    # Named here because the domicile module adds its package at the normal
+    # priority this repo's `lib.mkForce` discards -- the trap ui/xdg-portal
+    # documents.  Without it `domicile` is off PATH and its `.portal` file
+    # never reaches the profile.
+    home.packages = lib.mkForce (
+      lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
+    );
+
+    # Portal routing, in the shape ui/sway writes for wlr.  xdg-desktop-portal
+    # matches this against its OWN `XDG_CURRENT_DESKTOP`, which domicile's
+    # compositor announces to the D-Bus and systemd activation environments at
+    # startup.  `gtk` second answers what domicile does not implement -- not
+    # screenshot or screencast, which neither has a backend for.
+    xdg.portal = {
+      # For the symmetry with ui/sway; `home.packages` above is what installs
+      # it, and this only feeds that list and a non-empty assertion.
+      extraPortals =
+        lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage;
+      config.domicile.default = ["domicile" "gtk"];
+    };
 
     programs.domicile = {
       # `mkDefault` so a host on this profile can turn it off: a bare `true`
       # would make its `false` a conflict rather than an override.
       enable = lib.mkDefault true;
       settings = {
+        # What the desk COMES UP on: domicile's own toggle changes the live
+        # theme without writing back, and the next rebuild restates this.
+        theme = lib.optionalAttrs (themeMode != null) {mode = themeMode;};
+
         # The same option sway reads, not a copy of it: a host setting only one
         # of the two would give sway one layout and domicile another with
         # nothing to say so.  `options` goes across as the list it is.
