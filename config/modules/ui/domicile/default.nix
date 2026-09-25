@@ -116,10 +116,12 @@ in {
         # theme without writing back, and the next rebuild restates this.
         theme = lib.optionalAttrs (themeMode != null) {mode = themeMode;};
 
-        # The launcher's file index: every top-level entry of ~, one level into
-        # Library, Notes and Projects, and all of Scratch.  Dotfiles are not
-        # omitted -- a stated list replaces domicile's hidden-file default.
+        # The launcher's file index: every top-level entry of ~ but its
+        # dotfiles, one level into Library, Notes and Projects, and all of
+        # Scratch.  Dotfiles below ~ are kept -- a stated list replaces
+        # domicile's hidden-file default, and `.*` stops at a `/`.
         files.omit = [
+          ".*"
           "*/*"
           "!{Library,Notes,Projects,Scratch}/*"
           "{Library,Notes,Projects}/*/*"
