@@ -116,6 +116,15 @@ in {
         # theme without writing back, and the next rebuild restates this.
         theme = lib.optionalAttrs (themeMode != null) {mode = themeMode;};
 
+        # The launcher's file index: every top-level entry of ~, one level into
+        # Library, Notes and Projects, and all of Scratch.  Dotfiles are not
+        # omitted -- a stated list replaces domicile's hidden-file default.
+        files.omit = [
+          "*/*"
+          "!{Library,Notes,Projects,Scratch}/*"
+          "{Library,Notes,Projects}/*/*"
+        ];
+
         # The same option sway reads, not a copy of it: a host setting only one
         # of the two would give sway one layout and domicile another with
         # nothing to say so.  `options` goes across as the list it is.
