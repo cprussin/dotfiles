@@ -172,6 +172,10 @@ in {
 
   boot = {
     kernelModules = ["kvm-intel"];
+    # Cap the ARC at 8G.  Uncapped, OpenZFS lets it grow to ~all of RAM (c_max
+    # read 61.6G, size 21.2G on 2026-09-28), and with no swap it shrinks slower
+    # than a cold Chromium link allocates -- an OOM on the house's DNS server.
+    kernelParams = ["zfs.zfs_arc_max=${toString (8 * 1024 * 1024 * 1024)}"];
     extraModulePackages = [];
     initrd = {
       availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "e1000e" "igb"];
