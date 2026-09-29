@@ -127,6 +127,11 @@ in {
           "{Library,Notes,Projects}/*/*"
         ];
 
+        # The launcher offers the apps programs.launcher.desktopEntries names
+        # and nothing a package happened to install: every desktop entry is
+        # left out, then `launcher-*` taken back.
+        applications.omit = ["*" "!launcher-*"];
+
         # The same option sway reads, not a copy of it: a host setting only one
         # of the two would give sway one layout and domicile another with
         # nothing to say so.  `options` goes across as the list it is.

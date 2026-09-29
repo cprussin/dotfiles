@@ -15,10 +15,12 @@
   sms = mkWebApp "sms" "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
   matrix = pkgs.writeShellScript "matrix" "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   telegram = pkgs.writeShellScript "telegram" "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
+  slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   comms = pkgs.writeShellScript "" ''
     ${sms} &
     ${matrix} &
     ${telegram} &
+    ${slack} &
   '';
   mkGame = pkg:
     pkgs.writeShellScript "${pkg.name}-game" ''
@@ -45,7 +47,7 @@ in {
       launcher = {
         enable = true;
         apps = {
-          inherit sms matrix telegram comms;
+          inherit sms matrix telegram slack comms;
 
           agenda = pkgs.writeShellScript "agenda" "${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
           bitwig = "${pkgs.bitwig-studio}/bin/bitwig-studio";
@@ -89,7 +91,6 @@ in {
           screen-record = pkgs.writeShellScript "screenshot" "${screen} record $*";
           screenshot = pkgs.writeShellScript "screenshot" "${screen} shot $*";
           shutdown = mkConfirmationDialog "shutdown" "Yes, shut down" "No, remain on" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff";
-          slack = pkgs.writeShellScript "slack" "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
           sotd = mkWebApp "sotd" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
           steam = "${pkgs.steam}/bin/steam";
           stop-screen-record = pkgs.writeShellScript "stop-screen-record" "pkill wf-recorder";
@@ -99,6 +100,38 @@ in {
           tor-browser = pkgs.writeShellScript "tor-browser" "${pkgs.launcher}/bin/browse --browser tor-browser $*";
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
           volume = pkgs.callPackage ./apps/volume.nix {};
+        };
+
+        # What domicile's launcher offers, and all it offers: ui/domicile
+        # omits every desktop entry that is not one of these.
+        desktopEntries = {
+          agenda = "Agenda";
+          bluetooth = "Bluetooth";
+          btop = "btop";
+          calendar = "Calendar";
+          chatgpt = "ChatGPT";
+          claude = "Claude";
+          comms = "Comms";
+          credit-cards = "Credit Cards";
+          crux = "crux";
+          emacs = "Emacs";
+          email = "Email";
+          eyes = "Eyes";
+          gdrive = "Google Drive";
+          home = "Home";
+          journal = "Journal";
+          matrix = "Matrix";
+          mixer = "Mixer";
+          photos = "Photos";
+          screen-record = "Screen Record";
+          screenshot = "Screenshot";
+          slack = "Slack";
+          sms = "SMS";
+          sotd = "SOTD";
+          stop-screen-record = "Stop Screen Record";
+          syncthing = "Syncthing";
+          telegram = "Telegram";
+          tor-browser = "Tor Browser";
         };
       };
 
