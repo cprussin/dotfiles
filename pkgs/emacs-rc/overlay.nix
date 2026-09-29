@@ -24,9 +24,16 @@ in
         ]))
       ];
       buildInputs = [final.makeWrapper];
+      # A pgtk daemon puts every frame on the first Wayland display it
+      # opened, so each display gets its own daemon, started on demand.
       postBuild = ''
         wrapProgram $out/bin/emacs \
           --prefix PATH : ${bin-path final}
+        # `--prefix`: the daemon it starts is `execvp("emacs")`, off PATH.
+        wrapProgram $out/bin/emacsclient \
+          --prefix PATH : $out/bin \
+          --run 'export EMACS_SOCKET_NAME="''${EMACS_SOCKET_NAME:-server-''${WAYLAND_DISPLAY:-tty}}"' \
+          --run 'export ALTERNATE_EDITOR="''${ALTERNATE_EDITOR-}"'
       '';
     };
   }
