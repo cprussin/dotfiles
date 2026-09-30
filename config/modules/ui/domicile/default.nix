@@ -73,6 +73,81 @@
 
   hm = config.primary-user.home-manager;
 
+  inTerminal = name: bin: "${hm.default-terminal.bin} --title ${name} --class ${name} --name ${name} ${bin}";
+  matrix = "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
+  telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
+  slack = "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
+  # The programs domicile's launcher offers, by desktop file ID
+  # `domicile-<app>.desktop`: its own, and none of ui/launcher's commands --
+  # though chatgpt-desktop and claude-desktop still come from that module's
+  # overlays, which have to move before it goes.  What opens a URL is a bookmark instead, which
+  # domicile opens as a page of its own rather than handing to a browser.
+  apps = {
+    agenda = {
+      name = "Agenda";
+      exec = pkgs.writeShellScript "agenda" "exec ${pkgs.emacs}/bin/emacsclient -c -e '(org-agenda nil \"a\")'";
+    };
+    bluetooth = {
+      name = "Bluetooth";
+      exec = inTerminal "bluetooth" "${pkgs.bluetuith}/bin/bluetuith";
+    };
+    btop = {
+      name = "btop";
+      exec = inTerminal "btop" "${pkgs.btop}/bin/btop";
+    };
+    chatgpt = {
+      name = "ChatGPT";
+      exec = "${pkgs.chatgpt-desktop}/bin/chatgpt";
+    };
+    claude = {
+      name = "Claude";
+      exec = "${pkgs.claude-desktop}/bin/claude-desktop";
+    };
+    # SMS is a bookmark, which no command can open.
+    comms = {
+      name = "Comms";
+      exec = pkgs.writeShellScript "comms" ''
+        ${matrix} &
+        ${telegram} &
+        ${slack} &
+      '';
+    };
+    crux = {
+      name = "crux";
+      exec = inTerminal "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
+    };
+    emacs = {
+      name = "Emacs";
+      exec = "${pkgs.emacs}/bin/emacsclient -c";
+    };
+    journal = {
+      name = "Journal";
+      exec = inTerminal "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
+    };
+    matrix = {
+      name = "Matrix";
+      exec = matrix;
+    };
+    mixer = {
+      name = "Mixer";
+      exec = "${pkgs.pavucontrol}/bin/pavucontrol";
+    };
+    slack = {
+      name = "Slack";
+      exec = slack;
+    };
+    telegram = {
+      name = "Telegram";
+      exec = telegram;
+    };
+    tor-browser = {
+      name = "Tor Browser";
+      exec = "${pkgs.tor-browser}/bin/tor-browser";
+    };
+  };
+
+  google = url: "${url}?authuser=connor@prussin.net";
+
   keyboard = hm.keymap;
 
   # domicile's theme, out of the same `colorTheme` everything else here reads.
@@ -108,6 +183,17 @@ in {
       config.domicile.default = ["domicile" "gtk"];
     };
 
+    xdg.dataFile = lib.mapAttrs' (app: entry:
+      lib.nameValuePair "applications/domicile-${app}.desktop" {
+        source = "${pkgs.makeDesktopItem {
+          name = "domicile-${app}";
+          desktopName = entry.name;
+          exec = "${entry.exec}";
+          terminal = false;
+        }}/share/applications/domicile-${app}.desktop";
+      })
+    apps;
+
     programs.domicile = {
       # `mkDefault` so a host on this profile can turn it off: a bare `true`
       # would make its `false` a conflict rather than an override.
@@ -128,10 +214,24 @@ in {
           "{Library,Notes,Projects}/*/*"
         ];
 
-        # The launcher offers the apps programs.launcher.desktopEntries names
-        # and nothing a package happened to install: every desktop entry is
-        # left out, then `launcher-*` taken back.
-        applications.omit = ["*" "!launcher-*"];
+        # The launcher offers `apps` above and nothing a package happened
+        # to install: every desktop entry is left out, then `domicile-*` taken
+        # back.
+        applications = {
+          omit = ["*" "!domicile-*"];
+          bookmarks = lib.mapAttrsToList (name: url: {inherit name url;}) {
+            "Calendar" = google "https://calendar.google.com";
+            "Credit Cards" = "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
+            "Email" = google "https://mail.google.com";
+            "Eyes" = "https://eyes.internal.prussin.net";
+            "Google Drive" = google "https://drive.google.com";
+            "Home" = "https://home-assistant.internal.prussin.net";
+            "Photos" = "https://photos.internal.prussin.net";
+            "SMS" = "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
+            "SOTD" = "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
+            "Syncthing" = "http://localhost:8384";
+          };
+        };
 
         # This desk's emacs daemon, up before the first frame asks for it --
         # the same one ui/emacs has sway start.

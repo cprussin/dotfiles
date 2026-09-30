@@ -101,38 +101,6 @@ in {
           us = pkgs.writeShellScript "us" "${pkgs.sway}/bin/swaymsg \"input * xkb_variant ''\"";
           volume = pkgs.callPackage ./apps/volume.nix {};
         };
-
-        # What domicile's launcher offers, and all it offers: ui/domicile
-        # omits every desktop entry that is not one of these.
-        desktopEntries = {
-          agenda = "Agenda";
-          bluetooth = "Bluetooth";
-          btop = "btop";
-          calendar = "Calendar";
-          chatgpt = "ChatGPT";
-          claude = "Claude";
-          comms = "Comms";
-          credit-cards = "Credit Cards";
-          crux = "crux";
-          emacs = "Emacs";
-          email = "Email";
-          eyes = "Eyes";
-          gdrive = "Google Drive";
-          home = "Home";
-          journal = "Journal";
-          matrix = "Matrix";
-          mixer = "Mixer";
-          photos = "Photos";
-          screen-record = "Screen Record";
-          screenshot = "Screenshot";
-          slack = "Slack";
-          sms = "SMS";
-          sotd = "SOTD";
-          stop-screen-record = "Stop Screen Record";
-          syncthing = "Syncthing";
-          telegram = "Telegram";
-          tor-browser = "Tor Browser";
-        };
       };
 
       emacs.emacs-rc.browse = "${pkgs.launcher}/bin/browse";
