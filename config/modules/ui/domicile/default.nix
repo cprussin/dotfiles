@@ -147,10 +147,14 @@
   };
 
   # A Google bookmark: the personal account, or the Meat Proxy Labs one when
-  # the launcher's query holds `!mp`.
+  # the launcher's query holds `!mp` -- the row says which.
   google = url: {
     url = "${url}?authuser=connor@prussin.net";
-    shortcodes."!mp" = "${url}?authuser=connor@meatproxylabs.com";
+    label = "PrussinNet";
+    shortcodes."!mp" = {
+      url = "${url}?authuser=connor@meatproxylabs.com";
+      label = "Meat Proxy Labs";
+    };
   };
 
   keyboard = hm.keymap;
@@ -188,12 +192,16 @@ in {
       config.domicile.default = ["domicile" "gtk"];
     };
 
+    # Each app's icon and the picture its launcher preview shows are
+    # ./launcher/<app>.svg and ./launcher/<app>-preview.svg.
     xdg.dataFile = lib.mapAttrs' (app: entry:
       lib.nameValuePair "applications/domicile-${app}.desktop" {
         source = "${pkgs.makeDesktopItem {
           name = "domicile-${app}";
           desktopName = entry.name;
           exec = "${entry.exec}";
+          icon = "${./launcher + "/${app}.svg"}";
+          extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
           terminal = false;
         }}/share/applications/domicile-${app}.desktop";
       })
