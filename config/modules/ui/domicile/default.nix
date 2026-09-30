@@ -16,6 +16,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   # Physical pixels and the density each panel is readable at.  `logical` is
@@ -131,6 +132,11 @@ in {
         # and nothing a package happened to install: every desktop entry is
         # left out, then `launcher-*` taken back.
         applications.omit = ["*" "!launcher-*"];
+
+        # This desk's emacs daemon, up before the first frame asks for it --
+        # the same one ui/emacs has sway start.
+        startup.commands =
+          lib.optional hm.programs.emacs.enable ["${pkgs.emacs}/bin/emacsclient" "-e" "t"];
 
         # The same option sway reads, not a copy of it: a host setting only one
         # of the two would give sway one layout and domicile another with
