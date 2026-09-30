@@ -45,7 +45,7 @@ in {
           "sway/workspaces"
           "sway/mode"
           "custom/email-connor-prussin-net"
-          "custom/email-connor-ac-zeitgeist-com"
+          "custom/email-connor-meatproxylabs-com"
         ];
         modules-center = ["clock"];
         modules-right = [
@@ -160,10 +160,10 @@ in {
           };
         };
 
-        "custom/email-connor-ac-zeitgeist-com" = {
-          exec = get-mail "Zeitgeist" "connor@ac-zeitgeist.com";
+        "custom/email-connor-meatproxylabs-com" = {
+          exec = get-mail "Meat Proxy" "connor@meatproxylabs.com";
           interval = 20;
-          on-click = "${pkgs.launcher}/bin/browse https://mail.google.com?authuser=connor@ac-zeitgeist.com";
+          on-click = "${pkgs.launcher}/bin/browse https://mail.google.com?authuser=connor@meatproxylabs.com";
           return-type = "json";
         };
         "custom/email-connor-prussin-net" = {

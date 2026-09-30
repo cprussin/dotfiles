@@ -15,5 +15,5 @@ writeShellScript "reauth-new-mail-counter" ''
   }
 
   reauth connor@prussin.net
-  reauth connor@ac-zeitgeist.com
+  reauth connor@meatproxylabs.com
 ''
