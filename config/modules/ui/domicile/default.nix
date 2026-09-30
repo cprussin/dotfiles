@@ -146,7 +146,12 @@
     };
   };
 
-  google = url: "${url}?authuser=connor@prussin.net";
+  # A Google bookmark: the personal account, or the Meat Proxy Labs one when
+  # the launcher's query holds `!mp`.
+  google = url: {
+    url = "${url}?authuser=connor@prussin.net";
+    shortcodes."!mp" = "${url}?authuser=connor@meatproxylabs.com";
+  };
 
   keyboard = hm.keymap;
 
@@ -219,17 +224,17 @@ in {
         # back.
         applications = {
           omit = ["*" "!domicile-*"];
-          bookmarks = lib.mapAttrsToList (name: url: {inherit name url;}) {
+          bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) {
             "Calendar" = google "https://calendar.google.com";
-            "Credit Cards" = "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE?authuser=connor@prussin.net";
+            "Credit Cards" = google "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
             "Email" = google "https://mail.google.com";
-            "Eyes" = "https://eyes.internal.prussin.net";
+            "Eyes".url = "https://eyes.internal.prussin.net";
             "Google Drive" = google "https://drive.google.com";
-            "Home" = "https://home-assistant.internal.prussin.net";
-            "Photos" = "https://photos.internal.prussin.net";
-            "SMS" = "https://messages.google.com/web/conversations?authuser=connor@prussin.net";
-            "SOTD" = "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk?authuser=connor@prussin.net";
-            "Syncthing" = "http://localhost:8384";
+            "Home".url = "https://home-assistant.internal.prussin.net";
+            "Photos".url = "https://photos.internal.prussin.net";
+            "SMS" = google "https://messages.google.com/web/conversations";
+            "SOTD" = google "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
+            "Syncthing".url = "http://localhost:8384";
           };
         };
 
