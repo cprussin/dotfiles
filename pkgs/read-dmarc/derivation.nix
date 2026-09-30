@@ -8,12 +8,15 @@ stdenvNoCC.mkDerivation {
   pname = "read-dmarc";
   version = "1.0.0";
 
-  src = ./read-dmarc.py;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [./read-dmarc.py ./test_read_dmarc.py];
+  };
   dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 $src $out/bin/read-dmarc
+    install -Dm755 $src/read-dmarc.py $out/bin/read-dmarc
     substituteInPlace $out/bin/read-dmarc \
       --replace-fail '/usr/bin/env python3' '${python3}/bin/python3'
     runHook postInstall
@@ -66,8 +69,11 @@ stdenvNoCC.mkDerivation {
 
     $out/bin/read-dmarc --help > /dev/null
 
+    # Classification, against a mocked resolver: the sandbox has no DNS.
+    READ_DMARC=$out/bin/read-dmarc ${python3}/bin/python3 -B $src/test_read_dmarc.py
+
     status=0
-    output=$($out/bin/read-dmarc --color never report.xml.gz) || status=$?
+    output=$($out/bin/read-dmarc --color never --no-dns report.xml.gz) || status=$?
     echo "$output"
 
     # Failing mail present, so the exit status must be 1 and the failing

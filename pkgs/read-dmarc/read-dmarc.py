@@ -5,6 +5,16 @@ Reads DMARC aggregate (RUA) reports -- raw XML, or the zip/gzip/tar.gz
 envelopes reporters actually mail them in -- and answers the question that
 matters first: did everything pass, and if not, which domains failed and how.
 Domains that passed every check are summarized at the end, out of the way.
+
+Each record is classified:
+
+  pass              DMARC passed.
+  known_forwarder   DMARC failed, from a host whose forward-confirmed reverse
+                    DNS is a known forwarder or security scanner.  Collapsed
+                    to one line per vendor unless `--all` is given.
+  likely_forwarded  DMARC and SPF failed, but a DKIM signature aligned with the
+                    header-from domain passed: our mail, relayed.
+  unknown           Every other failure: an unauthorized sender, or spoofing.
 """
 
 from __future__ import annotations
@@ -12,10 +22,17 @@ from __future__ import annotations
 import argparse
 import gzip
 import io
+import ipaddress
+import json
 import os
+import re
+import socket
 import stat
 import sys
 import tarfile
+import tempfile
+import threading
+import time
 import zipfile
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -55,6 +72,50 @@ MAX_PROBLEMS_LISTED = 20
 # characters a domain name can hold, and short of what a `<org_name>` of 200 MB
 # would otherwise put on the terminal.
 MAX_TEXT = 500
+
+# Post-delivery forwarders and security scanners, keyed by the hostname suffix
+# their forward-confirmed reverse DNS carries.  They pull a delivered message,
+# scan it and re-inject it from their own hosts, so the recipient's provider
+# evaluates DMARC a second time and reports SPF failing from the scanner's IP.
+# That is noise, not spoofing.
+#
+# Match on hostnames only, never IP lists: these run on rotating cloud
+# addresses.  And never authorize any of this in SPF -- the hosts are shared
+# by every one of the vendor's customers, so doing so would let any of them
+# pass as us.
+#
+# TODO: candidates to verify (by a confirmed PTR in real reports) before
+# adding: Proofpoint, Mimecast, Barracuda, Microsoft Defender for Office 365,
+# Abnormal Security, Ironscales, Sublime Security.
+KNOWN_FORWARDERS = {
+    # Avanan, now Check Point Harmony Email & Collaboration.  API-based; its
+    # AWS hosts reverse-resolve under us.cloud-sec-av.com.
+    "cloud-sec-av.com": "Avanan (Check Point Harmony Email & Collaboration)",
+}
+
+# Record categories; see the module docstring.
+PASS = "pass"
+KNOWN_FORWARDER = "known_forwarder"
+LIKELY_FORWARDED = "likely_forwarded"
+UNKNOWN = "unknown"
+
+# Reverse DNS results are cached across runs.  A host with no confirmed name
+# is rechecked sooner, since that is the answer a transient problem gives.
+# Kept short: the vendors' cloud addresses get reassigned, and a stale entry
+# would hide a new owner's failures as forwarder noise.
+DNS_TTL = 4 * 60 * 60
+DNS_NEGATIVE_TTL = 60 * 60
+# Wall-clock budget for all lookups in a run, and how many run at once.  An IP
+# still unresolved at the deadline is treated as a failed lookup.
+DNS_BUDGET = 30
+DNS_WORKERS = 16
+
+# `ARC=pass`, as reporters that honor ARC write it into an override comment.
+ARC_RESULT = re.compile(r"\barc\s*=\s*([a-z]+)", re.IGNORECASE)
+NO_SUCH_NAME = {
+    getattr(socket, name) for name in ("EAI_NONAME", "EAI_NODATA") if hasattr(socket, name)
+}
+DNS_LABEL = re.compile(r"^[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?$")
 
 
 class Style:
@@ -104,12 +165,31 @@ class Record:
     dkim_auth: list[tuple[str, str, str]]
     spf_auth: list[tuple[str, str]]
     overrides: list[tuple[str, str]]
+    # The domain the published policy was found at: our organizational domain.
+    policy_domain: str = ""
+    begin: int | None = None
+    end: int | None = None
+    arc: tuple[str, ...] = ()
+    # Filled in by `classify`, once reverse DNS is in.
+    category: str = ""
+    hostnames: tuple[str, ...] = ()
+    vendor: str = ""
 
     @property
     def passed(self) -> bool:
         # DMARC passes when *either* identifier aligns and authenticates, so a
         # record only fails when the reporter evaluated both as non-pass.
+        # `policy_evaluated` is already that aligned verdict, made by a
+        # reporter who can see the public suffix list.
         return self.dkim == "pass" or self.spf == "pass"
+
+    @property
+    def aligned_dkim_pass(self) -> bool:
+        """Whether a passing signature's d= aligns with header-from (relaxed)."""
+        return any(
+            result == "pass" and aligned(domain, self.domain, self.policy_domain)
+            for domain, _, result in self.dkim_auth
+        )
 
 
 @dataclass
@@ -630,6 +710,11 @@ def parse_record(report: Report, node) -> Record | None:
     ]
 
     domain = child_text(identifiers, "header_from").lower() or report.domain
+    arc = tuple(
+        match.group(1).lower()
+        for _, comment in overrides
+        for match in ARC_RESULT.finditer(comment)
+    )
     return Record(
         domain=domain or "(unknown)",
         policy=published_policy(report, domain),
@@ -641,7 +726,244 @@ def parse_record(report: Report, node) -> Record | None:
         dkim_auth=dkim_auth,
         spf_auth=spf_auth,
         overrides=overrides,
+        policy_domain=report.domain,
+        begin=report.begin,
+        end=report.end,
+        arc=arc,
     )
+
+
+def under(name: str, parent: str) -> bool:
+    return name == parent or name.endswith(f".{parent}")
+
+
+def aligned(domain: str, header_from: str, policy_domain: str) -> bool:
+    """Relaxed alignment, without a public suffix list.
+
+    Aligned when both sit under the domain the policy was published at, so
+    siblings like `news.example.com` and `mail.example.com` align; or when one
+    name is the other or under it -- needed too, since a policy can be
+    published at a subdomain.  The parent needs two labels, so a bare TLD
+    never aligns; a public suffix like `co.uk` can, but no one can get a
+    passing signature for one.  Anything this misses lands in `unknown`,
+    which is the safe direction.
+    """
+    if not domain or not header_from:
+        return False
+    if policy_domain and under(header_from, policy_domain) and under(domain, policy_domain):
+        return True
+    return any(
+        "." in parent and under(name, parent)
+        for name, parent in ((domain, header_from), (header_from, domain))
+    )
+
+
+def forwarder_vendor(hostnames) -> str:
+    for host in hostnames:
+        for suffix, vendor in KNOWN_FORWARDERS.items():
+            if under(host, suffix):
+                return vendor
+    return ""
+
+
+def classify(record: Record, hostnames) -> None:
+    """Assign `record.category`, given its source's confirmed PTR names.
+
+    `hostnames` must be forward-confirmed; None (lookup failed) or empty never
+    makes a known forwarder.
+    """
+    record.hostnames = tuple(hostnames or ())
+    record.vendor = ""
+    if record.passed:
+        record.category = PASS
+    elif vendor := forwarder_vendor(record.hostnames):
+        record.category = KNOWN_FORWARDER
+        record.vendor = vendor
+    # SPF has failed here, or `passed` would have been true.
+    elif record.aligned_dkim_pass:
+        record.category = LIKELY_FORWARDED
+    else:
+        record.category = UNKNOWN
+
+
+def dns_name(name: str) -> str:
+    """A PTR target as a normalized hostname, or "" if it is not one.
+
+    The PTR zone belongs to whoever owns the IP -- a spoofer, say -- so the
+    name is validated before it is printed or matched on.
+    """
+    name = name.lower().rstrip(".")
+    if not name or len(name) > 253:
+        return ""
+    return name if all(DNS_LABEL.match(label) for label in name.split(".")) else ""
+
+
+def reverse_lookup(ip: str) -> list[str]:
+    """Forward-confirmed PTR names for `ip`: `[]` if none, OSError if unsure.
+
+    A PTR record alone proves nothing, since the IP's owner writes it.  Only a
+    name that resolves back to the same IP was put there by the name's owner.
+    """
+    try:
+        address = ipaddress.ip_address(ip)
+    except ValueError:
+        return []
+    try:
+        name, aliases, _ = socket.gethostbyaddr(str(address))
+    except socket.herror as err:
+        # HOST_NOT_FOUND and NO_DATA are answers; TRY_AGAIN and the rest are not.
+        if err.errno in (1, 4):
+            return []
+        raise
+    # A PTR that is not text is not a hostname: an answer, so it is cached
+    # rather than looked up again every run.
+    except UnicodeError:
+        return []
+    confirmed = []
+    for host in dict.fromkeys(dns_name(n) for n in [name, *aliases]):
+        if not host:
+            continue
+        try:
+            # Absolute, so neither search domains nor /etc/hosts vouch for it.
+            infos = socket.getaddrinfo(f"{host}.", None)
+        except socket.gaierror as err:
+            # No such name is an answer; a timeout is not, and must not be
+            # cached as one.
+            if err.errno in NO_SUCH_NAME:
+                continue
+            raise
+        except UnicodeError:
+            continue
+        for info in infos:
+            try:
+                if ipaddress.ip_address(str(info[4][0]).split("%")[0]) == address:
+                    confirmed.append(host)
+                    break
+            except ValueError:
+                continue
+    return confirmed
+
+
+class DnsCache:
+    """Reverse DNS results on disk, each good for a TTL.
+
+    Every failure to read or write it is ignored: a cache is an optimization,
+    and losing it only costs lookups.
+    """
+
+    def __init__(self, path: Path | None, now=time.time):
+        self.path = path
+        self.now = now
+        self.entries: dict[str, dict] = {}
+        if path is None:
+            return
+        try:
+            with open(path, encoding="utf-8") as handle:
+                loaded = json.load(handle)
+        except (OSError, ValueError):
+            return
+        if isinstance(loaded, dict):
+            self.entries = loaded
+
+    def get(self, ip: str) -> list[str] | None:
+        entry = self.entries.get(ip)
+        try:
+            hosts, stamp = entry["hosts"], float(entry["at"])
+        except (KeyError, TypeError, ValueError):
+            return None
+        if not isinstance(hosts, list) or not all(isinstance(h, str) for h in hosts):
+            return None
+        ttl = DNS_TTL if hosts else DNS_NEGATIVE_TTL
+        if not 0 <= self.now() - stamp < ttl:
+            return None
+        # Revalidated, since anyone who can write the file wrote these too.
+        return [host for host in map(dns_name, hosts) if host]
+
+    def put(self, ip: str, hosts: list[str]) -> None:
+        self.entries[ip] = {"hosts": hosts, "at": self.now()}
+
+    def save(self) -> None:
+        if self.path is None:
+            return
+        now = self.now()
+        live = {
+            ip: entry
+            for ip, entry in self.entries.items()
+            if isinstance(entry, dict)
+            and isinstance(entry.get("at"), (int, float))
+            and 0 <= now - entry["at"] < DNS_TTL
+        }
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            fd, temporary = tempfile.mkstemp(dir=self.path.parent, prefix=".rdns-")
+            try:
+                with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                    json.dump(live, handle)
+                os.replace(temporary, self.path)
+            except BaseException:
+                os.unlink(temporary)
+                raise
+        except OSError:
+            pass
+
+
+def default_cache_path() -> Path | None:
+    base = os.environ.get("XDG_CACHE_HOME") or (
+        os.path.join(os.environ["HOME"], ".cache") if os.environ.get("HOME") else ""
+    )
+    return Path(base) / "read-dmarc" / "rdns.json" if base else None
+
+
+def resolve(
+    ips, cache: DnsCache, lookup=reverse_lookup, budget: float = DNS_BUDGET
+) -> dict[str, list[str] | None]:
+    """Confirmed PTR names per IP; None where the lookup failed or timed out.
+
+    Lookups run on daemon threads against a shared deadline: the resolver has
+    no timeout of its own to set, and one dead nameserver should cost the run
+    seconds, not minutes.
+    """
+    results: dict[str, list[str] | None] = {}
+    pending = []
+    for ip in dict.fromkeys(ips):
+        cached = cache.get(ip)
+        if cached is None:
+            pending.append(ip)
+        else:
+            results[ip] = cached
+
+    fresh: dict[str, list[str]] = {}
+    queue = iter(pending)
+    lock = threading.Lock()
+
+    def work() -> None:
+        while True:
+            with lock:
+                ip = next(queue, None)
+            if ip is None:
+                return
+            try:
+                fresh[ip] = lookup(ip)
+            except Exception:
+                pass
+
+    workers = [
+        threading.Thread(target=work, daemon=True)
+        for _ in range(min(DNS_WORKERS, len(pending)))
+    ]
+    deadline = time.monotonic() + budget
+    for worker in workers:
+        worker.start()
+    for worker in workers:
+        worker.join(max(0.0, deadline - time.monotonic()))
+
+    for ip in pending:
+        hosts = fresh.get(ip)
+        if hosts is not None:
+            cache.put(ip, hosts)
+        results[ip] = hosts
+    cache.save()
+    return results
 
 
 def merge(records: list[Record]) -> list[Record]:
@@ -660,6 +982,7 @@ def merge(records: list[Record]) -> list[Record]:
     for record in records:
         key = (
             record.ip,
+            record.category,
             record.disposition,
             record.dkim,
             record.spf,
@@ -682,6 +1005,8 @@ def describe_dkim(record: Record) -> str:
     passing = sorted(
         {domain or "(no domain)" for domain, _, result in record.dkim_auth if result == "pass"}
     )
+    if passing and record.aligned_dkim_pass:
+        return f"signature valid for {', '.join(passing)}, but the reporter did not count it"
     if passing:
         return f"signature valid for {', '.join(passing)} -- not aligned with {record.domain}"
     if not record.dkim_auth:
@@ -782,11 +1107,21 @@ def collect(paths: list[Path]) -> tuple[dict[str, DomainStats], list[Report], Pr
     return domains, reports, problems
 
 
-def format_date_range(reports: list[Report]) -> str:
+def classify_all(domains: dict[str, DomainStats], use_dns: bool) -> None:
+    # Passing mail needs no lookup, so only failing sources are resolved.
+    failing = [record.ip for stats in domains.values() for record in stats.failures]
+    names = resolve(failing, DnsCache(default_cache_path())) if use_dns and failing else {}
+    for stats in domains.values():
+        for record in stats.passes + stats.failures:
+            classify(record, names.get(record.ip))
+
+
+def format_date_range(items) -> str:
+    """The span of the reports, or records, given."""
     stamps = [
         stamp
-        for report in reports
-        for stamp in (report.begin, report.end)
+        for item in items
+        for stamp in (item.begin, item.end)
         if stamp is not None
     ]
     if not stamps:
@@ -828,20 +1163,86 @@ def render_sources(records: list[Record], style: Style, color: str) -> list[str]
             # that overflows the field shunts the detail column along with it.
             verdict = style(f"{result:<9}", tint)
             lines.append(f"    {' ' * width}  {style(name, 'dim')} {verdict} {detail}")
+        pad = f"    {' ' * width}  "
+        if record.hostnames:
+            lines.append(f"{pad}{style('PTR ', 'dim')} {', '.join(record.hostnames)}")
+        if record.arc:
+            lines.append(f"{pad}{style('ARC ', 'dim')} {', '.join(dict.fromkeys(record.arc))}")
     return lines
 
 
-def render_failures(domains, style: Style, show_all: bool) -> list[str]:
+def failed_in(stats: DomainStats, category: str) -> list[Record]:
+    return [record for record in stats.failures if record.category == category]
+
+
+def forwarded(stats: DomainStats) -> int:
+    return sum(record.count for record in failed_in(stats, KNOWN_FORWARDER))
+
+
+def render_failures(
+    domains, category: str, style: Style, show_all: bool, color: str, shown: set[str]
+) -> list[str]:
+    """One section's domains.  `shown` holds those whose passes are printed."""
     out: list[str] = []
     for domain, stats in domains:
+        records = failed_in(stats, category)
+        if not records:
+            continue
         out.append("")
         policies = ", ".join(sorted(stats.policies))
-        headline = f"  {style(domain, 'bold')}  {stats.failed:,} of {stats.total:,} failed"
+        failed = sum(record.count for record in records)
+        headline = f"  {style(domain, 'bold')}  {failed:,} of {stats.total:,} failed"
         out.append(f"{headline}  {style(f'(published policy: {policies})', 'dim')}")
-        out.extend(render_sources(stats.failures, style, "red"))
-        if show_all and stats.passes:
+        out.extend(render_sources(records, style, color))
+        if show_all and stats.passes and domain not in shown:
+            shown.add(domain)
             out.append(f"    {style('and passing:', 'dim')}")
             out.extend(render_sources(stats.passes, style, "yellow"))
+    return out
+
+
+def render_forwarders(domains, style: Style, show_all: bool) -> list[str]:
+    """One line per vendor; every source under it too with `show_all`.
+
+    DKIM passing means the scanner only re-sent the message; failing means it
+    changed it (link rewriting, banners).  Both are expected.
+    """
+    by_vendor: dict[str, list[Record]] = defaultdict(list)
+    for _, stats in domains:
+        for record in failed_in(stats, KNOWN_FORWARDER):
+            by_vendor[record.vendor].append(record)
+    if not by_vendor:
+        return []
+
+    out = [
+        "",
+        style("Known forwarders and security scanners -- expected, not spoofing", "bold"),
+        style(
+            "  (DKIM pass: re-sent unchanged.  DKIM fail: modified by the scanner.)", "dim"
+        ),
+    ]
+    for vendor, records in sorted(by_vendor.items(), key=lambda item: item[0].lower()):
+        total = sum(record.count for record in records)
+        intact = sum(record.count for record in records if record.aligned_dkim_pass)
+        parts = [
+            plural(total, "message"),
+            f"DKIM {intact:,} pass / {total - intact:,} fail",
+        ]
+        window = format_date_range(records)
+        if window:
+            parts.append(window)
+        parts.append(f"for {', '.join(sorted({record.domain for record in records}))}")
+        out.append(f"  {style(vendor, 'bold')}  {style(', '.join(parts), 'dim')}")
+        if show_all:
+            for domain in sorted({record.domain for record in records}):
+                out.append(f"    {style(domain, 'dim')}")
+                out.extend(
+                    render_sources(
+                        [record for record in records if record.domain == domain],
+                        style,
+                        "yellow",
+                    )
+                )
     return out
 
 
@@ -849,7 +1250,10 @@ def render_clean(domains, style: Style, show_all: bool) -> list[str]:
     out = ["", style("Passed all checks", "dim")]
     width = max(len(domain) for domain, _ in domains)
     for domain, stats in domains:
-        summary = f"{plural(stats.total, 'message')} from {plural(len(stats.orgs), 'reporter')}"
+        summary = f"{plural(stats.passed, 'message')} from {plural(len(stats.orgs), 'reporter')}"
+        extra = forwarded(stats)
+        if extra:
+            summary += f", plus {extra:,} re-sent by known forwarders"
         out.append(style(f"  {domain:<{width}}  {summary}", "dim"))
         if show_all and stats.passes:
             out.extend(render_sources(stats.passes, style, "yellow"))
@@ -866,27 +1270,38 @@ def render(
     failed = sum(stats.failed for stats in domains.values())
     passed = sum(stats.passed for stats in domains.values())
     total = failed + passed
+    # Known forwarders failed DMARC too, but only by being a second hop: they
+    # are shown, and not counted as something to act on.
+    noise = sum(forwarded(stats) for stats in domains.values())
+    attention = failed - noise
     failing = sorted(
-        (item for item in domains.items() if item[1].failed),
-        key=lambda item: -item[1].failed,
+        (item for item in domains.items() if item[1].failed - forwarded(item[1])),
+        key=lambda item: -(item[1].failed - forwarded(item[1])),
     )
     clean = sorted(
-        (item for item in domains.items() if not item[1].failed),
+        (item for item in domains.items() if not item[1].failed - forwarded(item[1])),
         key=lambda item: -item[1].total,
     )
 
     out: list[str] = []
     if not total:
         out.append(style("No DMARC records found.", "bold", "yellow"))
-    elif failed:
+    elif attention:
         # A single failure in a large sample rounds to 0.0%, which reads as
         # nothing wrong; the counts either side of it carry the real weight.
         share = f"{failed / total:.1%}"
-        out.append(
-            style(f"FAIL  {failed:,} of {total:,} messages failed DMARC ({share})", "bold", "red")
-        )
+        headline = f"FAIL  {failed:,} of {total:,} messages failed DMARC ({share})"
+        if noise:
+            headline += f", {noise:,} of them re-sent by known forwarders"
+        out.append(style(headline, "bold", "red"))
     else:
-        headline = f"PASS  all {total:,} messages passed DMARC"
+        if noise:
+            headline = (
+                f"PASS  {passed:,} of {total:,} messages passed DMARC; "
+                f"the other {noise:,} were re-sent by known forwarders"
+            )
+        else:
+            headline = f"PASS  all {total:,} messages passed DMARC"
         if problems.total:
             # Not an unqualified all-clear.  Something was not read and what it
             # held is unknown, so the caveat belongs on the headline rather than
@@ -896,7 +1311,21 @@ def render(
             headline += f"  ({plural(problems.total, 'item')} skipped, see below)"
         out.append(style(headline, "bold", "green"))
 
-    out.extend(render_failures(failing, style, show_all))
+    shown: set[str] = set()
+    # Unknown first: it is the only category that can be spoofing or a sender
+    # we forgot to authorize.
+    for category, title, color in (
+        (UNKNOWN, "Unknown sources -- unauthorized senders, or spoofing", "red"),
+        (
+            LIKELY_FORWARDED,
+            "Likely forwarded -- SPF failed, but an aligned DKIM signature passed",
+            "yellow",
+        ),
+    ):
+        section = render_failures(failing, category, style, show_all, color, shown)
+        if section:
+            out.extend(["", style(title, "bold", color), *section[1:]])
+    out.extend(render_forwarders(domains.items(), style, show_all))
     if clean:
         out.extend(render_clean(clean, style, show_all))
 
@@ -920,7 +1349,7 @@ def render(
     # parse -- `expand` walks directories, so a README in one is routine.  The
     # test for 2 is whether a report was *read*, not whether it carried
     # countable records: a report of all-zero counts was read fine.
-    if failed:
+    if attention:
         code = 1
     elif not reports:
         code = 2
@@ -1079,7 +1508,8 @@ def main(argv: list[str] | None = None) -> int:
         prog="read-dmarc",
         description="Summarize DMARC aggregate reports: what failed, and how.",
         epilog=(
-            "exit status: 0 everything passed, 1 some mail failed DMARC, "
+            "exit status: 0 everything passed (known forwarders aside), "
+            "1 some mail failed DMARC, "
             "2 no report could be read, 3 the summary could not be written"
         ),
     )
@@ -1094,7 +1524,12 @@ def main(argv: list[str] | None = None) -> int:
         "-a",
         "--all",
         action="store_true",
-        help="also break passing mail down by sending IP",
+        help="also break passing mail, and known forwarders, down by sending IP",
+    )
+    parser.add_argument(
+        "--no-dns",
+        action="store_true",
+        help="skip reverse DNS, so no source is recognized as a known forwarder",
     )
     parser.add_argument(
         "--color",
@@ -1107,6 +1542,7 @@ def main(argv: list[str] | None = None) -> int:
     style = Style(args.color == "always" or (args.color == "auto" and stdout_is_terminal()))
     try:
         domains, reports, problems = collect(args.files)
+        classify_all(domains, not args.no_dns)
         text, code = render(domains, reports, problems, style, args.all)
         # Writing sits inside the same guard: `write_summary` doubles the
         # summary in memory, and formatting the message below allocates too,
