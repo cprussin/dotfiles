@@ -129,6 +129,12 @@ in {
     etc."machine-id".text = "89e4f9d000c74a389a33b82baa7c2fb2\n";
     systemPackages = [pkgs.displaylink];
   };
+  # Run AppImages directly: binfmt hands them to appimage-run, which supplies
+  # the FHS environment they expect.
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
   services = {
     getty.greetingLine = builtins.readFile ./greeting;
     fwupd.enable = true;
