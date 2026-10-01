@@ -146,15 +146,11 @@
     };
   };
 
-  # A Google bookmark: the personal account, or the Meat Proxy Labs one when
-  # the launcher's query holds `!mp` -- the row says which.
-  google = url: {
-    url = "${url}?authuser=connor@prussin.net";
-    label = "PrussinNet";
-    shortcodes."!mp" = {
-      url = "${url}?authuser=connor@meatproxylabs.com";
-      label = "Meat Proxy Labs";
-    };
+  # A Google bookmark, once per account: `<name> - PrussinNet` and
+  # `<name> - Meat Proxy Labs`.
+  google = name: url: {
+    "${name} - PrussinNet".url = "${url}?authuser=connor@prussin.net";
+    "${name} - Meat Proxy Labs".url = "${url}?authuser=connor@meatproxylabs.com";
   };
 
   keyboard = hm.keymap;
@@ -232,18 +228,20 @@ in {
         # back.
         applications = {
           omit = ["*" "!domicile-*"];
-          bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) {
-            "Calendar" = google "https://calendar.google.com";
-            "Credit Cards" = google "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
-            "Email" = google "https://mail.google.com";
-            "Eyes".url = "https://eyes.internal.prussin.net";
-            "Google Drive" = google "https://drive.google.com";
-            "Home".url = "https://home-assistant.internal.prussin.net";
-            "Photos".url = "https://photos.internal.prussin.net";
-            "SMS" = google "https://messages.google.com/web/conversations";
-            "SOTD" = google "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
-            "Syncthing".url = "http://localhost:8384";
-          };
+          bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) (
+            google "Calendar" "https://calendar.google.com"
+            // google "Credit Cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE"
+            // google "Email" "https://mail.google.com"
+            // google "Google Drive" "https://drive.google.com"
+            // google "SMS" "https://messages.google.com/web/conversations"
+            // google "SOTD" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk"
+            // {
+              "Eyes".url = "https://eyes.internal.prussin.net";
+              "Home".url = "https://home-assistant.internal.prussin.net";
+              "Photos".url = "https://photos.internal.prussin.net";
+              "Syncthing".url = "http://localhost:8384";
+            }
+          );
         };
 
         # This desk's emacs daemon, up before the first frame asks for it --
