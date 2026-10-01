@@ -310,7 +310,14 @@ in {
             curved = at 0 0 curved;
           })
         ];
+
+        # Meta+Shift+Return locks the desk, checking the password against the
+        # PAM service below.
+        lock.pam_service = "domicile";
       };
     };
   };
+
+  # What the lock authenticates through, as ui/swaylock does for swaylock.
+  security.pam.services.domicile = {};
 }
