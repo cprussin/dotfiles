@@ -317,6 +317,71 @@ in {
         # Meta+Shift+Return locks the desk, checking the password against the
         # PAM service below.
         lock.pam_service = "domicile";
+
+        # manganese's keys, sway's on Meta -- the same keysyms ui/sway binds.
+        # domicile finds the key each is on in `input.keyboard` above, so
+        # `parenleft` is the first workspace on dvp as it is under sway.
+        shells.manganese = let
+          directions = {
+            h = "left";
+            j = "down";
+            k = "up";
+            l = "right";
+            Left = "left";
+            Down = "down";
+            Up = "up";
+            Right = "right";
+          };
+          workspaces = {
+            parenleft = "1";
+            parenright = "2";
+            braceright = "3";
+            plus = "4";
+            braceleft = "5";
+            bracketright = "6";
+            bracketleft = "7";
+            exclam = "8";
+            equal = "9";
+            asterisk = "10";
+          };
+          bind = chord: action: lib.mapAttrs' (key: arg: lib.nameValuePair (chord key) (action arg));
+          shell = command: "send-shell ${command}";
+        in {
+          keybindings =
+            {
+              "Meta+Return" = shell "terminal";
+              "Meta+Shift+q" = shell "kill";
+              "Meta+Shift+Return" = shell "lock";
+              "Meta+space" = shell "launcher";
+              "Meta+d" = shell "launcher";
+              "Meta+Shift+v" = shell "clipboard";
+              "Meta+b" = shell "split h";
+              "Meta+v" = shell "split v";
+              "Meta+s" = shell "layout stacking";
+              "Meta+w" = shell "layout tabbed";
+              "Meta+e" = shell "layout toggle split";
+              "Meta+a" = shell "focus parent";
+              "Meta+Shift+a" = shell "focus child";
+              "Meta+f" = shell "fullscreen toggle";
+              "Meta+Shift+f" = shell "fullscreen toggle global";
+              "Meta+Tab" = shell "focus mode_toggle";
+              "Meta+Shift+Tab" = shell "floating toggle";
+              "Meta+minus" = shell "scratchpad show";
+              "Meta+Shift+minus" = shell "move scratchpad";
+              "Meta+r" = "mode resize";
+            }
+            // bind (key: "Meta+${key}") (way: shell "focus ${way}") directions
+            // bind (key: "Meta+Shift+${key}") (way: shell "move ${way}") directions
+            // bind (key: "Meta+${key}") (n: shell "workspace ${n}") workspaces
+            // bind (key: "Meta+Shift+${key}") (n: shell "move container to workspace ${n}") workspaces;
+
+          modes.resize =
+            {
+              "Meta+Return" = "mode default";
+              "Meta+Escape" = "mode default";
+            }
+            // bind (key: "Meta+${key}") (way: shell "resize grow ${way}") directions;
+        };
       };
     };
   };
