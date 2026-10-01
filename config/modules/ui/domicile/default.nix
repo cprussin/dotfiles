@@ -146,10 +146,13 @@
     };
   };
 
-  # A Google bookmark, once per account: `<name> - PrussinNet` and
+  # A Google bookmark on the personal account.
+  personal = url: "${url}?authuser=connor@prussin.net";
+
+  # A Google bookmark once per account: `<name> - PrussinNet` and
   # `<name> - Meat Proxy Labs`.
   google = name: url: {
-    "${name} - PrussinNet".url = "${url}?authuser=connor@prussin.net";
+    "${name} - PrussinNet".url = personal url;
     "${name} - Meat Proxy Labs".url = "${url}?authuser=connor@meatproxylabs.com";
   };
 
@@ -230,12 +233,12 @@ in {
           omit = ["*" "!domicile-*"];
           bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) (
             google "Calendar" "https://calendar.google.com"
-            // google "Credit Cards" "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE"
             // google "Email" "https://mail.google.com"
             // google "Google Drive" "https://drive.google.com"
-            // google "SMS" "https://messages.google.com/web/conversations"
-            // google "SOTD" "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk"
             // {
+              "Credit Cards".url = personal "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
+              "SMS".url = personal "https://messages.google.com/web/conversations";
+              "SOTD".url = personal "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
               "Eyes".url = "https://eyes.internal.prussin.net";
               "Home".url = "https://home-assistant.internal.prussin.net";
               "Photos".url = "https://photos.internal.prussin.net";
