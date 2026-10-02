@@ -161,7 +161,7 @@ in {
         };
 
         "custom/email-connor-meatproxylabs-com" = {
-          exec = get-mail "Meat Proxy" "connor@meatproxylabs.com";
+          exec = get-mail "Meat Proxy Labs" "connor@meatproxylabs.com";
           interval = 20;
           on-click = "${pkgs.launcher}/bin/browse https://mail.google.com?authuser=connor@meatproxylabs.com";
           return-type = "json";
