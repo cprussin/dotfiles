@@ -73,8 +73,6 @@
 
   hm = config.primary-user.home-manager;
 
-  manganese = config.flake-inputs.domicile.packages.${pkgs.stdenv.hostPlatform.system}.manganese;
-
   inTerminal = name: bin: "${hm.default-terminal.bin} --title ${name} --class ${name} --name ${name} ${bin}";
   matrix = "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
@@ -180,33 +178,39 @@ in {
       lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
     );
 
-    # Portal routing, in the shape ui/sway writes for wlr.  xdg-desktop-portal
-    # matches this against its OWN `XDG_CURRENT_DESKTOP`, which domicile's
-    # compositor announces to the D-Bus and systemd activation environments at
-    # startup.  `gtk` second answers what domicile does not implement -- not
-    # screenshot or screencast, which neither has a backend for.
-    xdg.portal = {
-      # For the symmetry with ui/sway; `home.packages` above is what installs
-      # it, and this only feeds that list and a non-empty assertion.
-      extraPortals =
-        lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage;
-      config.domicile.default = ["domicile" "gtk"];
-    };
+    xdg = {
+      # Portal routing, in the shape ui/sway writes for wlr.  xdg-desktop-portal
+      # matches this against its OWN `XDG_CURRENT_DESKTOP`, which domicile's
+      # compositor announces to the D-Bus and systemd activation environments at
+      # startup.  `gtk` second answers what domicile does not implement -- not
+      # screenshot or screencast, which neither has a backend for.
+      portal = {
+        # For the symmetry with ui/sway; `home.packages` above is what installs
+        # it, and this only feeds that list and a non-empty assertion.
+        extraPortals =
+          lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage;
+        config.domicile.default = ["domicile" "gtk"];
+      };
 
-    # Each app's icon and the picture its launcher preview shows are
-    # ./launcher/<app>.svg and ./launcher/<app>-preview.svg.
-    xdg.dataFile = lib.mapAttrs' (app: entry:
-      lib.nameValuePair "applications/domicile-${app}.desktop" {
-        source = "${pkgs.makeDesktopItem {
-          name = "domicile-${app}";
-          desktopName = entry.name;
-          exec = "${entry.exec}";
-          icon = "${./launcher + "/${app}.svg"}";
-          extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
-          terminal = false;
-        }}/share/applications/domicile-${app}.desktop";
-      })
-    apps;
+      # Each app's icon and the picture its launcher preview shows are
+      # ./launcher/<app>.svg and ./launcher/<app>-preview.svg.
+      dataFile = lib.mapAttrs' (app: entry:
+        lib.nameValuePair "applications/domicile-${app}.desktop" {
+          source = "${pkgs.makeDesktopItem {
+            name = "domicile-${app}";
+            desktopName = entry.name;
+            exec = "${entry.exec}";
+            icon = "${./launcher + "/${app}.svg"}";
+            extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
+            terminal = false;
+          }}/share/applications/domicile-${app}.desktop";
+        })
+      apps;
+
+      # The shell ./shell.ts, where `programs.domicile.settings.shell` below
+      # names it.
+      configFile."domicile/shell.ts".source = ./shell.ts;
+    };
 
     programs.domicile = {
       # `mkDefault` so a host on this profile can turn it off: a bare `true`
@@ -320,70 +324,10 @@ in {
         # PAM service below.
         lock.pam_service = "domicile";
 
-        # manganese's keys, sway's on Meta -- the same keysyms ui/sway binds.
-        # domicile finds the key each is on in `input.keyboard` above, so
-        # `parenleft` is the first workspace on dvp as it is under sway.
-        shells.manganese = let
-          directions = {
-            h = "left";
-            j = "down";
-            k = "up";
-            l = "right";
-            Left = "left";
-            Down = "down";
-            Up = "up";
-            Right = "right";
-          };
-          workspaces = {
-            parenleft = "1";
-            parenright = "2";
-            braceright = "3";
-            plus = "4";
-            braceleft = "5";
-            bracketright = "6";
-            bracketleft = "7";
-            exclam = "8";
-            equal = "9";
-            asterisk = "10";
-          };
-          bind = chord: action: lib.mapAttrs' (key: arg: lib.nameValuePair (chord key) (action arg));
-          shell = command: "send-shell ${command}";
-        in {
-          keybindings =
-            {
-              "Meta+Return" = shell "terminal";
-              "Meta+Shift+q" = shell "kill";
-              "Meta+Shift+Return" = shell "lock";
-              "Meta+space" = shell "launcher";
-              "Meta+d" = shell "launcher";
-              "Meta+Shift+v" = shell "clipboard";
-              "Meta+b" = shell "split h";
-              "Meta+v" = shell "split v";
-              "Meta+s" = shell "layout stacking";
-              "Meta+w" = shell "layout tabbed";
-              "Meta+e" = shell "layout toggle split";
-              "Meta+a" = shell "focus parent";
-              "Meta+Shift+a" = shell "focus child";
-              "Meta+f" = shell "fullscreen toggle";
-              "Meta+Shift+f" = shell "fullscreen toggle global";
-              "Meta+Tab" = shell "focus mode_toggle";
-              "Meta+Shift+Tab" = shell "floating toggle";
-              "Meta+minus" = shell "scratchpad show";
-              "Meta+Shift+minus" = shell "move scratchpad";
-              "Meta+r" = "mode resize";
-            }
-            // bind (key: "Meta+${key}") (way: shell "focus ${way}") directions
-            // bind (key: "Meta+Shift+${key}") (way: shell "move ${way}") directions
-            // bind (key: "Meta+${key}") (n: shell "workspace ${n}") workspaces
-            // bind (key: "Meta+Shift+${key}") (n: shell "move container to workspace ${n}") workspaces;
-
-          modes.resize =
-            {
-              "Meta+Return" = "mode default";
-              "Meta+Escape" = "mode default";
-            }
-            // bind (key: "Meta+${key}") (way: shell "resize grow ${way}") directions;
-        };
+        # The shell, and with it the keys: ./shell.ts, which domicile builds
+        # itself as the desk starts -- once, then from its cache until the file
+        # changes.  An edit reaches the desk at the next start.
+        shell = "${hm.xdg.configHome}/domicile/shell.ts";
       };
     };
   };
@@ -391,9 +335,10 @@ in {
   # What the lock authenticates through, as ui/swaylock does for swaylock.
   security.pam.services.domicile = {};
 
-  # What the display manager boots into: manganese, on the screen.  `OZONE=drm`
-  # because a display manager's session is always on a VT, and a stray
-  # `WAYLAND_DISPLAY` from the greeter would otherwise make it a window.
+  # What the display manager boots into: `domicile` with no shell named, so the
+  # config's ./shell.ts, on the screen.  `OZONE=drm` because a display
+  # manager's session is always on a VT, and a stray `WAYLAND_DISPLAY` from the
+  # greeter would otherwise make it a window.
   services.displayManager = lib.mkIf hm.programs.domicile.enable {
     defaultSession = "domicile";
     sessionPackages = [
@@ -401,7 +346,7 @@ in {
           [Desktop Entry]
           Name=Domicile
           Comment=manganese, on Domicile
-          Exec=${pkgs.writeShellScript "domicile-session" "OZONE=drm exec ${lib.getExe manganese}"}
+          Exec=${pkgs.writeShellScript "domicile-session" "OZONE=drm exec ${hm.programs.domicile.finalPackage}/bin/domicile"}
           DesktopNames=domicile
           Type=Application
         '')
