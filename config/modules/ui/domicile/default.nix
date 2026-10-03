@@ -73,6 +73,8 @@
 
   hm = config.primary-user.home-manager;
 
+  manganese = config.flake-inputs.domicile.packages.${pkgs.stdenv.hostPlatform.system}.manganese;
+
   inTerminal = name: bin: "${hm.default-terminal.bin} --title ${name} --class ${name} --name ${name} ${bin}";
   matrix = "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
@@ -388,4 +390,22 @@ in {
 
   # What the lock authenticates through, as ui/swaylock does for swaylock.
   security.pam.services.domicile = {};
+
+  # What the display manager boots into: manganese, on the screen.  `OZONE=drm`
+  # because a display manager's session is always on a VT, and a stray
+  # `WAYLAND_DISPLAY` from the greeter would otherwise make it a window.
+  services.displayManager = lib.mkIf hm.programs.domicile.enable {
+    defaultSession = "domicile";
+    sessionPackages = [
+      ((pkgs.writeTextDir "share/wayland-sessions/domicile.desktop" ''
+          [Desktop Entry]
+          Name=Domicile
+          Comment=manganese, on Domicile
+          Exec=${pkgs.writeShellScript "domicile-session" "OZONE=drm exec ${lib.getExe manganese}"}
+          DesktopNames=domicile
+          Type=Application
+        '')
+        // {providedSessions = ["domicile"];})
+    ];
+  };
 }
