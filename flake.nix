@@ -31,7 +31,10 @@
     # The home-manager module itself is nixpkgs-agnostic -- it reads `pkgs`
     # from the configuration importing it -- so this binds the package and
     # nothing else.
-    domicile.url = "github:cprussin/domicile";
+    #
+    # `stable` is the newest `main` built on the production engine; `main`
+    # itself can sit on a slower checked engine build for a night.
+    domicile.url = "github:cprussin/domicile/stable";
     fzf-pass = {
       url = "github:cprussin/fzf-pass";
       flake = false;

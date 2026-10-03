@@ -216,7 +216,9 @@ in {
   };
 
   services.displayManager = {
-    defaultSession = "sway";
+    # ui/domicile takes this over where it is imported; sway stays a session
+    # to pick at the login screen.
+    defaultSession = lib.mkDefault "sway";
     sessionPackages = [pkgs.sway];
   };
 }
