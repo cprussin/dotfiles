@@ -84,8 +84,10 @@ in {
   primary-user.home-manager.systemd.user.services.wluma = {
     Unit = {
       Description = "Adjust the backlight to the ambient light level";
-      PartOf = ["graphical-session.target"];
-      After = ["graphical-session.target"];
+      # sway's session rather than any graphical one: wluma reads the screen
+      # through wlroots' screencopy, which a domicile desk does not serve.
+      PartOf = ["sway-session.target"];
+      After = ["sway-session.target"];
 
       # wluma panics rather than degrades when the sensor isn't there, and
       # the script above bails when the panel isn't either, but the sensor
@@ -117,6 +119,6 @@ in {
       RestartSec = "5s";
     };
 
-    Install.WantedBy = ["graphical-session.target"];
+    Install.WantedBy = ["sway-session.target"];
   };
 }
