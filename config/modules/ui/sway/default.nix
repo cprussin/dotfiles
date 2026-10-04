@@ -23,6 +23,11 @@ in {
   primary-user.home-manager = {
     home.packages = lib.mkForce [pkgs.sway pkgs.xdg-desktop-portal-wlr];
 
+    # The helpers home-manager binds to "the graphical session" -- kanshi,
+    # swayidle -- are sway's: bind them to sway's own session target, not to
+    # `graphical-session.target`, which a domicile desk starts too.
+    wayland.systemd.target = "sway-session.target";
+
     wayland.windowManager.sway = {
       enable = true;
       systemd.enable = true;

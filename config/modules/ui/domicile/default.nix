@@ -321,13 +321,10 @@ in {
   };
 
   # The machine's half (domicile's NixOS module, imported in flake.nix): the
-  # `domicile` PAM service the lock above names, and `domicile` itself as a
-  # login session -- with no shell named, so the config's ./shell.ts.  Booting
-  # into it is this line, not the module's.
-  programs.domicile = {
-    inherit (hm.programs.domicile) enable;
-    desktops = [hm.programs.domicile.package];
-  };
+  # `domicile` PAM service the lock above names, and the `domicile` login
+  # session, which runs the config's ./shell.ts.  Booting into it is this line,
+  # not the module's.
+  programs.domicile = {inherit (hm.programs.domicile) enable;};
   services.displayManager.defaultSession =
     lib.mkIf hm.programs.domicile.enable "domicile";
 }
