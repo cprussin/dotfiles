@@ -63,6 +63,7 @@
     home-manager,
     nixos-hardware,
     colmena,
+    domicile,
     ...
   } @ flake-inputs: let
     password-utils-overlay = final: _: {
@@ -151,6 +152,9 @@
         extraModules
         ++ [
           home-manager.nixosModules.home-manager
+          # Here rather than in ui/domicile because `imports` cannot read
+          # `config.flake-inputs`.  Inert until `programs.domicile.enable`.
+          domicile.nixosModules.default
           injectFlakeInputs
           "${toString machineDir}/${targetHost}"
         ];
