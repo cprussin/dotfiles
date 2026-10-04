@@ -172,26 +172,14 @@ in {
 
     # Named here because the domicile module adds its package at the normal
     # priority this repo's `lib.mkForce` discards -- the trap ui/xdg-portal
-    # documents.  Without it `domicile` is off PATH and its `.portal` file
-    # never reaches the profile.
+    # documents.  Without it `domicile` is off PATH, and its `.portal` file and
+    # `domicile-portals.conf` (the module's portal routing) never reach the
+    # profile.
     home.packages = lib.mkForce (
       lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
     );
 
     xdg = {
-      # Portal routing, in the shape ui/sway writes for wlr.  xdg-desktop-portal
-      # matches this against its OWN `XDG_CURRENT_DESKTOP`, which domicile's
-      # compositor announces to the D-Bus and systemd activation environments at
-      # startup.  `gtk` second answers what domicile does not implement -- not
-      # screenshot or screencast, which neither has a backend for.
-      portal = {
-        # For the symmetry with ui/sway; `home.packages` above is what installs
-        # it, and this only feeds that list and a non-empty assertion.
-        extraPortals =
-          lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage;
-        config.domicile.default = ["domicile" "gtk"];
-      };
-
       # Each app's icon and the picture its launcher preview shows are
       # ./launcher/<app>.svg and ./launcher/<app>-preview.svg.
       dataFile = lib.mapAttrs' (app: entry:
@@ -332,25 +320,14 @@ in {
     };
   };
 
-  # What the lock authenticates through, as ui/swaylock does for swaylock.
-  security.pam.services.domicile = {};
-
-  # What the display manager boots into: `domicile` with no shell named, so the
-  # config's ./shell.ts, on the screen.  `OZONE=drm` because a display
-  # manager's session is always on a VT, and a stray `WAYLAND_DISPLAY` from the
-  # greeter would otherwise make it a window.
-  services.displayManager = lib.mkIf hm.programs.domicile.enable {
-    defaultSession = "domicile";
-    sessionPackages = [
-      ((pkgs.writeTextDir "share/wayland-sessions/domicile.desktop" ''
-          [Desktop Entry]
-          Name=Domicile
-          Comment=manganese, on Domicile
-          Exec=${pkgs.writeShellScript "domicile-session" "OZONE=drm exec ${hm.programs.domicile.finalPackage}/bin/domicile"}
-          DesktopNames=domicile
-          Type=Application
-        '')
-        // {providedSessions = ["domicile"];})
-    ];
+  # The machine's half (domicile's NixOS module, imported in flake.nix): the
+  # `domicile` PAM service the lock above names, and `domicile` itself as a
+  # login session -- with no shell named, so the config's ./shell.ts.  Booting
+  # into it is this line, not the module's.
+  programs.domicile = {
+    inherit (hm.programs.domicile) enable;
+    desktops = [hm.programs.domicile.package];
   };
+  services.displayManager.defaultSession =
+    lib.mkIf hm.programs.domicile.enable "domicile";
 }
