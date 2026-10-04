@@ -200,8 +200,10 @@ in {
       apps;
 
       # The shell ./shell.ts, where `programs.domicile.settings.shell` below
-      # names it.
-      configFile."domicile/shell.ts".source = ./shell.ts;
+      # names it, with the terminal's path in.
+      configFile."domicile/shell.ts".source = pkgs.replaceVars ./shell.ts {
+        terminal = hm.default-terminal.bin;
+      };
     };
 
     programs.domicile = {
