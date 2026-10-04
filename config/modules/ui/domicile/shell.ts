@@ -1,5 +1,8 @@
 // This desk's shell: manganese, with sway's keys on Meta as ui/sway binds them.
 //
+// `Meta+Return` opens the terminal, which manganese leaves for the config to
+// bind, by the path ./default.nix fills in.
+//
 // manganese's defaults already are sway's, but for one thing: its workspaces
 // are on the digits.  On dvp the digits are shifted, so the workspaces go on
 // the top row's own symbols instead -- `parenleft` is the first workspace, as
@@ -8,6 +11,7 @@
 import {
   DEFAULT_KEYBINDINGS,
   DEFAULT_MODES,
+  exec,
   moveToWorkspace,
   runManganese,
   workspace,
@@ -38,6 +42,7 @@ export const Shell = runManganese({
           ([chord]) => !onADigit(chord),
         ),
       ),
+      "Meta+Return": exec("@terminal@"),
       ...Object.fromEntries(
         WORKSPACE_KEYS.flatMap((key, at) => [
           [`Meta+${key}`, workspace(String(at + 1))],
