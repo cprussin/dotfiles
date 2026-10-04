@@ -40,7 +40,7 @@ in {
       # obvious option: it installs through `home.packages`, at the normal
       # priority that every `lib.mkForce [...]` on that list in this repo
       # discards -- including the one in the module that imports this.  The
-      # entry would silently not exist, and mimeApps below would then point
+      # entry would silently not exist, and sway-mimeapps.list below would then point
       # every web link at nothing at all.  This lands it in
       # ~/.local/share/applications, which the spec searches ahead of
       # XDG_DATA_DIRS, so it also doesn't lean on `environment.pathsToLink`.
@@ -74,13 +74,22 @@ in {
       # overwrite instead.  (GIO's `g_app_info_set_as_default_for_type`, which
       # is what Firefox's prompt uses, resolves the symlink first and so just
       # fails against the read-only store.)
-      mimeApps = {
-        enable = true;
-        defaultApplications = {
-          "text/html" = "browse.desktop";
-          "x-scheme-handler/http" = "browse.desktop";
-          "x-scheme-handler/https" = "browse.desktop";
-        };
+      #
+      # It names no web browser, though: that is sway's, below.  An empty but
+      # read-only file is still what keeps a runtime "make me the default"
+      # from naming one for every session.
+      mimeApps.enable = true;
+
+      # The web defaults, for sway only: `sway-mimeapps.list` is read ahead of
+      # `mimeapps.list` only where `XDG_CURRENT_DESKTOP` is `sway`.  A desk
+      # names no browser here, so domicile's own default -- a browser window
+      # of the desk -- answers web links there.
+      configFile."sway-mimeapps.list".text = lib.generators.toINI {} {
+        "Default Applications" = lib.genAttrs [
+          "text/html"
+          "x-scheme-handler/http"
+          "x-scheme-handler/https"
+        ] (_: "browse.desktop");
       };
     };
   };
