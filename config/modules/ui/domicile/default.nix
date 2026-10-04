@@ -140,6 +140,10 @@
       name = "Telegram";
       exec = telegram;
     };
+    terminal = {
+      name = "Terminal";
+      exec = hm.default-terminal.bin;
+    };
     tor-browser = {
       name = "Tor Browser";
       exec = "${pkgs.tor-browser}/bin/tor-browser";
