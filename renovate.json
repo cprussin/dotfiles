@@ -2,6 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "timezone": "UTC",
+  "schedule": ["before 6am on monday"],
+  "automerge": false,
+  "separateMajorMinor": false,
   "minimumReleaseAge": "7 days",
   "nix": {
     "enabled": true
@@ -10,12 +13,21 @@
     "enabled": true
   },
   "packageRules": [
-    { "matchUpdateTypes": ["minor", "patch", "pin", "digest"], "automerge": true },
-    { "matchUpdateTypes": ["major"], "automerge": false },
     {
-      "matchManagers": ["nix"],
-      "automerge": false,
-      "description": "minimumReleaseAge gates on releaseTimestamp, which nix's git-commit/digest-based flake.lock updates generally lack, so the 7-day cooling-off period above cannot be trusted to apply here -- require manual review instead."
+      "description": "One weekly PR with every update; a Claude routine fixes it up (lockfiles, flake hashes, breaking changes) and merges it.",
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "lockFileMaintenance",
+        "rollback",
+        "replacement"
+      ],
+      "groupName": "all dependencies",
+      "groupSlug": "all"
     }
   ]
 }
