@@ -140,6 +140,21 @@ in {
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
 
+    # nixos-hardware gives the enhanced "Framework Speakers" sink
+    # `priority.session` 1009, the same as the raw speaker sink behind it, which
+    # we keep visible (`hideRawDevice = false`).  WirePlumber gave the tie to the
+    # raw sink, so it became the default and audio skipped the filter chain.
+    # Drop the raw sink just below it; it stays above HDMI and the dock, and can
+    # still be selected by hand.
+    pipewire.wireplumber.extraConfig."51-speaker-raw-priority" = {
+      "monitor.alsa.rules" = [
+        {
+          matches = [{"node.name" = config.hardware.framework.laptop13.audioEnhancement.rawDeviceName;}];
+          actions.update-props."priority.session" = 1000;
+        }
+      ];
+    };
+
     # The audio enhancement filter chain above feeds the raw speaker sink and
     # the two volumes compound, so the raw sink has to sit at 100% for the
     # enhanced sink to reach full loudness.  `/` is tmpfs and we deliberately
