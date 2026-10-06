@@ -80,8 +80,7 @@
   # The programs domicile's launcher offers, by desktop file ID
   # `domicile-<app>.desktop`: its own, and none of ui/launcher's commands --
   # though chatgpt-desktop and claude-desktop still come from that module's
-  # overlays, and screenshot runs its screen.nix, all of which have to move
-  # before it goes.  What opens a URL is a bookmark instead, which
+  # overlays, which have to move before it goes.  What opens a URL is a bookmark instead, which
   # domicile opens as a page of its own rather than handing to a browser.
   apps = {
     agenda = {
@@ -133,10 +132,14 @@
       name = "Mixer";
       exec = "${pkgs.pavucontrol}/bin/pavucontrol";
     };
-    # sway's screenshot, as is: grim on the window slurp picks, into ~/Scratch.
+    # The whole desk, into ~/Scratch.  `domicile screenshot` is a stopgap
+    # until domicile has a screenshot portal and a picker.
     screenshot = {
       name = "Screenshot";
-      exec = "${pkgs.callPackage ../launcher/apps/screen.nix {}} shot";
+      exec = pkgs.writeShellScript "screenshot" ''
+        exec ${hm.programs.domicile.finalPackage}/bin/domicile screenshot \
+          "$HOME/Scratch/screenshot-$(${pkgs.coreutils}/bin/date +%Y-%m-%d-%H%M%S).png"
+      '';
     };
     slack = {
       name = "Slack";
