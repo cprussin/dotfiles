@@ -169,6 +169,27 @@
     "${name} - Meat Proxy Labs".url = "${url}?authuser=connor@meatproxylabs.com";
   };
 
+  # manganese's launcher, in ./shell.ts: `apps` above and nothing a package
+  # happened to install -- every desktop entry is left out, then `domicile-*`
+  # taken back.
+  applications = {
+    omit = ["*" "!domicile-*"];
+    bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) (
+      google "Calendar" "https://calendar.google.com"
+      // google "Email" "https://mail.google.com"
+      // google "Google Drive" "https://drive.google.com"
+      // {
+        "Credit Cards".url = personal "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
+        "SMS".url = personal "https://messages.google.com/web/conversations";
+        "SOTD".url = personal "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
+        "Eyes".url = "https://eyes.internal.prussin.net";
+        "Home".url = "https://home-assistant.internal.prussin.net";
+        "Photos".url = "https://photos.internal.prussin.net";
+        "Syncthing".url = "http://localhost:8384";
+      }
+    );
+  };
+
   keyboard = hm.keymap;
 
   # domicile's theme, out of the same `colorTheme` everything else here reads.
@@ -209,9 +230,11 @@ in {
       apps;
 
       # The shell ./shell.ts, where `programs.domicile.settings.shell` below
-      # names it, with the terminal's path in.
+      # names it, with the terminal's path and the launcher's `applications`
+      # in.
       configFile."domicile/shell.ts".source = pkgs.replaceVars ./shell.ts {
         terminal = hm.default-terminal.bin;
+        applications = builtins.toJSON applications;
       };
     };
 
@@ -234,27 +257,6 @@ in {
           "!{Library,Notes,Projects,Scratch}/*"
           "{Library,Notes,Projects}/*/*"
         ];
-
-        # The launcher offers `apps` above and nothing a package happened
-        # to install: every desktop entry is left out, then `domicile-*` taken
-        # back.
-        applications = {
-          omit = ["*" "!domicile-*"];
-          bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) (
-            google "Calendar" "https://calendar.google.com"
-            // google "Email" "https://mail.google.com"
-            // google "Google Drive" "https://drive.google.com"
-            // {
-              "Credit Cards".url = personal "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
-              "SMS".url = personal "https://messages.google.com/web/conversations";
-              "SOTD".url = personal "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
-              "Eyes".url = "https://eyes.internal.prussin.net";
-              "Home".url = "https://home-assistant.internal.prussin.net";
-              "Photos".url = "https://photos.internal.prussin.net";
-              "Syncthing".url = "http://localhost:8384";
-            }
-          );
-        };
 
         # This desk's emacs daemon, up before the first frame asks for it --
         # the same one ui/emacs has sway start.
