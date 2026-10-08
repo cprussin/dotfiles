@@ -1,7 +1,8 @@
 // This desk's shell: manganese, with sway's keys on Meta as ui/sway binds them.
 //
 // `Meta+Return` opens the terminal, which manganese leaves for the config to
-// bind, by the path ./default.nix fills in.
+// bind, by the path ./default.nix fills in.  The launcher's applications and
+// bookmarks are ./default.nix's `applications`, filled in as JSON.
 //
 // manganese's defaults already are sway's, but for one thing: its workspaces
 // are on the digits.  On dvp the digits are shifted, so the workspaces go on
@@ -35,6 +36,7 @@ const WORKSPACE_KEYS = [
 const onADigit = (chord: string): boolean => /^Meta\+(Shift\+)?\d$/.test(chord);
 
 export const Shell = runManganese({
+  applications: @applications@,
   keybindings: {
     keybindings: {
       ...Object.fromEntries(
