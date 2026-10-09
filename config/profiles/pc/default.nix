@@ -27,6 +27,7 @@
     ../../modules/ui/direnv
     ../../modules/ui/display-manager
     ../../modules/ui/emacs
+    ../../modules/ui/flatpak
     ../../modules/ui/fonts
     ../../modules/ui/graphics
     ../../modules/ui/gtk
