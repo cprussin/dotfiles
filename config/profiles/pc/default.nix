@@ -13,6 +13,7 @@
     ../../modules/security/yubikey
 
     ../../modules/system/avahi
+    ../../modules/system/background-builds
     ../../modules/system/dbus
     ../../modules/system/devices/android
     ../../modules/system/devices/audio
