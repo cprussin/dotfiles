@@ -132,14 +132,11 @@
       name = "Mixer";
       exec = "${pkgs.pavucontrol}/bin/pavucontrol";
     };
-    # The whole desk, into ~/Scratch.  `domicile screenshot` is a stopgap
-    # until domicile has a screenshot portal and a picker.
+    # The shell's picker, as Print: a monitor, a window or an area, saved
+    # under ~/Scratch/Screenshots (XDG_PICTURES_DIR).
     screenshot = {
       name = "Screenshot";
-      exec = pkgs.writeShellScript "screenshot" ''
-        exec ${hm.programs.domicile.finalPackage}/bin/domicile screenshot \
-          "$HOME/Scratch/screenshot-$(${pkgs.coreutils}/bin/date +%Y-%m-%d-%H%M%S).png"
-      '';
+      exec = "${hm.programs.domicile.finalPackage}/bin/domicile screenshot";
     };
     slack = {
       name = "Slack";
