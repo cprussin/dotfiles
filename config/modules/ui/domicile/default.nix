@@ -367,4 +367,9 @@ in {
   programs.domicile = {inherit (hm.programs.domicile) enable;};
   services.displayManager.defaultSession =
     lib.mkIf hm.programs.domicile.enable "domicile";
+
+  # The module lets members of `domicile` lower nice to -10 and use realtime
+  # priority 8, which the engine's frame and audio threads ask for.  Takes
+  # effect at the next login.
+  primary-user.extraGroups = lib.mkIf hm.programs.domicile.enable ["domicile"];
 }
