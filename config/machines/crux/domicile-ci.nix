@@ -152,6 +152,10 @@
     light = "/build/github-runner-light";
   };
 
+  # Each runner's /tmp and /var/tmp; see `serviceOverrides` below.
+  runnerTmpRoot = "/build/runner-tmp";
+  runnerTmp = name: "${runnerTmpRoot}/${name}";
+
   # The upstream unit is hardened for a runner that compiles ordinary code.
   # These drive Chromium's own build sandbox and a GPU, and six of those
   # defaults forbid exactly that.  Each is turned off with its reason;
@@ -261,8 +265,9 @@
     # /build rather than the one work directory, for both: each runner's
     # TMPDIR is /build/tmp.  The render node lock the companion change adds
     # will have to live under /build too, and for a reason worth writing down
-    # here rather than only over there: `PrivateTmp` is per-service, so these
-    # two units do NOT share /tmp, and a lock between them cannot live in it.
+    # here rather than only over there: each runner's /tmp is its own
+    # directory (see `serviceOverrides`), so these units do NOT share /tmp,
+    # and a lock between them cannot live in it.
     ReadWritePaths = ["/build"];
 
     # A non-ephemeral runner is Restart=no upstream, which is right for a
@@ -376,7 +381,19 @@
       TMPDIR = "/build/tmp";
     };
 
-    serviceOverrides = hardening;
+    serviceOverrides =
+      hardening
+      // {
+        # /tmp and /var/tmp on disk.  The module's PrivateTmp puts them on the
+        # host /tmp, which is tmpfs, and a runner unit lives for many jobs, so
+        # whatever a job leaves there stays in RAM until the next deploy.
+        # Chrome's leftover download directories from the engine guards held
+        # 15G of it on 2026-10-09.  A per-runner directory keeps the units
+        # apart the way PrivateTmp did.  0700 because the runners' UMask is
+        # 0022; see the work directories' rules below.
+        PrivateTmp = false;
+        BindPaths = ["${runnerTmp name}:/tmp" "${runnerTmp name}:/var/tmp"];
+      };
   };
 
   # What every one of these units needs before it can start, applied to all
@@ -441,11 +458,17 @@ in {
   # job.  The umask change is wanted for /build/chromium, which is shared;
   # these directories are not, so the directory bit takes back what it gave
   # away.
-  systemd.tmpfiles.rules = [
-    "d ${workDirs.heavy} 0750 ${config.primary-user.name} users -"
-    "d ${workDirs.heavy2} 0750 ${config.primary-user.name} users -"
-    "d ${workDirs.light} 0750 ${config.primary-user.name} users -"
-  ];
+  systemd.tmpfiles.rules =
+    [
+      "d ${workDirs.heavy} 0750 ${config.primary-user.name} users -"
+      "d ${workDirs.heavy2} 0750 ${config.primary-user.name} users -"
+      "d ${workDirs.light} 0750 ${config.primary-user.name} users -"
+
+      # On disk, so nothing empties it the way a reboot empties tmpfs; the age
+      # does instead, as for /build/tmp in chromium-build.nix.
+      "d ${runnerTmpRoot} 0750 ${config.primary-user.name} users -"
+    ]
+    ++ lib.mapAttrsToList (_: r: "d ${runnerTmp r.name} 0700 ${config.primary-user.name} users 10d") config.services.github-runners;
 
   systemd.services = {
     # THE HEAVY ONES ALSO WAIT FOR THE TREE POOL, AND THE LIGHT ONE MUST NOT.
