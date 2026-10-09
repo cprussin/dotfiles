@@ -35,4 +35,9 @@
     getty.greetingLine = builtins.readFile ./greeting;
     fwupd.enable = true;
   };
+
+  # Core dumps go to /var/lib/systemd/coredump, on the tmpfs root (see
+  # hardware.nix), so they are RAM.  Crashing engines in CI left 2G there on
+  # 2026-10-09.
+  systemd.coredump.settings.Coredump.MaxUse = "1G";
 }
