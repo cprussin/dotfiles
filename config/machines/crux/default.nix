@@ -3,6 +3,7 @@
     ./hardware.nix
     ../../profiles/physical-machine
     ../../profiles/server
+    ../../modules/system/podman
 
     ./backup.nix
     ./chromium-build.nix
