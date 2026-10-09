@@ -104,6 +104,8 @@ in {
     podman-home-assistant = {
       requires = ["import-tank.service"];
       after = ["import-tank.service"];
+      # Container storage is a nofail mount; don't start on the tmpfs under it.
+      unitConfig.RequiresMountsFor = "/var/lib/containers";
     };
   };
 }

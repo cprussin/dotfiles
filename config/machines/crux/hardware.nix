@@ -207,6 +207,12 @@ in {
       zfs.mkZfsFileSystems {
         "tank-fast/nix".mountpoint = "/nix";
         "tank-fast/log".mountpoint = "/var/log";
+        # Created with `-o quota=50G`: tank-fast also holds /nix.  nofail and
+        # x-systemd.before as for /build; see chromium-build.nix.
+        "tank-fast/containers" = {
+          mountpoint = "/var/lib/containers";
+          options = ["defaults" "nofail" "x-systemd.before=local-fs.target"];
+        };
         "tank-fast/secrets" = {
           mountpoint = "/secrets";
           neededForBoot = true;
