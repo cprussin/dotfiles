@@ -14,7 +14,12 @@
     programs.kitty = {
       enable = config.primary-user.home-manager.default-terminal.enableApplication;
       settings = {
-        open_url_with = "${pkgs.launcher}/bin/browse";
+        # The desktop's `BROWSER`: `domicile-open-url` in domicile, `browse`
+        # elsewhere.  Not `xdg-open`, which outside domicile is launcher's
+        # `run`, and that `eval`s its argument.
+        open_url_with = "${pkgs.writeShellScript "kitty-open-url" ''
+          exec "''${BROWSER:-${pkgs.launcher}/bin/browse}" "$@"
+        ''}";
         remember_window_size = "no";
         confirm_os_window_close = "0";
       };
