@@ -74,6 +74,17 @@
   hm = config.primary-user.home-manager;
 
   inTerminal = name: bin: "${hm.default-terminal.bin} --title ${name} --class ${name} --name ${name} ${bin}";
+
+  # A terminal asking `prompt`, with "No" highlighted first; only picking `yes`
+  # runs `cmd`.
+  confirm = name: yes: prompt: cmd:
+    inTerminal name (pkgs.writeShellScript name ''
+      selection=$(printf '%s\n' "No, remain on" "${yes}" | ${pkgs.fzf}/bin/fzf --layout=reverse --prompt "${prompt} ")
+      if [ "$selection" = "${yes}" ]; then
+        exec ${cmd}
+      fi
+    '');
+
   matrix = "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
   slack = "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
@@ -132,11 +143,19 @@
       name = "Mixer";
       exec = "${pkgs.pavucontrol}/bin/pavucontrol";
     };
+    reboot = {
+      name = "Reboot";
+      exec = confirm "reboot" "Yes, reboot" "Are you sure you want to reboot?" "${pkgs.systemd}/bin/systemctl reboot -i";
+    };
     # The shell's picker, as Print: a monitor, a window or an area, saved
     # under ~/Scratch/Screenshots (XDG_PICTURES_DIR).
     screenshot = {
       name = "Screenshot";
       exec = "${hm.programs.domicile.finalPackage}/bin/domicile screenshot";
+    };
+    shutdown = {
+      name = "Shutdown";
+      exec = confirm "shutdown" "Yes, shut down" "Are you sure you want to shut down?" "${pkgs.systemd}/bin/systemctl poweroff -i";
     };
     slack = {
       name = "Slack";
