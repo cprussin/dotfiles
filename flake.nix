@@ -35,6 +35,25 @@
     # `stable` is the newest `main` built on the production engine; `main`
     # itself can sit on a slower checked engine build for a night.
     domicile.url = "github:cprussin/domicile/stable";
+    # The vendors' apt indexes, not the .debs: `nix flake update` re-fetches
+    # these and lib/apt-package.nix reads the newest version and its hash out
+    # of them, so the desktop apps upgrade with everything else.
+    claude-desktop-apt-amd64 = {
+      url = "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages";
+      flake = false;
+    };
+    claude-desktop-apt-arm64 = {
+      url = "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-arm64/Packages";
+      flake = false;
+    };
+    chatgpt-desktop-apt-amd64 = {
+      url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-amd64/Packages";
+      flake = false;
+    };
+    chatgpt-desktop-apt-arm64 = {
+      url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-arm64/Packages";
+      flake = false;
+    };
     fzf-pass = {
       url = "github:cprussin/fzf-pass";
       flake = false;

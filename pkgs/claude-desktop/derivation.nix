@@ -4,12 +4,13 @@
 # can't find QEMU's firmware -- is adapted from
 # https://github.com/poeck/claude-desktop-nix-flake (MIT).
 #
-# `version` and `hash` move together: bump both from the pool listing at
-# https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages
+# Version and hash come from the apt index, a flake input: `nix flake update`
+# picks up new releases.  See lib/apt-package.nix.
 {
   lib,
   stdenv,
-  fetchurl,
+  callPackage,
+  aptIndexes,
   alsa-lib,
   asar,
   at-spi2-core,
@@ -55,6 +56,7 @@
   OVMF,
   pango,
   perl,
+  pipewire,
   qemu,
   systemd,
   trash-cli,
@@ -63,22 +65,15 @@
   wrapGAppsHook3,
   xdg-utils,
 }: let
-  version = "1.18286.2";
-
-  sources = {
-    x86_64-linux = {
-      debArch = "amd64";
-      hash = "sha256-Vvpd4FPgpo3HWDZ3hXvtz0IZsZ2QIBQA4CN7fXTVEvE=";
-    };
-    aarch64-linux = {
-      debArch = "arm64";
-      hash = "sha256-OMZaEibczHWmskGLnUwGT0+dxTMfiWCK7dVU2H1Sm6M=";
-    };
-  };
-
-  source =
-    sources.${stdenv.hostPlatform.system}
-    or (throw "claude-desktop is not packaged for ${stdenv.hostPlatform.system}");
+  inherit
+    (callPackage ../../lib/apt-package.nix {} {
+      package = "claude-desktop";
+      baseUrl = "https://downloads.claude.ai/claude-desktop/apt/stable";
+      indexes = aptIndexes;
+    })
+    version
+    src
+    ;
 
   firmwareCodePath =
     if stdenv.hostPlatform.isAarch64
@@ -125,6 +120,8 @@
     nspr
     nss
     pango
+    # @ant/claude-native links it.
+    pipewire
     stdenv.cc.cc.lib
     systemd
     vulkan-loader
@@ -142,10 +139,7 @@ in
     pname = "claude-desktop";
     inherit version;
 
-    src = fetchurl {
-      url = "https://downloads.claude.ai/claude-desktop/apt/stable/pool/main/c/claude-desktop/claude-desktop_${version}_${source.debArch}.deb";
-      inherit (source) hash;
-    };
+    inherit src;
 
     nativeBuildInputs = [
       asar
@@ -176,8 +170,11 @@ in
       cp -a usr/lib/claude-desktop "$out/lib/"
       cp -a usr/share/applications usr/share/icons usr/share/doc "$out/share/"
 
-      substituteInPlace "$out/share/applications/claude-desktop.desktop" \
-        --replace-fail "Exec=claude-desktop" "Exec=$out/bin/claude-desktop"
+      for desktop in "$out"/share/applications/*.desktop
+      do
+        substituteInPlace "$desktop" \
+          --replace-fail "Exec=claude-desktop" "Exec=$out/bin/claude-desktop"
+      done
 
       # The .deb bundles virtiofsd for distros that don't package it; the patch
       # below points Cowork at that copy, and unlike the three rewrites it has
@@ -189,13 +186,19 @@ in
       asarRoot="$(mktemp -d)"
       asar extract "$out/lib/claude-desktop/resources/app.asar" "$asarRoot"
 
+      # The VM code lives in a hashed chunk under .vite/build as of 2.x, not
+      # index.js, so find it by the path it's about to have patched out.
+      vmChunk="$(grep -l -F '/usr/share/OVMF/OVMF_CODE_4M.fd' "$asarRoot"/.vite/build/*.js || true)"
+      test -f "$vmChunk" \
+        || (echo "could not identify the Claude Desktop VM code chunk" >&2; exit 1)
+
       FIRMWARE_CODE_PATH="${firmwareCodePath}" \
       VIRTIOFSD_PATH="$out/lib/claude-desktop/resources/virtiofsd" \
       perl -0pi -e '
         s{([A-Za-z0-9_\$]+)=process\.arch==="arm64"\?\["/usr/share/AAVMF/AAVMF_CODE\.fd"\]:\["/usr/share/OVMF/OVMF_CODE_4M\.fd","/usr/share/OVMF/OVMF_CODE\.fd"\]}{$1=["$ENV{FIRMWARE_CODE_PATH}"]} or die "failed to patch firmware path\n";
         s{([A-Za-z0-9_\$]+)=\["/usr/libexec/virtiofsd","/usr/bin/virtiofsd"\]}{$1=["$ENV{VIRTIOFSD_PATH}"]} or die "failed to patch virtiofsd path\n";
-        s{return A\.replace\("OVMF_CODE","OVMF_VARS"\)\.replace\("AAVMF_CODE","AAVMF_VARS"\)}{return A.replace("OVMF_CODE","OVMF_VARS").replace("AAVMF_CODE","AAVMF_VARS").replace("edk2-aarch64-code.fd","edk2-arm-vars.fd")} or die "failed to patch firmware vars path\n";
-      ' "$asarRoot/.vite/build/index.js"
+        s{return ([A-Za-z0-9_\$]+)\.replace\("OVMF_CODE","OVMF_VARS"\)\.replace\("AAVMF_CODE","AAVMF_VARS"\)}{return $1.replace("OVMF_CODE","OVMF_VARS").replace("AAVMF_CODE","AAVMF_VARS").replace("edk2-aarch64-code.fd","edk2-arm-vars.fd")} or die "failed to patch firmware vars path\n";
+      ' "$vmChunk"
 
       rm "$out/lib/claude-desktop/resources/app.asar"
       asar pack --unpack "*.node" "$asarRoot" "$out/lib/claude-desktop/resources/app.asar"
@@ -222,7 +225,7 @@ in
       changelog = "https://code.claude.com/docs/en/desktop-linux";
       license = lib.licenses.unfree;
       mainProgram = "claude-desktop";
-      platforms = builtins.attrNames sources;
+      platforms = builtins.attrNames aptIndexes;
       sourceProvenance = [lib.sourceTypes.binaryNativeCode];
     };
   }

@@ -1,5 +1,53 @@
 {
   "nodes": {
+    "chatgpt-desktop-apt-amd64": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-6t51DIaJV5n1fG/Q6+qDjs3MO3Z5br12FIZ/IVtjgJc=",
+        "type": "file",
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-amd64/Packages"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-amd64/Packages"
+      }
+    },
+    "chatgpt-desktop-apt-arm64": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-f+r1X2VvBGNkqulLhiQyjaXSolEEyzJb1X7Xw168cCA=",
+        "type": "file",
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-arm64/Packages"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-arm64/Packages"
+      }
+    },
+    "claude-desktop-apt-amd64": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-e8GJv1/2F4WeEE2EFGmvQOpGpoojJf2SYqoJUgVeWzc=",
+        "type": "file",
+        "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages"
+      }
+    },
+    "claude-desktop-apt-arm64": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-UaMLvu+oNgzHP75zEogWLpKy9qx70IcTECggjtJl4/o=",
+        "type": "file",
+        "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-arm64/Packages"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-arm64/Packages"
+      }
+    },
     "colmena": {
       "inputs": {
         "nix-github-actions": "nix-github-actions",
@@ -415,6 +463,10 @@
     },
     "root": {
       "inputs": {
+        "chatgpt-desktop-apt-amd64": "chatgpt-desktop-apt-amd64",
+        "chatgpt-desktop-apt-arm64": "chatgpt-desktop-apt-arm64",
+        "claude-desktop-apt-amd64": "claude-desktop-apt-amd64",
+        "claude-desktop-apt-arm64": "claude-desktop-apt-arm64",
         "colmena": "colmena",
         "dircolors-solarized": "dircolors-solarized",
         "domicile": "domicile",

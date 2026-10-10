@@ -1,15 +1,16 @@
 # OpenAI ships the Linux app as a .deb from their own apt repo and there's no
 # nixpkgs package for it (`pkgs.chatgpt` is the macOS .dmg, darwin-only), so we
-# unpack that .deb the same way `claude-desktop` does.  The URL layout and the
-# per-arch hashes come from the AUR `chatgpt-desktop` PKGBUILD, which repackages
-# the same binaries.
+# unpack that .deb the same way `claude-desktop` does.  The repository layout
+# comes from the AUR `chatgpt-desktop` PKGBUILD, which repackages the same
+# binaries.
 #
-# `version` and `hash` move together; the pool this reads from is listed at
-# https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-amd64/Packages
+# Version and hash come from the apt index, a flake input: `nix flake update`
+# picks up new releases.  See lib/apt-package.nix.
 {
   lib,
   stdenv,
-  fetchurl,
+  callPackage,
+  aptIndexes,
   alsa-lib,
   at-spi2-core,
   autoPatchelfHook,
@@ -59,22 +60,15 @@
   wrapGAppsHook3,
   xdg-utils,
 }: let
-  version = "26.820.71523";
-
-  sources = {
-    x86_64-linux = {
-      debArch = "amd64";
-      hash = "sha256-Ry0D6IophX8QFbK5F12AUjoTHPG8PpAX6xqP8jTeG9o=";
-    };
-    aarch64-linux = {
-      debArch = "arm64";
-      hash = "sha256-4OyqrqaqROfkWMky9c12EueGwK6wi+2XHLlq48QmYBM=";
-    };
-  };
-
-  source =
-    sources.${stdenv.hostPlatform.system}
-    or (throw "chatgpt-desktop is not packaged for ${stdenv.hostPlatform.system}");
+  inherit
+    (callPackage ../../lib/apt-package.nix {} {
+      package = "chatgpt";
+      baseUrl = "https://persistent.oaistatic.com/codex-app-prod/linux/deb";
+      indexes = aptIndexes;
+    })
+    version
+    src
+    ;
 
   # coreutils is load-bearing: the asar patch below makes the app copy its
   # bundled plugins with `cp` and `chmod` rather than node's fs.cp.
@@ -131,10 +125,7 @@ in
     pname = "chatgpt-desktop";
     inherit version;
 
-    src = fetchurl {
-      url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_${version}_${source.debArch}.deb";
-      inherit (source) hash;
-    };
+    inherit src;
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -283,7 +274,7 @@ in
       homepage = "https://chatgpt.com/download";
       license = lib.licenses.unfree;
       mainProgram = "chatgpt";
-      platforms = builtins.attrNames sources;
+      platforms = builtins.attrNames aptIndexes;
       sourceProvenance = [lib.sourceTypes.binaryNativeCode];
     };
   }

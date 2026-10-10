@@ -30,8 +30,18 @@
     '';
 in {
   nixpkgs.overlays = [
-    (import ../../../../pkgs/chatgpt-desktop/overlay.nix)
-    (import ../../../../pkgs/claude-desktop/overlay.nix)
+    (import ../../../../pkgs/chatgpt-desktop/overlay.nix {
+      aptIndexes = {
+        x86_64-linux = config.flake-inputs.chatgpt-desktop-apt-amd64;
+        aarch64-linux = config.flake-inputs.chatgpt-desktop-apt-arm64;
+      };
+    })
+    (import ../../../../pkgs/claude-desktop/overlay.nix {
+      aptIndexes = {
+        x86_64-linux = config.flake-inputs.claude-desktop-apt-amd64;
+        aarch64-linux = config.flake-inputs.claude-desktop-apt-arm64;
+      };
+    })
     (import ../../../../pkgs/launcher/overlay.nix)
   ];
 
