@@ -75,31 +75,16 @@
 
   inTerminal = name: bin: "${hm.default-terminal.bin} --title ${name} --class ${name} --name ${name} ${bin}";
 
-  # domicile's own yes/no dialog -- its Access portal, asked directly -- and
-  # `cmd` only on a yes.  Esc, "Cancel" or no shell to ask all leave it be.
-  confirm = name: title: subtitle: grant: cmd:
-    pkgs.writeShellScript name ''
-      reply=$(${pkgs.systemd}/bin/busctl --user --timeout=infinity call \
-        org.freedesktop.impl.portal.desktop.domicile \
-        /org/freedesktop/portal/desktop \
-        org.freedesktop.impl.portal.Access AccessDialog 'osssssa{sv}' \
-        "/org/freedesktop/portal/desktop/request/launcher/${name}_$$" \
-        domicile-${name} "" \
-        ${lib.escapeShellArg title} ${lib.escapeShellArg subtitle} "" \
-        2 grant_label s ${lib.escapeShellArg grant} deny_label s Cancel)
-      if [ "$reply" = 'ua{sv} 0 0' ]; then
-        exec ${cmd}
-      fi
-    '';
-
   matrix = "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
   telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
   slack = "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   # The programs domicile's launcher offers, by desktop file ID
-  # `domicile-<app>.desktop`: its own, and none of ui/launcher's commands --
+  # `domicile-<app>.desktop`, beside the History, Screenshot, Shutdown and
+  # Reboot entries domicile ships itself -- and none of ui/launcher's commands,
   # though chatgpt-desktop and claude-desktop still come from that module's
-  # overlays, which have to move before it goes.  What opens a URL is a bookmark instead, which
-  # domicile opens as a page of its own rather than handing to a browser.
+  # overlays, which have to move before it goes.  What opens a URL is a
+  # bookmark instead, which domicile opens as a page of its own rather than
+  # handing to a browser.
   apps = {
     agenda = {
       name = "Agenda";
@@ -149,20 +134,6 @@
     mixer = {
       name = "Mixer";
       exec = "${pkgs.pavucontrol}/bin/pavucontrol";
-    };
-    reboot = {
-      name = "Reboot";
-      exec = confirm "reboot" "Reboot?" "Every open window closes." "Reboot" "${pkgs.systemd}/bin/systemctl reboot -i";
-    };
-    # The shell's picker, as Print: a monitor, a window or an area, saved
-    # under ~/Scratch/Screenshots (XDG_PICTURES_DIR).
-    screenshot = {
-      name = "Screenshot";
-      exec = "${hm.programs.domicile.finalPackage}/bin/domicile screenshot";
-    };
-    shutdown = {
-      name = "Shutdown";
-      exec = confirm "shutdown" "Shut down?" "Every open window closes." "Shut down" "${pkgs.systemd}/bin/systemctl poweroff -i";
     };
     slack = {
       name = "Slack";
