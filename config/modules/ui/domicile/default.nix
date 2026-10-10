@@ -79,11 +79,11 @@
   telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
   slack = "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   # The programs domicile's launcher offers, by desktop file ID
-  # `domicile-<app>.desktop`, beside the History, Screenshot, Shutdown and
-  # Reboot entries domicile ships itself -- and none of ui/launcher's commands,
-  # though chatgpt-desktop and claude-desktop still come from that module's
-  # overlays, which have to move before it goes.  What opens a URL is a
-  # bookmark instead, which domicile opens as a page of its own rather than
+  # `domicile-<app>.desktop`, beside the History, Settings, Screenshot, Shutdown
+  # and Reboot entries domicile ships itself -- and none of ui/launcher's
+  # commands, though chatgpt-desktop and claude-desktop still come from that
+  # module's overlays, which have to move before it goes.  What opens a URL is
+  # a bookmark instead, which domicile opens as a page of its own rather than
   # handing to a browser.
   apps = {
     agenda = {
