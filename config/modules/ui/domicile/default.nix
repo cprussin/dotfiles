@@ -84,7 +84,8 @@
   # commands, though chatgpt-desktop and claude-desktop still come from that
   # module's overlays, which have to move before it goes.  What opens a URL is
   # a bookmark instead, which domicile opens as a page of its own rather than
-  # handing to a browser.
+  # handing to a browser.  `windowClass` is the app id of the window an app
+  # opens, which domicile's title bars look its icon up by.
   apps = {
     agenda = {
       name = "Agenda";
@@ -93,10 +94,12 @@
     bluetooth = {
       name = "Bluetooth";
       exec = inTerminal "bluetooth" "${pkgs.bluetuith}/bin/bluetuith";
+      windowClass = "bluetooth";
     };
     btop = {
       name = "btop";
       exec = inTerminal "btop" "${pkgs.btop}/bin/btop";
+      windowClass = "btop";
     };
     chatgpt = {
       name = "ChatGPT";
@@ -118,38 +121,47 @@
     crux = {
       name = "crux";
       exec = inTerminal "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
+      windowClass = "crux";
     };
     emacs = {
       name = "Emacs";
       exec = "${pkgs.emacs}/bin/emacsclient -c";
+      windowClass = "emacs";
     };
     journal = {
       name = "Journal";
       exec = inTerminal "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
+      windowClass = "journal";
     };
     matrix = {
       name = "Matrix";
       exec = matrix;
+      windowClass = "Element";
     };
     mixer = {
       name = "Mixer";
       exec = "${pkgs.pavucontrol}/bin/pavucontrol";
+      windowClass = "org.pulseaudio.pavucontrol";
     };
     slack = {
       name = "Slack";
       exec = slack;
+      windowClass = "Slack";
     };
     telegram = {
       name = "Telegram";
       exec = telegram;
+      windowClass = "org.telegram.desktop";
     };
     terminal = {
       name = "Terminal";
       exec = hm.default-terminal.bin;
+      windowClass = "kitty";
     };
     tor-browser = {
       name = "Tor Browser";
       exec = "${pkgs.tor-browser}/bin/tor-browser";
+      windowClass = "Tor Browser";
     };
   };
 
@@ -218,6 +230,7 @@ in {
             exec = "${entry.exec}";
             icon = "${./launcher + "/${app}.svg"}";
             extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
+            startupWMClass = entry.windowClass or null;
             terminal = false;
           }}/share/applications/domicile-${app}.desktop";
         })
