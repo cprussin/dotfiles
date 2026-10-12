@@ -85,7 +85,9 @@
   # module's overlays, which have to move before it goes.  What opens a URL is
   # a bookmark instead, which domicile opens as a page of its own rather than
   # handing to a browser.  `windowClass` is the app id of the window an app
-  # opens, which domicile's title bars look its icon up by.
+  # opens, which domicile's title bars look its icon up by; `package` instead
+  # takes it from that package's own desktop entry at build time, for apps
+  # whose app id isn't known here.
   apps = {
     agenda = {
       name = "Agenda";
@@ -104,10 +106,12 @@
     chatgpt = {
       name = "ChatGPT";
       exec = "${pkgs.chatgpt-desktop}/bin/chatgpt";
+      package = pkgs.chatgpt-desktop;
     };
     claude = {
       name = "Claude";
       exec = "${pkgs.claude-desktop}/bin/claude-desktop";
+      package = pkgs.claude-desktop;
     };
     # SMS is a bookmark, which no command can open.
     comms = {
@@ -164,6 +168,25 @@
       windowClass = "Tor Browser";
     };
   };
+
+  # `desktop` with the `StartupWMClass` `package`'s desktop entries name, or
+  # the id of its one entry if none does -- the app id its window takes.
+  withPackageClass = app: package: desktop:
+    pkgs.runCommand "domicile-${app}.desktop" {} ''
+      entries=(${package}/share/applications/*.desktop)
+      class="$(sed -n 's/^StartupWMClass=//p' "''${entries[@]}" | sed -n 1p)"
+      if [ -z "$class" ] && [ "''${#entries[@]}" -eq 1 ] && [ -e "''${entries[0]}" ]
+      then
+        class="$(basename "''${entries[0]}" .desktop)"
+      fi
+      if [ -z "$class" ]
+      then
+        echo "no app id in ${package}'s desktop entries: ''${entries[*]}" >&2
+        exit 1
+      fi
+      cat ${desktop} > $out
+      echo "StartupWMClass=$class" >> $out
+    '';
 
   # A Google bookmark on the personal account.
   personal = url: "${url}?authuser=connor@prussin.net";
@@ -224,15 +247,20 @@ in {
       # ./launcher/<app>.svg and ./launcher/<app>-preview.svg.
       dataFile = lib.mapAttrs' (app: entry:
         lib.nameValuePair "applications/domicile-${app}.desktop" {
-          source = "${pkgs.makeDesktopItem {
-            name = "domicile-${app}";
-            desktopName = entry.name;
-            exec = "${entry.exec}";
-            icon = "${./launcher + "/${app}.svg"}";
-            extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
-            startupWMClass = entry.windowClass or null;
-            terminal = false;
-          }}/share/applications/domicile-${app}.desktop";
+          source = let
+            desktop = "${pkgs.makeDesktopItem {
+              name = "domicile-${app}";
+              desktopName = entry.name;
+              exec = "${entry.exec}";
+              icon = "${./launcher + "/${app}.svg"}";
+              extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
+              startupWMClass = entry.windowClass or null;
+              terminal = false;
+            }}/share/applications/domicile-${app}.desktop";
+          in
+            if entry ? package
+            then withPackageClass app entry.package desktop
+            else desktop;
         })
       apps;
 
