@@ -198,7 +198,7 @@
     "${name} - Meat Proxy Labs".url = "${url}?authuser=connor@meatproxylabs.com";
   };
 
-  # manganese's launcher, in ./shell.ts: `apps` above and nothing a package
+  # manganese's launcher, in ./shell.tsx: `apps` above and nothing a package
   # happened to install -- every desktop entry is left out, then `domicile-*`
   # taken back.
   applications = {
@@ -264,10 +264,10 @@ in {
         })
       apps;
 
-      # The shell ./shell.ts, where `programs.domicile.settings.shell` below
+      # The shell ./shell.tsx, where `programs.domicile.settings.shell` below
       # names it, with the terminal's path and the launcher's `applications`
       # in.
-      configFile."domicile/shell.ts".source = pkgs.replaceVars ./shell.ts {
+      configFile."domicile/shell.tsx".source = pkgs.replaceVars ./shell.tsx {
         terminal = hm.default-terminal.bin;
         applications = builtins.toJSON applications;
       };
@@ -368,17 +368,17 @@ in {
         # PAM service below.
         lock.pam_service = "domicile";
 
-        # The shell, and with it the keys: ./shell.ts, which domicile builds
+        # The shell, and with it the keys: ./shell.tsx, which domicile builds
         # itself as the desk starts -- once, then from its cache until the file
         # changes.  An edit reaches the desk at the next start.
-        shell = "${hm.xdg.configHome}/domicile/shell.ts";
+        shell = "${hm.xdg.configHome}/domicile/shell.tsx";
       };
     };
   };
 
   # The machine's half (domicile's NixOS module, imported in flake.nix): the
   # `domicile` PAM service the lock above names, and the `domicile` login
-  # session, which runs the config's ./shell.ts.  Booting into it is this line,
+  # session, which runs the config's ./shell.tsx.  Booting into it is this line,
   # not the module's.
   programs.domicile = {inherit (hm.programs.domicile) enable;};
   services.displayManager.defaultSession =
