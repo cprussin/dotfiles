@@ -360,13 +360,12 @@ in {
           })
         ];
 
-        # The screens blank after ten idle minutes, and the desk locks with
-        # them, since `lock` is set.
-        idle.blank_after_seconds = 10 * 60;
-
-        # Meta+Shift+Return locks the desk, checking the password against the
-        # PAM service below.
-        lock.pam_service = "domicile";
+        # The screens blank after ten idle minutes, and the desk locks then
+        # too.  Blanking alone doesn't lock: the lock runs on its own clock.
+        idle = {
+          blank_after_seconds = 10 * 60;
+          lock_after_seconds = 10 * 60;
+        };
 
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
         # itself as the desk starts -- once, then from its cache until the file
@@ -377,9 +376,10 @@ in {
   };
 
   # The machine's half (domicile's NixOS module, imported in flake.nix): the
-  # `domicile` PAM service the lock above names, and the `domicile` login
-  # session, which runs the config's ./shell.tsx.  Booting into it is this line,
-  # not the module's.
+  # `domicile` PAM service, which the lock (Meta+Shift+Return, or the idle
+  # timeout above) checks the password against by default, and the `domicile`
+  # login session, which runs the config's ./shell.tsx.  Booting into it is
+  # this line, not the module's.
   programs.domicile = {inherit (hm.programs.domicile) enable;};
   services.displayManager.defaultSession =
     lib.mkIf hm.programs.domicile.enable "domicile";
