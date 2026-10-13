@@ -360,6 +360,10 @@ in {
           })
         ];
 
+        # The screens blank after ten idle minutes, and the desk locks with
+        # them, since `lock` is set.
+        idle.blank_after_seconds = 10 * 60;
+
         # Meta+Shift+Return locks the desk, checking the password against the
         # PAM service below.
         lock.pam_service = "domicile";
