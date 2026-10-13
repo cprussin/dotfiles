@@ -9,14 +9,14 @@
 // the top row's own symbols instead -- `parenleft` is the first workspace, as
 // it is under sway.  domicile finds the key each keysym is on in the config's
 // `input.keyboard`, so these follow the layout.
+import { runManganese } from "@domicile-desktop/manganese";
 import {
   DEFAULT_KEYBINDINGS,
   DEFAULT_MODES,
   exec,
   moveToWorkspace,
-  runManganese,
   workspace,
-} from "@domicile-desktop/manganese";
+} from "@domicile-desktop/manganese-window-management/keyboard/commands";
 
 /** Workspaces 1 to 10, in the order dvp's top row has them. */
 const WORKSPACE_KEYS = [
