@@ -9,7 +9,10 @@
 // the top row's own symbols instead -- `parenleft` is the first workspace, as
 // it is under sway.  domicile finds the key each keysym is on in the config's
 // `input.keyboard`, so these follow the layout.
-import { runManganese } from "@domicile-desktop/manganese";
+//
+// Each Gmail account's inbox leads the bar's right column.
+import { DEFAULT_BAR, runManganese } from "@domicile-desktop/manganese";
+import { Gmail } from "@domicile-desktop/manganese-bar-module-gmail";
 import {
   DEFAULT_KEYBINDINGS,
   DEFAULT_MODES,
@@ -37,6 +40,22 @@ const onADigit = (chord: string): boolean => /^Meta\+(Shift\+)?\d$/.test(chord);
 
 export const Shell = runManganese({
   applications: @applications@,
+  bar: {
+    ...DEFAULT_BAR,
+    right: [
+      <Gmail
+        email="connor@prussin.net"
+        key="prussin-net"
+        nickname="PrussinNet"
+      />,
+      <Gmail
+        email="connor@meatproxylabs.com"
+        key="meat-proxy"
+        nickname="Meat Proxy"
+      />,
+      ...DEFAULT_BAR.right,
+    ],
+  },
   keybindings: {
     keybindings: {
       ...Object.fromEntries(
