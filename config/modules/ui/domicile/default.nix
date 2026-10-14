@@ -360,11 +360,12 @@ in {
           })
         ];
 
-        # The screens blank after ten idle minutes, and the desk locks then
-        # too.  Blanking alone doesn't lock: the lock runs on its own clock.
+        # The screens blank after ten idle minutes, and the desk locks thirty
+        # seconds later: a key or the mouse in between wakes the screens
+        # without the passphrase.
         idle = {
           blank_after_seconds = 10 * 60;
-          lock_after_seconds = 10 * 60;
+          lock_after_seconds = 10 * 60 + 30;
         };
 
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
