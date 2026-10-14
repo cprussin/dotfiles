@@ -240,8 +240,6 @@ in {
     # profile.
     home.packages = lib.mkForce (
       lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
-      # The cursor `theme.cursor_theme` below names.
-      ++ [pkgs.bibata-cursors]
     );
 
     xdg = {
@@ -282,17 +280,7 @@ in {
       settings = {
         # What the desk COMES UP on: domicile's own toggle changes the live
         # theme without writing back, and the next rebuild restates this.
-        #
-        # The cursor is a test, not a choice: an orange, left-handed arrow at
-        # twice the size can't be mistaken for the system's Numix-Cursor.  If
-        # the pointer over a page stays Numix, the engine ignores
-        # `theme.cursor_theme` (domicile's ROADMAP, "Windows and clients").
-        theme =
-          lib.optionalAttrs (themeMode != null) {mode = themeMode;}
-          // {
-            cursor_theme = "Bibata-Modern-Amber-Right";
-            cursor_size = 64;
-          };
+        theme = lib.optionalAttrs (themeMode != null) {mode = themeMode;};
 
         # The launcher's file index: every top-level entry of ~ but its
         # dotfiles, one level into Library, Notes and Projects, and all of
