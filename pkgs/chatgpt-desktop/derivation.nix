@@ -224,9 +224,10 @@ in
       done
 
       # Two things the app does that only break on NixOS: it materializes its
-      # bundled plugins into ~/.codex with node's fs.cp, which preserves the
-      # store's read-only modes and then can't write the manifests it rewrites
-      # (EACCES on every launch), and @parcel/watcher probes `process.report`,
+      # bundled plugins (into ~/.codex and ~/.config/Codex/executor-plugins)
+      # with node's fs.cp, which preserves the store's read-only modes and
+      # then can't write the files it rewrites (EACCES on every launch after
+      # the first), and @parcel/watcher probes `process.report`,
       # which trips a CFI guard in the bundled Electron runtime.  Both patches
       # fail the build if the code they match has moved.
       python3 ${./patch-asar.py} "$out/lib/chatgpt/resources/app.asar"

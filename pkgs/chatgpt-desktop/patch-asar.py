@@ -3,7 +3,8 @@
 
 Vendored from numtide/llm-agents.nix, packages/chatgpt/patch-asar.py, taken
 from main on 2026-08-28; diff against that path to re-sync when a version bump
-moves the minified code these patterns match.
+moves the minified code these patterns match.  Local changes since: the
+executor-plugins patch and the pre-copy chmod in COPY_PLUGINS_WRITABLE.
 
 Copyright (c) 2024 Numtide
 
@@ -48,32 +49,66 @@ SKIP_PROCESS_REPORT = (
 # manifests there. Node's fs.cp preserves the Nix store's read-only modes,
 # so copy with coreutils and make only the user-owned destination writable.
 # `exec` is the promisified execFile helper already used for the darwin
-# `ditto` branch. Hoisting `platform` into a local buys the bytes needed.
+# `ditto` branch. The leading chmod (which fails harmlessly when the
+# destination is new) lets the copy overwrite a tree an unpatched fs.cp
+# already left read-only. Fitting all three commands in the original's bytes
+# means one `sh -c` and dropping the darwin branch, dead in a Linux build.
 COPY_PLUGINS_WRITABLE = (
     re.compile(
         rb"(?P<fn>async function [\w$]+\(e,t\)\{)"
         rb"if\((?P<plat>[\w$]+\.default\.platform)===`darwin`\)"
-        rb"(?P<ditto>\{await (?P<exec>[\w$]+)\(`/usr/bin/ditto`,\[`--noqtn`,e,t\]\);return\})"
+        rb"\{await (?P<exec>[\w$]+)\(`/usr/bin/ditto`,\[`--noqtn`,e,t\]\);return\}"
         rb"if\((?P=plat)!==`win32`\)\{"
         rb"await [\w$]+\.default\.cp\(e,t,\{recursive:!0,verbatimSymlinks:!0\}\);return\}"
     ),
     lambda m: (
         m["fn"]
-        + b"let r="
+        + b"if("
         + m["plat"]
-        + b";if(r===`darwin`)"
-        + m["ditto"]
-        + b"if(r!==`win32`){await "
+        + b"!==`win32`){await "
         + m["exec"]
-        + b"(`cp`,[`-r`,e+`/.`,t]);await "
-        + m["exec"]
-        + b"(`chmod`,[`-R`,`u+w`,t]);return}"
+        + b"(`/bin/sh`,[`-c`,`chmod -Rf u+w \"$1\";cp -r \"$0\"/. \"$1\"&&chmod -R u+w \"$1\"`,e,t]);return}"
     ),
 )
 
-PATCHES: list[tuple[re.Pattern[bytes], Callable[[re.Match[bytes]], bytes]]] = [
-    SKIP_PROCESS_REPORT,
-    COPY_PLUGINS_WRITABLE,
+
+def _copy_plugins_fn(data: bytes) -> bytes:
+    """Name of the function COPY_PLUGINS_WRITABLE patches."""
+    m = re.search(COPY_PLUGINS_WRITABLE[0], data)
+    if m is None:
+        sys.exit("COPY_PLUGINS_WRITABLE target not found")
+    return re.search(rb"async function ([\w$]+)", m["fn"])[1]
+
+
+# The app also copies its bundled codex-app-tools MCP server into
+# ~/.config/Codex/executor-plugins with a bare fs.cp, then writes .mcp.json
+# beside it: the same read-only-store problem, failing the executor startup.
+# Route it through the helper COPY_PLUGINS_WRITABLE already fixes.
+COPY_EXECUTOR_PLUGINS_WRITABLE = (
+    re.compile(
+        rb"(?P<head>async function [\w$]+\(\{executorPluginRoot:(?P<dst>[\w$]+),"
+        rb"[^)]*\)\{.{0,160}?)"
+        rb"await [\w$]+\.default\.cp\((?P<src>[\w$]+\.cwd),(?P=dst),\{recursive:!0\}\)"
+    ),
+    lambda m, data: (
+        m["head"]
+        + b"await "
+        + _copy_plugins_fn(data)
+        + b"("
+        + m["src"]
+        + b","
+        + m["dst"]
+        + b")"
+    ),
+)
+
+PATCHES: list[
+    tuple[re.Pattern[bytes], Callable[[re.Match[bytes], bytes], bytes]]
+] = [
+    (SKIP_PROCESS_REPORT[0], lambda m, _data: SKIP_PROCESS_REPORT[1](m)),
+    # Before COPY_PLUGINS_WRITABLE, which it finds its helper's name by.
+    COPY_EXECUTOR_PLUGINS_WRITABLE,
+    (COPY_PLUGINS_WRITABLE[0], lambda m, _data: COPY_PLUGINS_WRITABLE[1](m)),
 ]
 
 
@@ -89,7 +124,7 @@ def main() -> None:
             )
         m = matches[0]
         original = m.group(0)
-        replacement = build(m)
+        replacement = build(m, data)
         if len(replacement) > len(original):
             sys.exit(f"replacement longer than original: {replacement[:60]!r}...")
         data = (
