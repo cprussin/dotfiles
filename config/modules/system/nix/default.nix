@@ -11,6 +11,26 @@
   unstable-pkgs-overlay = _: _: {
     inherit (pkgs-unstable) bitwig-studio zwave-js-server;
 
+    # Linux builds only exist from unstable on; drop this once stable has one.
+    #
+    # - Its launcher only picks Wayland when NIXOS_OZONE_WL is set, which
+    #   nothing else here sets.
+    # - The app self-installs a copy of its desktop entry into
+    #   ~/.local/share/applications, where `Exec=chatgpt` finds nothing: the
+    #   package is in no profile.
+    # - That entry also claims http/https for its in-app browser, which made
+    #   it the handler for every web link (see pkgs/launcher).
+    chatgpt = pkgs-unstable.chatgpt.overrideAttrs (old: {
+      postFixup =
+        old.postFixup
+        + ''
+          wrapProgram "$out/bin/chatgpt" --set-default NIXOS_OZONE_WL 1
+          substituteInPlace "$out"/share/applications/*.desktop \
+            --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt" \
+            --replace-fail "x-scheme-handler/http;x-scheme-handler/https;" ""
+        '';
+    });
+
     # 26.05 is stuck on immich 2.7.5, which upstream stopped updating and
     # nixpkgs marks insecure (CVE-2026-59258, CVE-2026-82272), so crux no
     # longer evaluates at all with it.  immich 3 only reaches nixpkgs with

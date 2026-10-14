@@ -30,12 +30,6 @@
     '';
 in {
   nixpkgs.overlays = [
-    (import ../../../../pkgs/chatgpt-desktop/overlay.nix {
-      aptIndexes = {
-        x86_64-linux = config.flake-inputs.chatgpt-desktop-apt-amd64;
-        aarch64-linux = config.flake-inputs.chatgpt-desktop-apt-arm64;
-      };
-    })
     (import ../../../../pkgs/claude-desktop/overlay.nix {
       aptIndexes = {
         x86_64-linux = config.flake-inputs.claude-desktop-apt-amd64;
@@ -67,7 +61,7 @@ in {
           btop = mkTerminalApp "btop" "${pkgs.btop}/bin/btop";
           calendar = mkGoogleApp "calendar" "https://calendar.google.com";
           cast = pkgs.callPackage ./apps/cast.nix {};
-          chatgpt = "${pkgs.chatgpt-desktop}/bin/chatgpt";
+          chatgpt = "${pkgs.chatgpt}/bin/chatgpt";
           chrome = pkgs.writeShellScript "chrome" "${pkgs.launcher}/bin/browse --browser chrome $*";
           chromium = pkgs.writeShellScript "chromium" "${pkgs.launcher}/bin/browse --browser chromium $*";
           claude = "${pkgs.claude-desktop}/bin/claude-desktop";
