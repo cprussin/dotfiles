@@ -28,7 +28,7 @@
     "chatgpt-desktop-apt-amd64": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-6t51DIaJV5n1fG/Q6+qDjs3MO3Z5br12FIZ/IVtjgJc=",
+        "narHash": "sha256-wFcKQg/gJwr0k7aMnI0JBukelagxMhVUgxLiTJo+iVM=",
         "type": "file",
         "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-amd64/Packages"
       },
@@ -40,7 +40,7 @@
     "chatgpt-desktop-apt-arm64": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-f+r1X2VvBGNkqulLhiQyjaXSolEEyzJb1X7Xw168cCA=",
+        "narHash": "sha256-NwnOY3bDzUWaYzEJqzuiJ1NvJjJVPxozUN3BAZIcWJw=",
         "type": "file",
         "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-arm64/Packages"
       },
