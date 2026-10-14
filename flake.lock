@@ -116,11 +116,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1791947961,
-        "narHash": "sha256-2AIKFWP0OxrXppkBCZ6TirC80Y2FDatblmbqMjI4iSk=",
+        "lastModified": 1791974735,
+        "narHash": "sha256-B3FVGr0YT4YRSmLrgXbAL9MlWAtsSlizbZln6vCUoAw=",
         "owner": "cprussin",
         "repo": "domicile",
-        "rev": "9ac7fedda675c108174bff746e08199d8a7ccfc6",
+        "rev": "3b131418bb6b717a1edc4a6525689f4739a1df2f",
         "type": "github"
       },
       "original": {
