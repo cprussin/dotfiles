@@ -81,8 +81,8 @@
   # The programs domicile's launcher offers, by desktop file ID
   # `domicile-<app>.desktop`, beside the History, Settings, Screenshot, Shutdown
   # and Reboot entries domicile ships itself -- and none of ui/launcher's
-  # commands, though chatgpt-desktop and claude-desktop still come from that
-  # module's overlays, which have to move before it goes.  What opens a URL is
+  # commands, though claude-desktop still comes from that module's overlay,
+  # which has to move before it goes.  What opens a URL is
   # a bookmark instead, which domicile opens as a page of its own rather than
   # handing to a browser.  `windowClass` is the app id of the window an app
   # opens, which domicile's title bars look its icon up by; `package` instead
@@ -105,8 +105,8 @@
     };
     chatgpt = {
       name = "ChatGPT";
-      exec = "${pkgs.chatgpt-desktop}/bin/chatgpt";
-      package = pkgs.chatgpt-desktop;
+      exec = "${pkgs.chatgpt}/bin/chatgpt";
+      package = pkgs.chatgpt;
     };
     claude = {
       name = "Claude";
