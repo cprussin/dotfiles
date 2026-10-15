@@ -26,7 +26,11 @@
       })
     cfg;
 
-  mkUnlockScript = drive: filenameBase: ''
+  mkUnlockScript = drive: {
+    filenameBase,
+    allowDiscards,
+    ...
+  }: ''
     if [ -b "/dev/mapper/crypt-${filenameBase}" ]; then
       echo "Already decrypted: ${drive}"
       exit
@@ -36,7 +40,7 @@
     ${config.security.wrapperDir}/mount -t tmpfs tmpfs /tmp/${filenameBase}
     ${base64Decode config.deployment.keys."${filenameBase}-header".path} > /tmp/${filenameBase}/header
 
-    ${pkgs.cryptsetup}/bin/cryptsetup open \
+    ${pkgs.cryptsetup}/bin/cryptsetup open ${lib.optionalString allowDiscards "--allow-discards"} \
       --key-file <(${base64Decode config.deployment.keys."${filenameBase}-key".path}) \
       --header /tmp/${filenameBase}/header \
       /dev/disk/by-id/${drive} crypt-${filenameBase}
@@ -68,6 +72,15 @@ in {
                   reason.
                 '';
               };
+              allowDiscards = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Pass TRIM through the mapping.  Lets the drive see which
+                  blocks are free, at the cost of revealing that the disk
+                  holds encrypted data and roughly how much.
+                '';
+              };
             };
           }
         )
@@ -92,7 +105,7 @@ in {
               "${opts.filenameBase}-key-key.service"
               "${opts.filenameBase}-header-key.service"
             ];
-            script = mkUnlockScript drive opts.filenameBase;
+            script = mkUnlockScript drive opts;
 
             # This closes the mapping for a deliberate `systemctl stop`, which
             # is how `run-backup` puts the external disk away.  It is also
