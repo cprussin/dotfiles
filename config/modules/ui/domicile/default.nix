@@ -240,6 +240,8 @@ in {
     # profile.
     home.packages = lib.mkForce (
       lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
+      # The cursor `theme.cursor_theme` below names.
+      ++ [pkgs.bibata-cursors]
     );
 
     xdg = {
@@ -280,7 +282,16 @@ in {
       settings = {
         # What the desk COMES UP on: domicile's own toggle changes the live
         # theme without writing back, and the next rebuild restates this.
-        theme = lib.optionalAttrs (themeMode != null) {mode = themeMode;};
+        #
+        # The cursor is a check, not a choice: an orange, mirrored arrow at
+        # twice the usual size can't be mistaken for Chromium's own.  48, not
+        # more: a GPU's cursor plane is often 64px and cuts a bigger one off.
+        theme =
+          lib.optionalAttrs (themeMode != null) {mode = themeMode;}
+          // {
+            cursor_theme = "Bibata-Modern-Amber-Right";
+            cursor_size = 48;
+          };
 
         # The launcher's file index: every top-level entry of ~ but its
         # dotfiles, one level into Library, Notes and Projects, and all of
