@@ -31,6 +31,10 @@ in {
     {
       "${config.backupDisk.diskId}" = {
         inherit (config.backupDisk) filenameBase;
+        # The WD Elements is SMR, which slows badly when it cannot tell free
+        # space from used.  Revealing the allocation pattern is an acceptable
+        # cost for a backup disk.
+        allowDiscards = true;
       };
     }
     // builtins.listToAttrs (map (drive: lib.nameValuePair drive {}) zfsDrives);
