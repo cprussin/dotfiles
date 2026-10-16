@@ -11,6 +11,8 @@
 // `input.keyboard`, so these follow the layout.
 //
 // Each Gmail account's inbox leads the bar's right column.
+//
+// manganese's `options` is re-exported so Settings' Shell page can edit them.
 import { DEFAULT_BAR, runManganese } from "@domicile-desktop/manganese";
 import { Gmail } from "@domicile-desktop/manganese-bar-module-gmail";
 import {
@@ -37,6 +39,8 @@ const WORKSPACE_KEYS = [
 
 /** A default that puts a workspace on a digit, which this desk does not. */
 const onADigit = (chord: string): boolean => /^Meta\+(Shift\+)?\d$/.test(chord);
+
+export { options } from "@domicile-desktop/manganese";
 
 export const Shell = runManganese({
   applications: @applications@,
