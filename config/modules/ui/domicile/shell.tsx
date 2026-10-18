@@ -17,7 +17,6 @@ import { DEFAULT_BAR, runManganese } from "@domicile-desktop/manganese";
 import { Gmail } from "@domicile-desktop/manganese-bar-module-gmail";
 import {
   DEFAULT_KEYBINDINGS,
-  DEFAULT_MODES,
   exec,
   moveToWorkspace,
   workspace,
@@ -75,6 +74,5 @@ export const Shell = runManganese({
         ]),
       ),
     },
-    modes: DEFAULT_MODES,
   },
 });
