@@ -200,6 +200,16 @@ in
         s{return ([A-Za-z0-9_\$]+)\.replace\("OVMF_CODE","OVMF_VARS"\)\.replace\("AAVMF_CODE","AAVMF_VARS"\)}{return $1.replace("OVMF_CODE","OVMF_VARS").replace("AAVMF_CODE","AAVMF_VARS").replace("edk2-aarch64-code.fd","edk2-arm-vars.fd")} or die "failed to patch firmware vars path\n";
       ' "$vmChunk"
 
+      # The tray icon follows the color scheme -- black in light mode -- except
+      # on GNOME, whose panel is always dark.  Domicile's bar is always dark
+      # too, so always use the white icon.
+      trayChunk="$(grep -l -F 'TrayIconLinux-Dark.png' "$asarRoot"/.vite/build/*.js || true)"
+      test -f "$trayChunk" \
+        || (echo "could not identify the Claude Desktop tray code chunk" >&2; exit 1)
+      perl -0pi -e '
+        s{case"png":return [^?;]+\?"TrayIconLinux-Dark\.png":"TrayIconLinux\.png"}{case"png":return"TrayIconLinux-Dark.png"} or die "failed to patch tray icon\n";
+      ' "$trayChunk"
+
       rm "$out/lib/claude-desktop/resources/app.asar"
       asar pack --unpack "*.node" "$asarRoot" "$out/lib/claude-desktop/resources/app.asar"
 
