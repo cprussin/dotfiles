@@ -83,54 +83,90 @@
                              (powerline-fill face1 (powerline-width rhs))
                              (powerline-render rhs)))))))
 
+(defmacro emacs-rc-solarized-with-fixes (variant)
+  "Define `solarized-VARIANT-with-fixes', solarized's VARIANT with fixes."
+  (let ((theme-name (intern (format "solarized-%s-with-fixes" variant)))
+        (palette (intern (format "solarized-%s-color-palette-alist" variant))))
+    `(progn
+       (deftheme ,theme-name)
+       (solarized-with-color-variables
+         ',variant
+         ',theme-name
+         ,palette
+         '(
+
+           (custom-theme-set-faces
+            theme-name
+
+            ;; Make popups more visible
+            `(tooltip ((t (:background ,base3 :foreground ,base01))))
+            `(company-tooltip ((t (:background ,base3 :foreground ,base01))))
+            `(company-tooltip-selection ((t (:background ,base01 :foreground ,base3))))
+            `(company-scrollbar-bg ((,class (:background ,base2))))
+            `(company-scrollbar-fg ((,class (:foreground ,base3 :background ,base00))))
+            `(company-tooltip-common ((,class (:foreground ,magenta))))
+
+            ;; Make org-mode tags look like tags
+            `(org-tag ((t (:foreground ,violet :box t :height 0.8))))
+            `(org-headline-done ((t (:strike-through t :foreground ,base01))))
+            `(org-checkbox ((t (:box nil :foreground ,blue))))
+
+            ;; Fix colors on modeline
+            `(powerline-evil-normal-face ((t (:weight bold :inherit 'menu))))
+            `(powerline-evil-insert-face ((t (:weight bold :inherit 'region))))
+            `(powerline-evil-visual-face ((t (:weight bold :inherit 'lazy-highlight))))
+            `(powerline-evil-operator-face ((t (:weight bold :inherit 'menu))))
+            `(powerline-evil-replace-face ((t (:weight bold :inherit 'isearch))))
+            `(powerline-evil-motion-face ((t (:weight bold :inherit 'menu))))
+            `(powerline-evil-emacs-face ((t (:weight bold :inherit 'menu))))
+
+            ;; Don't override shell colors
+            `(comint-highlight-prompt (())))
+
+           (custom-theme-set-variables
+            theme-name
+            ;; Fix pos-tip popup colors
+            `(pos-tip-foreground-color ,base01)
+            `(pos-tip-background-color ,base3)))))))
+
+(use-package emacs-rc-custom)
+
 (use-package solarized-theme
   :demand
   :commands solarized-color-blend
   :config
   (setq x-underline-at-descent-line t)
-  (deftheme solarized-dark-with-fixes)
   (use-package solarized-palettes)
-  (solarized-with-color-variables
-    'dark
-    'solarized-dark-with-fixes
-    solarized-dark-color-palette-alist
-    '(
+  (emacs-rc-solarized-with-fixes dark)
+  (emacs-rc-solarized-with-fixes light)
 
-      (custom-theme-set-faces
-       theme-name
+  (defun emacs-rc-follow-color-theme (&rest _)
+    "Enable the solarized variant `emacs-rc-color-theme-link' names."
+    (let* ((name-file (and emacs-rc-color-theme-link
+                           (expand-file-name "name" emacs-rc-color-theme-link)))
+           (name (and name-file
+                      (file-readable-p name-file)
+                      (with-temp-buffer
+                        (insert-file-contents name-file)
+                        (string-trim (buffer-string)))))
+           (theme (if (equal name "solarized/light")
+                      'solarized-light-with-fixes
+                    'solarized-dark-with-fixes)))
+      (unless (memq theme custom-enabled-themes)
+        (mapc #'disable-theme custom-enabled-themes)
+        (enable-theme theme)
+        (when (fboundp 'powerline-reset) (powerline-reset)))))
 
-       ;; Make popups more visible
-       `(tooltip ((t (:background ,base3 :foreground ,base01))))
-       `(company-tooltip ((t (:background ,base3 :foreground ,base01))))
-       `(company-tooltip-selection ((t (:background ,base01 :foreground ,base3))))
-       `(company-scrollbar-bg ((,class (:background ,base2))))
-       `(company-scrollbar-fg ((,class (:foreground ,base3 :background ,base00))))
-       `(company-tooltip-common ((,class (:foreground ,magenta))))
+  (emacs-rc-follow-color-theme)
 
-       ;; Make org-mode tags look like tags
-       `(org-tag ((t (:foreground ,violet :box t :height 0.8))))
-       `(org-headline-done ((t (:strike-through t :foreground ,base01))))
-       `(org-checkbox ((t (:box nil :foreground ,blue))))
-
-       ;; Fix colors on modeline
-       `(powerline-evil-normal-face ((t (:weight bold :inherit 'menu))))
-       `(powerline-evil-insert-face ((t (:weight bold :inherit 'region))))
-       `(powerline-evil-visual-face ((t (:weight bold :inherit 'lazy-highlight))))
-       `(powerline-evil-operator-face ((t (:weight bold :inherit 'menu))))
-       `(powerline-evil-replace-face ((t (:weight bold :inherit 'isearch))))
-       `(powerline-evil-motion-face ((t (:weight bold :inherit 'menu))))
-       `(powerline-evil-emacs-face ((t (:weight bold :inherit 'menu))))
-
-       ;; Don't override shell colors
-       `(comint-highlight-prompt (())))
-
-      (custom-theme-set-variables
-       theme-name
-       ;; Fix pos-tip popup colors
-       `(pos-tip-foreground-color ,base01)
-       `(pos-tip-background-color ,base3))))
-
-  (enable-theme 'solarized-dark-with-fixes))
+  ;; The follower swaps the link by renaming over it, which a watch on the
+  ;; directory sees.
+  (when (and emacs-rc-color-theme-link
+             (file-directory-p (file-name-directory emacs-rc-color-theme-link)))
+    (require 'filenotify)
+    (file-notify-add-watch (file-name-directory emacs-rc-color-theme-link)
+                           '(change)
+                           #'emacs-rc-follow-color-theme)))
 
 (use-package display-line-numbers
   :config
