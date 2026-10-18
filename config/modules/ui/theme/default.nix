@@ -19,7 +19,12 @@ in {
       ++ hm-conf.font.emoji
     ));
 
-    colorTheme.name = config.colorTheme.name;
+    colorTheme = {
+      inherit (config.colorTheme) name;
+      # Follows the desktop's light/dark preference: domicile's toggle, and
+      # no preference -- the startup variant -- on a desk without one.
+      follow = true;
+    };
 
     cursorTheme = {
       package = pkgs.numix-cursor-theme;
