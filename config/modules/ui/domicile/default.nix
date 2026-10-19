@@ -282,11 +282,18 @@ in {
         # theme without writing back, and the next rebuild restates this.
         #
         # The pointer is the one every other toolkit here draws: ui/theme's
-        # cursor, through home-manager's `pointerCursor`.
+        # cursor, through home-manager's `pointerCursor`, with its light-mode
+        # set when it has one.
         theme =
           lib.optionalAttrs (themeMode != null) {mode = themeMode;}
           // lib.optionalAttrs (hm.home.pointerCursor != null) {
-            cursor_theme = hm.home.pointerCursor.name;
+            cursor_theme =
+              if hm.cursorTheme.lightName == null
+              then hm.home.pointerCursor.name
+              else {
+                dark = hm.home.pointerCursor.name;
+                light = hm.cursorTheme.lightName;
+              };
             cursor_size = hm.home.pointerCursor.size;
           };
 

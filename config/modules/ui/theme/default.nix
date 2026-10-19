@@ -28,7 +28,9 @@ in {
 
     cursorTheme = {
       package = pkgs.numix-cursor-theme;
+      # White arrows on the dark theme, black on the light one.
       name = "Numix-Cursor";
+      lightName = "Numix-Cursor-Light";
     };
 
     iconTheme = {
