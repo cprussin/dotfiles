@@ -10,7 +10,9 @@
 // it is under sway.  domicile finds the key each keysym is on in the config's
 // `input.keyboard`, so these follow the layout.
 //
-// Each Gmail account's inbox leads the bar's right column.
+// Each Gmail account's inbox leads the bar's right column, read with the Gmail
+// API through one Google Cloud OAuth client (Desktop app type).  Google does
+// not treat a desktop client's secret as secret.
 //
 // manganese's `options` is re-exported so Settings' Shell page can edit them.
 import { DEFAULT_BAR, runManganese } from "@domicile-desktop/manganese";
@@ -41,17 +43,24 @@ const onADigit = (chord: string): boolean => /^Meta\+(Shift\+)?\d$/.test(chord);
 
 export { options } from "@domicile-desktop/manganese";
 
+const GMAIL_CLIENT = {
+  id: "218508107688-o7njpis2eip1akvq6vpo86tq3np4tkhm.apps.googleusercontent.com",
+  secret: "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",
+};
+
 export const Shell = runManganese({
   applications: @applications@,
   bar: {
     ...DEFAULT_BAR,
     right: [
       <Gmail
+        client={GMAIL_CLIENT}
         email="connor@prussin.net"
         key="prussin-net"
         nickname="PrussinNet"
       />,
       <Gmail
+        client={GMAIL_CLIENT}
         email="connor@meatproxylabs.com"
         key="meat-proxy"
         nickname="Meat Proxy"
