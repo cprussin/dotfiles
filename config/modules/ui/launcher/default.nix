@@ -106,8 +106,6 @@ in {
           volume = pkgs.callPackage ./apps/volume.nix {};
         };
       };
-
-      emacs.emacs-rc.browse = "${pkgs.launcher}/bin/browse";
     };
   };
 }

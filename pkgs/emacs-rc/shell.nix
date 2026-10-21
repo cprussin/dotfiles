@@ -6,7 +6,6 @@
 }: let
   entry-point = pkgs.writeText "init.el" ''
     ${pkgs.lib.optionalString (!prod) "(add-to-list 'load-path \"${toString ./.}\")"}
-    (setq emacs-rc-browse-path "${pkgs.chromium}/bin/chromium")
     (require 'emacs-rc)
   '';
 
