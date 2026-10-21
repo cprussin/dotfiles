@@ -12,11 +12,6 @@
   :group 'environment
   :prefix "emacs-rc-")
 
-(defcustom emacs-rc-browse-path "chromium"
-  "Path to the web browser executable."
-  :type 'string
-  :group 'emacs-rc)
-
 (defcustom emacs-rc-color-theme-link nil
   "The color theme's link to the variant the desktop shows, or nil.
 

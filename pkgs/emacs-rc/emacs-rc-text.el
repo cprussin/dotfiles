@@ -22,8 +22,10 @@
         show-paren-when-point-in-periphery t)
   (show-paren-mode))
 
+;; `$BROWSER', which domicile sets to `domicile-open-url' for the apps it
+;; starts, and the session sets to launcher's `browse' elsewhere.
 (use-package browse-url
-  :config (setq browse-url-generic-program emacs-rc-browse-path
+  :config (setq browse-url-generic-program (or (getenv "BROWSER") "xdg-open")
                 browse-url-browser-function 'browse-url-generic))
 
 (use-package hl-line
