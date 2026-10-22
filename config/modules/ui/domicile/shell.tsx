@@ -54,7 +54,6 @@ export const Shell = runManganese({
   bar: {
     ...DEFAULT_BAR,
     right: [
-      <GoogleMessages key="messages" />,
       <Gmail
         client={GMAIL_CLIENT}
         email="connor@prussin.net"
@@ -67,6 +66,7 @@ export const Shell = runManganese({
         key="meat-proxy"
         nickname="Meat Proxy"
       />,
+      <GoogleMessages key="messages" />,
       ...DEFAULT_BAR.right,
     ],
   },
