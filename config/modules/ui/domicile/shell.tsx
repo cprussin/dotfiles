@@ -10,13 +10,14 @@
 // it is under sway.  domicile finds the key each keysym is on in the config's
 // `input.keyboard`, so these follow the layout.
 //
-// Each Gmail account's inbox leads the bar's right column, read with the Gmail
-// API through one Google Cloud OAuth client (Desktop app type).  Google does
-// not treat a desktop client's secret as secret.
+// Google Messages leads the bar's right column, then each Gmail account's
+// inbox, read with the Gmail API through one Google Cloud OAuth client (Desktop
+// app type).  Google does not treat a desktop client's secret as secret.
 //
 // manganese's `options` is re-exported so Settings' Shell page can edit them.
 import { DEFAULT_BAR, runManganese } from "@domicile-desktop/manganese";
 import { Gmail } from "@domicile-desktop/manganese-bar-module-gmail";
+import { GoogleMessages } from "@domicile-desktop/manganese-bar-module-google-messages";
 import {
   DEFAULT_KEYBINDINGS,
   exec,
@@ -53,6 +54,7 @@ export const Shell = runManganese({
   bar: {
     ...DEFAULT_BAR,
     right: [
+      <GoogleMessages key="messages" />,
       <Gmail
         client={GMAIL_CLIENT}
         email="connor@prussin.net"

@@ -113,7 +113,7 @@
       exec = "${pkgs.claude-desktop}/bin/claude-desktop";
       package = pkgs.claude-desktop;
     };
-    # SMS is a bookmark, which no command can open.
+    # SMS is the bar's Google Messages item, in ./shell.tsx.
     comms = {
       name = "Comms";
       exec = pkgs.writeShellScript "comms" ''
@@ -209,7 +209,6 @@
       // google "Google Drive" "https://drive.google.com"
       // {
         "Credit Cards".url = personal "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
-        "SMS".url = personal "https://messages.google.com/web/conversations";
         "SOTD".url = personal "https://docs.google.com/spreadsheets/d/168kHAuFM2bOHaQvyzkbWBF4206jV5bXpg0ubT3fSSJk";
         "Eyes".url = "https://eyes.internal.prussin.net";
         "Home".url = "https://home-assistant.internal.prussin.net";
