@@ -387,6 +387,14 @@ in {
         # itself as the desk starts -- once, then from its cache until the file
         # changes.  An edit reaches the desk at the next start.
         shell = "${hm.xdg.configHome}/domicile/shell.tsx";
+
+        # Gmail has no "follow the system" theme, so ./gmail-theme-sync clicks
+        # through its own picker to Dark or Default when the page's
+        # `prefers-color-scheme` -- the desk's `theme.mode` above -- disagrees
+        # as a tab loads, comes back into view, or sees the scheme change.
+        # Straight from the store: nothing here needs writing to, and an edit
+        # is a new path, which the desk loads at its next start.
+        extensions.unpacked = ["${./gmail-theme-sync}"];
       };
     };
   };
