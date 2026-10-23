@@ -16,10 +16,11 @@
     viewAll: ["View all"],
     // Only in the open quick-settings panel.
     quickSettings: ["See all settings"],
-    pickerTitle: ["Pick your theme", "Themes"],
+    pickerTitle: ["Pick your theme"],
     themes: { dark: ["Dark"], light: ["Default"] },
     save: ["Save"],
     cancel: ["Cancel"],
+    close: ["Close"],
   };
 
   const KEY = {
@@ -119,14 +120,39 @@
     return null;
   }
 
+  function findText(labels, root = document) {
+    for (const el of root.querySelectorAll("h1, h2, h3, [role='heading'], span, div")) {
+      if (el.children.length <= 1 && labels.includes(el.textContent.trim()) && visible(el)) return el;
+    }
+    return null;
+  }
+
   const find = (labels, root) => findByLabel(labels, root) || findByText(labels, root);
 
-  // The open dialog whose text includes one of `titles`.
+  // The open dialog titled one of `titles`. Gmail doesn't always mark the
+  // picker as a dialog, so failing that, the innermost fixed-position box
+  // (a modal's) around a visible title that also holds its Save or Cancel.
   function findDialog(titles) {
     for (const el of document.querySelectorAll('[role="dialog"], [role="alertdialog"]')) {
       if (visible(el) && titles.some((t) => el.textContent.includes(t))) return el;
     }
+    const title = findText(titles);
+    for (let el = title?.parentElement; el && el !== document.body; el = el.parentElement) {
+      if (
+        getComputedStyle(el).position === "fixed" &&
+        findByText([...LABELS.save, ...LABELS.cancel], el)
+      ) {
+        return el;
+      }
+    }
     return null;
+  }
+
+  // Gmail may fade a closed dialog out rather than remove it.
+  function isOpen(el) {
+    if (!el || !document.contains(el) || !visible(el)) return false;
+    const style = getComputedStyle(el);
+    return style.visibility !== "hidden" && Number(style.opacity) > 0;
   }
 
   async function waitFor(fn, timeout = 4000) {
@@ -148,9 +174,12 @@
       clientX: r.left + r.width / 2,
       clientY: r.top + r.height / 2,
     };
-    for (const type of ["mousedown", "mouseup", "click"]) {
-      el.dispatchEvent(new MouseEvent(type, at));
+    for (const type of ["pointerdown", "mousedown", "pointerup", "mouseup"]) {
+      const Event = type.startsWith("pointer") ? PointerEvent : MouseEvent;
+      el.dispatchEvent(new Event(type, { ...at, pointerType: "mouse", isPrimary: true }));
     }
+    if (el instanceof HTMLElement) el.click();
+    else el.dispatchEvent(new MouseEvent("click", at));
   }
 
   function escape() {
@@ -195,18 +224,25 @@
       if (!save) return log("no 'Save'"), false;
       click(save);
       ok = true;
+      if (!(await waitFor(() => !isOpen(picker), 3000))) {
+        return log("picker still open after 'Save'"), false;
+      }
 
       const took = !!(await waitFor(() => currentTheme() === want, 5000));
       log("done; now", currentTheme());
       return took;
     } finally {
       // Never leave Gmail's picker or quick settings open.
-      if (!ok) {
-        const cancel = picker && document.contains(picker) && findByText(LABELS.cancel, picker);
-        if (cancel) click(cancel);
+      picker = isOpen(picker) ? picker : findDialog(LABELS.pickerTitle);
+      if (picker) {
+        const close = findByText(LABELS.cancel, picker) || findByLabel(LABELS.close, picker);
+        if (close) click(close);
         else escape();
-        await sleep(300);
+        if (!(await waitFor(() => !isOpen(picker), 2000))) log("couldn't close the picker", picker);
+      } else if (!ok) {
+        escape();
       }
+      await sleep(300);
       if (gear && findByText(LABELS.quickSettings)) click(gear);
     }
   }
