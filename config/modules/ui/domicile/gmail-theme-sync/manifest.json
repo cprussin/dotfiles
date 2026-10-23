@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Gmail Theme Sync",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Switches Gmail between its built-in Dark and Default themes to match the system color scheme.",
   "content_scripts": [
     {
