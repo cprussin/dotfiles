@@ -28,7 +28,7 @@
     "claude-desktop-apt-amd64": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-etIHm65Po3swHi8xQtTHPtnpKIMFOuFWbc+tQ2fQRJk=",
+        "narHash": "sha256-3x7Bws4ko7epBKwkjNhslnh6/50l/7ibv5QEVzDJrOI=",
         "type": "file",
         "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages"
       },
@@ -40,7 +40,7 @@
     "claude-desktop-apt-arm64": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-16VlpeG5sc/KDGb/DGRvWoGKqHYgq3CbH7Qdh2aZprM=",
+        "narHash": "sha256-1aVsdaMZUBZ6oDa7zs1FM8CdQE+3qSxRNArF35CibJ4=",
         "type": "file",
         "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-arm64/Packages"
       },
