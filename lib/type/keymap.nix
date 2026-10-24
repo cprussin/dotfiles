@@ -14,11 +14,10 @@ lib.types.submodule {
 
     options = lib.mkOption {
       description = "Options to apply to the keymap, e.g. [\"caps:escape\"]";
-      # A LIST BECAUSE THE XKB FORMAT IS ONE.  sway and ckbcomp both want the
-      # comma-separated line, so they join it where they are written -- which
-      # is one join each at a boundary that already exists, rather than every
-      # other reader splitting a string back into the list it started as.
-      # domicile's config takes the list outright.
+      # A LIST BECAUSE THE XKB FORMAT IS ONE.  ckbcomp wants the
+      # comma-separated line, so it joins it where it is written, rather than
+      # every other reader splitting a string back into the list it started
+      # as.  domicile's config takes the list outright.
       type = lib.types.listOf lib.types.str;
       default = [];
     };

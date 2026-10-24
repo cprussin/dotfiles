@@ -44,6 +44,5 @@ in {
         then [cfg.pkg]
         else []
       );
-    wayland.windowManager.sway.config.terminal = cfg.bin;
   };
 }

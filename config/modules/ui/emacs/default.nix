@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{config, ...}: {
   nixpkgs.overlays = [
     (import ../../../../pkgs/emacs-rc/overlay.nix)
     (import ../../../../pkgs/emojione-png/overlay.nix)
@@ -15,10 +11,5 @@
       enable = true;
       emacs-rc.enable = true;
     };
-
-    # This session's daemon, up before the first frame asks for it.
-    wayland.windowManager.sway.config.startup = [
-      {command = "${pkgs.emacs}/bin/emacsclient -e t";}
-    ];
   };
 }

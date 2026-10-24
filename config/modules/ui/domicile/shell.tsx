@@ -1,13 +1,12 @@
-// This desk's shell: manganese, with sway's keys on Meta as ui/sway binds them.
+// This desk's shell: manganese, with its keys on Meta.
 //
 // `Meta+Return` opens the terminal, which manganese leaves for the config to
 // bind, by the path ./default.nix fills in.  The launcher's applications and
 // bookmarks are ./default.nix's `applications`, filled in as JSON.
 //
-// manganese's defaults already are sway's, but for one thing: its workspaces
-// are on the digits.  On dvp the digits are shifted, so the workspaces go on
-// the top row's own symbols instead -- `parenleft` is the first workspace, as
-// it is under sway.  domicile finds the key each keysym is on in the config's
+// manganese's workspaces are on the digits.  On dvp the digits are shifted, so
+// the workspaces go on the top row's own symbols instead -- `parenleft` is the
+// first workspace.  domicile finds the key each keysym is on in the config's
 // `input.keyboard`, so these follow the layout.
 //
 // Google Messages leads the bar's right column, then each Gmail account's

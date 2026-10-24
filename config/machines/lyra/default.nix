@@ -68,7 +68,7 @@
 
   # The bet: a DisplayLinkManager that acknowledged the suspend should resume
   # on the "R" nixpkgs sends and keep its evdi devices, leaving the outputs
-  # where they are and sway and kanshi with nothing to rebuild.  Restarting dlm
+  # where they are and the compositor with nothing to rebuild.  Restarting dlm
   # gets the monitors back too, but only by dropping every DisplayLink output
   # first, so spend it only where the handshake says it is needed.  If the
   # outputs come back dark anyway, this is the assumption that was wrong, and
@@ -308,7 +308,6 @@ in {
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
         "tank/persisted-state/domicile-profile".mountpoint = "/home/${config.primary-user.name}/.local/state/domicile/profile";
-        "tank/persisted-state/gmail-new-mail-counter".mountpoint = "/home/${config.primary-user.name}/.local/state/gmail-new-mail-counter";
         "tank/persisted-state/iwd".mountpoint = "/var/lib/iwd";
         "tank/persisted-state/log".mountpoint = "/var/log";
         "tank/persisted-state/root-containers".mountpoint = "/var/lib/containers";
