@@ -84,7 +84,6 @@ in {
         src = config.flake-inputs.dircolors-solarized;
       })
       (import "${config.flake-inputs.fzf-pass}/overlay.nix")
-      (import ../../../../pkgs/mako/overlay.nix)
       (import ../../../../pkgs/notify-send/overlay.nix {
         src = config.flake-inputs.notify-send;
       })

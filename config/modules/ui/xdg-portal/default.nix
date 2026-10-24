@@ -28,11 +28,10 @@
     ];
 
     # gtk is the backend that implements FileChooser, AppChooser, Settings,
-    # Print and most of the rest.  wlr, added by the sway module, implements
-    # only Screenshot and ScreenCast, so without this the interfaces every GTK
-    # app asks for on startup have no implementation at all -- including the
-    # AppChooser that the frontend's own OpenURI falls back to when there is no
-    # default handler for a URL.
+    # Print and most of the rest.  Without it the interfaces every GTK app asks
+    # for on startup have no implementation at all -- including the AppChooser
+    # that the frontend's own OpenURI falls back to when there is no default
+    # handler for a URL.
     xdg.portal = {
       enable = true;
       extraPortals = [pkgs.xdg-desktop-portal-gtk];

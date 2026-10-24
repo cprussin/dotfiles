@@ -9,6 +9,5 @@ _: {
     ../../modules/system/devices/wifi
 
     ../../modules/ui/domicile
-    ../../modules/ui/kanshi
   ];
 }

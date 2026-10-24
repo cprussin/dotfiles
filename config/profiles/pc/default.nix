@@ -36,14 +36,9 @@
     ../../modules/ui/launcher
     ../../modules/ui/log
     ../../modules/ui/lorri
-    ../../modules/ui/mako
     ../../modules/ui/mpv
     ../../modules/ui/plymouth
     ../../modules/ui/sunshine
-    ../../modules/ui/sway
-    ../../modules/ui/swayidle
-    ../../modules/ui/swaylock
-    ../../modules/ui/waybar
     ../../modules/ui/xdg-portal
   ];
 

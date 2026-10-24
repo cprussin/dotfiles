@@ -19,7 +19,6 @@ in {
 
   config = lib.mkIf (cfg.package != null) {
     home.packages = [cfg.package];
-    services.mako.settings.icon-path = "${cfg.package}/share/icons/${cfg.name}";
     gtk.iconTheme = cfg;
   };
 }

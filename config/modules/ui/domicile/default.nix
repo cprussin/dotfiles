@@ -1,16 +1,14 @@
-# This desk, for domicile.  The sway half of it is
-# config/modules/ui/kanshi/default.nix: same monitors, same arithmetic, and the
-# same rule -- the first profile whose monitors are exactly what is plugged in
-# wins, re-matched on every hotplug.
+# This desk, for domicile.  The first output profile whose monitors are exactly
+# what is plugged in wins, re-matched on every hotplug.
 #
-# Names are the panel's EDID string as domicile builds it, which differs from
-# kanshi's in two ways: the make is the three-letter PNP id ("DEL", not "Dell
-# Inc.") and a missing serial is left out rather than spelled "Unknown".  A
-# name that matches nothing is not an error -- the desk just comes up unplaced.
+# Names are the panel's EDID string as domicile builds it: the make is the
+# three-letter PNP id ("DEL", not "Dell Inc.") and a missing serial is left
+# out.  A name that matches nothing is not an error -- the desk just comes up
+# unplaced.
 #
-# Positions assume every monitor comes up at its native mode.  kanshi pins one
-# per output; a domicile profile has no mode field, so the mode arrives with
-# the monitor and the compositor divides it by the scale.
+# Positions assume every monitor comes up at its native mode.  A domicile
+# profile has no mode field, so the mode arrives with the monitor and the
+# compositor divides it by the scale.
 #
 # If a screen comes up upside down, the fix is domicile's cover-the-window.ts.
 {
@@ -42,12 +40,12 @@
     left = "DEL DELL U3219Q 2ZLS413";
     center = "DEL DELL U3219Q G3MS413";
     right = "DEL DELL U3219Q H8KF413";
-    # kanshi says "Audio Processing Technology  Ltd Monitor demoset-1"; the
-    # double space is pnp.ids' own, which is what makes the model "Monitor".
+    # The make in full is "Audio Processing Technology  Ltd"; the double space
+    # is pnp.ids' own, which is what makes the model "Monitor".
     portable = "APT Monitor demoset-1";
   };
 
-  # Rounded outward, like the kanshi module: a monitor a pixel further out
+  # Rounded outward: a monitor a pixel further out
   # leaves a gap nobody sees, where one a pixel short overlaps its neighbour --
   # and domicile has no mirroring, so an overlap is two screens claiming one
   # patch of desktop.
@@ -56,7 +54,7 @@
     position = [(builtins.ceil x) (builtins.ceil y)];
   };
 
-  # A quarter turn, the same 270 the kanshi file writes for these three.
+  # A quarter turn.
   sideways = x: y: monitor: (at x y monitor) // {transform = "rotate-270";};
 
   # What a monitor measures once it is stood on its side.
@@ -307,14 +305,12 @@ in {
           "{Library,Notes,Projects}/*/*"
         ];
 
-        # This desk's emacs daemon, up before the first frame asks for it --
-        # the same one ui/emacs has sway start.
+        # This desk's emacs daemon, up before the first frame asks for it.
         startup.commands =
           lib.optional hm.programs.emacs.enable ["${pkgs.emacs}/bin/emacsclient" "-e" "t"];
 
-        # The same option sway reads, not a copy of it: a host setting only one
-        # of the two would give sway one layout and domicile another with
-        # nothing to say so.  `options` goes across as the list it is.
+        # The home-manager `keymap` option.  `options` goes across as the list
+        # it is.
         input = lib.optionalAttrs (keyboard != null) {
           keyboard = {
             xkb_layout = keyboard.layout;

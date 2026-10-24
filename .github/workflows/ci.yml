@@ -125,7 +125,6 @@ jobs:
           - claude-desktop
           - dircolors-solarized
           - emojione-png
-          - mako
           - notify-send
           - pass
           - powerpanel

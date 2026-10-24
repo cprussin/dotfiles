@@ -11,13 +11,12 @@
   # stops at the first directory holding either `<desktop>-portals.conf` or
   # `portals.conf`, and /etc/xdg comes before the profiles that carry
   # `domicile-portals.conf`, so a `common` entry would route a domicile desk
-  # to gtk.  `sway` is named only to silence the module's warning about an
-  # empty config; it repeats ui/sway's choice, which home-manager writes to
-  # ~/.config where it is read first anyway.
+  # to gtk.  `configPackages` is set only to silence the module's warning
+  # about an empty config: gtk ships no `portals.conf`, so it writes nothing.
   xdg.portal = {
     enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    config.sway.default = ["wlr" "gtk"];
+    configPackages = [pkgs.xdg-desktop-portal-gtk];
   };
 
   # NixOS adds no remote, so `flatpak install` has nowhere to install from.
