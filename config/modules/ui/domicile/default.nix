@@ -306,7 +306,10 @@ in {
                 light = hm.cursorTheme.lightName;
               };
             cursor_size = hm.home.pointerCursor.size;
-          };
+          }
+          # Gmail has no dark theme that follows the system, so the browser
+          # draws it dark while the desk is.
+          // {force_dark = ["mail.google.com"];};
 
         # The launcher's file index: every top-level entry of ~ but its
         # dotfiles, one level into Library, Notes and Projects, and all of
@@ -396,14 +399,6 @@ in {
         # itself as the desk starts -- once, then from its cache until the file
         # changes.  An edit reaches the desk at the next start.
         shell = "${hm.xdg.configHome}/domicile/shell.tsx";
-
-        # Gmail has no "follow the system" theme, so ./gmail-theme-sync clicks
-        # through its own picker to Dark or Default when the page's
-        # `prefers-color-scheme` -- the desk's `theme.mode` above -- disagrees
-        # as a tab loads, comes back into view, or sees the scheme change.
-        # Straight from the store: nothing here needs writing to, and an edit
-        # is a new path, which the desk loads at its next start.
-        extensions.unpacked = ["${./gmail-theme-sync}"];
       };
     };
   };
