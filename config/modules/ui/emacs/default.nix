@@ -1,4 +1,8 @@
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   nixpkgs.overlays = [
     (import ../../../../pkgs/emacs-rc/overlay.nix)
     (import ../../../../pkgs/emojione-png/overlay.nix)
@@ -11,5 +15,9 @@
       enable = true;
       emacs-rc.enable = true;
     };
+
+    # `-c` waits for the frame to be closed, which a caller like `git commit`
+    # needs before it reads the file back.
+    home.sessionVariables.EDITOR = "${pkgs.emacs}/bin/emacsclient -c";
   };
 }

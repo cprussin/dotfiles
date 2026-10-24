@@ -164,22 +164,6 @@
         "type": "github"
       }
     },
-    "fzf-pass": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1748233696,
-        "narHash": "sha256-ZKxMTNk50RsBWMHrELVOYvuTl4pHUc3R3xMMEDkz/FA=",
-        "owner": "cprussin",
-        "repo": "fzf-pass",
-        "rev": "35c253310c23b4bcd0a701cf911b01d2bb84218c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cprussin",
-        "repo": "fzf-pass",
-        "type": "github"
-      }
-    },
     "gpg-key": {
       "flake": false,
       "locked": {
@@ -363,22 +347,6 @@
         "type": "github"
       }
     },
-    "notify-send": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1646324558,
-        "narHash": "sha256-p0Q+aYJb8OqmZiQGf95/aUMHWA7QF52epNFWki3ekXg=",
-        "owner": "vlevit",
-        "repo": "notify-send.sh",
-        "rev": "2bac09be65e6007c77e82710bfd9c22189d731d8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vlevit",
-        "repo": "notify-send.sh",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "claude-desktop-apt-amd64": "claude-desktop-apt-amd64",
@@ -387,14 +355,12 @@
         "dircolors-solarized": "dircolors-solarized",
         "domicile": "domicile",
         "flake-utils": "flake-utils",
-        "fzf-pass": "fzf-pass",
         "gpg-key": "gpg-key",
         "home-manager": "home-manager",
         "mkCli": "mkCli_2",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "notify-send": "notify-send",
         "zoom-frm": "zoom-frm"
       }
     },

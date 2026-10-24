@@ -19,7 +19,7 @@
     #   ~/.local/share/applications, where `Exec=chatgpt` finds nothing: the
     #   package is in no profile.
     # - That entry also claims http/https for its in-app browser, which made
-    #   it the handler for every web link (see pkgs/launcher).
+    #   it the handler for every web link.
     chatgpt = pkgs-unstable.chatgpt.overrideAttrs (old: {
       postFixup =
         old.postFixup
@@ -82,10 +82,6 @@ in {
       unstable-pkgs-overlay
       (import ../../../../pkgs/dircolors-solarized/overlay.nix {
         src = config.flake-inputs.dircolors-solarized;
-      })
-      (import "${config.flake-inputs.fzf-pass}/overlay.nix")
-      (import ../../../../pkgs/notify-send/overlay.nix {
-        src = config.flake-inputs.notify-send;
       })
       (import ../../../../pkgs/pass-with-otp/overlay.nix)
       (import ../../../../pkgs/powerpanel/overlay.nix)

@@ -109,10 +109,9 @@ jobs:
   # and instantiating a machine runs no build phase -- a broken install phase or
   # a stale `src` hash evaluates clean and first breaks on deploy.  Build them
   # through `lyra`'s package set, which has every overlay in this repo applied.
-  # `emacs`, `google-fonts` and `launcher` are left out: each realizes a
-  # multi-gigabyte closure (`launcher` interpolates every browser, `freecad`,
-  # `prusa-slicer`...) to check a handful of scripts, and took 3x the rest of
-  # the workflow combined.  Their interpolations are still checked by eval.
+  # `emacs` and `google-fonts` are left out: each realizes a multi-gigabyte
+  # closure to check a handful of files, and took 3x the rest of the workflow
+  # combined.  Their interpolations are still checked by eval.
   build-pkgs:
     name: build pkgs.${{ matrix.package }}
     runs-on: ubuntu-latest
@@ -125,7 +124,6 @@ jobs:
           - claude-desktop
           - dircolors-solarized
           - emojione-png
-          - notify-send
           - pass
           - powerpanel
           - sudo

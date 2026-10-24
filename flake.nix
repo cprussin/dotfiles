@@ -46,20 +46,12 @@
       url = "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-arm64/Packages";
       flake = false;
     };
-    fzf-pass = {
-      url = "github:cprussin/fzf-pass";
-      flake = false;
-    };
     gpg-key = {
       url = "https://connor.prussin.net/pubkey.asc";
       flake = false;
     };
     mkCli.url = "github:cprussin/mkCli";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    notify-send = {
-      url = "github:vlevit/notify-send.sh";
-      flake = false;
-    };
     zoom-frm = {
       url = "github:cprussin/zoom-frm";
       flake = false;

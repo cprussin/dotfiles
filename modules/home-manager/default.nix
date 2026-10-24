@@ -7,6 +7,5 @@
     ./font.nix
     ./icon-theme.nix
     ./keymap.nix
-    ./launcher.nix
   ];
 }
