@@ -23,7 +23,7 @@
   (show-paren-mode))
 
 ;; `$BROWSER', which domicile sets to `domicile-open-url' for the apps it
-;; starts, and the session sets to launcher's `browse' elsewhere.
+;; starts.
 (use-package browse-url
   :config (setq browse-url-generic-program (or (getenv "BROWSER") "xdg-open")
                 browse-url-browser-function 'browse-url-generic))

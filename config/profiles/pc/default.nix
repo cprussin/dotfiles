@@ -21,7 +21,6 @@
     ../../modules/system/devices/dialout
     ../../modules/system/devices/ledger
     ../../modules/system/devices/printers
-    ../../modules/system/devices/redshift
     ../../modules/system/devices/scanners
     ../../modules/system/podman
 
@@ -33,12 +32,11 @@
     ../../modules/ui/graphics
     ../../modules/ui/gtk
     ../../modules/ui/imv
-    ../../modules/ui/launcher
+    ../../modules/ui/claude-desktop
     ../../modules/ui/log
     ../../modules/ui/lorri
     ../../modules/ui/mpv
     ../../modules/ui/plymouth
-    ../../modules/ui/sunshine
     ../../modules/ui/xdg-portal
   ];
 

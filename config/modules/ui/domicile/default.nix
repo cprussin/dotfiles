@@ -78,10 +78,8 @@
   slack = "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
   # The programs domicile's launcher offers, by desktop file ID
   # `domicile-<app>.desktop`, beside the History, Settings, Screenshot, Shutdown
-  # and Reboot entries domicile ships itself -- and none of ui/launcher's
-  # commands, though claude-desktop still comes from that module's overlay,
-  # which has to move before it goes.  What opens a URL is
-  # a bookmark instead, which domicile opens as a page of its own rather than
+  # and Reboot entries domicile ships itself.  What opens a URL is a bookmark
+  # instead, which domicile opens as a page of its own rather than
   # handing to a browser.  `windowClass` is the app id of the window an app
   # opens, which domicile's title bars look its icon up by; `package` instead
   # takes it from that package's own desktop entry at build time, for apps
@@ -235,31 +233,47 @@ in {
     # documents.  Without it `domicile` is off PATH, and its `.portal` file and
     # `domicile-portals.conf` (the module's portal routing) never reach the
     # profile.
+    #
+    # xdg-utils is the system `xdg-open` that domicile's own `xdg-open` hands
+    # everything but a web link to.
     home.packages = lib.mkForce (
-      lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
+      [pkgs.xdg-utils]
+      ++ lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
     );
 
     xdg = {
+      # A read-only store symlink at ~/.config/mimeapps.list (and the
+      # deprecated copy under ~/.local/share/applications), so defaults are set
+      # here, not at runtime.  It names no web browser, so domicile's own
+      # default answers web links.  Apps that make themselves the default
+      # (`xdg-mime default`, Electron's `setAsDefaultProtocolClient`) replace
+      # the symlink with a plain file; `force` overwrites that at the next
+      # activation rather than failing on it.
+      mimeApps.enable = true;
+      configFile."mimeapps.list".force = true;
+
       # Each app's icon and the picture its launcher preview shows are
       # ./launcher/<app>.svg and ./launcher/<app>-preview.svg.
-      dataFile = lib.mapAttrs' (app: entry:
-        lib.nameValuePair "applications/domicile-${app}.desktop" {
-          source = let
-            desktop = "${pkgs.makeDesktopItem {
-              name = "domicile-${app}";
-              desktopName = entry.name;
-              exec = "${entry.exec}";
-              icon = "${./launcher + "/${app}.svg"}";
-              extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
-              startupWMClass = entry.windowClass or null;
-              terminal = false;
-            }}/share/applications/domicile-${app}.desktop";
-          in
-            if entry ? package
-            then withPackageClass app entry.package desktop
-            else desktop;
-        })
-      apps;
+      dataFile =
+        {"applications/mimeapps.list".force = true;}
+        // lib.mapAttrs' (app: entry:
+          lib.nameValuePair "applications/domicile-${app}.desktop" {
+            source = let
+              desktop = "${pkgs.makeDesktopItem {
+                name = "domicile-${app}";
+                desktopName = entry.name;
+                exec = "${entry.exec}";
+                icon = "${./launcher + "/${app}.svg"}";
+                extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
+                startupWMClass = entry.windowClass or null;
+                terminal = false;
+              }}/share/applications/domicile-${app}.desktop";
+            in
+              if entry ? package
+              then withPackageClass app entry.package desktop
+              else desktop;
+          })
+        apps;
 
       # The shell ./shell.tsx, where `programs.domicile.settings.shell` below
       # names it, with the terminal's path and the launcher's `applications`
