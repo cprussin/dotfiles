@@ -196,54 +196,64 @@
   // A scheme change that arrived mid-switch, run once that one is done.
   let pending = false;
 
-  // Drive the picker to `want`. True if Gmail took it.
+  // Drive the picker to `want`: "done" if Gmail took it, "stuck" if the
+  // picker stayed open after Save, "failed" otherwise.
+  //
+  // Gmail applies the tile but can ignore scripted clicks on the picker's
+  // Save and Cancel, so the picker stays open. Only a reload closes it then;
+  // see sync().
   async function switchTo(want) {
     let gear = null;
     let picker = null;
     let ok = false;
+    let stuck = false;
     try {
       gear = await waitFor(() => findByLabel(LABELS.settingsButton));
-      if (!gear) return log("no settings button"), false;
+      if (!gear) return log("no settings button"), "failed";
       click(gear);
 
       // Go straight to the full picker: the quick-settings panel also has
       // "Default" density and inbox-type options, which a label search there
       // would click instead of the theme.
       const viewAll = await waitFor(() => findByText(LABELS.viewAll));
-      if (!viewAll) return log("no 'View all'"), false;
+      if (!viewAll) return log("no 'View all'"), "failed";
       click(viewAll);
 
       picker = await waitFor(() => findDialog(LABELS.pickerTitle));
-      if (!picker) return log("no theme picker"), false;
+      if (!picker) return log("no theme picker"), "failed";
 
       const tile = await waitFor(() => find(LABELS.themes[want], picker));
-      if (!tile) return log("no theme tile for", want, picker), false;
+      if (!tile) return log("no theme tile for", want, picker), "failed";
       click(tile);
 
       const save = await waitFor(() => findByText(LABELS.save, picker), 1500);
-      if (!save) return log("no 'Save'"), false;
+      if (!save) return log("no 'Save'"), "failed";
       click(save);
       ok = true;
       if (!(await waitFor(() => !isOpen(picker), 3000))) {
-        return log("picker still open after 'Save'"), false;
+        stuck = true;
+        return log("picker still open after 'Save'"), "stuck";
       }
 
       const took = !!(await waitFor(() => currentTheme() === want, 5000));
       log("done; now", currentTheme());
-      return took;
+      return took ? "done" : "failed";
     } finally {
-      // Never leave Gmail's picker or quick settings open.
-      picker = isOpen(picker) ? picker : findDialog(LABELS.pickerTitle);
-      if (picker) {
-        const close = findByText(LABELS.cancel, picker) || findByLabel(LABELS.close, picker);
-        if (close) click(close);
-        else escape();
-        if (!(await waitFor(() => !isOpen(picker), 2000))) log("couldn't close the picker", picker);
-      } else if (!ok) {
-        escape();
+      // Never leave Gmail's picker or quick settings open. A stuck picker is
+      // left to the reload: clicking Cancel there would undo the theme.
+      if (!stuck) {
+        picker = isOpen(picker) ? picker : findDialog(LABELS.pickerTitle);
+        if (picker) {
+          const close = findByText(LABELS.cancel, picker) || findByLabel(LABELS.close, picker);
+          if (close) click(close);
+          else escape();
+          if (!(await waitFor(() => !isOpen(picker), 2000))) log("couldn't close the picker", picker);
+        } else if (!ok) {
+          escape();
+        }
+        await sleep(300);
+        if (gear && findByText(LABELS.quickSettings)) click(gear);
       }
-      await sleep(300);
-      if (gear && findByText(LABELS.quickSettings)) click(gear);
     }
   }
 
@@ -260,6 +270,7 @@
     const want = wanted();
     const have = currentTheme();
     log("want", want, "have", have);
+    if (have === want) store.remove(KEY.failed);
     if (!have || have === want) return;
 
     let failed = null;
@@ -272,8 +283,15 @@
 
     busy = true;
     try {
-      if (await switchTo(want)) store.remove(KEY.failed);
+      const result = await switchTo(want);
+      // Whatever happened, a picker Gmail won't let go of is closed by a
+      // reload. The failure marker is set first, so if Gmail didn't keep the
+      // theme, the reloaded page doesn't switch (and reload) again; a load
+      // that finds the theme right clears it.
+      const open = isOpen(findDialog(LABELS.pickerTitle));
+      if (result === "done" && !open) store.remove(KEY.failed);
       else store.set(KEY.failed, JSON.stringify({ want, at: Date.now() }));
+      if (open) return log("reloading to close the picker"), location.reload();
     } finally {
       busy = false;
     }
