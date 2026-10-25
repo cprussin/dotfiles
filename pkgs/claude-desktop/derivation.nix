@@ -224,9 +224,13 @@ in
       )
     '';
 
+    # Chromium picks its password store by desktop, and an unknown one such as
+    # domicile gets plaintext; then the app can't keep its sign-in.  The flag
+    # sends it to whatever Secret Service is running, gnome-keyring or not.
     postFixup = ''
       makeWrapper "$out/lib/claude-desktop/claude-desktop" "$out/bin/claude-desktop" \
-        "''${gappsWrapperArgs[@]}"
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags --password-store=gnome-libsecret
     '';
 
     meta = {
