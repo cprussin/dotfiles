@@ -250,6 +250,30 @@
 
   keyboard = hm.keymap;
 
+  # The home-manager `keymap` option, then plain us to switch to.  The desk
+  # starts on the first; `options` goes across as the list it is.
+  keymaps = lib.optionals (keyboard != null) (let
+    own = {
+      name =
+        if keyboard.variant == ""
+        then keyboard.layout
+        else keyboard.variant;
+      xkb_layout = keyboard.layout;
+      xkb_variant = keyboard.variant;
+      xkb_options = keyboard.options;
+    };
+  in
+    [own] ++ lib.optional (own.name != "us") {name = "us";});
+
+  # A launcher app between `keymaps`, for someone else at the keyboard.  The
+  # bar's keymap item shows while on us.
+  toggleKeymap = lib.optionalAttrs (lib.length keymaps > 1) {
+    toggle-keymap = {
+      name = "Toggle keymap";
+      exec = "${hm.programs.domicile.package}/bin/domicile send-shell keymap next";
+    };
+  };
+
   # domicile's theme, out of the same `colorTheme` everything else here reads.
   # Names are `<family>/<variant>` and the variants are exactly domicile's two.
   # Both the attrset and its `name` are nullable; either null leaves domicile's
@@ -327,7 +351,7 @@ in {
               then withPackageClass app entry.package desktop
               else desktop;
           })
-        apps;
+        (apps // toggleKeymap);
 
       # The shell ./shell.tsx, where `programs.domicile.settings.shell` below
       # names it, with the terminal's path and the launcher's `applications`
@@ -380,15 +404,12 @@ in {
         startup.commands =
           lib.optional hm.programs.emacs.enable ["${pkgs.emacs}/bin/emacsclient" "-e" "t"];
 
-        # The home-manager `keymap` option.  `options` goes across as the list
-        # it is.
-        input = lib.optionalAttrs (keyboard != null) {
-          keyboard = {
-            xkb_layout = keyboard.layout;
-            xkb_variant = keyboard.variant;
-            xkb_options = keyboard.options;
-          };
+        input = lib.optionalAttrs (keymaps != []) {
+          keyboard.keymaps = keymaps;
         };
+
+        # The keymap item only while switched off the desk's own keymap.
+        shell_options.keymap.hideDefault = true;
 
         output.profiles = [
           # The lid open and nothing plugged in.
