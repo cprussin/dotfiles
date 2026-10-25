@@ -308,6 +308,9 @@ in {
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
         "tank/persisted-state/domicile-profile".mountpoint = "/home/${config.primary-user.name}/.local/state/domicile/profile";
+        # Portal choices (global shortcuts, screen-cast restore tokens, wallpaper).
+        # `domicile-profile` mounts inside it.
+        "tank/persisted-state/domicile-state".mountpoint = "/home/${config.primary-user.name}/.local/state/domicile";
         "tank/persisted-state/iwd".mountpoint = "/var/lib/iwd";
         "tank/persisted-state/keyrings".mountpoint = "/home/${config.primary-user.name}/.local/share/keyrings";
         "tank/persisted-state/log".mountpoint = "/var/log";
