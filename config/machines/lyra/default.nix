@@ -298,6 +298,8 @@ in {
         "tank/persisted-state/Zulip".mountpoint = "/home/${config.primary-user.name}/.config/Zulip";
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
         "tank/persisted-state/argo".mountpoint = "/home/${config.primary-user.name}/.config/argo";
+        # Start-on-login entries, from apps and the Background portal.
+        "tank/persisted-state/autostart".mountpoint = "/home/${config.primary-user.name}/.config/autostart";
         "tank/persisted-state/bluetooth".mountpoint = "/var/lib/bluetooth";
         "tank/persisted-state/chatgpt-desktop".mountpoint = "/home/${config.primary-user.name}/.config/ChatGPT";
         "tank/persisted-state/chromium".mountpoint = "/home/${config.primary-user.name}/.config/chromium";
