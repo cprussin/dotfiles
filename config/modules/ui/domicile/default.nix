@@ -73,9 +73,41 @@
 
   inTerminal = name: bin: "${hm.default-terminal.bin} --title ${name} --class ${name} --name ${name} ${bin}";
 
-  matrix = "${pkgs.element-desktop}/bin/element-desktop --ozone-platform-hint=auto";
-  telegram = "${pkgs.telegram-desktop}/bin/Telegram --ozone-platform-hint=auto -g warn";
-  slack = "${pkgs.slack}/bin/slack --ozone-platform-hint=auto -g warn";
+  # `package` with `flags` added to `bin`, in its desktop entries and D-Bus
+  # services too, so a link that starts it (slack://, tg://, element://) runs
+  # it as the launcher does.  Telegram's entry is `DBusActivatable`, so GIO
+  # starts it through its service, not the entry's `Exec`.  Fails the build if
+  # an `Exec` names some other program.
+  withFlags = package: bin: flags:
+    pkgs.symlinkJoin {
+      name = "${package.name}-with-flags";
+      paths = [package];
+      nativeBuildInputs = [pkgs.makeWrapper];
+      postBuild = ''
+        rm "$out/bin/${bin}"
+        makeWrapper "${package}/bin/${bin}" "$out/bin/${bin}" --add-flags "${flags}"
+        for file in "$out"/share/applications/*.desktop "$out"/share/dbus-1/services/*.service
+        do
+          [ -e "$file" ] || continue
+          original="$(readlink -f "$file")"
+          rm "$file"
+          sed -E 's#^(Try)?Exec=([^ ]*/)?${bin}( |$)#\1Exec='"$out"'/bin/${bin}\3#' "$original" > "$file"
+          if grep -E '^Exec=' "$file" | grep -v -q -F "$out/bin/${bin}"
+          then
+            echo "an Exec in $original doesn't run ${bin}" >&2
+            exit 1
+          fi
+        done
+      '';
+    };
+
+  element = withFlags pkgs.element-desktop "element-desktop" "--ozone-platform-hint=auto";
+  telegram-desktop = withFlags pkgs.telegram-desktop "Telegram" "--ozone-platform-hint=auto -g warn";
+  slack-desktop = withFlags pkgs.slack "slack" "--ozone-platform-hint=auto -g warn";
+
+  matrix = "${element}/bin/element-desktop";
+  telegram = "${telegram-desktop}/bin/Telegram";
+  slack = "${slack-desktop}/bin/slack";
   # The programs domicile's launcher offers, by desktop file ID
   # `domicile-<app>.desktop`, beside the History, Settings, Screenshot, Shutdown
   # and Reboot entries domicile ships itself.  What opens a URL is a bookmark
@@ -236,8 +268,20 @@ in {
     #
     # xdg-utils is the system `xdg-open` that domicile's own `xdg-open` hands
     # everything but a web link to.
+    #
+    # The chat apps' desktop entries handle their links (slack://, tg://,
+    # element://), sign-in links among them, so they are in the profile and
+    # not only behind `apps` above.  The launcher omits them.  ChatGPT stays
+    # out: it writes its own entry, which claims http/https, into
+    # ~/.local/share/applications, and with `chatgpt` on PATH that entry would
+    # open every web link.
     home.packages = lib.mkForce (
-      [pkgs.xdg-utils]
+      [
+        element
+        pkgs.xdg-utils
+        slack-desktop
+        telegram-desktop
+      ]
       ++ lib.optional hm.programs.domicile.enable hm.programs.domicile.finalPackage
     );
 
