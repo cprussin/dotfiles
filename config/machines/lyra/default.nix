@@ -309,6 +309,7 @@ in {
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
         "tank/persisted-state/domicile-profile".mountpoint = "/home/${config.primary-user.name}/.local/state/domicile/profile";
         "tank/persisted-state/iwd".mountpoint = "/var/lib/iwd";
+        "tank/persisted-state/keyrings".mountpoint = "/home/${config.primary-user.name}/.local/share/keyrings";
         "tank/persisted-state/log".mountpoint = "/var/log";
         "tank/persisted-state/root-containers".mountpoint = "/var/lib/containers";
         "tank/persisted-state/syncthing".mountpoint = "/home/${config.primary-user.name}/.cache/syncthing";
