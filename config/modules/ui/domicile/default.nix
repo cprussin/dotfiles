@@ -115,7 +115,7 @@
   # handing to a browser.  `windowClass` is the app id of the window an app
   # opens, which domicile's title bars look its icon up by; `package` instead
   # takes it from that package's own desktop entry at build time, for apps
-  # whose app id isn't known here.
+  # whose app id isn't known here.  `mimeTypes` are the types its entry declares.
   apps = {
     agenda = {
       name = "Agenda";
@@ -155,10 +155,12 @@
       exec = inTerminal "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
       windowClass = "crux";
     };
+    # Also what opens folders and text files; see `mimeApps` below.
     emacs = {
       name = "Emacs";
-      exec = "${pkgs.emacs}/bin/emacsclient -c";
+      exec = "${pkgs.emacs}/bin/emacsclient -c %F";
       windowClass = "emacs";
+      mimeTypes = ["inode/directory" "text/plain"];
     };
     journal = {
       name = "Journal";
@@ -317,7 +319,14 @@ in {
       # (`xdg-mime default`, Electron's `setAsDefaultProtocolClient`) replace
       # the symlink with a plain file; `force` overwrites that at the next
       # activation rather than failing on it.
-      mimeApps.enable = true;
+      #
+      # Emacs opens folders and text files.  domicile's launcher counts every
+      # text/* type as a text/plain, so it opens any text a more specific
+      # default doesn't claim.
+      mimeApps = {
+        enable = true;
+        defaultApplications = lib.genAttrs apps.emacs.mimeTypes (_: "domicile-emacs.desktop");
+      };
       configFile."mimeapps.list".force = true;
 
       # Each app's icon and the picture its launcher preview shows are
@@ -333,6 +342,7 @@ in {
                 exec = "${entry.exec}";
                 icon = "${./launcher + "/${app}.svg"}";
                 extraConfig."X-Domicile-Preview" = "${./launcher + "/${app}-preview.svg"}";
+                mimeTypes = entry.mimeTypes or [];
                 startupWMClass = entry.windowClass or null;
                 terminal = false;
               }}/share/applications/domicile-${app}.desktop";
