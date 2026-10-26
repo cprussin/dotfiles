@@ -142,14 +142,6 @@
       package = pkgs.claude-desktop;
     };
     # SMS is the bar's Google Messages item, in ./shell.tsx.
-    comms = {
-      name = "Comms";
-      exec = pkgs.writeShellScript "comms" ''
-        ${matrix} &
-        ${telegram} &
-        ${slack} &
-      '';
-    };
     crux = {
       name = "crux";
       exec = inTerminal "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
@@ -400,9 +392,15 @@ in {
           "{Library,Notes,Projects}/*/*"
         ];
 
-        # This desk's emacs daemon, up before the first frame asks for it.
+        # This desk's emacs daemon, up before the first frame asks for it, and
+        # the chat apps, in their trays.
         startup.commands =
-          lib.optional hm.programs.emacs.enable ["${pkgs.emacs}/bin/emacsclient" "-e" "t"];
+          lib.optional hm.programs.emacs.enable ["${pkgs.emacs}/bin/emacsclient" "-e" "t"]
+          ++ [
+            [matrix "--hidden"]
+            [telegram "-startintray"]
+            [slack "-u"]
+          ];
 
         input = lib.optionalAttrs (keymaps != []) {
           keyboard.keymaps = keymaps;
