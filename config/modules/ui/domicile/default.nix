@@ -141,7 +141,7 @@
       exec = "${pkgs.claude-desktop}/bin/claude-desktop";
       package = pkgs.claude-desktop;
     };
-    # SMS is the bar's Google Messages item, in ./shell.tsx.
+    # SMS is Google Messages, in the notification drawer (./shell.tsx).
     crux = {
       name = "crux";
       exec = inTerminal "crux" "${pkgs.openssh}/bin/ssh -t crux load-session";
