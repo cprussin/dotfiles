@@ -9,14 +9,15 @@
 // first workspace.  domicile finds the key each keysym is on in the config's
 // `input.keyboard`, so these follow the layout.
 //
-// Google Messages leads the bar's right column, then each Gmail account's
-// inbox, read with the Gmail API through one Google Cloud OAuth client (Desktop
-// app type).  Google does not treat a desktop client's secret as secret.
+// The notification drawer lists each Gmail account's inbox, then Google
+// Messages.  Gmail is read with the Gmail API through one Google Cloud OAuth
+// client (Desktop app type).  Google does not treat a desktop client's secret
+// as secret.
 //
 // manganese's `options` is re-exported so Settings' Shell page can edit them.
-import { DEFAULT_BAR, runManganese } from "@domicile-desktop/manganese";
-import { Gmail } from "@domicile-desktop/manganese-bar-module-gmail";
-import { GoogleMessages } from "@domicile-desktop/manganese-bar-module-google-messages";
+import { runManganese } from "@domicile-desktop/manganese";
+import { gmailInbox } from "@domicile-desktop/manganese-inbox-gmail";
+import { messagesInbox } from "@domicile-desktop/manganese-inbox-google-messages";
 import {
   DEFAULT_KEYBINDINGS,
   exec,
@@ -50,25 +51,19 @@ const GMAIL_CLIENT = {
 
 export const Shell = runManganese({
   applications: @applications@,
-  bar: {
-    ...DEFAULT_BAR,
-    right: [
-      <Gmail
-        client={GMAIL_CLIENT}
-        email="connor@prussin.net"
-        key="prussin-net"
-        nickname="PrussinNet"
-      />,
-      <Gmail
-        client={GMAIL_CLIENT}
-        email="connor@meatproxylabs.com"
-        key="meat-proxy"
-        nickname="Meat Proxy"
-      />,
-      <GoogleMessages key="messages" />,
-      ...DEFAULT_BAR.right,
-    ],
-  },
+  inboxes: [
+    gmailInbox({
+      client: GMAIL_CLIENT,
+      email: "connor@prussin.net",
+      nickname: "PrussinNet",
+    }),
+    gmailInbox({
+      client: GMAIL_CLIENT,
+      email: "connor@meatproxylabs.com",
+      nickname: "Meat Proxy",
+    }),
+    messagesInbox(),
+  ],
   keybindings: {
     keybindings: {
       ...Object.fromEntries(
