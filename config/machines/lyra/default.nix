@@ -306,6 +306,9 @@ in {
         "tank/persisted-state/claude-code".mountpoint = "/home/${config.primary-user.name}/.claude";
         "tank/persisted-state/claude-desktop".mountpoint = "/home/${config.primary-user.name}/.config/Claude";
         "tank/persisted-state/codex".mountpoint = "/home/${config.primary-user.name}/.codex";
+        # The ChatGPT app's Electron data.  Keeps its global shortcut ids
+        # stable, so domicile doesn't ask about them again every boot.
+        "tank/persisted-state/codex-desktop".mountpoint = "/home/${config.primary-user.name}/.config/Codex";
         "tank/persisted-state/containers".mountpoint = "/home/${config.primary-user.name}/.local/share/containers";
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
         "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
