@@ -222,12 +222,11 @@
 
   # manganese's launcher, in ./shell.tsx: `apps` above and nothing a package
   # happened to install -- every desktop entry is left out, then `domicile-*`
-  # taken back.
+  # taken back. Email and SMS entries come from the inboxes in ./shell.tsx.
   applications = {
     omit = ["*" "!domicile-*"];
     bookmarks = lib.mapAttrsToList (name: bookmark: bookmark // {inherit name;}) (
       google "Calendar" "https://calendar.google.com"
-      // google "Email" "https://mail.google.com"
       // google "Google Drive" "https://drive.google.com"
       // {
         "Credit Cards".url = personal "https://docs.google.com/spreadsheets/d/1Y8xind-5nMe9bezMFmk__CQdkSBd7FPupt1NkdKDLUE";
