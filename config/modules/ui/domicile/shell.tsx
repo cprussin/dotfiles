@@ -55,14 +55,16 @@ export const Shell = runManganese({
     gmailInbox({
       client: GMAIL_CLIENT,
       email: "connor@prussin.net",
+      launcherName: "Email - PrussinNet",
       nickname: "PrussinNet",
     }),
     gmailInbox({
       client: GMAIL_CLIENT,
       email: "connor@meatproxylabs.com",
+      launcherName: "Email - Meat Proxy Labs",
       nickname: "Meat Proxy",
     }),
-    messagesInbox(),
+    messagesInbox({ launcherName: "SMS" }),
   ],
   keybindings: {
     keybindings: {
