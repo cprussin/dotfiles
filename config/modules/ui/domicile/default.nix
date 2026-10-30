@@ -376,6 +376,11 @@ in {
               };
             cursor_size = hm.home.pointerCursor.size;
           }
+          # ui/theme's icons, so notifications and the tray find apps' icons
+          # (Gmail's, say) rather than drawing a letter.
+          // lib.optionalAttrs (hm.iconTheme.package != null) {
+            icon_theme = hm.iconTheme.name;
+          }
           # Gmail has no dark theme that follows the system, so the browser
           # draws it dark while the desk is.
           // {force_dark = ["mail.google.com"];};
