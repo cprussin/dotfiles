@@ -380,17 +380,6 @@ in {
           # draws it dark while the desk is.
           // {force_dark = ["mail.google.com"];};
 
-        # The launcher's file index: every top-level entry of ~ but its
-        # dotfiles, one level into Library, Notes and Projects, and all of
-        # Scratch.  Dotfiles below ~ are kept -- a stated list replaces
-        # domicile's hidden-file default, and `.*` stops at a `/`.
-        files.omit = [
-          ".*"
-          "*/*"
-          "!{Library,Notes,Projects,Scratch}/*"
-          "{Library,Notes,Projects}/*/*"
-        ];
-
         # This desk's emacs daemon, up before the first frame asks for it, and
         # the chat apps, in their trays.
         startup.commands =
