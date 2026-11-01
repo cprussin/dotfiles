@@ -17,6 +17,14 @@
 
   headerPath = name: "${ramfs name}/header";
 
+  # The pools the initrd imports.  Mirrors nixpkgs' `rootPools`.
+  bootZfsPools = lib.unique (
+    map (fs: lib.head (lib.splitString "/" fs.device)) (
+      lib.filter (fs: fs.fsType == "zfs" && utils.fsNeededForBoot fs)
+      config.system.build.fileSystems
+    )
+  );
+
   # The unit the LUKS volume is opened by.  The volume names in use here
   # contain dashes, which systemd escapes as `\x2d`, so the name has to be run
   # through the same escaping systemd's generator uses or the ordering
@@ -61,7 +69,10 @@
         done
         echo " found!"
 
-        pin=$(systemd-ask-password --no-tty "Smartcard PIN for ${name}:")
+        # `--timeout=0`: the default gives up after 90s, and under the
+        # script's `set -e` that failed the unit and left the volume with no
+        # key.  A failed prompt is just another failed attempt.
+        pin=$(systemd-ask-password --no-tty --timeout=0 "Smartcard PIN for ${name}:") || pin=
         echo -n "$pin" | ${pkgs.gnupg}/bin/gpg \
           -q --batch --passphrase-fd 0 --pinentry-mode loopback \
           -d ${mountPoint name}/${opts.key.file} \
@@ -73,6 +84,7 @@
           echo "Check the PIN, or plug in another card holding the same key."
           ${pkgs.gnupg}/bin/gpgconf --kill scdaemon >/dev/null 2>/dev/null || true
           rm -rf "$GNUPGHOME/private-keys-v1.d"
+          sleep 1
         fi
       done
 
@@ -189,7 +201,15 @@ in {
         );
 
         services =
-          lib.mapAttrs' (
+          # nixpkgs orders initrd `zfs-import-<pool>` after nothing crypt
+          # related: it polls for the pool for ~60s, then fails, taking the
+          # boot to emergency mode.  Any unlock slower than that -- a smartcard
+          # PIN typed late, or a retry -- lost the race.  Hold the import until
+          # every volume here is open.
+          lib.genAttrs (map (pool: "zfs-import-${pool}") bootZfsPools) (_: {
+            after = map cryptsetupUnit (lib.attrNames cfg);
+          })
+          // lib.mapAttrs' (
             name: opts:
               lib.nameValuePair "luks-key-drive-${name}" {
                 description = "Stage LUKS key material for ${name} from an external drive";
@@ -232,7 +252,11 @@ in {
                   done
                   echo " found!"
 
-                  mount -t ${opts.key.drive.fsType} -o ro ${opts.key.drive.device} ${mountPoint name}
+                  # The node can appear before the drive is readable, and a
+                  # failed mount would fail the unit under `set -e`.
+                  until mount -t ${opts.key.drive.fsType} -o ro ${opts.key.drive.device} ${mountPoint name}; do
+                    sleep 1
+                  done
 
                   ${stageKey name opts}
                   ${lib.optionalString (opts.key.header != null) ''
