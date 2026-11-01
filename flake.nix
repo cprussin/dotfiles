@@ -189,6 +189,7 @@
             inherit system;
             overlays = [
               colmena.overlays.default
+              (import ./pkgs/colmena/overlay.nix)
               password-utils-overlay
               mkCli.overlays.default
               cli-overlay
