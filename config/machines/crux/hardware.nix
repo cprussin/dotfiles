@@ -179,7 +179,14 @@ in {
     # Cap the ARC at 8G.  Uncapped, OpenZFS lets it grow to ~all of RAM (c_max
     # read 61.6G, size 21.2G on 2026-09-28), and with no swap it shrinks slower
     # than a cold Chromium link allocates -- an OOM on the house's DNS server.
-    kernelParams = ["zfs.zfs_arc_max=${toString (8 * 1024 * 1024 * 1024)}"];
+    #
+    # The cap pushed out the metadata borg re-stats every 15 minutes, so each
+    # run walked /tank off the HDDs: ~1.5h, 5-7G read, ~10 min CPU.  Raising
+    # meta_balance (default 500) makes the ARC favor metadata over file data.
+    kernelParams = [
+      "zfs.zfs_arc_max=${toString (8 * 1024 * 1024 * 1024)}"
+      "zfs.zfs_arc_meta_balance=2000"
+    ];
     extraModulePackages = [];
     initrd = {
       availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "e1000e" "igb"];
