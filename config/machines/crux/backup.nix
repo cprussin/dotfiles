@@ -332,7 +332,12 @@ in {
       passCommand = "cat ${config.deployment.keys.borgbackup.path}";
     };
     environment.BORG_RSH = "ssh -i ${config.deployment.keys."rsync.net-ssh".path}";
-    compression = "auto,lzma";
+    # zstd rather than lzma: lzma manages only a few MB/s per core, so any
+    # sizeable change set spent hours compressing.  Only new chunks are
+    # compressed and chunk IDs hash the plaintext, so dedup is unaffected.
+    compression = "auto,zstd";
+    # So the journal says what each run read, added and sent.
+    extraCreateArgs = ["--stats"];
     startAt = "*:0/15";
     prune.keep = {
       within = "1d";
