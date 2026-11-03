@@ -303,11 +303,8 @@ in {
   # the emergency the note above contemplates.
   environment.systemPackages = [drm-acl];
 
-  # The stable path rather than the store path the other entry in this
-  # repository uses (config/modules/ui/log).  That one is invoked by a
-  # generated command line carrying the same store path, so the two always
-  # agree; this one is typed, by a person or an agent who will get whatever
-  # PATH resolves -- which is this.
+  # The stable path rather than a store path: this command is typed, by a
+  # person or an agent who will get whatever PATH resolves -- which is this.
   #
   # The trade, stated the right way round: naming the symlink keeps the rule
   # valid across rebuilds, at the price that the rule names whatever that

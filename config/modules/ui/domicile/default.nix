@@ -156,7 +156,7 @@
     };
     journal = {
       name = "Journal";
-      exec = inTerminal "journal" "sudo ${pkgs.systemd}/bin/journalctl -alf";
+      exec = inTerminal "journal" "${pkgs.systemd}/bin/journalctl -alf";
       windowClass = "journal";
     };
     matrix = {
