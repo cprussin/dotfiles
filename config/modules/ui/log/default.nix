@@ -1,3 +1,4 @@
-{pkgs, ...}: {
-  primary-user.sudo-cmds = ["${pkgs.systemd}/bin/journalctl -alf"];
+{
+  # Read the whole journal (system and user) without sudo.
+  primary-user.extraGroups = ["systemd-journal"];
 }
