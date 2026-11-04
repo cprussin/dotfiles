@@ -334,6 +334,9 @@ in {
 
   boot = {
     kernelModules = ["kvm-amd"];
+    # KVM turns on SVM as it loads (the default since Linux 6.12), and VMware's
+    # vmmon then can't start VMs.  This defers it to the first KVM VM.
+    kernelParams = ["kvm.enable_virt_at_load=0"];
     extraModulePackages = [];
     initrd = {
       availableKernelModules = [];
