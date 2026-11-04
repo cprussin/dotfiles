@@ -28,7 +28,7 @@
     "claude-desktop-apt-amd64": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-HFGUhFsSITkUTD2eYh9/fzfNf8umuvls5c34B1t5g80=",
+        "narHash": "sha256-bkaeRgxd0snOh3TgvGZP1Gb/cNFfrVOQ1iuKGdjKEyE=",
         "type": "file",
         "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages"
       },
@@ -40,7 +40,7 @@
     "claude-desktop-apt-arm64": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-qcz0v2cAl2QkRlZI21/8P0djyRoGVtuBwXrlsR7eKjU=",
+        "narHash": "sha256-ZkEqf0R31wEwfdDZ97bGFVAIafnArRZkTJ1ZoZRW2ag=",
         "type": "file",
         "url": "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-arm64/Packages"
       },
@@ -92,11 +92,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1793688453,
-        "narHash": "sha256-BB09fN4hD1j5D1hMJ6EUtFN3/niGbZkiyBJDgTpt9E0=",
+        "lastModified": 1793804671,
+        "narHash": "sha256-6hEdbQKqL97P2eBMe+uHnER50r48mDoEfAXXZgdzhO0=",
         "owner": "cprussin",
         "repo": "domicile",
-        "rev": "40d73785dbbb89f5a51785037c746adbf1966ced",
+        "rev": "c44f0f23d5fd3a9dc57454afbf0d9bb8d5e10ec5",
         "type": "github"
       },
       "original": {
