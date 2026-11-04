@@ -135,6 +135,9 @@ in {
     enable = true;
     binfmt = true;
   };
+  # VMware Workstation, to test domicile on VMware's virtual GPU.  VMs need
+  # a persisted home (root is tmpfs), e.g. a ZFS dataset at ~/vmware.
+  virtualisation.vmware.host.enable = true;
   services = {
     getty.greetingLine = builtins.readFile ./greeting;
     fwupd.enable = true;
