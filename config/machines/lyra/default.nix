@@ -177,6 +177,14 @@ in {
       ];
     };
   };
+  # A crashing app stays frozen on screen until systemd-coredump is done with
+  # its core.  Claude Desktop's 10G core took the service's whole 5 minutes on
+  # 2026-11-05 and was thrown away anyway.  Past 1G, keep only a truncated
+  # core, so the app exits within seconds.
+  systemd.coredump.settings.Coredump = {
+    ProcessSizeMax = "1G";
+    ExternalSizeMax = "1G";
+  };
   systemd.services = {
     dlm.wantedBy = ["multi-user.target"];
 
