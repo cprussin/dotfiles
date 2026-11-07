@@ -101,6 +101,14 @@ in {
         suppress_key_server_warning = true;
         public_baseurl = "https://matrix.internal.prussin.net";
 
+        # Synapse denies publishing to the room directory by default.
+        room_list_publication_rules = [
+          {
+            user_id = "@*:prussin.net";
+            action = "allow";
+          }
+        ];
+
         listeners = [
           {
             port = federation_port_internal;
