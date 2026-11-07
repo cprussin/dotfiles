@@ -253,6 +253,10 @@ in {
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
+    # nixos-hardware disables panel self-refresh for hangs reported on the
+    # 7040 in 2024 (drm/amd#3647).  PSR saves real power at idle, so try it
+    # here.  If the desktop freezes or flickers, revert this.
+    amdgpu.dcDebugMask.disablePsr = false;
     cpu.amd.updateMicrocode = true;
     enableRedistributableFirmware = true;
     framework = {
