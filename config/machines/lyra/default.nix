@@ -39,15 +39,25 @@
   # That is a hypothesis, not something observed.
   #
   # Worst case this costs 2 + 2 + 10s, paid when the ports exist but nothing
-  # answers on them.  Nothing removes them once DisplayLinkManager has created
-  # them and `/tmp` lives for the boot, so a stopped daemon does not make this
-  # fast -- only an absent one does.  That bound also applies on the way to
+  # answers on them.  dlm's `ExecStopPost=` removes them (see `release-ports`
+  # below), so a stopped daemon skips this entirely.  That bound also applies on the way to
   # shutdown, where `powerDownCommands` runs again via `post-boot.service`'s
   # `preStop`.  Against the unbounded version that is a win where it hung --
   # until `post-boot` hit its 90s `TimeoutStopSec` -- and a loss where the
   # daemon is up but silent, which cost nothing before only because the `-f`
   # guard skipped the wait entirely.
+  #
+  # dlm only runs while a DisplayLink device is plugged in (see the udev rules
+  # below).  Undocked there is nothing to hand off to, and a stale port --
+  # or the regular file a resume's "R" leaves behind -- would cost the full
+  # bound, so skip straight past it.
   suspend-dlm = pkgs.writeShellScript "suspend-dlm" ''
+    if ! ${pkgs.systemd}/bin/systemctl -q is-active dlm.service
+    then
+      ${pkgs.coreutils}/bin/rm -f ${unacknowledged}
+      exit 0
+    fi
+
     ${pkgs.coreutils}/bin/timeout 2 ${pkgs.bash}/bin/bash -c \
       'while read -n 1 -t 1 _ < ${pmOut}; do : ; done' || true
 
@@ -81,7 +91,8 @@
   restore-dlm = pkgs.writeShellScript "restore-dlm" ''
     if [ -e ${unacknowledged} ]
     then
-      ${pkgs.systemd}/bin/systemctl --no-block restart dlm.service
+      # `try-restart`: never start dlm for a dock unplugged while asleep.
+      ${pkgs.systemd}/bin/systemctl --no-block try-restart dlm.service
       restart=$?
 
       # Consume it.  Every suspend rewrites this, but leaving a stale one set
@@ -93,6 +104,20 @@
       # where the monitors depend on it having worked.
       exit "$restart"
     fi
+  '';
+
+  # Clear DisplayLinkManager's ports so the next daemon makes fresh ones and,
+  # while none runs, nixpkgs' resume "R" writes a regular file instead of
+  # blocking.  Removing a FIFO does not wake a writer already blocked opening
+  # it, so first open the read end once to let any such writer through.  A
+  # blocking `cat` rather than an `O_NONBLOCK` open-and-close: the latter can
+  # hand that writer EPIPE, which would fail the rest of its script.
+  release-ports = pkgs.writeShellScript "release-dlm-ports" ''
+    if [ -p ${pmIn} ]
+    then
+      ${pkgs.coreutils}/bin/timeout 1 ${pkgs.coreutils}/bin/cat ${pmIn} > /dev/null || true
+    fi
+    ${pkgs.coreutils}/bin/rm -f ${pmIn} ${pmOut}
   '';
 
   # The BRIO's mic returns silence after a suspend until the camera is
@@ -137,6 +162,14 @@ in {
   };
   services = {
     getty.greetingLine = builtins.readFile ./greeting;
+
+    # DisplayLinkManager costs about 1% of a core even with nothing plugged
+    # in, so run it only while a DisplayLink device is.  The displaylink
+    # package's own udev rule starts dlm on plug (and at boot, via coldplug);
+    # this stops it on unplug, via `dlm-stop-if-undocked` below.
+    udev.extraRules = ''
+      ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="17e9/*", RUN+="${pkgs.systemd}/bin/systemctl --no-block restart dlm-stop-if-undocked.service"
+    '';
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
 
@@ -183,7 +216,35 @@ in {
     ExternalSizeMax = "1G";
   };
   systemd.services = {
-    dlm.wantedBy = ["multi-user.target"];
+    # dlm now stops whenever the dock is unplugged, which would leave its
+    # FIFOs in `/tmp` with no reader.  nixpkgs' `resumeCommands` still writes
+    # "R" to ${pmIn} on every resume, and that write would then block
+    # `sleep-actions` for its full 90s `TimeoutStopSec`.  Removing them when
+    # dlm stops turns that write into a harmless regular file; removing them
+    # again before it starts lets DisplayLinkManager create fresh FIFOs.
+    dlm.serviceConfig = {
+      ExecStartPre = release-ports;
+      ExecStopPost = release-ports;
+    };
+
+    # Debounced: docks often drop off the bus and come straight back across
+    # a resume, and stopping dlm then would restart it and drop every output.
+    # Waiting also leaves dlm running while any other DisplayLink device
+    # remains.
+    dlm-stop-if-undocked = {
+      description = "Stop DisplayLinkManager once no DisplayLink device remains";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeShellScript "dlm-stop-if-undocked" ''
+          ${pkgs.coreutils}/bin/sleep 10
+          for vendor in /sys/bus/usb/devices/*/idVendor
+          do
+            [ "$(${pkgs.coreutils}/bin/cat "$vendor" 2>/dev/null)" = 17e9 ] && exit 0
+          done
+          exec ${pkgs.systemd}/bin/systemctl stop dlm.service
+        '';
+      };
+    };
 
     # Runs `restore-dlm` above on resume, which restarts dlm only when the
     # suspend handshake went unacknowledged.
@@ -211,11 +272,10 @@ in {
     # last -- behind the very write that used to eat the restart.
     #
     # When the restart does fire and dlm is dead rather than merely silent,
-    # that write is itself blocked in `open()`, and it stays blocked until
-    # `sleep-actions` hits its 90s `TimeoutStopSec` unless the new daemon
-    # reuses the same FIFO -- taking the rest of that script, dhcpcd's
-    # `systemctl reload`, with it.  That is the cost of not waiting, and it is
-    # only paid on resumes that were already going wrong.
+    # that write is itself blocked in `open()`.  `release-ports`, run as the
+    # old daemon stops, opens the read end to let it through before removing
+    # the FIFO, so it no longer waits out `sleep-actions`' 90s
+    # `TimeoutStopSec`.
     dlm-restore = {
       description = "Restore DisplayLink outputs after sleep";
       wantedBy = ["sleep.target"];
