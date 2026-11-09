@@ -378,7 +378,13 @@ in {
           }
           # Gmail has no dark theme that follows the system, so the browser
           # draws it dark while the desk is.
-          // {force_dark = ["mail.google.com"];};
+          // {force_dark = ["mail.google.com"];}
+          # The pointer gets out of the way of typing and of reading: gone on
+          # a typed key and after three seconds still, back on the next touch.
+          // {
+            cursor_hide_when_typing = true;
+            cursor_hide_after_ms = 3000;
+          };
 
         # This desk's emacs daemon, up before the first frame asks for it, and
         # the chat apps, in their trays.
