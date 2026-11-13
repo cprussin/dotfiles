@@ -345,10 +345,8 @@ in {
         (apps // toggleKeymap);
 
       # The shell ./shell.tsx, where `programs.domicile.settings.shell` below
-      # names it, with the terminal's path and the launcher's `applications`
-      # in.
+      # names it, with the launcher's `applications` in.
       configFile."domicile/shell.tsx".source = pkgs.replaceVars ./shell.tsx {
-        terminal = hm.default-terminal.bin;
         applications = builtins.toJSON applications;
       };
     };
@@ -358,6 +356,10 @@ in {
       # would make its `false` a conflict rather than an override.
       enable = lib.mkDefault true;
       settings = {
+        # What Meta+Return opens, and what htop, vim and the like run in
+        # from the launcher and `domicile open`.
+        terminal = [hm.default-terminal.bin];
+
         # What the desk COMES UP on: domicile's own toggle changes the live
         # theme without writing back, and the next rebuild restates this.
         #

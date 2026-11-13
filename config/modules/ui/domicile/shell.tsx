@@ -1,8 +1,8 @@
 // This desk's shell: manganese, with its keys on Meta.
 //
-// `Meta+Return` opens the terminal, which manganese leaves for the config to
-// bind, by the path ./default.nix fills in.  The launcher's applications and
-// bookmarks are ./default.nix's `applications`, filled in as JSON.
+// `Meta+Return` is manganese's own: it opens the config's `terminal`, which
+// ./default.nix sets.  The launcher's applications and bookmarks are
+// ./default.nix's `applications`, filled in as JSON.
 //
 // manganese's workspaces are on the digits.  On dvp the digits are shifted, so
 // the workspaces go on the top row's own symbols instead -- `parenleft` is the
@@ -20,7 +20,6 @@ import { gmailInbox } from "@domicile-desktop/manganese-inbox-gmail";
 import { messagesInbox } from "@domicile-desktop/manganese-inbox-google-messages";
 import {
   DEFAULT_KEYBINDINGS,
-  exec,
   moveToWorkspace,
   workspace,
 } from "@domicile-desktop/manganese-window-management/keyboard/commands";
@@ -73,7 +72,6 @@ export const Shell = runManganese({
           ([chord]) => !onADigit(chord),
         ),
       ),
-      "Meta+Return": exec("@terminal@"),
       ...Object.fromEntries(
         WORKSPACE_KEYS.flatMap((key, at) => [
           [`Meta+${key}`, workspace(String(at + 1))],
