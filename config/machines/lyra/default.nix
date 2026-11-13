@@ -169,6 +169,17 @@ in {
     # this stops it on unplug, via `dlm-stop-if-undocked` below.
     udev.extraRules = ''
       ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="17e9/*", RUN+="${pkgs.systemd}/bin/systemctl --no-block restart dlm-stop-if-undocked.service"
+
+      # Framework's 1TB storage expansion card (/boot) comes up with runtime
+      # PM off, which keeps it and its xHCI controller awake: measured at 1.8W
+      # idle on 2026-11-12.  Let it autosuspend when idle.  The SCSI disk under
+      # it starts with runtime PM forbidden too, and the USB device can only
+      # suspend once that has, so enable both.  The disk's half matches the
+      # block device's `add`, which comes after `sd_probe` -- on the SCSI
+      # device's own `add` the probe has yet to run, and it resets the delay
+      # to -1 (never suspend).
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0005", ATTR{power/control}="auto"
+      ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0005", ATTR{device/power/control}="auto", ATTR{device/power/autosuspend_delay_ms}="5000"
     '';
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
@@ -347,7 +358,10 @@ in {
       "/boot" = {
         device = "/dev/disk/by-uuid/69FD-AA98";
         fsType = "vfat";
-        options = ["fmask=0022" "dmask=0022"];
+        # /boot lives on the removable storage card, which only a deploy needs
+        # once the initrd has read the LUKS key off it.  Mount it on access and
+        # drop it after a minute idle, so the card can sleep -- or be pulled.
+        options = ["fmask=0022" "dmask=0022" "noauto" "x-systemd.automount" "x-systemd.idle-timeout=1min"];
       };
     }
     // (
