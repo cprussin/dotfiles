@@ -61,11 +61,20 @@
   turnedWidth = monitor: monitor.logical.height;
   turnedHeight = monitor: monitor.logical.width;
 
+  # The panels that can vary their refresh rate (the Dells can't): they run
+  # adaptive sync wherever they are lit.
+  variableRefresh = ["laptop" "curved"];
+
   profile = name: displays: {
     inherit name;
     displays =
       lib.mapAttrsToList
-      (key: placement: placement // {display = names.${key};})
+      (key: placement:
+        placement
+        // {display = names.${key};}
+        // lib.optionalAttrs
+        ((builtins.elem key variableRefresh) && (placement.enabled or true))
+        {adaptive_sync = true;})
       displays;
   };
 
