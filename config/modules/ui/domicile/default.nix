@@ -65,6 +65,11 @@
   # adaptive sync wherever they are lit.
   variableRefresh = ["laptop" "curved"];
 
+  # Every monitor but the laptop's panel, which has no HDR: they run in HDR
+  # wherever they are lit.  domicile drives a monitor in HDR only when its
+  # EDID lists PQ, so one that turns out not to stays as it was.
+  highDynamicRange = ["left" "center" "right" "curved" "portable"];
+
   profile = name: displays: {
     inherit name;
     displays =
@@ -74,7 +79,10 @@
         // {display = names.${key};}
         // lib.optionalAttrs
         ((builtins.elem key variableRefresh) && (placement.enabled or true))
-        {adaptive_sync = true;})
+        {adaptive_sync = true;}
+        // lib.optionalAttrs
+        ((builtins.elem key highDynamicRange) && (placement.enabled or true))
+        {hdr = true;})
       displays;
   };
 
