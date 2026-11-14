@@ -20,16 +20,26 @@
     #   package is in no profile.
     # - That entry also claims http/https for its in-app browser, which made
     #   it the handler for every web link.
-    chatgpt = pkgs-unstable.chatgpt.overrideAttrs (old: {
-      postFixup =
-        old.postFixup
-        + ''
-          wrapProgram "$out/bin/chatgpt" --set-default NIXOS_OZONE_WL 1
-          substituteInPlace "$out"/share/applications/*.desktop \
-            --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt" \
-            --replace-fail "x-scheme-handler/http;x-scheme-handler/https;" ""
-        '';
-    });
+    #
+    # Its tectonic fails to build: nixpkgs' cargo setup hook now exports
+    # AWS_LC_SYS_USE_SYSTEM=1, and tectonic has no system AWS-LC.  Build the
+    # vendored one instead; drop this once nixpkgs fixes tectonic-unwrapped.
+    chatgpt =
+      (pkgs-unstable.chatgpt.override {
+        tectonic-unwrapped = pkgs-unstable.tectonic-unwrapped.overrideAttrs {
+          preBuild = "unset AWS_LC_SYS_USE_SYSTEM";
+        };
+      })
+      .overrideAttrs (old: {
+        postFixup =
+          old.postFixup
+          + ''
+            wrapProgram "$out/bin/chatgpt" --set-default NIXOS_OZONE_WL 1
+            substituteInPlace "$out"/share/applications/*.desktop \
+              --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt" \
+              --replace-fail "x-scheme-handler/http;x-scheme-handler/https;" ""
+          '';
+      });
 
     # 26.05 is stuck on immich 2.7.5, which upstream stopped updating and
     # nixpkgs marks insecure (CVE-2026-59258, CVE-2026-82272), so crux no
