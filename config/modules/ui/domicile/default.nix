@@ -61,9 +61,13 @@
   turnedWidth = monitor: monitor.logical.height;
   turnedHeight = monitor: monitor.logical.width;
 
-  # The panels that can vary their refresh rate (the Dells can't): they run
-  # adaptive sync wherever they are lit.
-  variableRefresh = ["laptop" "curved"];
+  # The panels that run adaptive sync wherever they are lit.  The Dells can't
+  # vary their refresh rate.  The laptop's panel can, but amdgpu never lets a
+  # panel with adaptive sync on enter panel self-refresh, which saves more
+  # power on a still screen than a lower refresh rate does.  Self-refresh is
+  # turned on in machines/lyra; if that is reverted, the laptop can have
+  # adaptive sync back.
+  variableRefresh = ["curved"];
 
   # Every monitor but the laptop's panel, which has no HDR: they run in HDR
   # wherever they are lit.  domicile drives a monitor in HDR only when its
