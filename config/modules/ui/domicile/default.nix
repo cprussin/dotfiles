@@ -129,6 +129,22 @@
   matrix = "${element}/bin/element-desktop";
   telegram = "${telegram-desktop}/bin/Telegram";
   slack = "${slack-desktop}/bin/slack";
+  chatgpt = "${pkgs.chatgpt}/bin/chatgpt";
+  claude = "${pkgs.claude-desktop}/bin/claude-desktop";
+
+  # The Electron apps run on domicile's engine rather than their own
+  # Electron: `command` as `domicile open --electron` takes it, the app found
+  # from its program, and the command itself what runs should the engine
+  # not run the app.
+  onTheEngine = command:
+    [
+      "${hm.programs.domicile.finalPackage}/bin/domicile"
+      "open"
+      "--electron"
+      (builtins.head command)
+      "--"
+    ]
+    ++ command;
   # The programs domicile's launcher offers, by desktop file ID
   # `domicile-<app>.desktop`, beside the History, Settings, Screenshot, Shutdown
   # and Reboot entries domicile ships itself.  What opens a URL is a bookmark
@@ -154,12 +170,12 @@
     };
     chatgpt = {
       name = "ChatGPT";
-      exec = "${pkgs.chatgpt}/bin/chatgpt";
+      exec = lib.concatStringsSep " " (onTheEngine [chatgpt]);
       package = pkgs.chatgpt;
     };
     claude = {
       name = "Claude";
-      exec = "${pkgs.claude-desktop}/bin/claude-desktop";
+      exec = lib.concatStringsSep " " (onTheEngine [claude]);
       package = pkgs.claude-desktop;
     };
     # SMS is Google Messages, in the notification drawer (./shell.tsx).
@@ -182,7 +198,7 @@
     };
     matrix = {
       name = "Matrix";
-      exec = matrix;
+      exec = lib.concatStringsSep " " (onTheEngine [matrix]);
       windowClass = "Element";
     };
     mixer = {
@@ -192,7 +208,7 @@
     };
     slack = {
       name = "Slack";
-      exec = slack;
+      exec = lib.concatStringsSep " " (onTheEngine [slack]);
       windowClass = "Slack";
     };
     telegram = {
@@ -414,10 +430,18 @@ in {
         startup.commands =
           lib.optional hm.programs.emacs.enable ["${pkgs.emacs}/bin/emacsclient" "-e" "t"]
           ++ [
-            [matrix "--hidden"]
+            (onTheEngine [matrix "--hidden"])
             [telegram "-startintray"]
-            [slack "-u"]
+            (onTheEngine [slack "-u"])
           ];
+
+        # Their desktop entries, which open their links (claude://, element://,
+        # slack://, sign-in links among them), start them on the engine too.
+        electron.apps = [
+          "com.anthropic.Claude.desktop"
+          "element-desktop.desktop"
+          "slack.desktop"
+        ];
 
         input = lib.optionalAttrs (keymaps != []) {
           keyboard.keymaps = keymaps;
