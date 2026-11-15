@@ -2,6 +2,14 @@
 # `balanced` on AC.  Runs at boot and on every charger plug/unplug; a profile
 # picked by hand holds until the next one.
 #
+# power-profiles-daemon ships its `amdgpu_panel_power` action switched off, so
+# the panel's adaptive backlight (ABM), which dims the backlight and boosts
+# contrast to match, never came on.  With it on, the daemon turns ABM up on
+# battery as the charge falls: in power-saver from below 50%, in balanced from
+# below 30%.  The daemon keeps that choice under /var/lib, which a tmpfs root
+# forgets, so switch it on whenever it's off (switching restarts the daemon's
+# drivers, so leave it be when it's already on).
+#
 # Only `Mains` supplies count: on the Framework that is `ACAD`, which tracks the
 # charger whichever port it is in.  The USB-C `ucsi-source-psy-*` supplies are
 # type `USB` and are ignored.
@@ -10,6 +18,7 @@
   pkgs,
   ...
 }: let
+  powerprofilesctl = "${config.services.power-profiles-daemon.package}/bin/powerprofilesctl";
   set-profile = pkgs.writeShellScript "power-profile-on-battery" ''
     profile=power-saver
     for supply in /sys/class/power_supply/*
@@ -17,7 +26,10 @@
       [ "$(${pkgs.coreutils}/bin/cat "$supply/type" 2>/dev/null)" = Mains ] || continue
       [ "$(${pkgs.coreutils}/bin/cat "$supply/online" 2>/dev/null)" = 1 ] && profile=balanced
     done
-    exec ${config.services.power-profiles-daemon.package}/bin/powerprofilesctl set "$profile"
+    ${powerprofilesctl} list-actions \
+      | ${pkgs.gawk}/bin/awk -v RS= '{ $0 = tolower($0) } /name: amdgpu_panel_power/ && /enabled: true/ { found = 1 } END { exit !found }' \
+      || ${powerprofilesctl} configure-action --enable amdgpu_panel_power
+    exec ${powerprofilesctl} set "$profile"
   '';
 in {
   systemd.services.power-profile-on-battery = {
