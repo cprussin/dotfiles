@@ -180,6 +180,13 @@ in {
       # to -1 (never suspend).
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0005", ATTR{power/control}="auto"
       ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0005", ATTR{device/power/control}="auto", ATTR{device/power/autosuspend_delay_ms}="5000"
+
+      # The kernel leaves runtime PM off on every PCI device until something
+      # turns it on, so the GPU, NVMe, Wi-Fi, audio coprocessor and the bridges
+      # between them never power down between uses: powertop flagged 22 of
+      # them on 2026-11-15.  Let them all suspend when idle, as TLP and
+      # `powertop --auto-tune` do.
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
     '';
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
@@ -417,6 +424,15 @@ in {
 
   boot = {
     kernelModules = ["kvm-amd"];
+    # The NMI watchdog wakes every core periodically to look for lockups; a
+    # laptop that hangs gets power-cycled anyway.
+    kernelParams = ["nmi_watchdog=0"];
+    # Power the HDA codec down after a second of silence instead of keeping it
+    # on for good.
+    extraModprobeConfig = "options snd_hda_intel power_save=1";
+    # Flush dirty pages every 15 s rather than 5 s, so an idle disk is woken
+    # a third as often.
+    kernel.sysctl."vm.dirty_writeback_centisecs" = 1500;
     extraModulePackages = [];
     initrd = {
       availableKernelModules = [];
