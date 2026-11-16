@@ -34,7 +34,10 @@
 in {
   systemd.services.power-profile-on-battery = {
     description = "Pick the power profile for the current power source";
-    wantedBy = ["multi-user.target"];
+    # The daemon starts after multi-user.target and is wanted by
+    # graphical.target, so being wanted by multi-user.target while ordered
+    # after the daemon is a cycle, and systemd drops this unit at boot.
+    wantedBy = ["graphical.target"];
     requires = ["power-profiles-daemon.service"];
     after = ["power-profiles-daemon.service"];
     serviceConfig = {
