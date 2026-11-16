@@ -78,11 +78,18 @@ in {
       options = "-d";
     };
     settings = {
+      # Domicile's cache holds each commit its `stable` branch moves to, which
+      # the `domicile` input pins, so a rebuild downloads Domicile instead of
+      # compiling it.
+      substituters = [
+        "https://packages.domicile-desktop.com/nix"
+      ];
       trusted-substituters = [
         "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "packages.domicile-desktop.com-1:iAulr298MtC52WMi2GPI8bqPEvOXHoQtSRAGOo0ny90="
       ];
       experimental-features = "flakes nix-command";
       auto-optimise-store = true;
