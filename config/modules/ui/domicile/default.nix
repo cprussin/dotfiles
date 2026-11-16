@@ -138,7 +138,7 @@
   # not run the app.
   onTheEngine = command:
     [
-      "${hm.programs.domicile.finalPackage}/bin/domicile"
+      "${hm.programs.domicile.package}/bin/domicile"
       "open"
       "--electron"
       (builtins.head command)
