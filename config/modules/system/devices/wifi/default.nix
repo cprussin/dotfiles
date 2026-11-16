@@ -12,7 +12,13 @@ _: {
           RoamThreshold = -65;
           RoamThreshold5G = -70;
         };
-        Network.NameResolvingService = "resolvconf";
+        Network = {
+          NameResolvingService = "resolvconf";
+          # iwd's routes default to metric 300, ahead of dhcpcd's wired routes
+          # (1000 + ifindex), so a docked laptop sent everything over wifi.
+          # Sit behind any wired link instead.
+          RoutePriorityOffset = 3000;
+        };
       };
     };
     dhcpcd.denyInterfaces = ["wlan*"];
