@@ -180,6 +180,16 @@ in {
       # to -1 (never suspend).
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0005", ATTR{power/control}="auto"
       ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0005", ATTR{device/power/control}="auto", ATTR{device/power/autosuspend_delay_ms}="5000"
+
+      # The xHCI controller behind the storage card, webcam, Bluetooth and
+      # YubiKey (c3:00.0) refuses D3hot on this firmware (BIOS 04.02): every
+      # runtime suspend logs "Refused to change power state from D0 to D3hot"
+      # and leaves it in D0, and the suspend/resume churn kept both USB4
+      # routers (c3:00.5/.6) awake 93% of the time and its root hub 76%.  It
+      # never reaches D3 anyway, so hold it in D0; measured on 2026-11-16, the
+      # routers then sleep 100% and the root hub 57%.  xhci_pci turns runtime
+      # PM on itself at probe, so re-pin it on every bind.
+      ACTION=="add|bind", SUBSYSTEM=="pci", DRIVER=="xhci_hcd", ATTR{vendor}=="0x1022", ATTR{device}=="0x151f", ATTR{power/control}="on"
     '';
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
