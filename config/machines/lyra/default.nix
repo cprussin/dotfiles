@@ -429,8 +429,8 @@ in {
     # The NMI watchdog's hard-lockup detector keeps a perf counter armed on
     # every core; drop it, at the cost of no backtrace from a hard hang.
     #
-    # The 1TB storage expansion card (/boot) binds to `uas`, which can't
-    # autosuspend, so the udev rule above for it never takes: its USB link
+    # The 1TB storage expansion card (/boot) binds to `uas`, which doesn't
+    # support autosuspend, so the udev rule above has no effect: its USB link
     # and xHCI controller stayed awake for the whole uptime on 2026-11-15,
     # with the disk itself long since suspended.  `u` (ignore UAS) hands it
     # to `usb-storage`, which can.  /boot needs no UAS throughput.
