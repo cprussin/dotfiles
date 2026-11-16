@@ -426,7 +426,13 @@ in {
     kernelModules = ["kvm-amd"];
     # The NMI watchdog wakes every core periodically to look for lockups; a
     # laptop that hangs gets power-cycled anyway.
-    kernelParams = ["nmi_watchdog=0"];
+    #
+    # The 1TB storage expansion card (/boot) binds to `uas`, which can't
+    # autosuspend, so the udev rule above for it never takes: its USB link
+    # and xHCI controller stayed awake for the whole uptime on 2026-11-15,
+    # with the disk itself long since suspended.  `u` (ignore UAS) hands it
+    # to `usb-storage`, which can.  /boot needs no UAS throughput.
+    kernelParams = ["nmi_watchdog=0" "usb-storage.quirks=32ac:0005:u"];
     # Power the HDA codec down after a second of silence instead of keeping it
     # on for good.
     extraModprobeConfig = "options snd_hda_intel power_save=1";
