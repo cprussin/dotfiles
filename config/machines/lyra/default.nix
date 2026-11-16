@@ -180,15 +180,6 @@ in {
       # to -1 (never suspend).
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0005", ATTR{power/control}="auto"
       ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0005", ATTR{device/power/control}="auto", ATTR{device/power/autosuspend_delay_ms}="5000"
-
-      # The kernel leaves runtime PM forbidden on every PCI device until
-      # something allows it: powertop flagged 22 on 2026-11-15.  Allow it on
-      # all of them, as TLP and `powertop --auto-tune` do.  Only devices whose
-      # drivers support runtime PM (the PCIe bridges, HDMI audio, xHCI,
-      # unbound functions) actually power down; amdgpu and nvme ignore it.  If
-      # USB-C hotplug or the dock gets flaky, pin that xHCI controller back to
-      # "on" with a later rule.
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
     '';
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
