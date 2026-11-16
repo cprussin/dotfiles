@@ -181,11 +181,13 @@ in {
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0005", ATTR{power/control}="auto"
       ACTION=="add", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTRS{idVendor}=="32ac", ATTRS{idProduct}=="0005", ATTR{device/power/control}="auto", ATTR{device/power/autosuspend_delay_ms}="5000"
 
-      # The kernel leaves runtime PM off on every PCI device until something
-      # turns it on, so the GPU, NVMe, Wi-Fi, audio coprocessor and the bridges
-      # between them never power down between uses: powertop flagged 22 of
-      # them on 2026-11-15.  Let them all suspend when idle, as TLP and
-      # `powertop --auto-tune` do.
+      # The kernel leaves runtime PM forbidden on every PCI device until
+      # something allows it: powertop flagged 22 on 2026-11-15.  Allow it on
+      # all of them, as TLP and `powertop --auto-tune` do.  Only devices whose
+      # drivers support runtime PM (the PCIe bridges, HDMI audio, xHCI,
+      # unbound functions) actually power down; amdgpu and nvme ignore it.  If
+      # USB-C hotplug or the dock gets flaky, pin that xHCI controller back to
+      # "on" with a later rule.
       ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
     '';
     fwupd.enable = true;
@@ -424,8 +426,8 @@ in {
 
   boot = {
     kernelModules = ["kvm-amd"];
-    # The NMI watchdog wakes every core periodically to look for lockups; a
-    # laptop that hangs gets power-cycled anyway.
+    # The NMI watchdog's hard-lockup detector keeps a perf counter armed on
+    # every core; drop it, at the cost of no backtrace from a hard hang.
     #
     # The 1TB storage expansion card (/boot) binds to `uas`, which can't
     # autosuspend, so the udev rule above for it never takes: its USB link
@@ -433,12 +435,6 @@ in {
     # with the disk itself long since suspended.  `u` (ignore UAS) hands it
     # to `usb-storage`, which can.  /boot needs no UAS throughput.
     kernelParams = ["nmi_watchdog=0" "usb-storage.quirks=32ac:0005:u"];
-    # Power the HDA codec down after a second of silence instead of keeping it
-    # on for good.
-    extraModprobeConfig = "options snd_hda_intel power_save=1";
-    # Flush dirty pages every 15 s rather than 5 s, so an idle disk is woken
-    # a third as often.
-    kernel.sysctl."vm.dirty_writeback_centisecs" = 1500;
     extraModulePackages = [];
     initrd = {
       availableKernelModules = [];
