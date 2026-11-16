@@ -189,6 +189,10 @@ in {
       # USB-C hotplug or the dock gets flaky, pin that xHCI controller back to
       # "on" with a later rule.
       ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"
+      # Except the Wi-Fi card (class 0x0280, network controller): with runtime
+      # PM allowed it dropped off the bus on 2026-11-16 and Wi-Fi vanished
+      # until reboot.  Kept active, the bridges above it stay up too.
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{class}=="0x0280*", ATTR{power/control}="on"
     '';
     fwupd.enable = true;
     xserver.videoDrivers = ["displaylink" "modesetting"];
