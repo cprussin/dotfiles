@@ -20,6 +20,8 @@
 }: let
   powerprofilesctl = "${config.services.power-profiles-daemon.package}/bin/powerprofilesctl";
   set-profile = pkgs.writeShellScript "power-profile-on-battery" ''
+    # ACAD can still read its old state just after its event.
+    ${pkgs.coreutils}/bin/sleep 2
     profile=power-saver
     for supply in /sys/class/power_supply/*
     do
@@ -46,8 +48,10 @@ in {
     };
   };
 
-  # `--no-block` so udev never waits on D-Bus.
+  # `--no-block` so udev never waits on D-Bus.  `restart`, not `start`: a dock
+  # replug fires unplug and plug back to back, and `start` folds the plug into
+  # the run the unplug began, which left a docked laptop in power-saver.
   services.udev.extraRules = ''
-    SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="${pkgs.systemd}/bin/systemctl --no-block start power-profile-on-battery.service"
+    SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="${pkgs.systemd}/bin/systemctl --no-block restart power-profile-on-battery.service"
   '';
 }
