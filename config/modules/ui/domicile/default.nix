@@ -540,8 +540,6 @@ in {
         # which keeps the sign-ins already in them.  Each names the extensions
         # switched on in it, which locks every extension's switch there (on if
         # listed, off otherwise): change them here.
-        # The profile menu's and Settings' order.
-        browser.order = ["default" "meat-proxy" "ac-zeitgeist" "private"];
         browser.profiles = {
           # Cyan, Manganese's dark accent, which this config doesn't change.
           default = {
@@ -568,6 +566,9 @@ in {
             extensions = [];
           };
         };
+
+        # The order the profile menu and Settings list the profiles in.
+        browser.order = ["default" "meat-proxy" "ac-zeitgeist" "private"];
 
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
         # itself as the desk starts -- once, then from its cache until the file
