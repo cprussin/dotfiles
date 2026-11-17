@@ -509,6 +509,30 @@ in {
           lock_after_seconds = 10 * 60 + 30;
         };
 
+        # Browser profiles, each with its own sign-ins, site data and
+        # extensions.  Naming `profiles` replaces domicile's built-in pair, so
+        # `default` and `private` are restated here under their built-in ids,
+        # which keeps the sign-ins already in them.
+        browser.profiles = {
+          default = {
+            name = "Default";
+            color = "#0d9488";
+          };
+          private = {
+            name = "Private";
+            color = "#a78bfa";
+            private = true;
+          };
+          meat-proxy = {
+            name = "Meat Proxy";
+            color = "#d97706";
+          };
+          ac-zeitgeist = {
+            name = "AC Zeitgeist";
+            color = "#2563eb";
+          };
+        };
+
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
         # itself as the desk starts -- once, then from its cache until the file
         # changes.  An edit reaches the desk at the next start.
