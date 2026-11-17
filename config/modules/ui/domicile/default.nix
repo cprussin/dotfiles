@@ -261,11 +261,15 @@
   # A Google bookmark on the personal account.
   personal = url: "${url}?authuser=connor@prussin.net";
 
-  # A Google bookmark once per account: `<name> - PrussinNet` and
-  # `<name> - Meat Proxy Labs`.
+  # A Google bookmark once per account: `<name> - PrussinNet`, and
+  # `<name> - Meat Proxy Labs` in the Meat Proxy profile, whose Google sign-in
+  # is that account.
   google = name: url: {
     "${name} - PrussinNet".url = personal url;
-    "${name} - Meat Proxy Labs".url = "${url}?authuser=connor@meatproxylabs.com";
+    "${name} - Meat Proxy Labs" = {
+      inherit url;
+      profile = "meat-proxy";
+    };
   };
 
   # manganese's launcher, in ./shell.tsx: `apps` above and nothing a package
