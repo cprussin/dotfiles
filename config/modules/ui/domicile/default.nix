@@ -538,7 +538,8 @@ in {
         # extensions.  Naming `profiles` replaces domicile's built-in pair, so
         # `default` and `private` are restated here under their built-in ids,
         # which keeps the sign-ins already in them.  Each names the extensions
-        # switched on in it, which locks their switches: change them here.
+        # switched on in it, which locks every extension's switch there (on if
+        # listed, off otherwise): change them here.
         browser.profiles = {
           default = {
             name = "Default";
