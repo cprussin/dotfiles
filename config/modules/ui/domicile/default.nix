@@ -17,9 +17,10 @@
   pkgs,
   ...
 }: let
-  # Chrome Web Store ids of the password managers.
+  # Chrome Web Store ids of the extensions every browser profile has.
   bitwarden = "nngceckbapebfimnlniiiahkandclblb";
   onePassword = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";
+  uBlockOriginLite = "ddkjiahejlhfcafbddmgiahcphecmpfh";
 
   # Physical pixels and the density each panel is readable at.  `logical` is
   # what the desktop is laid out in, left fractional so that positions -- which
@@ -513,22 +514,27 @@ in {
           lock_after_seconds = 10 * 60 + 30;
         };
 
-        # The password managers, each on in one profile below.
+        # Installed in every browser profile, and switched on or off in each
+        # from Settings > Profiles or the tray's menu: 1Password is meant for
+        # Meat Proxy and Bitwarden for the default profile, and uBlock Origin
+        # Lite for all of them.  Each starts on, except in Private, where the
+        # engine starts every extension off: switch uBlock on there once.
         extensions.web_store = [
           bitwarden
           onePassword
+          uBlockOriginLite
         ];
 
         # Browser profiles, each with its own sign-ins, site data and
         # extensions.  Naming `profiles` replaces domicile's built-in pair, so
         # `default` and `private` are restated here under their built-in ids,
-        # which keeps the sign-ins already in them.  A profile's `extensions`
-        # is every extension on in it: the rest are off and locked.
+        # which keeps the sign-ins already in them.  No profile names its
+        # `extensions`, which would lock the switches of the extensions above
+        # in it.
         browser.profiles = {
           default = {
             name = "Default";
             color = "#0d9488";
-            extensions = [bitwarden];
           };
           private = {
             name = "Private";
@@ -538,7 +544,6 @@ in {
           meat-proxy = {
             name = "Meat Proxy";
             color = "#d97706";
-            extensions = [onePassword];
           };
           ac-zeitgeist = {
             name = "AC Zeitgeist";
