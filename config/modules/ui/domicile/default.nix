@@ -18,8 +18,14 @@
   ...
 }: let
   # Chrome Web Store ids of the extensions every browser profile has.
+  addAllOffers = "fnkdinpfaifdabidnjcdgnkhfaeibbnp";
   bitwarden = "nngceckbapebfimnlniiiahkandclblb";
+  capitalOneShopping = "nenlahapcbofgnanklpelkaejcehkggg";
+  nightly = "fiikommddbeccaoicoejoniammnalkfa";
   onePassword = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";
+  phantom = "bfnaelmomeimhlpmgjnjophhpkkoljpa";
+  rabby = "acmacodkjbdgmoleebolmdjonilkdbch";
+  solflare = "bhhhlbepdkbapadjdnnojkbgioiodbic";
   uBlockOriginLite = "ddkjiahejlhfcafbddmgiahcphecmpfh";
 
   # Physical pixels and the density each panel is readable at.  `logical` is
@@ -514,40 +520,46 @@ in {
           lock_after_seconds = 10 * 60 + 30;
         };
 
-        # Installed in every browser profile, and switched on or off in each
-        # from Settings > Profiles or the tray's menu: 1Password is meant for
-        # Meat Proxy and Bitwarden for the default profile, and uBlock Origin
-        # Lite for all of them.  Each starts on, except in Private, where the
-        # engine starts every extension off: switch uBlock on there once.
+        # Installed in every browser profile.  Each profile's `extensions`
+        # below names the ones switched on in it; the rest are off there.
         extensions.web_store = [
+          addAllOffers
           bitwarden
+          capitalOneShopping
+          nightly
           onePassword
+          phantom
+          rabby
+          solflare
           uBlockOriginLite
         ];
 
         # Browser profiles, each with its own sign-ins, site data and
         # extensions.  Naming `profiles` replaces domicile's built-in pair, so
         # `default` and `private` are restated here under their built-in ids,
-        # which keeps the sign-ins already in them.  No profile names its
-        # `extensions`, which would lock the switches of the extensions above
-        # in it.
+        # which keeps the sign-ins already in them.  Each names the extensions
+        # switched on in it, which locks their switches: change them here.
         browser.profiles = {
           default = {
             name = "Default";
             color = "#0d9488";
+            extensions = [addAllOffers bitwarden uBlockOriginLite];
           };
           private = {
             name = "Private";
             color = "#a78bfa";
             private = true;
+            extensions = [uBlockOriginLite];
           };
           meat-proxy = {
             name = "Meat Proxy";
             color = "#d97706";
+            extensions = [onePassword uBlockOriginLite];
           };
           ac-zeitgeist = {
             name = "AC Zeitgeist";
             color = "#2563eb";
+            extensions = [];
           };
         };
 
