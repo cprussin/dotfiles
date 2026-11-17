@@ -517,7 +517,8 @@ in {
         # Installed in every browser profile, and switched on or off in each
         # from Settings > Profiles or the tray's menu: 1Password is meant for
         # Meat Proxy and Bitwarden for the default profile, and uBlock Origin
-        # Lite for all of them.
+        # Lite for all of them.  Each starts on, except in Private, where the
+        # engine starts every extension off: switch uBlock on there once.
         extensions.web_store = [
           bitwarden
           onePassword
