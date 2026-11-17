@@ -541,9 +541,10 @@ in {
         # switched on in it, which locks every extension's switch there (on if
         # listed, off otherwise): change them here.
         browser.profiles = {
+          # Cyan, Manganese's dark accent, which this config doesn't change.
           default = {
             name = "Default";
-            color = "#0d9488";
+            color = "#06b6d4";
             extensions = [addAllOffers bitwarden uBlockOriginLite];
           };
           private = {
@@ -554,12 +555,14 @@ in {
           };
           meat-proxy = {
             name = "Meat Proxy";
-            color = "#d97706";
+            # The green of meatproxylabs.com's logo.
+            color = "#2bd96b";
             extensions = [onePassword uBlockOriginLite];
           };
           ac-zeitgeist = {
             name = "AC Zeitgeist";
-            color = "#2563eb";
+            # The indigo of "Zeit" in ac-zeitgeist.com's logo.
+            color = "#4338ca";
             extensions = [];
           };
         };
