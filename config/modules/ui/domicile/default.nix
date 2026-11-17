@@ -261,11 +261,15 @@
   # A Google bookmark on the personal account.
   personal = url: "${url}?authuser=connor@prussin.net";
 
-  # A Google bookmark once per account: `<name> - PrussinNet` and
-  # `<name> - Meat Proxy Labs`.
+  # A Google bookmark once per account: `<name> - PrussinNet`, and
+  # `<name> - Meat Proxy Labs` in the Meat Proxy profile, whose Google sign-in
+  # is that account.
   google = name: url: {
     "${name} - PrussinNet".url = personal url;
-    "${name} - Meat Proxy Labs".url = "${url}?authuser=connor@meatproxylabs.com";
+    "${name} - Meat Proxy Labs" = {
+      inherit url;
+      profile = "meat-proxy";
+    };
   };
 
   # manganese's launcher, in ./shell.tsx: `apps` above and nothing a package
@@ -566,6 +570,9 @@ in {
             extensions = [];
           };
         };
+
+        # The order the profile menu and Settings list the profiles in.
+        browser.order = ["default" "meat-proxy" "ac-zeitgeist" "private"];
 
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
         # itself as the desk starts -- once, then from its cache until the file
