@@ -17,6 +17,10 @@
   pkgs,
   ...
 }: let
+  # Chrome Web Store ids of the password managers.
+  bitwarden = "nngceckbapebfimnlniiiahkandclblb";
+  onePassword = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";
+
   # Physical pixels and the density each panel is readable at.  `logical` is
   # what the desktop is laid out in, left fractional so that positions -- which
   # are sums of these -- don't drift a pixel per monitor across the desk.
@@ -507,6 +511,39 @@ in {
         idle = {
           blank_after_seconds = 10 * 60;
           lock_after_seconds = 10 * 60 + 30;
+        };
+
+        # The password managers, each on in one profile below.
+        extensions.web_store = [
+          bitwarden
+          onePassword
+        ];
+
+        # Browser profiles, each with its own sign-ins, site data and
+        # extensions.  Naming `profiles` replaces domicile's built-in pair, so
+        # `default` and `private` are restated here under their built-in ids,
+        # which keeps the sign-ins already in them.  A profile's `extensions`
+        # is every extension on in it: the rest are off and locked.
+        browser.profiles = {
+          default = {
+            name = "Default";
+            color = "#0d9488";
+            extensions = [bitwarden];
+          };
+          private = {
+            name = "Private";
+            color = "#a78bfa";
+            private = true;
+          };
+          meat-proxy = {
+            name = "Meat Proxy";
+            color = "#d97706";
+            extensions = [onePassword];
+          };
+          ac-zeitgeist = {
+            name = "AC Zeitgeist";
+            color = "#2563eb";
+          };
         };
 
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
