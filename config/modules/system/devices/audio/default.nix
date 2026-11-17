@@ -40,6 +40,16 @@ _: let
     {"node.description" = "~Plugable UD-6950.*";}
   ];
 
+  # The BRIO webcam's mic scores about 2109 as a USB capture node, above the
+  # 2010 that WirePlumber gives a Bluetooth headset's mic, so it takes the
+  # default source.  When the dock hub re-enumerates mid-call, the call's
+  # capture stream lands on it, autoswitch drops the headset to A2DP, and SCO
+  # resets.  Rank it below the headset, and the internal mic (2009) below it so
+  # the BRIO still wins at the desk without a headset.
+  webcamMics = [{"node.name" = "~alsa_input.usb-.*BRIO.*";}];
+
+  internalMics = [{"node.name" = "~alsa_input.pci-.*";}];
+
   mkPriorityRule = matches: priority: {
     inherit matches;
     actions.update-props."priority.session" = priority;
@@ -58,6 +68,8 @@ in {
     wireplumber.extraConfig."50-audio-device-priorities" = {
       "monitor.alsa.rules" = [
         (mkPriorityRule usbSinks 2000)
+        (mkPriorityRule webcamMics 2000)
+        (mkPriorityRule internalMics 1900)
         (mkPriorityRule dockNodes 500)
       ];
       "monitor.bluez.rules" = [(mkPriorityRule bluetoothSinks 3000)];
