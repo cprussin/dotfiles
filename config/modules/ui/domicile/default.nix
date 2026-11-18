@@ -17,8 +17,12 @@
   pkgs,
   ...
 }: let
-  # Chrome Web Store ids of the extensions every browser profile has.
+  # Ids of the extensions every browser profile has.  All are Chrome Web Store
+  # ids except addAllOffers: the local extension in addAllOffersDir, whose
+  # manifest key gives it the id of the store's OfferAdder, so it
+  # must never be listed in `web_store`.
   addAllOffers = "fnkdinpfaifdabidnjcdgnkhfaeibbnp";
+  addAllOffersDir = "~/Projects/credit-card-optimization/add-all-offers-to-card";
   bitwarden = "nngceckbapebfimnlniiiahkandclblb";
   capitalOneShopping = "nenlahapcbofgnanklpelkaejcehkggg";
   nightly = "fiikommddbeccaoicoejoniammnalkfa";
@@ -533,7 +537,6 @@ in {
         # Installed in every browser profile.  Each profile's `extensions`
         # below names the ones switched on in it; the rest are off there.
         extensions.web_store = [
-          addAllOffers
           bitwarden
           capitalOneShopping
           nightly
@@ -543,6 +546,7 @@ in {
           solflare
           uBlockOriginLite
         ];
+        extensions.unpacked = [addAllOffersDir];
 
         # Browser profiles, each with its own sign-ins, site data and
         # extensions.  Naming `profiles` replaces domicile's built-in pair, so
