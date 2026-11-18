@@ -584,6 +584,10 @@ in {
         # The order the profile menu and Settings list the profiles in.
         browser.order = ["default" "meat-proxy" "ac-zeitgeist" "private"];
 
+        # Let agents on the web (claude.ai) reach the desk through Domicile's
+        # relay; each still signs in with a code the desk shows.
+        agents.web = true;
+
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
         # itself as the desk starts -- once, then from its cache until the file
         # changes.  An edit reaches the desk at the next start.
