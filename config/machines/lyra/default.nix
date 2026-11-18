@@ -413,6 +413,12 @@ in {
       }
     );
 
+  # A second boot entry on Linux 7.2, to measure idle power against the 6.18
+  # default.  On 6.18 the APU idles at ~3 W even logged out; 7.1 added amdgpu's
+  # display idle state manager, which stops screen-static power savings from
+  # toggling on every small update.  7.2 is the newest kernel ZFS supports.
+  specialisation.kernel-7-2.configuration.boot.kernelPackages = pkgs.linuxPackages_7_2;
+
   boot = {
     kernelModules = ["kvm-amd"];
     # The NMI watchdog's hard-lockup detector keeps a perf counter armed on
