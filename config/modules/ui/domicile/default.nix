@@ -164,6 +164,19 @@
       "--"
     ]
     ++ command;
+  # As onTheEngine, with the app's windows in browser profile `profile` and
+  # its extensions, as `electron.profiles` gives it.
+  onTheEngineIn = profile: command:
+    [
+      "${hm.programs.domicile.package}/bin/domicile"
+      "open"
+      "--electron"
+      "--profile"
+      profile
+      (builtins.head command)
+      "--"
+    ]
+    ++ command;
   # The programs domicile's launcher offers, by desktop file ID
   # `domicile-<app>.desktop`, beside the History, Settings, Screenshot, Shutdown
   # and Reboot entries domicile ships itself.  What opens a URL is a bookmark
@@ -229,7 +242,7 @@
     };
     slack = {
       name = "Slack";
-      exec = lib.concatStringsSep " " (onTheEngine [slack]);
+      exec = lib.concatStringsSep " " (onTheEngineIn "meat-proxy" [slack]);
       windowClass = "Slack";
     };
     telegram = {
@@ -457,7 +470,7 @@ in {
           ++ [
             (onTheEngine [matrix "--hidden"])
             [telegram "-startintray"]
-            (onTheEngine [slack "-u"])
+            (onTheEngineIn "meat-proxy" [slack "-u"])
           ];
 
         # Their desktop entries, which open their links (claude://, element://,
@@ -467,6 +480,8 @@ in {
           "element-desktop.desktop"
           "slack.desktop"
         ];
+        # Slack is Meat Proxy's, so that profile's 1Password fills its sign-in.
+        electron.profiles."slack.desktop" = "meat-proxy";
 
         input = lib.optionalAttrs (keymaps != []) {
           keyboard.keymaps = keymaps;
