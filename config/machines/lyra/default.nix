@@ -424,6 +424,10 @@ in {
     # with the disk itself long since suspended.  `u` (ignore UAS) hands it
     # to `usb-storage`, which can.  /boot needs no UAS throughput.
     kernelParams = ["nmi_watchdog=0" "usb-storage.quirks=32ac:0005:u"];
+    # snd_hda_intel's power_save defaults to 0, so the speaker codec and its
+    # HDA controller never power down.  1 s lets them sleep once WirePlumber
+    # suspends an idle sink.  If sound starts with a pop, revert this.
+    extraModprobeConfig = "options snd_hda_intel power_save=1";
     extraModulePackages = [];
     initrd = {
       availableKernelModules = [];
