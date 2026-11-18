@@ -133,7 +133,11 @@
       '';
     };
 
-  element = withFlags pkgs.element-desktop "element-desktop" "--ozone-platform-hint=auto";
+  # Element keeps its database key in the desktop's keyring (gnome-keyring,
+  # which the Claude module runs) rather than Chromium's hardcoded one: on a
+  # desktop Chromium doesn't know, as domicile is, the app otherwise asks on
+  # first start whether to settle for "weaker encryption".
+  element = withFlags pkgs.element-desktop "element-desktop" "--ozone-platform-hint=auto --password-store=gnome-libsecret";
   telegram-desktop = withFlags pkgs.telegram-desktop "Telegram" "--ozone-platform-hint=auto -g warn";
   slack-desktop = withFlags pkgs.slack "slack" "--ozone-platform-hint=auto -g warn";
 
