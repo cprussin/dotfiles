@@ -381,7 +381,6 @@ in {
         "tank/persisted-state/Slack".mountpoint = "/home/${config.primary-user.name}/.config/Slack";
         "tank/persisted-state/Steam".mountpoint = "/home/${config.primary-user.name}/.local/share/Steam";
         "tank/persisted-state/TelegramDesktop".mountpoint = "/home/${config.primary-user.name}/.local/share/TelegramDesktop";
-        "tank/persisted-state/Zulip".mountpoint = "/home/${config.primary-user.name}/.config/Zulip";
         "tank/persisted-state/alsa".mountpoint = "/var/lib/alsa";
         "tank/persisted-state/argo".mountpoint = "/home/${config.primary-user.name}/.config/argo";
         # Start-on-login entries, from apps and the Background portal.
@@ -397,7 +396,6 @@ in {
         "tank/persisted-state/codex-desktop".mountpoint = "/home/${config.primary-user.name}/.config/Codex";
         "tank/persisted-state/containers".mountpoint = "/home/${config.primary-user.name}/.local/share/containers";
         "tank/persisted-state/direnv-allow".mountpoint = "/home/${config.primary-user.name}/.local/share/direnv/allow";
-        "tank/persisted-state/discord".mountpoint = "/home/${config.primary-user.name}/.config/discord";
         "tank/persisted-state/domicile-profile".mountpoint = "/home/${config.primary-user.name}/.local/state/domicile/profile";
         # Portal choices (global shortcuts, screen-cast restore tokens, wallpaper).
         # `domicile-profile` mounts inside it.
