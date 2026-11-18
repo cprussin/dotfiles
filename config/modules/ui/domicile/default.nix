@@ -183,9 +183,11 @@
       exec = inTerminal "btop" "${pkgs.btop}/bin/btop";
       windowClass = "btop";
     };
+    # ChatGPT only starts on OpenAI's own Electron fork, so domicile hands it
+    # back to its own Electron every time; start it there directly.
     chatgpt = {
       name = "ChatGPT";
-      exec = lib.concatStringsSep " " (onTheEngine [chatgpt]);
+      exec = chatgpt;
       package = pkgs.chatgpt;
     };
     claude = {
