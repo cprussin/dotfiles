@@ -14,6 +14,15 @@
     })
   ];
 
+  # The app runs its Code sessions -- Remote Control included, which is how
+  # claude.ai starts sessions on this machine -- with a Claude Code CLI it
+  # downloads itself into ~/.config/Claude/claude-code.  That is a generic
+  # glibc binary asking for /lib64/ld-linux-x86-64.so.2, which NixOS does not
+  # have, so without this every session dies at exec and the only way in is
+  # running `claude remote-control` by hand.  It links glibc only, so the
+  # default library set is enough.
+  programs.nix-ld.enable = true;
+
   # Cowork runs its sandbox VM through KVM, and it opens /dev/vhost-vsock,
   # which only members of this group can, whatever /dev/kvm's own permissions
   # are.  See https://code.claude.com/docs/en/desktop-linux
