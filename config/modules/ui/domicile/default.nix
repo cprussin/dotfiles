@@ -585,7 +585,7 @@ in {
         browser.order = ["default" "meat-proxy" "ac-zeitgeist" "private"];
 
         # Let agents on the web (claude.ai) reach the desk through Domicile's
-        # relay; each still signs in with a code the desk shows.
+        # relay; each signs in once you click Allow on the desk.
         agents.web = true;
 
         # The shell, and with it the keys: ./shell.tsx, which domicile builds
