@@ -1,64 +1,56 @@
-# Claude Code's background daemon, so claude.ai can start sessions on this
-# machine without anyone running `claude remote-control` by hand.
+# Keeps `claude remote-control` running in ~/Scratch, so claude.ai can start
+# sessions on this machine without anyone running it by hand.
 #
-# Claude Desktop can't do it here: its Remote Control hosting is behind a
-# server-side gate, and on Linux it says "The Claude app can't connect a folder
-# on this device yet" (tested on lyra with dotfiles#304 deployed).
+# Not Claude Desktop: its Remote Control hosting is server-gated off on Linux
+# ("The Claude app can't connect a folder on this device yet", dotfiles#304).
 #
-# The CLI has its own: `claude daemon` supervises Remote Control servers listed
-# in ~/.claude/daemon.json.  `claude daemon install` would write this same unit
-# itself, but pointing at whichever store path ran it -- gone after the next
-# garbage collection, and never upgraded.  So it is declared here instead,
-# under the name and with the ExecStart shape the CLI looks for: it treats the
-# daemon as installed when ~/.config/systemd/user/com.anthropic.claude-daemon
-# .service exists, and only then lets `claude daemon remote-control add` run.
+# Not `claude daemon` (dotfiles#307): `claude daemon remote-control add` is
+# behind the server-side flag `tengu_radiant_heron` (claude-code 2.1.322), and
+# says "not available in this environment" when it is off.  Prod builds stub
+# out every flag override, so that is not fixable here.
 #
-# Which folders it serves is the CLI's state, not this file's: it lives in
-# ~/.claude/daemon.json, which is persisted with the rest of ~/.claude.
+# Plain `remote-control` is not gated and runs fine without a terminal, once
+# ~/Scratch is trusted and "Enable Remote Control?" has been answered (both need
+# a terminal, once: `cd ~/Scratch; claude remote-control`, answer y).
 #
-# ~/.claude.json is not: it sits beside ~/.claude on the tmpfs root, so the
-# account and folder-trust state in it went with every reboot.  With
-# CLAUDE_CONFIG_DIR set the CLI keeps that file inside the directory instead,
-# where it persists -- set for the daemon and for every login alike, so both
-# read and write the same one (after a re-login: sessionVariables only reach
-# new sessions).
-#
-# Once, after the switch and a re-login:
-#
-#   cp ~/.claude.json ~/.claude/.claude.json   # keep this boot's state, if any
-#   cd ~ && claude                               # accept the trust dialog
-#   claude daemon remote-control add --dir ~
-#
-# A folder must be trusted before it can be served, and with nothing added
-# the daemon serves nothing and the machine shows offline to claude.ai.
+# CLAUDE_CONFIG_DIR keeps ~/.claude.json inside the persisted ~/.claude rather
+# than on the tmpfs root, for this unit and every login alike, so both share
+# the account and folder trust.
 {
   config,
   pkgs,
   ...
 }: let
-  home = "/home/${config.primary-user.name}";
+  user = config.primary-user.name;
+  home = "/home/${user}";
   configDir = "${home}/.claude";
+  dir = "${home}/Scratch";
 in {
-  # For `claude daemon remote-control add` and friends.  systemPackages rather
-  # than home.packages, as config/machines/crux/claude-agent.nix explains.
+  # systemPackages rather than home.packages, as
+  # config/machines/crux/claude-agent.nix explains.
   environment = {
     systemPackages = [pkgs.claude-code];
     sessionVariables.CLAUDE_CONFIG_DIR = configDir;
   };
 
-  primary-user.home-manager.systemd.user.services."com.anthropic.claude-daemon" = {
+  primary-user.home-manager.systemd.user.services.claude-remote-control = {
     Unit = {
-      Description = "Claude Daemon";
-      StartLimitIntervalSec = 60;
-      StartLimitBurst = 10;
+      Description = "Claude Code Remote Control in ~/Scratch";
+      ConditionPathIsDirectory = dir;
     };
 
     Service = {
       Type = "simple";
-      Environment = ["CLAUDE_CONFIG_DIR=${configDir}"];
-      ExecStart = "${pkgs.claude-code}/bin/claude daemon --json-path ${configDir}/daemon.json --log-file ${configDir}/daemon.log --origin service";
+      WorkingDirectory = dir;
+      Environment = [
+        "CLAUDE_CONFIG_DIR=${configDir}"
+        # Sessions it spawns get the same tools a login shell has.
+        "PATH=/run/wrappers/bin:/etc/profiles/per-user/${user}/bin:/run/current-system/sw/bin"
+      ];
+      ExecStart = "${pkgs.claude-code}/bin/claude remote-control --no-create-session-in-dir";
+      # Signed out, offline at boot, or a crash: keep retrying, gently.
       Restart = "always";
-      RestartSec = 1;
+      RestartSec = 15;
     };
 
     Install.WantedBy = ["default.target"];

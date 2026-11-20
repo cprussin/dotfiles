@@ -14,10 +14,8 @@
 #
 # WHY THERE IS NO SERVICE HERE, AND NO TERMINAL MULTIPLEXER EITHER.
 #
-# `claude rc` starts an *interactive* Remote Control session, so there is
-# nothing to run under systemd.  A unit with no terminal would either fail or
-# sit there being useless, and a unit that pretended otherwise would be a lie
-# in a file people trust.
+# `claude rc` can run under systemd (ui/claude-code does on lyra), but here
+# a person starts it deliberately: see the last section.
 #
 # `rc` rather than the `--remote-control crux` this used to pass: it is the
 # subcommand for the same thing, and it takes the session name from the
