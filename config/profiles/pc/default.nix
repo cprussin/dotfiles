@@ -32,6 +32,7 @@
     ../../modules/ui/graphics
     ../../modules/ui/gtk
     ../../modules/ui/imv
+    ../../modules/ui/claude-code
     ../../modules/ui/claude-desktop
     ../../modules/ui/log
     ../../modules/ui/lorri
