@@ -141,7 +141,16 @@
   # which the Claude module runs) rather than Chromium's hardcoded one: on a
   # desktop Chromium doesn't know, as domicile is, the app otherwise asks on
   # first start whether to settle for "weaker encryption".
-  element = withFlags pkgs.element-desktop "element-desktop" "--ozone-platform-hint=auto --password-store=gnome-libsecret";
+  #
+  # Its config turns off `force_verification`: with it on, every start asks
+  # the homeserver whether cross-signing is set up before leaving the loading
+  # spinner, and a network change failing that request (a boot's Wi-Fi and
+  # WireGuard coming up) leaves the spinner up for good, Element's bug.
+  # Without it a new login is offered verification rather than made to.
+  elementConfig = pkgs.writeText "element-config.json" (builtins.toJSON {
+    force_verification = false;
+  });
+  element = withFlags pkgs.element-desktop "element-desktop" "--ozone-platform-hint=auto --password-store=gnome-libsecret --config ${elementConfig}";
   telegram-desktop = withFlags pkgs.telegram-desktop "Telegram" "--ozone-platform-hint=auto -g warn";
   slack-desktop = withFlags pkgs.slack "slack" "--ozone-platform-hint=auto -g warn";
 
