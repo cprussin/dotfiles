@@ -67,6 +67,11 @@
     #
     # Drop all of this when crux moves to 26.11 and stable carries immich 3.
     inherit (pkgs-unstable) immich immich-machine-learning;
+
+    # 26.05 is months behind, and claude.ai only offers Remote Control
+    # features the CLI it talks to has.  ui/claude-code's daemon on lyra and
+    # crux's claude-agent both run this.
+    inherit (pkgs-unstable) claude-code;
   };
 in {
   nix = {
