@@ -18,11 +18,12 @@
   ...
 }: let
   # Ids of the extensions every browser profile has.  All are Chrome Web Store
-  # ids except addAllOffers: the local extension in addAllOffersDir, whose
-  # manifest key gives it the id of the store's OfferAdder, so it
-  # must never be listed in `web_store`.
-  addAllOffers = "fnkdinpfaifdabidnjcdgnkhfaeibbnp";
-  addAllOffersDir = "~/Projects/credit-card-optimization/add-all-offers-to-card";
+  # ids except addAllOffers: the local extension built into addAllOffersDir.
+  # Its manifest has no key, so its id is the one Chromium derives from that
+  # absolute path (SHA-256 of the path, first 16 bytes as a-p); it changes if
+  # the path does, and it must never be listed in `web_store`.
+  addAllOffers = "bdbgnfppgkchjejiplkmfdamiodccodi";
+  addAllOffersDir = "~/Projects/credit-card-optimization/add-all-offers-to-card/dist";
   bitwarden = "nngceckbapebfimnlniiiahkandclblb";
   capitalOneShopping = "nenlahapcbofgnanklpelkaejcehkggg";
   nightly = "fiikommddbeccaoicoejoniammnalkfa";
