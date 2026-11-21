@@ -36,4 +36,5 @@
   :after (flycheck hledger-mode)
   :demand)
 
+(provide 'emacs-rc-hledger)
 ;;; emacs-rc-hledger.el ends here
