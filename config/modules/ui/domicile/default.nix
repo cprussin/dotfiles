@@ -30,6 +30,7 @@
   onePassword = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";
   phantom = "bfnaelmomeimhlpmgjnjophhpkkoljpa";
   rabby = "acmacodkjbdgmoleebolmdjonilkdbch";
+  ramp = "idefohglmnkliiadgfofeokcpjobdeik";
   solflare = "bhhhlbepdkbapadjdnnojkbgioiodbic";
   uBlockOriginLite = "ddkjiahejlhfcafbddmgiahcphecmpfh";
 
@@ -553,6 +554,7 @@ in {
           onePassword
           phantom
           rabby
+          ramp
           solflare
           uBlockOriginLite
         ];
@@ -581,7 +583,7 @@ in {
             name = "Meat Proxy";
             # The green of meatproxylabs.com's logo.
             color = "#2bd96b";
-            extensions = [onePassword uBlockOriginLite];
+            extensions = [onePassword ramp uBlockOriginLite];
           };
           ac-zeitgeist = {
             name = "AC Zeitgeist";
