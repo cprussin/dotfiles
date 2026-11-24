@@ -73,7 +73,15 @@
   # measurement above) plus a ~40G out/Release, since the pool builds a
   # release in any tree; plus the 40G compiler cache.  2 * 137 + 40 = 314G
   # before the runner work directories and /build/tmp, so the dataset's quota
-  # is **350G**.  The unit below checks the 314 and asks for the 350.
+  # was **350G**.  The unit below checks the 314 and asks for the 350.
+  #
+  # IT IS 500G NOW (2026-11-24), MORE THAN THE POOL HOLDS, ON PURPOSE.  After a
+  # Chromium pin roll, domicile's `engine-tree-pool.sh refresh` copies the
+  # freshly built tree over the stale one with `cp --reflink=always`.  The
+  # clone shares its blocks, so the POOL barely notices, but the QUOTA charges
+  # it at full size (~106G) until the stale tree is removed.  At 350G that copy
+  # hit EDQUOT and left /build at zero, which stops both runners at "Set up
+  # job".  So the quota has to fit two trees plus a third, charged copy.
   #
   # The unit computes the floor from `treeCount` and `ccacheGiB`, not from
   # these sentences; keep them in step.
@@ -82,7 +90,7 @@
   # dataset was created by hand with `-o quota=200G` and nothing in this file
   # declares it, so raising it is a command on the machine:
   #
-  #     zfs set quota=350G tank-fast/chromium
+  #     zfs set quota=500G tank-fast/chromium
   #
   # Spelled literally rather than with ${pool}, because this is a comment: Nix
   # does not interpolate one, so in a shell that name expands to nothing and
