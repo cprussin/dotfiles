@@ -73,7 +73,7 @@
   # measurement above) plus a ~40G out/Release, since the pool builds a
   # release in any tree; plus the 40G compiler cache.  2 * 137 + 40 = 314G
   # before the runner work directories and /build/tmp, so the dataset's quota
-  # was **350G**.  The unit below checks the 314 and asks for the 350.
+  # was **350G**.  The unit below still refuses below the 314.
   #
   # IT IS 500G NOW (2026-11-24), MORE THAN THE POOL HOLDS, ON PURPOSE.  After a
   # Chromium pin roll, domicile's `engine-tree-pool.sh refresh` copies the
@@ -81,12 +81,15 @@
   # clone shares its blocks, so the POOL barely notices, but the QUOTA charges
   # it at full size (~106G) until the stale tree is removed.  At 350G that copy
   # hit EDQUOT and left /build at zero, which stops both runners at "Set up
-  # job".  So the quota has to fit two trees plus a third, charged copy.
+  # job".  So the quota has to fit two trees plus a third, charged copy:
+  # 314 + 137 = 451, and the unit below asks for the next round number, 500.
+  # A quota between 314G and that passes the unit's check and then fails at
+  # the first copy after a roll.
   #
   # The unit computes the floor from `treeCount` and `ccacheGiB`, not from
   # these sentences; keep them in step.
   #
-  # THAT QUOTA IS NOT SET HERE, AND THE UNIT BELOW REFUSES UNTIL IT IS.  The
+  # THAT QUOTA IS NOT SET HERE, AND THE UNIT BELOW REFUSES BELOW ITS FLOOR.  The
   # dataset was created by hand with `-o quota=200G` and nothing in this file
   # declares it, so raising it is a command on the machine:
   #
@@ -351,13 +354,16 @@ in {
             # would not stop anything even here at the top level, while a bare
             # assignment inside a function still would.  This one is bare.
             floor=$(( ${toString treeCount} * (97 + 40) + ${toString ccacheGiB} ))
-            want=$(( (floor / 50 + 1) * 50 ))
+            # Asks for room for one more tree than the floor: the copy after a
+            # pin roll is charged at full size until the stale tree goes.
+            want=$(( ((floor + 97 + 40) / 50 + 1) * 50 ))
             quota=$(zfs get -Hp -o value quota ${pool}/chromium)
             if [ "$quota" != "0" ] && [ "$quota" -lt $((floor * 1024 * 1024 * 1024)) ]; then
               echo "${pool}/chromium has a $((quota / 1024 / 1024 / 1024))G quota." >&2
               echo "${toString treeCount} Chromium trees at 97G, a release build of 40G in each" >&2
               echo "and a ${toString ccacheGiB}G compiler cache need ''${floor}G of it, before the runner" >&2
-              echo "work directories and /build/tmp." >&2
+              echo "work directories and /build/tmp. The quota below also fits the" >&2
+              echo "copy of a tree that domicile makes after a Chromium pin roll." >&2
               echo >&2
               echo "  zfs set quota=''${want}G ${pool}/chromium" >&2
               echo >&2
