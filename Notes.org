@@ -19,7 +19,7 @@
 - [ ] Deploy lyra boot keys with colmena (just copy encrypted header / key, will need to start decrypting header on boot)
 - [ ] Maybe put lyra boot keys on another partition with a fs that supports permissions or something?
 - [ ] Run ssh server on early boot of crux to receive keys so we don't need to store them at rest
-** TODO Add systemd-resolved / split dns :system:
+** DONE Add systemd-resolved / split dns :system:
 ** TODO Set up kerberos / ldap
 ** TODO Lock / unlock / login with gpg keys (kerberos?)
 ** TODO Make install-user-mountpoints not suck

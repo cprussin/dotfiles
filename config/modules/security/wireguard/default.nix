@@ -5,18 +5,33 @@
 }: let
   passwords = pkgs.callPackage ../../../../lib/passwords.nix {};
   network = pkgs.callPackage ../../../../lib/network.nix {};
+  resolvectl = "${config.systemd.package}/bin/resolvectl";
 in {
+  services.resolved = {
+    enable = true;
+    # avahi answers mDNS.
+    settings.Resolve.MulticastDNS = false;
+  };
+
+  systemd.services.wireguard-prussinnet = {
+    wants = ["systemd-resolved.service"];
+    after = ["systemd-resolved.service"];
+  };
+
   networking = {
     wireguard = {
       enable = true;
       interfaces.prussinnet = {
         privateKeyFile = config.deployment.keys.wireguard-private-key.path;
         ips = [network.wireguard6."${config.networking.hostName}".cidr network.wireguard4."${config.networking.hostName}".cidr];
+        # Split DNS: only internal.prussin.net goes to crux, over the tunnel.
+        # Everything else uses the network's own DNS, so a captive portal
+        # that holds the tunnel down doesn't stall every lookup.
         postSetup = ''
-          echo -en 'search internal.prussin.net\nnameserver ${network.wireguard6.crux.address}\nnameserver ${network.wireguard4.crux.address}' |\
-            ${pkgs.openresolv}/bin/resolvconf -a prussinnet
+          ${resolvectl} dns prussinnet ${network.wireguard6.crux.address} ${network.wireguard4.crux.address}
+          ${resolvectl} domain prussinnet internal.prussin.net
+          ${resolvectl} default-route prussinnet false
         '';
-        postShutdown = "${pkgs.openresolv}/bin/resolvconf -d prussinnet";
         peers = [
           {
             name = "crux";
