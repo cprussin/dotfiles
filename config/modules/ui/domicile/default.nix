@@ -32,7 +32,6 @@
   rabby = "acmacodkjbdgmoleebolmdjonilkdbch";
   ramp = "idefohglmnkliiadgfofeokcpjobdeik";
   solflare = "bhhhlbepdkbapadjdnnojkbgioiodbic";
-  uBlockOriginLite = "ddkjiahejlhfcafbddmgiahcphecmpfh";
 
   # Physical pixels and the density each panel is readable at.  `logical` is
   # what the desktop is laid out in, left fractional so that positions -- which
@@ -556,7 +555,6 @@ in {
           rabby
           ramp
           solflare
-          uBlockOriginLite
         ];
         extensions.unpacked = [addAllOffersDir];
 
@@ -571,19 +569,19 @@ in {
           default = {
             name = "Default";
             color = "#06b6d4";
-            extensions = [addAllOffers bitwarden uBlockOriginLite];
+            extensions = [addAllOffers bitwarden];
           };
           private = {
             name = "Private";
             color = "#a78bfa";
             private = true;
-            extensions = [uBlockOriginLite];
+            extensions = [];
           };
           meat-proxy = {
             name = "Meat Proxy";
             # The green of meatproxylabs.com's logo.
             color = "#2bd96b";
-            extensions = [onePassword ramp uBlockOriginLite];
+            extensions = [onePassword ramp];
           };
           ac-zeitgeist = {
             name = "AC Zeitgeist";
