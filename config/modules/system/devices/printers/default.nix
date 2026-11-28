@@ -1,5 +1,8 @@
 _: {
   services.printing.enable = true;
+  # cupsd registers each queue's color profile with colord; without it every
+  # queue logs `CreateProfile/CreateDevice failed: not activatable`.
+  services.colord.enable = true;
   hardware.printers = {
     ensureDefaultPrinter = "circinus";
     ensurePrinters = [
