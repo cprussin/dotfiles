@@ -48,6 +48,10 @@ in {
         "PATH=/run/wrappers/bin:/etc/profiles/per-user/${user}/bin:/run/current-system/sw/bin"
       ];
       ExecStart = "${pkgs.claude-code}/bin/claude remote-control --no-create-session-in-dir";
+      # Its stdout is a terminal UI that redraws several times a second, which
+      # filled the journal. Its startup errors, such as being signed out, go to
+      # stderr and still reach the journal, as does its exit status.
+      StandardOutput = "null";
       # Signed out, offline at boot, or a crash: keep retrying, gently.
       Restart = "always";
       RestartSec = 15;
